@@ -1,0 +1,55 @@
+Labels are measurements made by people, policies, or downstream events. They are not pure truth. AI engineers must understand how the measurement was produced, where reviewers disagree, and which examples never enter the dataset.
+
+## Write the rubric before opening the queue
+
+Define the unit of review, available evidence, allowed labels, decision rules, abstain/uncertain outcome, and escalation path. Include examples around boundaries and update them through controlled versions. If reviewers need information unavailable in production, the label may train a system for an impossible task.
+
+Train reviewers on a shared calibration set and double-label an overlap sample. Agreement should be measured per class and segment, not only overall. Disagreement may reveal an ambiguous rubric, insufficient evidence, or legitimate subjectivity. Adjudicate important cases and record both original decisions; erasing disagreement creates false certainty.
+
+<Check
+  question="Two qualified reviewers repeatedly disagree on whether terse support messages are ‘angry.’ What is the best first response?"
+  options={[
+    "Inspect the rubric and examples, add an uncertain outcome, and calibrate reviewers",
+    "Randomly select one reviewer’s label",
+    "Average the text strings",
+    "Fine-tune a larger model immediately"
+  ]}
+  answer={0}
+  explanation="Systematic disagreement is evidence about the task definition or available evidence. Resolve measurement quality before training a model to imitate noise."
+  hint="Is the problem necessarily model capacity?"
+/>
+
+## Feedback is selected and strategic
+
+Thumbs-up/down, corrections, escalations, and task outcomes are useful but biased. Users respond more often to surprising failures, reviewers see only routed cases, and automated systems change which events occur. A model that auto-approves easy items leaves reviewers a dataset of hard items; training directly on that queue misrepresents production prevalence.
+
+Record the **exposure** and selection policy: which model/version produced the item, why it was shown for review, what alternatives were hidden, and whether the user completed the task. Separate explicit preference from factual correction. Protect against malicious feedback and privacy leakage before promoting examples into eval or training sets.
+
+## Active learning and review capacity
+
+Active learning selects examples expected to reduce uncertainty or cover a sparse region. Combine uncertainty, disagreement, diversity, risk, and random sampling. Pure uncertainty sampling can overfocus on inherently ambiguous cases; pure model confidence may be uncalibrated. Always retain a random sample for unbiased quality estimates.
+
+Review operations need service levels, queue priorities, workload limits, and quality audits. If review backlog grows faster than it clears, the system’s “human-in-the-loop” safety control is failing.
+
+<Check
+  question="Only low-confidence model outputs are reviewed. Can their correction rate estimate quality for all production outputs?"
+  options={[
+    "No; the reviewed set is selected by confidence and needs a random audit sample for an unbiased estimate",
+    "Yes; reviewed cases always represent the full population",
+    "Yes, if reviewers work quickly",
+    "No, because feedback can never be useful"
+  ]}
+  answer={0}
+  explanation="Routing changes the sample. Corrections help improve difficult cases, while random audits estimate population quality."
+  hint="How were cases chosen for review?"
+/>
+
+## Guided build: a review and learning loop
+
+Create a labeling rubric for one project and a 60-item queue containing clear, ambiguous, rare, and high-risk cases. Have two people, or two independent review passes, label at least 20 overlapping items. Calculate agreement and inspect disagreements.
+
+Design a weekly sample combining routed failures, high-risk cases, diverse/uncertain cases, and a random audit. Store rubric version, reviewer, decision, evidence, reason, model/config version, and selection reason. Define promotion checks before an item enters the regression set or training data. Report review throughput, backlog age, disagreement, correction rate by selection source, and one rubric improvement grounded in evidence.
+
+<Callout type="note">
+A feedback loop is healthy only if it can learn that the task definition is wrong. Forcing every observation into the existing label set makes the system confidently repeat yesterday’s assumptions.
+</Callout>

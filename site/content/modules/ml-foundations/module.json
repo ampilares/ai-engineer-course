@@ -1,0 +1,36 @@
+{
+  "slug": "ml-foundations",
+  "number": 5,
+  "title": "Data, Math & Classical ML",
+  "phase": "ml",
+  "summary": "Frame prediction problems honestly: splits without leakage, metrics beyond accuracy, baselines before complexity.",
+  "outcomes": [
+    "Frame a business question as a supervised learning problem, or refuse to",
+    "Create train/validation/test splits without leakage",
+    "Choose and interpret precision, recall, F1, and calibration",
+    "Beat a naive baseline before reaching for complexity, and analyze errors by segment"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "framing-prediction",
+      "title": "Framing a prediction problem",
+      "minutes": 24
+    },
+    {
+      "slug": "splits-and-leakage",
+      "title": "Splits, leakage, and honest evaluation",
+      "minutes": 26
+    },
+    {
+      "slug": "metrics-beyond-accuracy",
+      "title": "Metrics beyond accuracy",
+      "minutes": 27
+    },
+    {
+      "slug": "baselines-and-errors",
+      "title": "Baselines, models, and error analysis",
+      "minutes": 28
+    }
+  ]
+}

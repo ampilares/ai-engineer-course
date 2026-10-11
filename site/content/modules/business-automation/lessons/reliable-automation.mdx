@@ -1,0 +1,69 @@
+A workflow that runs on your laptop is a prototype. A workflow the business *depends on* keeps working through duplicate webhooks, API outages, malformed inputs, and its own crashes, and when it can't, it fails loudly into human hands. This lesson is the reliability kit.
+
+## The moving parts
+
+- **Triggers** start runs. A **webhook** calls your URL when an event occurs, a **poller** checks for changes at intervals, and a **schedule** starts work at defined times. Many webhook and messaging systems provide at-least-once delivery, so the same event may arrive more than once. The idempotency design below handles that reality.
+- **Queues** decouple receiving from processing: the trigger enqueues a job and acknowledges instantly; workers process at their own pace. A traffic spike becomes a longer queue, not a dropped request. Failed jobs land in a **dead-letter queue** for inspection instead of vanishing.
+- **Durable state:** Record every run's progress in a database, including the current step, relevant input references, completed effects, and pending work. A crashed worker can resume, and an operator can identify a stuck run.
+- **Orchestrators like n8n** give you these pieces visually (triggers, branches, retries, error paths) self-hostable and fast to iterate. Same concepts, boxes instead of code; the skill transfers in both directions.
+
+## Idempotency: the automation superpower
+
+Module 3 introduced it; automation *lives* on it. Same webhook delivered twice, retry after an ambiguous timeout, replayed queue message: in every case some step runs again. Design every step so **running twice equals running once**:
+
+```text
+before acting: SELECT processed FROM runs WHERE event_id = ?  → skip if done
+external calls: send Idempotency-Key: {event_id}-{step}
+after acting:  record completion in the same transaction
+```
+
+<Check
+  question="Your order webhook occasionally fires twice, and customers occasionally get two confirmation emails and two charges. The correct fix is…"
+  options={[
+    "Ask the sender to promise exactly-once delivery",
+    "Make processing idempotent: dedupe on the event ID before acting, and pass idempotency keys to the charge API: duplicates become no-ops",
+    "Add a 5-second sleep before processing",
+    "Process only every second webhook"
+  ]}
+  answer={1}
+  explanation="At-least-once delivery is a law of distributed systems, not a bug to report. Dedup-before-acting plus keyed external calls makes duplicates harmless: the only robust posture."
+  hint="You cannot prevent the duplicate. What can you control?"
+/>
+
+## Where the model fits and where the human does not
+
+Inside this machinery, model steps follow Module 8's contract: schema in, validation out, **confidence routing** to humans. The human checkpoint isn't a temporary crutch to remove later; for consequential steps it's a permanent architectural feature (Module 10's approval gates, wearing a business suit). Design the review experience properly (a queue with context, one-click approve/correct) and corrections feed your eval set (Module 14).
+
+Error handling completes the picture: **transient failures** (timeouts, 429s, 5xx) retry with backoff and a cap, then dead-letter; **permanent failures** (validation, low confidence, refusals) route straight to humans with everything they need to act. And every run needs an owner notified when the dead-letter queue grows: an unmonitored error queue is just a slower way to lose data.
+
+<Check
+  question="A model step returns low-confidence output for a vendor invoice. The well-designed workflow…"
+  options={[
+    "…retries the model call until confidence rises above threshold",
+    "…routes the item to a human review queue with the document, the model's draft, and one-click correct/approve, and records the correction for future evals",
+    "…posts the low-confidence data anyway to keep throughput high",
+    "…crashes the whole workflow for safety"
+  ]}
+  answer={1}
+  explanation="Low confidence is a permanent condition for this item, not a transient fault: retrying resamples the same uncertainty. Routing with full context keeps the process flowing and mines corrections for improvement."
+  hint="Is low confidence transient (retry) or permanent (route)?"
+/>
+
+<GoDeeper>
+  <LinkCard href="https://docs.n8n.io/courses/" title="n8n courses" source="docs.n8n.io" why="Free hands-on path to build exactly these trigger/queue/error patterns visually." />
+  <LinkCard href="https://microservices.io/patterns/data/transactional-outbox.html" title="Transactional outbox pattern" source="microservices.io" why="The rigorous version of 'record completion in the same transaction'." />
+</GoDeeper>
+
+## Design every transition for interruption
+
+Represent the workflow as explicit states and events. A worker should claim work with a lease, commit the result, and acknowledge the message in an order that tolerates crashes. Because exactly-once delivery is rarely available across systems, aim for **at-least-once delivery plus idempotent effects**. Use an outbox pattern when a database change and event publication must stay consistent.
+
+Retries need classification and ownership. Transient failures back off; validation and permission failures go to review or a dead-letter queue; unknown failures alert an operator. A dead-letter queue requires reason codes, a replay tool, an owner, and a time-to-resolution expectation. Store enough input and version metadata to reproduce a failed step without copying secrets into every log.
+
+Human approval is also a durable state. Show the proposed action, source evidence, validation results, and consequences. Expire stale approvals and revalidate conditions before execution; an approval for yesterday’s account balance may not be safe today.
+
+## Guided build: crash-tested workflow
+
+Implement trigger, validation, one model decision, durable queue/state, external action, and approval for a consequential case. Inject a timeout before the action, a crash after the action, duplicate events, malformed model output, expired approval, and permanent upstream failure.
+
+Prove there are no duplicate side effects, every item reaches a terminal or visible waiting state, failed items can be replayed safely, and an operator can discover why work stopped. Include a state diagram, failure matrix, and recovery runbook with the working artifact.

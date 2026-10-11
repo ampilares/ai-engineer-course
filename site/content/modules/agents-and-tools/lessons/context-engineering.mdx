@@ -1,0 +1,53 @@
+An agent that runs for fifty steps, a chat that spans three weeks, a workflow that processes a 400-page contract: all collide with the same wall: **the context window is finite, and everything the model should know must fit in it, every single call.** Deciding *what earns those tokens* is context engineering, and it has quietly become one of the highest-leverage skills in applied AI.
+
+## The budget mindset
+
+Treat the context window as a budget to allocate, not a bucket to fill. A long-running assistant's context competes among: system instructions and tool schemas (fixed overhead), conversation/step history (grows without bound), retrieved knowledge (Module 9), and working state (what's been decided, what's pending). Overspend and you hit three separate walls: hard truncation (silent loss), *lost-in-the-middle* degradation (Module 7: big contexts get skimmed, not read), and cost/latency (every token, every call).
+
+The discipline: **spend tokens proportional to relevance, not recency of arrival.** Most raw history is low-value; the few load-bearing facts are precious.
+
+## Memory patterns that work
+
+- **Rolling summarization:** When history exceeds a threshold, compress the oldest span into a concise summary and keep recent turns verbatim. Summaries can lose detail irreversibly, so preserve exact facts and commitments such as `order ORD-4821; refund €89 approved; contact by email` instead of writing "we discussed an order."
+- **Structured state instead of transcript**: for agents especially: maintain an explicit scratchpad (`goal, facts_established, actions_taken, pending`) updated each step, and feed *that* forward rather than the full step-by-step history. Fifty steps of tool output compress into twenty lines of state. This is Module 3's "durable state" habit meeting the context window.
+- **Memory as retrieval:** Store durable facts, preferences, past decisions, and entity knowledge outside the prompt in an appropriate database or retrieval system. Retrieve only what is relevant and authorized for the current request. Nothing persists in a context window between sessions; durable storage and controlled retrieval create the memory behavior.
+- **Fixed-prefix hygiene**: keep the stable parts (instructions, schemas, examples) identical and *first*, so prompt caching (Module 8) makes your fixed overhead nearly free.
+
+<Check
+  question="Your agent's 40-step run now drags 30,000 tokens of accumulated tool outputs into every model call, and quality is degrading. The highest-leverage fix is…"
+  options={[
+    "A model with a bigger context window",
+    "Maintain a structured working state (goal, facts established, actions taken, pending) updated each step, and feed that forward instead of the raw transcript",
+    "Raise the temperature so the model focuses better",
+    "Delete all history each step"
+  ]}
+  answer={1}
+  explanation="The raw transcript is mostly noise; the state is signal. A bigger window postpones the wall while keeping lost-in-the-middle degradation and 30k-token costs; full amnesia destroys the run. Compression into explicit state fixes cause, cost, and quality at once."
+  hint="What does the model actually NEED from step 12: the raw tool dump, or what it established?"
+/>
+
+## What survives summarization: a design decision
+
+Every compression step determines what the working context may no longer contain. Preserve commitments and constraints, such as a promised refund date. Preserve identifiers exactly because paraphrasing can corrupt order numbers or email addresses. Remove redundant retrieved chunks, verbose tool payloads, and conversational filler. Before acting on a consequential fact from a summary, verify it against the system of record because summaries are model-generated output.
+
+<Check
+  question="After rolling summarization, an agent 'remembers' the customer's IBAN from its own summary and uses it for a payout. What principle does this violate?"
+  options={[
+    "Nothing: summaries are reliable memory",
+    "Exact identifiers must survive verbatim or be re-fetched from the system of record before consequential use: a summary is generated text, and paraphrased account numbers are how money reaches strangers",
+    "Agents should never handle payments",
+    "IBANs are too long for context windows"
+  ]}
+  answer={1}
+  explanation="Summarization is lossy model output. For consequential exacts (account numbers, amounts, emails) the pattern is verify-before-act: re-read from the durable store, don't trust the compressed recollection. (This is also why approval gates show the human the actual parameters.)"
+  hint="What kind of text is a summary, per Module 8's trust rules?"
+/>
+
+<Callout type="tip">
+Context engineering is also a *quality* tool, not just a cost tool: a model reading 2,000 curated tokens consistently outperforms the same model skimming 50,000 raw ones. Less, better context is the cheapest model upgrade available: the same lesson retrieval taught in Module 9, generalized to everything in the window.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" title="Effective context engineering for AI agents" source="Anthropic" why="The practitioner playbook this lesson compresses: read after building your first long-running agent." />
+  <LinkCard href="https://arxiv.org/abs/2307.03172" title="Lost in the Middle" source="arXiv" why="The research reason 'just use the big window' underperforms curated context." />
+</GoDeeper>

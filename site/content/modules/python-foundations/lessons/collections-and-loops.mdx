@@ -1,0 +1,93 @@
+Real data never arrives one value at a time: it arrives as *collections*: a list of orders, a dictionary of fields, a list of dictionaries from an API. Master these two shapes and the loops that process them, and you will recognize a large share of practical data work.
+
+## Lists: ordered sequences
+
+```python
+amounts = [4180, 990, 12500, 340]
+amounts[0]          # 4180: positions count from ZERO
+amounts[-1]         # 340: negatives count from the end
+len(amounts)        # 4
+amounts.append(75)  # add to the end
+```
+
+## Dictionaries: labeled records
+
+A **dict** maps keys to values: the natural shape of a record, and exactly what APIs and models exchange (as JSON, next lesson):
+
+```python
+invoice = {"vendor": "Nordwind", "total": 4180, "paid": False}
+invoice["vendor"]            # "Nordwind"
+invoice["due"] = "2026-08-01"  # add a field
+invoice.get("iban")          # None: .get() is the safe lookup
+invoice["iban"]              # KeyError!: [] on a missing key crashes
+```
+
+That last line matters: `[]` on a missing key raises an exception; `.get()` returns `None` (or a default). Choosing between them is choosing what should happen when data is incomplete: a real design decision you'll make constantly.
+
+<Check
+  question="An extraction dict may or may not contain 'due_date'. Which lookup lets processing continue gracefully when it's absent?"
+  options={[
+    "invoice['due_date']: crashes make missing data visible",
+    "invoice.get('due_date'): returns None when absent, which your code can check and route on",
+    "Deleting the field first",
+    "Converting the dict to a list"
+  ]}
+  answer={1}
+  explanation="get() turns absence into a value (None) you can handle: the schema-with-nullable-fields idea from Module 8 in miniature. Use [] when a missing key genuinely IS a bug you want to crash on."
+  hint="One of them raises KeyError; the other returns None."
+/>
+
+## Loops: doing something with each item
+
+```python
+invoices = [
+    {"vendor": "Nordwind", "total": 4180},
+    {"vendor": "Baltic Freight", "total": 990},
+    {"vendor": "CargoOne", "total": 12500},
+]
+
+big = []
+for inv in invoices:              # inv is each dict in turn
+    if inv["total"] > 1000:
+        big.append(inv["vendor"])
+# big == ["Nordwind", "CargoOne"]
+```
+
+Python has a beloved shorthand for exactly this filter-and-transform pattern, the **comprehension**:
+
+```python
+big = [inv["vendor"] for inv in invoices if inv["total"] > 1000]
+total_value = sum(inv["total"] for inv in invoices)
+```
+
+Read it aloud: *"the vendor, for each invoice, if its total exceeds 1000."* Once it clicks, you'll see this pattern everywhere in AI code: filtering documents, transforming records, building prompt lists.
+
+<PythonPractice
+  title="Filter and transform"
+  instructions="Given the list `orders`, build a list `flagged` containing the id of every order whose amount is at least 500, and compute `revenue` as the sum of all amounts."
+  starter={"orders = [\n    {\"id\": \"A1\", \"amount\": 120},\n    {\"id\": \"A2\", \"amount\": 750},\n    {\"id\": \"A3\", \"amount\": 500},\n    {\"id\": \"A4\", \"amount\": 90},\n]\n\nflagged = []\nrevenue = 0\n# your code here\n"}
+  test={"assert flagged == ['A2', 'A3'], f'flagged is {flagged}, expected [\\'A2\\', \\'A3\\']'\nassert revenue == 1460, f'revenue is {revenue}, expected 1460'\nprint('Filtering and summing: correct!')"}
+  solution={"flagged = [o[\"id\"] for o in orders if o[\"amount\"] >= 500]\nrevenue = sum(o[\"amount\"] for o in orders)"}
+/>
+
+## The shape you'll see forever: list of dicts
+
+Look again at `invoices` above: a **list of dictionaries**. Every API response, every dataset row collection, every batch of model outputs takes this shape. The fluency drill is always the same three moves (*loop over the list, reach into each dict, filter or transform*) and you just did all three.
+
+<Check
+  question="What does `[o['id'] for o in orders if o['amount'] > 5000]` produce when no order exceeds 5000?"
+  options={[
+    "None",
+    "An empty list []: a comprehension with no matching items is empty, not an error",
+    "A KeyError",
+    "The full list of ids"
+  ]}
+  answer={1}
+  explanation="No matches simply means no items: []. Empty-but-valid is a normal state your downstream code should expect: len(result) == 0 is a check, not a crash."
+  hint="A filter that matches nothing yields how many items?"
+/>
+
+<GoDeeper>
+  <LinkCard href="https://docs.python.org/3/tutorial/datastructures.html" title="Data Structures" source="python.org" why="Lists, dicts, and comprehensions in official depth." />
+  <LinkCard href="https://www.kaggle.com/learn/python" title="Kaggle: Python" source="Kaggle Learn" why="Free interactive notebook course to drill everything from this module with more reps." />
+</GoDeeper>

@@ -1,0 +1,510 @@
+[
+  {
+    "id": "multi-q01",
+    "type": "single",
+    "prompt": "When is a staged OCR/parser pipeline preferable to one general multimodal call?",
+    "options": [
+      {
+        "id": "a",
+        "text": "When exact text/structure needs stage-level measurement, validation, and predictable cost"
+      },
+      {
+        "id": "b",
+        "text": "Whenever the file contains pixels"
+      },
+      {
+        "id": "c",
+        "text": "Only when no schema exists"
+      },
+      {
+        "id": "d",
+        "text": "Never; one model is always simpler operationally"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Specialist stages can make exact perception and structure observable; native multimodal reasoning remains useful where joint interpretation adds value."
+  },
+  {
+    "id": "multi-q02",
+    "type": "multi",
+    "prompt": "Which checks belong at untrusted media ingestion? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Detect real file type and enforce byte/pixel/duration limits"
+      },
+      {
+        "id": "b",
+        "text": "Sandbox parsing or scan as required"
+      },
+      {
+        "id": "c",
+        "text": "Record source, hash, transforms, and permission metadata"
+      },
+      {
+        "id": "d",
+        "text": "Trust the filename extension as proof of safety"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Media requires validation, resource limits, safe parsing, and provenance. Extensions are user-controlled labels."
+  },
+  {
+    "id": "multi-q03",
+    "type": "single",
+    "prompt": "OCR recognizes all words in a two-column page but interleaves the columns. What failed?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Layout analysis and reading order"
+      },
+      {
+        "id": "b",
+        "text": "API authentication"
+      },
+      {
+        "id": "c",
+        "text": "Speech endpointing"
+      },
+      {
+        "id": "d",
+        "text": "Model quantization"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Character recognition can be correct while the structural sequence needed for meaning is wrong."
+  },
+  {
+    "id": "multi-q04",
+    "type": "single",
+    "prompt": "What is the strongest evidence for accepting an extracted invoice total?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Source region plus schema validity and deterministic reconciliation with line items"
+      },
+      {
+        "id": "b",
+        "text": "The model says it is 99% confident"
+      },
+      {
+        "id": "c",
+        "text": "The answer contains many words"
+      },
+      {
+        "id": "d",
+        "text": "The image filename includes 'final'"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Verifiable evidence and exact business constraints are stronger than uncalibrated self-reported confidence."
+  },
+  {
+    "id": "multi-q05",
+    "type": "single",
+    "prompt": "Why preserve the original media after creating normalized derivatives?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Transforms can lose evidence, and the original supports review, reprocessing, and provenance when retention is allowed"
+      },
+      {
+        "id": "b",
+        "text": "Original files require no access control"
+      },
+      {
+        "id": "c",
+        "text": "Normalized files cannot be tested"
+      },
+      {
+        "id": "d",
+        "text": "It guarantees the model will be correct"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Resizing, compression, OCR, and text conversion are lossy. The governed original permits verification and improved future processing."
+  },
+  {
+    "id": "multi-q06",
+    "type": "single",
+    "prompt": "What does barge-in require in a voice system?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Stop playback, update turn state, cancel safe obsolete work, and reconcile any ambiguous side effect"
+      },
+      {
+        "id": "b",
+        "text": "Ignore the user until all audio completes"
+      },
+      {
+        "id": "c",
+        "text": "Delete conversation state"
+      },
+      {
+        "id": "d",
+        "text": "Increase speech volume"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Interruption is both an interface and state-management event; stopping audio does not automatically undo external actions."
+  },
+  {
+    "id": "multi-q07",
+    "type": "single",
+    "prompt": "Which latency measure most directly affects whether a voice assistant feels responsive at the start of a reply?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Time from end-of-turn detection to first useful audio"
+      },
+      {
+        "id": "b",
+        "text": "Total database size"
+      },
+      {
+        "id": "c",
+        "text": "Number of colors in the interface"
+      },
+      {
+        "id": "d",
+        "text": "Training epoch count"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Endpointing, transcription, reasoning, and synthesis before first audio determine the initial conversational pause."
+  },
+  {
+    "id": "multi-q08",
+    "type": "single",
+    "prompt": "A multimodal model reads hidden instructions in an image and proposes an unauthorized upload. Which layer prevents impact?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Application authorization and egress policy deny the capability"
+      },
+      {
+        "id": "b",
+        "text": "Higher image resolution"
+      },
+      {
+        "id": "c",
+        "text": "A longer answer"
+      },
+      {
+        "id": "d",
+        "text": "OCR confidence"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Multimodal content is untrusted. Capability controls outside the model stop unauthorized consequences."
+  },
+  {
+    "id": "multi-q09",
+    "type": "multi",
+    "prompt": "Which dimensions should a document extraction eval report separately? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Perception/text accuracy"
+      },
+      {
+        "id": "b",
+        "text": "Layout/table structure"
+      },
+      {
+        "id": "c",
+        "text": "Critical-field and end-to-end outcome accuracy"
+      },
+      {
+        "id": "d",
+        "text": "Only average answer length"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Stage and task metrics localize whether perception, structure, or reasoning caused the outcome."
+  },
+  {
+    "id": "multi-q10",
+    "type": "single",
+    "prompt": "Why evaluate speech systems by accent, noise, device, and domain vocabulary?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Aggregate accuracy can hide deployment-condition and user-group failures"
+      },
+      {
+        "id": "b",
+        "text": "Every speaker must sound identical"
+      },
+      {
+        "id": "c",
+        "text": "Audio has no overall metric"
+      },
+      {
+        "id": "d",
+        "text": "Segmentation always raises the average"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Speech quality varies with acoustic and population conditions; release evidence must cover the intended users and environments."
+  },
+  {
+    "id": "multi-q11",
+    "type": "single",
+    "prompt": "A user corrects a transcribed account number before a payment. What should the interface do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Show the corrected value and require confirmation before the consequential write"
+      },
+      {
+        "id": "b",
+        "text": "Prefer the original transcript silently"
+      },
+      {
+        "id": "c",
+        "text": "Submit both account numbers"
+      },
+      {
+        "id": "d",
+        "text": "Remove the audit record"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Correction and explicit confirmation keep a perception error from becoming a financial side effect."
+  },
+  {
+    "id": "multi-q12",
+    "type": "single",
+    "prompt": "What is the correct fallback when a required camera capture repeatedly fails quality checks?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Offer clear capture guidance and a tested non-visual or human-assisted path"
+      },
+      {
+        "id": "b",
+        "text": "Guess from the blurred image"
+      },
+      {
+        "id": "c",
+        "text": "Block the user permanently"
+      },
+      {
+        "id": "d",
+        "text": "Hide the error"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Quality rejection must be paired with recovery and accessibility rather than forcing an unreliable modality."
+  },
+  {
+    "id": "mm-x01",
+    "type": "single",
+    "prompt": "Two-column PDF text extracted row-by-row reads as interleaved nonsense. The missing extraction output is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…reading order: blocks need page, bounding box, and reading-order indexes: layout is meaning, not decoration"
+      },
+      {
+        "id": "b",
+        "text": "…higher OCR resolution"
+      },
+      {
+        "id": "c",
+        "text": "…a larger language model"
+      },
+      {
+        "id": "d",
+        "text": "…lower temperature"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Character accuracy can be perfect while structure is destroyed. Reading order is a first-class output of document parsing, evaluated separately."
+  },
+  {
+    "id": "mm-x02",
+    "type": "single",
+    "prompt": "When a PDF has trustworthy embedded text, running OCR anyway is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a downgrade: native text is exact while OCR introduces recognition errors: detect text-vs-scanned per region and OCR only what needs it"
+      },
+      {
+        "id": "b",
+        "text": "…best practice for consistency"
+      },
+      {
+        "id": "c",
+        "text": "…required by PDF standards"
+      },
+      {
+        "id": "d",
+        "text": "…free of any quality difference"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Use the highest-fidelity source available per region. OCR is the fallback for scans, not the default for everything."
+  },
+  {
+    "id": "mm-x03",
+    "type": "single",
+    "prompt": "Extraction schemas for documents include an evidence region (page + bounding box) per field because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…evidence makes every value verifiable: reviewers jump straight to the source region, and missing evidence flags probable hallucination"
+      },
+      {
+        "id": "b",
+        "text": "…it makes the JSON larger and more impressive"
+      },
+      {
+        "id": "c",
+        "text": "…models require coordinates to function"
+      },
+      {
+        "id": "d",
+        "text": "…screens are rectangular"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Evidence-linked extraction is the document version of RAG citations: checkable claims, faster review, and an automatic tripwire for invented values."
+  },
+  {
+    "id": "mm-x04",
+    "type": "single",
+    "prompt": "A model reports 97% confidence on an extracted total, but line items don't sum to it. The document routes to…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…human review: deterministic reconciliation outranks self-reported confidence, which measures fluency more than truth"
+      },
+      {
+        "id": "b",
+        "text": "…auto-processing; 97% is high"
+      },
+      {
+        "id": "c",
+        "text": "…deletion"
+      },
+      {
+        "id": "d",
+        "text": "…a retry with higher temperature"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Arithmetic doesn't hallucinate. Deterministic cross-checks are the strongest signal in the confidence blend and always win conflicts."
+  },
+  {
+    "id": "mm-x05",
+    "type": "single",
+    "prompt": "Document AI quality should be monitored by segment (vendor, layout, scan quality, language) because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…template drift and new layouts degrade specific segments first: aggregates hide the vendor whose new invoice format just broke extraction"
+      },
+      {
+        "id": "b",
+        "text": "…segments make dashboards prettier"
+      },
+      {
+        "id": "c",
+        "text": "…averages are mathematically invalid"
+      },
+      {
+        "id": "d",
+        "text": "…regulations require vendor tracking"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Module 5's segment-analysis habit, applied to documents: failures cluster, and the cluster is the diagnosis."
+  },
+  {
+    "id": "mm-x06",
+    "type": "single",
+    "prompt": "Uploaded documents are a prompt-injection vector because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…hidden text (white-on-white, metadata, embedded notes) reaches the model as readable tokens: document content is untrusted input, full Module 15 rules applied"
+      },
+      {
+        "id": "b",
+        "text": "…PDFs can execute Python on the server"
+      },
+      {
+        "id": "c",
+        "text": "…they can't be; images are safe by nature"
+      },
+      {
+        "id": "d",
+        "text": "…OCR always adds malicious text"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The model reads what humans don't see. Least privilege and gated actions protect document pipelines exactly as they protect chat."
+  },
+  {
+    "id": "mm-x07",
+    "type": "single",
+    "prompt": "For voice interfaces, the latency budget differs from text chat because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…conversation has a rhythm: sub-second response gaps read as natural while multi-second gaps read as broken: pushing designs toward streaming, smaller models, and incremental transcription"
+      },
+      {
+        "id": "b",
+        "text": "…audio files are smaller than text"
+      },
+      {
+        "id": "c",
+        "text": "…voice users are more patient"
+      },
+      {
+        "id": "d",
+        "text": "…latency is identical across modalities"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Modality sets the budget; the budget picks the architecture (Module 16's discipline). Realtime voice is a p95 problem before it's a quality problem."
+  },
+  {
+    "id": "mm-x08",
+    "type": "single",
+    "prompt": "An unfamiliar document layout arrives. The robust pipeline response is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a 'new layout' route: flag, quarantine for review, and add to evaluation, rather than forcing it through the dominant template and hoping"
+      },
+      {
+        "id": "b",
+        "text": "…force it through the closest template"
+      },
+      {
+        "id": "c",
+        "text": "…reject the customer"
+      },
+      {
+        "id": "d",
+        "text": "…retry ten times"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Unknown-unknowns get an explicit route. Reviewed new layouts become supported layouts; forced ones become silent errors."
+  }
+]

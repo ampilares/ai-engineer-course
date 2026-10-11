@@ -1,0 +1,21 @@
+{
+  "slug": "python-foundations",
+  "number": 1,
+  "title": "Python from Zero",
+  "phase": "onramp",
+  "summary": "Never coded? Start here. The Python you need for AI engineering, practiced right in your browser: plus how to work with AI as you learn to code.",
+  "outcomes": [
+    "Read and write basic Python: variables, conditionals, functions, and loops",
+    "Work with lists and dictionaries: the shapes all data arrives in",
+    "Handle files, JSON, errors, and packages like a professional",
+    "Use AI coding assistants productively without becoming dependent on them"
+  ],
+  "examCount": 10,
+  "lessons": [
+    { "slug": "thinking-in-python", "title": "Thinking in Python: values, names, and decisions", "minutes": 16 },
+    { "slug": "functions-and-errors", "title": "Functions, types, and errors", "minutes": 16 },
+    { "slug": "collections-and-loops", "title": "Lists, dictionaries, and loops", "minutes": 16 },
+    { "slug": "files-json-environment", "title": "Files, JSON, and your Python environment", "minutes": 14 },
+    { "slug": "coding-with-ai", "title": "Coding with AI without losing your skills", "minutes": 13 }
+  ]
+}

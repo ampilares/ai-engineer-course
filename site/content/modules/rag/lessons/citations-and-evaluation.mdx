@@ -1,0 +1,86 @@
+Retrieval found the chunks; now generation must be **held to them**. The difference between a trustworthy knowledge assistant and a liability is three disciplines: grounding instructions, an abstention path, and separated evaluation.
+
+## Grounded generation: the prompt contract
+
+```text
+Answer the question using ONLY the provided sources.
+After each claim, cite its source like [1].
+If the sources do not contain the answer, say exactly:
+"I don't have enough information in the knowledge base to answer this."
+Do not use outside knowledge, even when confident.
+
+Sources:
+[1] (Refund Policy §2, updated 2026-03) "Refunds are available within 30 days…"
+[2] (Shipping FAQ) "Standard delivery takes 3–5 business days…"
+
+Question: {question}
+```
+
+Three design choices carry the weight:
+
+- **Citations per claim** make answers *checkable*: by users, by reviewers, and by your evals. An uncitable sentence is a red flag by construction.
+- **The abstention path is engineered, not assumed.** A model can generate a refusal, but it will not do so reliably without a defined policy, evidence threshold, and measurable output. Use an exact, detectable response for insufficient evidence and treat correct abstention as a successful outcome. A RAG system that never abstains should be tested aggressively for unsupported answers.
+- **"Only the provided sources"** suppresses the model's parametric guesses: imperfectly. Enforcement comes from evaluation, below.
+
+<Check
+  question="Retrieval returns nothing relevant for 'Do you ship to Antarctica?', yet the bot answers 'Yes, 7–10 days', from nowhere. Which safeguard failed or was missing?"
+  options={[
+    "The embedding model was too small",
+    "Grounding + abstention: with no supporting source, the designed outcome is the explicit 'insufficient information' response, and un-cited claims should fail evaluation",
+    "The context window overflowed",
+    "Nothing failed; a plausible guess is fine"
+  ]}
+  answer={1}
+  explanation="Empty or irrelevant retrieval must route to abstention, not to the model's imagination. This is the exact scenario the refusal path exists for, and why evals must include unanswerable questions."
+  hint="What should happen when the sources don't contain the answer?"
+/>
+
+## Evaluate the stages separately
+
+A RAG system fails in two independent places, and one end-to-end score cannot tell you which. So build **two eval sets**:
+
+**1. Retrieval evals**: questions with hand-labeled relevant chunks. Metrics:
+- **Recall@k**: is a relevant chunk in the top k? (If not, generation never had a chance.)
+- **MRR/precision@k**: how high and how clean is the ranking?
+
+Cheap to run (no generation!), so iterate chunking, hybrid weights, and rerankers against them freely.
+
+**2. Generation evaluations:** Given the correct retrieved chunks, judge whether the answer is faithful to the sources, cites its claims, and abstains when the sources are silent. Include a meaningful share of unanswerable questions and report the abstention and unsupported-claim rates.
+
+The debugging flowchart falls out automatically: wrong answer → check what was retrieved → *relevant chunks present?* No → fix retrieval (chunking, hybrid, reranking). Yes → fix generation (grounding prompt, model choice).
+
+<Check
+  question="End-to-end answer quality is 71%. Retrieval evals show recall@5 = 62%. Where does improvement effort go first?"
+  options={[
+    "Retrieval: in ~4 of 10 questions the model never saw the relevant text, capping everything downstream; no generation fix can answer from absent context",
+    "A bigger generation model",
+    "Prettier citation formatting",
+    "Raising temperature for more creative answers"
+  ]}
+  answer={0}
+  explanation="Recall is the ceiling: generation cannot exceed what retrieval delivers. Fix chunking/hybrid/reranking until recall@k is high, then tune generation. Measuring the stages separately is what made this diagnosis possible."
+  hint="What fraction of questions were unanswerable-by-construction for the generator?"
+/>
+
+<Callout type="note">
+**Module project: cited knowledge assistant.** Use 20–50 permission-safe documents from your domain. Build structural chunking with metadata, hybrid retrieval, a grounded prompt with citations, and an exact abstention response. Evaluate at least 30 answerable questions with labeled relevant chunks and 10 unanswerable questions. Report retrieval recall@5, citation correctness, answer faithfulness, and abstention rate. For every miss, identify the failed stage and propose a targeted correction.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.ragas.io/" title="Ragas" source="docs.ragas.io" why="Open-source RAG evaluation framework implementing exactly this stage-separated approach." />
+  <LinkCard href="https://arxiv.org/abs/2307.03172" title="Lost in the Middle" source="arXiv" why="The research behind why stuffing more chunks into context underperforms: supports retrieve-less-but-better." />
+</GoDeeper>
+
+## Verify claims, not decorative footnotes
+
+A citation is useful only if it identifies a stable source location and supports the adjacent claim. Ask the generator to produce claim-level source IDs from the supplied context, then validate that every cited ID was actually retrieved. For high-stakes workflows, split the answer into atomic claims and grade entailment against the cited passage. A source that is relevant to the topic may still fail to support the exact number, date, or condition stated.
+
+Separate failures into retrieval miss, context selection, unsupported generation, citation mismatch, and appropriate abstention. This taxonomy tells you what to change. End-to-end “answer quality” alone can hide a generator that guesses correctly despite failed retrieval or a retriever that finds the evidence while generation ignores it.
+
+Evaluate permission isolation and freshness as correctness properties. Include queries where an old document conflicts with the current version and users with different access should receive different evidence.
+
+## Guided build: a cited assistant with a refusal contract
+
+Extend the retrieval benchmark to at least 50 questions, including 10 unanswerable, 5 stale-version conflicts, and 5 permission cases. Measure retrieval recall, answer correctness, claim support, citation validity, abstention precision/recall, latency, and cost.
+
+Review every unsupported claim and wrong abstention. Set launch thresholds and a single exact response for insufficient evidence. The module artifact passes only when each answer is traceable to authorized evidence, every citation resolves, and the system refuses more reliably than it fabricates on the unanswerable set.

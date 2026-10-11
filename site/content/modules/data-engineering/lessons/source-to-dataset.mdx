@@ -1,0 +1,63 @@
+Models do not consume “the company’s data.” They consume a particular snapshot assembled from particular systems under particular rules. Data engineering makes that statement precise enough to reproduce, test, and operate.
+
+## Start with a source contract
+
+A source contract names the owner, delivery method, schema, identifiers, event time, update semantics, expected volume, freshness target, permissions, and failure contact. It answers awkward questions before code does:
+
+- Is a row an immutable event, a current record, or a correction to history?
+- Which field is stable across retries and exports?
+- Can records arrive late or out of order?
+- Does deletion mean a tombstone event or disappearance from the next snapshot?
+- Which timestamp describes the business event, and which describes ingestion?
+
+Without those answers, a pipeline can run successfully while building the wrong dataset.
+
+## Batch, events, and change data
+
+**Batch ingestion** periodically reads files or API pages. It is simple and replayable, but freshness is bounded by the schedule. **Event ingestion** processes messages as changes occur; it lowers latency while introducing ordering, duplication, and backpressure concerns. **Change data capture** publishes inserts, updates, and deletes from a source database, preserving operational changes without repeatedly scanning the whole table.
+
+Choose based on the business freshness requirement, not fashion. A nightly policy index may be enough; a fraud decision after a payment needs current events. Many systems use both: a batch snapshot establishes truth, while events keep it current.
+
+Every mode needs a stable source ID and idempotent sink. Store the raw or losslessly normalized input in a bounded landing layer when policy permits. Record source version, event time, ingestion time, content hash, and pipeline run. This provenance lets you rebuild a dataset and determine which records were affected by a bad parser.
+
+<Check
+  question="A daily customer export contains the current state of every customer. Yesterday a customer existed; today the row is absent. What must the source contract clarify?"
+  options={[
+    "Whether absence means deletion, an export failure, a filter change, or no update",
+    "Which embedding model to use",
+    "The learning rate for training",
+    "Whether the CSV should be renamed"
+  ]}
+  answer={0}
+  explanation="A snapshot shows what is present, not why a prior row disappeared. Deletion semantics must be explicit before the sink can safely remove or retain data."
+  hint="Can a missing row communicate intent by itself?"
+/>
+
+## Define the dataset at a point in time
+
+For training, reconstruct what was knowable at the prediction cutoff. Join features using event time, not today’s corrected values. For retrieval, preserve document effective dates and source authority. For evaluation, freeze the exact input set and its lineage. A mutable query result is not a versioned dataset.
+
+Late data needs policy: accept it and rebuild affected partitions, ignore it after a deadline, or flag the dataset as incomplete. Corrections need the same treatment. Silent in-place mutation destroys reproducibility.
+
+<Check
+  question="A churn model trained in August uses each customer’s current plan from a table that was overwritten in July. Why is the dataset not reproducible?"
+  options={[
+    "The historical plan values at each prediction cutoff were lost, so the feature cannot be reconstructed",
+    "August is a poor month for training",
+    "Plan names cannot be model features",
+    "The table should have been a CSV"
+  ]}
+  answer={0}
+  explanation="Point-in-time datasets require history. A current-state table cannot recover what the system knew before later plan changes."
+  hint="Which value existed when the decision would have been made?"
+/>
+
+## Guided build: a replayable ingestion slice
+
+Choose one API, file export, or event source. Write its source contract and ingest at least two deliveries containing a new record, update, duplicate, late record, malformed record, and deletion signal. Land the input, validate it, and publish a typed table.
+
+Prove that replaying both deliveries produces the same final state, malformed records are quarantined with reason codes, and every published row points to its source delivery. Query dataset freshness and record counts by pipeline run. Your deliverable is the contract, ingestion code, tests, lineage fields, and a short explanation of the chosen batch/event design.
+
+<Callout type="tip">
+Keep the first version small enough to replay locally. The ability to rebuild a thousand representative records on demand teaches more than operating an opaque distributed pipeline you cannot inspect.
+</Callout>

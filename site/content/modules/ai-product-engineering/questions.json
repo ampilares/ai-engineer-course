@@ -1,0 +1,510 @@
+[
+  {
+    "id": "product-q01",
+    "type": "single",
+    "prompt": "Which statement is a falsifiable AI product hypothesis?",
+    "options": [
+      {
+        "id": "a",
+        "text": "For eligible support cases, cited drafts reduce median handling time 20% while critical error and recontact stay below limits"
+      },
+      {
+        "id": "b",
+        "text": "Our AI will delight everyone"
+      },
+      {
+        "id": "c",
+        "text": "We will use the newest model"
+      },
+      {
+        "id": "d",
+        "text": "Agents are the future"
+      }
+    ],
+    "answer": "a",
+    "explanation": "It names population, intervention, outcome, magnitude, and guardrails that a pilot can test."
+  },
+  {
+    "id": "product-q02",
+    "type": "single",
+    "prompt": "Why define eligibility and non-goals before implementation?",
+    "options": [
+      {
+        "id": "a",
+        "text": "They bound claims, evaluation, routing, and risk to the population the product can support"
+      },
+      {
+        "id": "b",
+        "text": "They guarantee universal accuracy"
+      },
+      {
+        "id": "c",
+        "text": "They remove the need for user research"
+      },
+      {
+        "id": "d",
+        "text": "They make all inputs identical"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A declared operating boundary makes unsupported cases visible and prevents a narrow capability from being marketed as universal."
+  },
+  {
+    "id": "product-q03",
+    "type": "single",
+    "prompt": "A draft has sources, but reviewers rarely open them. Which metric tests whether evidence is functioning in the UX?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Source verification behavior plus audited unsupported-claim rate"
+      },
+      {
+        "id": "b",
+        "text": "Answer length alone"
+      },
+      {
+        "id": "c",
+        "text": "Number of model parameters"
+      },
+      {
+        "id": "d",
+        "text": "Button color"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Evidence availability is not enough; observe whether it is usable and whether accepted claims are actually supported."
+  },
+  {
+    "id": "product-q04",
+    "type": "single",
+    "prompt": "What makes human approval meaningful for a consequential action?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The reviewer sees the exact effect, evidence, warnings, destination, and can reject or correct it"
+      },
+      {
+        "id": "b",
+        "text": "The approval button appears after a long explanation"
+      },
+      {
+        "id": "c",
+        "text": "The model approves itself first"
+      },
+      {
+        "id": "d",
+        "text": "Every action is approved in under one second"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Approval must support independent informed judgment; generic consent or rapid clicking is not a control."
+  },
+  {
+    "id": "product-q05",
+    "type": "multi",
+    "prompt": "Which are useful uncertainty signals in an AI interface? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Missing or conflicting evidence"
+      },
+      {
+        "id": "b",
+        "text": "Deterministic validation warnings"
+      },
+      {
+        "id": "c",
+        "text": "Unsupported input or out-of-scope state"
+      },
+      {
+        "id": "d",
+        "text": "An unexplained self-reported percentage shown as certainty"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Observable evidence and scope conditions support action. Uncalibrated percentages can create false precision."
+  },
+  {
+    "id": "product-q06",
+    "type": "single",
+    "prompt": "What is the best basis for a build-versus-buy decision?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Lifecycle quality, risk, privacy, integration, operations, total cost, and exit path on representative cases"
+      },
+      {
+        "id": "b",
+        "text": "The vendor with the longest feature list"
+      },
+      {
+        "id": "c",
+        "text": "Token price alone"
+      },
+      {
+        "id": "d",
+        "text": "Whichever product was announced most recently"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The decision spans system outcomes and ongoing ownership; API price and feature count omit major costs and constraints."
+  },
+  {
+    "id": "product-q07",
+    "type": "single",
+    "prompt": "What should an architecture decision record include?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Context, options, evidence, decision, consequences, rollback, and review trigger"
+      },
+      {
+        "id": "b",
+        "text": "Only the selected framework name"
+      },
+      {
+        "id": "c",
+        "text": "A guarantee the decision never changes"
+      },
+      {
+        "id": "d",
+        "text": "A copy of every raw user prompt"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A decision is reviewable when its reasoning, trade-offs, exit, and conditions for reconsideration are explicit."
+  },
+  {
+    "id": "product-q08",
+    "type": "single",
+    "prompt": "What can shadow mode measure without exposing model output to users?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Traffic mix, integration behavior, latency, cost, and disagreement with the current path"
+      },
+      {
+        "id": "b",
+        "text": "True long-term adoption"
+      },
+      {
+        "id": "c",
+        "text": "Whether users trust the interface"
+      },
+      {
+        "id": "d",
+        "text": "The causal effect of showing the output"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Shadowing provides production-shaped technical evidence, but users cannot adopt or react to an intervention they do not see."
+  },
+  {
+    "id": "product-q09",
+    "type": "single",
+    "prompt": "Why record the exact system version for each experiment exposure?",
+    "options": [
+      {
+        "id": "a",
+        "text": "So outcomes can be attributed to a defined intervention when prompts, models, or routes change"
+      },
+      {
+        "id": "b",
+        "text": "To make randomization unnecessary"
+      },
+      {
+        "id": "c",
+        "text": "To remove privacy controls"
+      },
+      {
+        "id": "d",
+        "text": "To guarantee statistical significance"
+      }
+    ],
+    "answer": "a",
+    "explanation": "An unstable or unidentified treatment makes product-outcome analysis uninterpretable."
+  },
+  {
+    "id": "product-q10",
+    "type": "single",
+    "prompt": "A mandatory AI feature has 100% usage but increases task time. What should the team conclude?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Usage is forced exposure, not positive adoption; the task outcome shows a regression"
+      },
+      {
+        "id": "b",
+        "text": "The feature is successful because usage is perfect"
+      },
+      {
+        "id": "c",
+        "text": "Task time is irrelevant"
+      },
+      {
+        "id": "d",
+        "text": "Remove the baseline data"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Realized value depends on outcomes and user behavior; mandatory exposure cannot prove product fit."
+  },
+  {
+    "id": "product-q11",
+    "type": "multi",
+    "prompt": "Which belong in a limited pilot plan? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Eligible population and exposure method"
+      },
+      {
+        "id": "b",
+        "text": "Primary outcome, guardrails, and stop conditions"
+      },
+      {
+        "id": "c",
+        "text": "Support owner, rollback, and decision date"
+      },
+      {
+        "id": "d",
+        "text": "A promise to scale regardless of results"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "A bounded pilot defines who is exposed, how success and harm are measured, and who can stop or recover it."
+  },
+  {
+    "id": "product-q12",
+    "type": "single",
+    "prompt": "When should an AI feature be sunset?",
+    "options": [
+      {
+        "id": "a",
+        "text": "When evidence shows low value, unacceptable risk/cost, or loss of ownership and it cannot be corrected economically"
+      },
+      {
+        "id": "b",
+        "text": "Never; launch makes it permanent"
+      },
+      {
+        "id": "c",
+        "text": "Only when a newer model is announced"
+      },
+      {
+        "id": "d",
+        "text": "Whenever one user asks a question"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Lifecycle ownership includes removing products that no longer justify their outcomes, risks, or maintenance burden."
+  },
+  {
+    "id": "pe-x01",
+    "type": "single",
+    "prompt": "Shadow mode (processing real inputs without showing outputs) can establish…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…integration behavior, latency, traffic mix, and model-decision distributions, but not user behavior, since users never see the output"
+      },
+      {
+        "id": "b",
+        "text": "…long-term adoption with certainty"
+      },
+      {
+        "id": "c",
+        "text": "…that approvals work under real responsibility"
+      },
+      {
+        "id": "d",
+        "text": "…nothing useful"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Shadow gives production-shaped technical evidence risk-free. The human questions (trust, adoption, workflow fit) need exposure stages that follow."
+  },
+  {
+    "id": "pe-x02",
+    "type": "single",
+    "prompt": "A pilot needs predefined stop conditions because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…without them, sunk cost declares failures successes and one anecdote kills successes: stop rules are pre-registered honesty, like eval criteria"
+      },
+      {
+        "id": "b",
+        "text": "…pilots are illegal without them"
+      },
+      {
+        "id": "c",
+        "text": "…they make pilots shorter"
+      },
+      {
+        "id": "d",
+        "text": "…predefined stop conditions guarantee that the primary outcome will improve"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Deciding what failure looks like before seeing results is the product-scale version of not tuning on the test set."
+  },
+  {
+    "id": "pe-x03",
+    "type": "single",
+    "prompt": "Why randomize an A/B experiment by team or user rather than by request?",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a person using both variants learns from each: contaminating the comparison; the randomization unit must contain the learning effects"
+      },
+      {
+        "id": "b",
+        "text": "…request-level randomization is computationally hard"
+      },
+      {
+        "id": "c",
+        "text": "…teams prefer being units"
+      },
+      {
+        "id": "d",
+        "text": "…the math only works for teams"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Contamination blurs effects. Choose units that isolate exposure, and predefine outcome, guardrails, and duration before peeking."
+  },
+  {
+    "id": "pe-x04",
+    "type": "single",
+    "prompt": "Alongside the primary metric, experiments carry guardrail metrics to catch…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…wins that secretly cost too much elsewhere: throughput up while error rate, escalations, or downstream rework quietly climb"
+      },
+      {
+        "id": "b",
+        "text": "…nothing; one metric is cleaner"
+      },
+      {
+        "id": "c",
+        "text": "…slow dashboards"
+      },
+      {
+        "id": "d",
+        "text": "…jealous stakeholders"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A metric can improve while the system worsens (the course's oldest warning). Guardrail metrics track outcomes that the primary metric does not protect."
+  },
+  {
+    "id": "pe-x05",
+    "type": "single",
+    "prompt": "Adoption analysis found users silently overriding 40% of AI suggestions. This most likely signals…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…rational rejection of quality or fit: interview the overriders and inspect their cases before concluding 'training problem'"
+      },
+      {
+        "id": "b",
+        "text": "…users are wrong and need mandates"
+      },
+      {
+        "id": "c",
+        "text": "…a UI color issue"
+      },
+      {
+        "id": "d",
+        "text": "…nothing; overrides are noise"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Overrides are the richest feedback stream in the system: each one is a labeled disagreement. Users are usually responding to something real."
+  },
+  {
+    "id": "pe-x06",
+    "type": "single",
+    "prompt": "Build-versus-buy for an AI capability should weigh…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…differentiation (is this your product's core judgment?), data sensitivity, integration depth, and total ownership cost: buying commodity capability, building differentiating workflow"
+      },
+      {
+        "id": "b",
+        "text": "…only the sticker price"
+      },
+      {
+        "id": "c",
+        "text": "…whichever option demos faster"
+      },
+      {
+        "id": "d",
+        "text": "…always build, for pride"
+      }
+    ],
+    "answer": "a",
+    "explanation": "OCR and transcription are commodities; your domain's judgment layer and evals are differentiation. Spend build-effort where moats form."
+  },
+  {
+    "id": "pe-x07",
+    "type": "single",
+    "prompt": "Good AI-product UX for uncertain outputs includes…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…visible confidence/evidence, one-tap correction, and human control over consequential steps: designing FOR uncertainty rather than hiding it"
+      },
+      {
+        "id": "b",
+        "text": "…hiding uncertainty so users trust the system"
+      },
+      {
+        "id": "c",
+        "text": "…disclaimers in 6-point font"
+      },
+      {
+        "id": "d",
+        "text": "…removing all human controls for speed"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Trust comes from calibrated presentation and recoverability, not from performed confidence. Corrections double as your feedback loop."
+  },
+  {
+    "id": "pe-x08",
+    "type": "single",
+    "prompt": "Defining sunset criteria for an AI feature at launch means…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…agreeing in advance what usage/quality evidence justifies removal, so an unused or unsafe feature gets retired instead of defended for the launch narrative"
+      },
+      {
+        "id": "b",
+        "text": "…scheduling the feature's death date unconditionally"
+      },
+      {
+        "id": "c",
+        "text": "…nothing; features are forever"
+      },
+      {
+        "id": "d",
+        "text": "…planning the next press release"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Portfolio honesty: removal is a legitimate outcome. Pre-agreed criteria make it a process decision, not a political battle."
+  }
+]

@@ -1,0 +1,94 @@
+Here's the uncomfortable truth about building with AI models: your system's behavior can change when *you changed nothing*: a model upgrade, a prompt tweak, a new edge case in the data. The only defense is the boring superpower of classical engineering: **automated tests and version control**. Teams that have them iterate fearlessly; teams that don't, freeze.
+
+## Tests: encoded expectations
+
+A test is a small program that states what your code should do and screams when it stops doing it:
+
+```python
+from validate import Invoice, validate
+
+def test_valid_invoice_passes():
+    assert validate(Invoice("ACME", 5000)) == []
+
+def test_negative_total_rejected():
+    problems = validate(Invoice("ACME", -100))
+    assert "total must be positive" in problems
+
+def test_bad_currency_rejected():
+    problems = validate(Invoice("ACME", 5000, currency="EURO"))
+    assert any("currency" in p for p in problems)
+```
+
+Run `pytest` and every expectation is re-verified in milliseconds. The valuable tests are rarely the happy path: they're the **failure paths**: empty input, duplicates, timeouts, malformed fields. If the entry diagnostic of this course asks you to test "success, invalid input, upstream failure, and duplicates," that's not bureaucracy; that's the actual shape of production traffic.
+
+<Check
+  question="Which test suite gives the most real-world confidence for a function that fetches and parses API data?"
+  options={[
+    "One test with a perfect API response",
+    "Tests for a perfect response, a timeout, a 500 error, malformed JSON, and a duplicate delivery",
+    "A test that checks the function runs in under one second",
+    "No tests, but very careful manual checking before each release"
+  ]}
+  answer={1}
+  explanation="Production traffic is mostly fine and occasionally each kind of broken. Testing only the happy path verifies the case that was never going to hurt you. Manual checking doesn't scale and silently skips cases."
+  hint="What kinds of input will the function actually meet in production?"
+/>
+
+## Tests are the prototype for evals
+
+When a system contains a model, exact assertions are no longer sufficient because output is probabilistic and may have several acceptable forms. Module 14 extends the same testing discipline into **evaluations**: representative datasets paired with graders that score model behavior before a change ships. The mechanics evolve, but the habit of encoding and checking expectations transfers directly.
+
+## Git: the undo button for entire projects
+
+Version control records every state of your codebase so you can experiment without fear, collaborate without overwriting each other, and answer "what changed?": the first question in every debugging session.
+
+The working loop is small:
+
+```bash
+git switch -c feature/validation   # branch: a parallel line of work
+python -m pytest                   # verify the starting point
+git add validate.py test_validate.py
+git commit -m "Reject invoices with non-positive totals"
+git push origin feature/validation # share; open a pull request for review
+```
+
+Two habits carry most of the value:
+
+- **Small, described commits.** A commit that does one thing with a clear message makes history searchable and reviews possible.
+- **Review every diff, including your own.** Reading a diff before committing catches many defects and unintended changes, especially when an AI assistant drafted some of the code.
+
+<Check
+  question="A prompt change three weeks ago quietly degraded your extraction quality, and you've just noticed. Which combination lets you find and fix this fastest?"
+  options={[
+    "Big memory and luck",
+    "Version-controlled prompts plus an eval suite you can run against any past version",
+    "Restarting the project from scratch",
+    "Asking the model what changed"
+  ]}
+  answer={1}
+  explanation="Git tells you exactly what changed and when; the eval suite tells you which change moved the metric. Together they turn 'quality mysteriously dropped' into a short binary search. This is why Module 16 insists prompts and configs are versioned like code."
+  hint="You need to see what changed, and measure each candidate."
+/>
+
+<Callout type="note">
+**Module project: the reliable data worker.** Build it now, on your machine: pick any free public API; fetch, validate, and store records in SQLite; expose one filtered query endpoint; write tests for success, invalid input, upstream failure, and duplicates. Keep it in Git with honest commit messages. Every later module builds on this skeleton.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.pytest.org/en/stable/" title="pytest documentation" source="pytest.org" why="The de-facto standard Python test runner used in every lab." />
+  <LinkCard href="https://learngitbranching.js.org/" title="Learn Git Branching" source="learngitbranching.js.org" why="An interactive visualization that makes branches click in an hour." />
+</GoDeeper>
+
+## Choose the right test boundary
+
+Use several layers of confidence. **Unit tests** isolate deterministic rules and should be fast and numerous. **Contract tests** verify that your code sends and accepts the shape promised at an API boundary. **Integration tests** exercise real components such as SQLite and your HTTP client together. A small **end-to-end test** proves the critical user journey. Mock the network at the edge, not every internal function; tests coupled to implementation details become expensive to change while missing real behavior.
+
+AI-assisted coding raises the value of review, not the need for it. Before keeping generated code, inspect the diff, run the relevant tests, check error paths, and remove dependencies you do not understand. Never ask an assistant to “fix the test” without first deciding whether the code or expectation is wrong.
+
+Commit artifacts that determine behavior: source, tests, prompts, schemas, migrations, eval datasets, and configuration templates. Exclude secrets, local databases, caches, and raw personal data. A reproducible repository includes a short setup path and a command that verifies the project.
+
+## Guided build: make the project change-safe
+
+Create a test matrix for the reliable data worker. It must cover happy path, boundary values, invalid records, timeout, retry exhaustion, malformed upstream data, duplicate delivery, and database failure. Add one contract test for the external API and one end-to-end test from ingestion to query.
+
+Then make a small behavior change on a branch. Capture the failing test first, implement the change, run the complete suite, and review the diff before committing. Your evidence is the test matrix, the command output, and a concise commit history that another learner can follow.

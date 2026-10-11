@@ -1,0 +1,31 @@
+{
+  "slug": "evaluation",
+  "number": 14,
+  "title": "Evaluation, Testing & Observability",
+  "phase": "production",
+  "summary": "Know whether a probabilistic system is actually improving: datasets, graders, LLM judges, regression suites, and traces.",
+  "outcomes": [
+    "Build representative eval datasets from real traffic and failures",
+    "Choose graders: exact checks, rubrics, and LLM-as-judge, and validate the judge",
+    "Run evals as regression gates before every change ships",
+    "Instrument traces and metrics that make failures diagnosable"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "why-evals",
+      "title": "Why evaluations: measuring model behavior",
+      "minutes": 26
+    },
+    {
+      "slug": "datasets-and-graders",
+      "title": "Datasets and graders (including LLM-as-judge)",
+      "minutes": 28
+    },
+    {
+      "slug": "traces-and-monitoring",
+      "title": "Traces, metrics, and drift",
+      "minutes": 27
+    }
+  ]
+}

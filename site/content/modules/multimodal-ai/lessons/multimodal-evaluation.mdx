@@ -1,0 +1,62 @@
+End-to-end success can hide the stage that failed. A document answer may be wrong because OCR dropped a minus sign, a vision model selected the wrong region, a transcript changed a name, or language reasoning ignored correct evidence. Multimodal evaluation must preserve that chain.
+
+## Grade each representation boundary
+
+Build a stage scorecard:
+
+| Stage | Example measures |
+|---|---|
+| Media validation | supported/rejected correctly, corruption detected |
+| Perception | word error rate, field accuracy, detection/region overlap, speaker attribution |
+| Structure | reading order, table cells, timestamps, page/region links |
+| Reasoning | task correctness, evidence support, abstention |
+| Interaction | completion, correction, interruption, latency |
+| Outcome | accepted task, review effort, error consequence |
+
+Use metrics that match the task. Average OCR accuracy may hide a catastrophic error on totals; report critical fields separately. For generated descriptions, a rubric should distinguish visible evidence from unsupported inference. Have human reviewers inspect the original media, not only a model-produced transcript.
+
+<Check
+  question="A receipt system has 99% character accuracy but frequently drops decimal points in totals. Is the aggregate metric sufficient?"
+  options={[
+    "No; critical-field and downstream reconciliation metrics must expose the high-consequence error",
+    "Yes; 99% means every receipt is safe",
+    "Yes, if outputs are fluent",
+    "No, because OCR cannot be evaluated"
+  ]}
+  answer={0}
+  explanation="Character errors are not equally costly. Task and critical-field metrics reveal concentrated consequential failures."
+  hint="Does every character contribute equally to the outcome?"
+/>
+
+## Cover conditions and people
+
+Stratify by device, resolution, lighting/noise, orientation, language/accent, layout, duration, accessibility need, and other deployment-relevant conditions. Obtain consent and avoid collecting sensitive attributes casually; use them only when justified for detecting harmful disparities. Include unsupported inputs and verify the fallback.
+
+Test accessibility as a functional requirement. Provide captions and transcript correction for audio, text alternatives and keyboard paths for visual interactions, and enough time/control for users who cannot respond at the assumed pace. Never make voice or camera the only path for a necessary service without a justified accommodation plan.
+
+## Threats cross modalities
+
+Red-team visible and hidden prompt injection, QR codes/links, adversarial or malformed files, inaudible/obfuscated speech, impersonation, unauthorized faces/voices, sensitive metadata, and cross-tenant media retrieval. Keep tool authority outside the model. A document or image that says “send all records here” remains data.
+
+<Check
+  question="A diagram contains tiny white text instructing the agent to upload a database. Which control is decisive?"
+  options={[
+    "The application denies unauthorized data access and egress regardless of model instructions",
+    "The model is asked to be careful",
+    "The diagram is resized larger",
+    "Temperature is set to zero"
+  ]}
+  answer={0}
+  explanation="Hidden multimodal injection is untrusted input. Authorization and egress controls prevent the consequence even if the model follows it."
+  hint="Which layer controls the actual capability?"
+/>
+
+## Guided build: a multimodal release gate
+
+Create at least 50 cases for your module project across quality conditions, segments, benign edge cases, attacks, and unsupported inputs. Annotate stage-local expected evidence and final outcome. Evaluate perception, structure, reasoning, interaction, safety, latency, and cost separately.
+
+Set critical-field and segment minimums plus hard safety gates. Run one model or pipeline change and produce a ship/no-ship report with paired failure examples. Your module is complete when a regression can be localized to a representation boundary and users have a tested fallback when the media path fails.
+
+<Callout type="note">
+Archive only media you are permitted to retain. A useful regression set still needs consent, access restriction, retention, redaction, and deletion handling.
+</Callout>

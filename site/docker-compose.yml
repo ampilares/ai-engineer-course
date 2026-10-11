@@ -1,0 +1,37 @@
+services:
+  app:
+    build: .
+    image: practical-ai-engineer:latest
+    restart: unless-stopped
+    environment:
+      - BASE_URL=${BASE_URL:-http://localhost:3000}
+      - DATA_DIR=/data
+      # Uncomment and set for real email delivery:
+      # - SMTP_HOST=${SMTP_HOST}
+      # - SMTP_PORT=${SMTP_PORT}
+      # - SMTP_SECURE=${SMTP_SECURE}
+      # - SMTP_USER=${SMTP_USER}
+      # - SMTP_PASS=${SMTP_PASS}
+      # - MAIL_FROM=${MAIL_FROM}
+    volumes:
+      - app-data:/data
+    expose:
+      - "3000"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  app-data:
+  caddy-data:
+  caddy-config:

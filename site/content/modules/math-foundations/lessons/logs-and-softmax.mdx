@@ -1,0 +1,63 @@
+Between a model's raw internal scores and the probabilities it reports sits one small, ubiquitous function: **softmax**. Understanding it (and the logarithms and exponentials it's built from) turns several course-long mysteries (temperature, logits, "cross-entropy loss") into plain mechanics.
+
+## Exponentials and logarithms in two paragraphs
+
+**Exponential growth** multiplies: 2, 4, 8, 16… Each step scales by a factor. Exponentials turn small input differences into huge output differences: `e^5` is ~148 but `e^10` is ~22,000.
+
+**Logarithms** are the inverse: they count *how many multiplications* got you somewhere, compressing huge ranges into small ones (log₁₀ of 1,000,000 is just 6). Two practical consequences you'll use: multiplying probabilities (which shrink toward zero catastrophically fast) becomes *adding* their logs (which is why losses and likelihoods live in log-space) and quantities spanning many magnitudes (costs, token counts, probabilities) are best compared on log scales.
+
+<Check
+  question="Why do ML systems work with log-probabilities instead of raw probabilities when scoring a long sequence?"
+  options={[
+    "Logs make probabilities larger",
+    "Multiplying many probabilities underflows toward zero, while adding their logs is numerically stable and turns products into manageable sums",
+    "Logarithms are required by GPU hardware",
+    "Logarithms make each token statistically independent"
+  ]}
+  answer={1}
+  explanation="P(sequence) = p₁ × p₂ × … × pₙ becomes vanishingly small after a few hundred tokens. log turns the product into a sum of moderate negative numbers: computable, comparable, and exactly what 'cross-entropy loss' accumulates."
+  hint="What happens when you multiply 500 numbers that are each less than 1?"
+/>
+
+## Softmax: scores → probabilities
+
+A model's final layer produces a raw score per vocabulary token (**logits**) which can be any numbers at all: `[5.1, 2.3, -1.0, …]`. Probabilities must be positive and sum to 1. Softmax is the converter:
+
+```text
+softmax(zᵢ) = e^(zᵢ) / Σⱼ e^(zⱼ)
+```
+
+Exponentiate every score (making them positive and *amplifying gaps*), then divide by the total (making them sum to 1). You have already spent quality time with softmax without the name: the sampling widget's bars *are* softmax outputs, and its temperature slider divides the logits before the exponential:
+
+<SamplingSimulator />
+
+Now the slider is transparent: **temperature T divides every logit.** Small T → gaps between scores get amplified enormously by the exponential → the top token swallows the distribution (greedy). Large T → gaps shrink toward zero → near-uniform randomness. Temperature never adds knowledge; it repartitions the same scores.
+
+<Check
+  question="Logits are [4.0, 2.0]. What does dividing both by a temperature of 0.5 (making them [8.0, 4.0]) do to the softmax gap between the two tokens?"
+  options={[
+    "Nothing: both scores changed equally",
+    "It widens the probability gap: the exponential amplifies the doubled difference, concentrating probability on the top token",
+    "It flips which token is more likely",
+    "It makes both probabilities negative"
+  ]}
+  answer={1}
+  explanation="Softmax cares about differences between logits, and the exponential amplifies them: a gap of 2 → ratio e²≈7.4; a gap of 4 → ratio e⁴≈55. Low temperature = bigger effective gaps = sharper distribution. You watched this happen on the slider."
+  hint="e² versus e⁴: how do the ratios compare?"
+/>
+
+## Cross-entropy, demystified
+
+Training (Module 6) needs to score how far a predicted distribution is from the observed target. For a single correct class, **cross-entropy** reduces to the negative log-probability assigned to that class. Assigning the correct next token probability `0.9` produces a loss of about `0.105`; assigning it `0.001` produces a loss of about `6.9`. The loss therefore penalizes confident wrong predictions much more strongly than uncertain but correct ones. In a batch or sequence, training aggregates this quantity across examples or tokens.
+
+<Callout type="tip">
+Vocabulary unlocked: **logits** (raw scores), **softmax** (scores converted to probabilities), **temperature** (a logit-scaling parameter), **log-probabilities** (a numerically stable form of likelihood), and **cross-entropy** (a loss based on the negative log-probability of the target). These terms form one connected family that appears throughout machine learning.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://www.3blue1brown.com/topics/neural-networks" title="Neural networks series" source="3Blue1Brown" why="The softmax/loss segments animate exactly this lesson's mechanics." />
+</GoDeeper>
+
+## Practice: trace temperature and loss
+
+Choose three logits, such as `[3, 1, 0]`. Use a calculator or short script to compute softmax probabilities at temperatures `0.5`, `1`, and `2`. For each distribution, calculate the negative log-probability when the first class is correct and when the third class is correct. Summarize how temperature changes confidence and why confident mistakes receive a larger loss.

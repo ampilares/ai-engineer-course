@@ -1,0 +1,506 @@
+[
+  {
+    "id": "et-q01",
+    "type": "single",
+    "prompt": "For any capability gap, the correct order to try solutions is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "Prompting → RAG → fine-tuning → (almost never) training from scratch, stopping at the first rung that solves it"
+      },
+      {
+        "id": "b",
+        "text": "Fine-tuning first, since it's most powerful"
+      },
+      {
+        "id": "c",
+        "text": "Training from scratch for full control"
+      },
+      {
+        "id": "d",
+        "text": "RAG for everything, always"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Climb the ladder only as far as needed. Skipping to fine-tuning for a prompt- or retrieval-shaped problem is the field's most common expensive mistake."
+  },
+  {
+    "id": "et-q02",
+    "type": "single",
+    "prompt": "Fine-tuning is the WRONG tool for adding factual knowledge because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…it's unreliable at teaching facts, bakes in a snapshot that goes stale, and can't cite sources: knowledge problems are retrieval's job"
+      },
+      {
+        "id": "b",
+        "text": "…it is always more expensive than any alternative"
+      },
+      {
+        "id": "c",
+        "text": "…it permanently damages the base model"
+      },
+      {
+        "id": "d",
+        "text": "…facts cannot be represented in weights at all"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Fine-tuning shapes behavior/format/style far more than it installs reliable, current, citable knowledge. Use RAG for facts."
+  },
+  {
+    "id": "et-q03",
+    "type": "single",
+    "prompt": "Which is fine-tuning's genuine sweet spot?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Consistent format/style/tone at scale, and shrinking prompts so a smaller, cheaper model can do a narrow job"
+      },
+      {
+        "id": "b",
+        "text": "Keeping the model's knowledge up to date daily"
+      },
+      {
+        "id": "c",
+        "text": "Per-user access control"
+      },
+      {
+        "id": "d",
+        "text": "Citing sources in answers"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Bake in behavior, drop the lengthy instructions, often down-tier the model. Knowledge, freshness, access control, and citations are jobs for retrieval and code."
+  },
+  {
+    "id": "et-q04",
+    "type": "single",
+    "prompt": "What do parameter-efficient methods like LoRA change about fine-tuning?",
+    "options": [
+      {
+        "id": "a",
+        "text": "They adjust a small set of added weights instead of all parameters, making fine-tuning cheap enough for modest hardware or a hosted API"
+      },
+      {
+        "id": "b",
+        "text": "They let a model learn without any data"
+      },
+      {
+        "id": "c",
+        "text": "They eliminate the need to evaluate the result"
+      },
+      {
+        "id": "d",
+        "text": "They retrain the model from scratch faster"
+      }
+    ],
+    "answer": "a",
+    "explanation": "LoRA-style methods make fine-tuning accessible, but the hidden costs (a new artifact to version, eval, monitor, and re-tune) remain."
+  },
+  {
+    "id": "et-q05",
+    "type": "single",
+    "prompt": "A hospital must process patient data that legally cannot leave its premises, at steady high volume. The fitting approach is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a self-hosted open-weight model (quantized to fit hardware), keeping data in-network with cost bounded by fixed infrastructure"
+      },
+      {
+        "id": "b",
+        "text": "…a hosted frontier API with a good privacy policy"
+      },
+      {
+        "id": "c",
+        "text": "…emailing records to an enterprise API tier"
+      },
+      {
+        "id": "d",
+        "text": "…fine-tuning a hosted model on the records"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Hard data residency + steady volume is the canonical self-hosting case: data never leaves by construction, and fixed hardware amortizes. Any option sending data out fails the residency requirement."
+  },
+  {
+    "id": "et-q06",
+    "type": "single",
+    "prompt": "Quantization makes local models practical by…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…storing weights at lower numeric precision (e.g., 16-bit → 4-bit), cutting memory and speeding inference for usually-small quality loss"
+      },
+      {
+        "id": "b",
+        "text": "…removing layers from the network"
+      },
+      {
+        "id": "c",
+        "text": "…deleting rare vocabulary tokens"
+      },
+      {
+        "id": "d",
+        "text": "…training the model on less data"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Lower-precision weights shrink the memory footprint: often the difference between needing a data-center GPU and running on a good laptop."
+  },
+  {
+    "id": "et-q07",
+    "type": "single",
+    "prompt": "A question requires connecting information from two separate documents. The most direct technique is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "Multi-hop retrieval: retrieve, read, then retrieve again to gather and connect information across sources"
+      },
+      {
+        "id": "b",
+        "text": "Raising the temperature"
+      },
+      {
+        "id": "c",
+        "text": "One giant chunk covering everything"
+      },
+      {
+        "id": "d",
+        "text": "Fine-tuning the generator on the two documents"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Cross-document synthesis exceeds single-shot retrieval; multi-hop (an agentic retrieval loop) gathers the pieces iteratively: validated on your eval set before you pay the latency."
+  },
+  {
+    "id": "et-q08",
+    "type": "single",
+    "prompt": "The unifying rule for adopting ANY advanced technique (advanced retrieval, fine-tuning, new architectures) is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…measure the need and the gain on your own eval set for your own task before adding the complexity"
+      },
+      {
+        "id": "b",
+        "text": "…adopt whatever tops public benchmarks"
+      },
+      {
+        "id": "c",
+        "text": "…avoid all new techniques"
+      },
+      {
+        "id": "d",
+        "text": "…wait until the provider defaults to it"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Benchmarks measure someone else's task. Evaluate on your data; every technique is a latency/complexity/maintenance cost that your numbers must justify."
+  },
+  {
+    "id": "et-q09",
+    "type": "single",
+    "prompt": "Which best characterizes the durable, non-expiring skills this course built?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The primitives (tokens, embeddings, attention, retrieval, tool loops, evals) and the judgment (workflow-before-agent, evals-before-optimization, human authority): stable across model releases"
+      },
+      {
+        "id": "b",
+        "text": "Memorizing current model names and prices"
+      },
+      {
+        "id": "c",
+        "text": "One specific provider's SDK"
+      },
+      {
+        "id": "d",
+        "text": "The exact SOTA technique of this month"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Models are new implementations of stable primitives; the stances and engineering discipline outlast every version churn."
+  },
+  {
+    "id": "et-q10",
+    "type": "single",
+    "prompt": "Which capstone better demonstrates AI engineering?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A modest invoice-triage workflow that is evaluated (40-case suite, honest numbers), secured (threat model), deployed with monitoring, and measured (before/after ROI)"
+      },
+      {
+        "id": "b",
+        "text": "An impressive multi-agent research demo with no evals, no deployment, and no cost analysis"
+      },
+      {
+        "id": "c",
+        "text": "Whichever uses the most agents"
+      },
+      {
+        "id": "d",
+        "text": "Whichever has the largest model"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The course's thesis: the engineering around the model is the job. Complete-and-coherent beats ambitious-and-hollow: the demo-not-system trap is the thing to avoid."
+  },
+  {
+    "id": "et-q11",
+    "type": "single",
+    "prompt": "Asked in your defense 'which component causes most errors?', the strongest answer is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "A specific, measured, stage-localized answer backed by your eval breakdown and traces (e.g., 'retrieval: recall@5 is 68%, 71% of failures trace there')"
+      },
+      {
+        "id": "b",
+        "text": "'The model is unpredictable, so it's hard to say'"
+      },
+      {
+        "id": "c",
+        "text": "'There are no errors in my system'"
+      },
+      {
+        "id": "d",
+        "text": "'Whatever the last user complained about'"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Evidence-backed, stage-localized precision is the signature of the discipline. Vagueness, denial, and anecdote signal it's missing."
+  },
+  {
+    "id": "et-q12",
+    "type": "multi",
+    "prompt": "Which elements must a passing capstone demonstrate? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "An eval suite with graders and honest numbers, including failures"
+      },
+      {
+        "id": "b",
+        "text": "Safety: threat model, least privilege, approval on consequential actions"
+      },
+      {
+        "id": "c",
+        "text": "Deployment with monitoring, a budget/SLOs, and a rollback runbook"
+      },
+      {
+        "id": "d",
+        "text": "The largest possible model and maximum autonomy, regardless of the task"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Evaluation, safety, and operations must all be present and coherent. Model size and autonomy are means chosen to fit the task, never goals in themselves."
+  },
+  {
+    "id": "et-x01",
+    "type": "single",
+    "prompt": "Distillation (training a small model on a large model's outputs) is attractive when…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a narrow task needs the big model's quality at small-model cost/latency: the student learns the specific behavior without the teacher's breadth"
+      },
+      {
+        "id": "b",
+        "text": "…you want the small model to gain general intelligence"
+      },
+      {
+        "id": "c",
+        "text": "…you have no eval set"
+      },
+      {
+        "id": "d",
+        "text": "…never; distillation is obsolete"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A teacher-labeled dataset for one job transfers that job. Validate the student on YOUR evals; expect the narrow win, not general parity."
+  },
+  {
+    "id": "et-x02",
+    "type": "single",
+    "prompt": "Synthetic training data (generated by a model) carries which core caution?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It inherits the generator's blind spots and can't be the sole evidence of real-world performance: real, held-out data must anchor evaluation"
+      },
+      {
+        "id": "b",
+        "text": "It is illegal in most countries"
+      },
+      {
+        "id": "c",
+        "text": "It is always superior to human data"
+      },
+      {
+        "id": "d",
+        "text": "It cannot be stored in JSON"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Synthetic data expands coverage cheaply but circularly. The test set that decides anything must come from reality."
+  },
+  {
+    "id": "et-x03",
+    "type": "single",
+    "prompt": "For fine-tuning, you split train/validation/test by distinct entities or time periods (not random rows) because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…near-duplicate rows from the same entity landing in both train and test inflate scores: the leakage lessons of Module 5 apply fully to adaptation data"
+      },
+      {
+        "id": "b",
+        "text": "…random splits are computationally expensive"
+      },
+      {
+        "id": "c",
+        "text": "…entities have legal rights to one split"
+      },
+      {
+        "id": "d",
+        "text": "…it doesn't matter for fine-tuning"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Same customer's ten similar invoices across splits = memorization measured as skill. Split on the axis of real-world generalization."
+  },
+  {
+    "id": "et-x04",
+    "type": "single",
+    "prompt": "Quantization's accuracy cost shows up MOST in…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…tasks sensitive to small numerical distinctions and less-represented languages, which is why you re-run YOUR evals on the quantized model, not trust generic benchmarks"
+      },
+      {
+        "id": "b",
+        "text": "…file download speed"
+      },
+      {
+        "id": "c",
+        "text": "…the model's vocabulary size"
+      },
+      {
+        "id": "d",
+        "text": "…nothing; quantization is lossless"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Precision loss is uneven across capabilities. The decision instrument is your task's eval before/after: the module's recurring answer."
+  },
+  {
+    "id": "et-x05",
+    "type": "single",
+    "prompt": "Self-hosting adds which operational jobs that hosted APIs hide?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Capacity planning, batching/throughput tuning, warm-up, hardware utilization, model provenance verification, and security patching: the platform team you become"
+      },
+      {
+        "id": "b",
+        "text": "None; local models run themselves"
+      },
+      {
+        "id": "c",
+        "text": "Only electricity bills"
+      },
+      {
+        "id": "d",
+        "text": "Prompt writing"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The API fee was buying operations. Self-hosting's TCO includes the engineering time that replaces it: count it before celebrating per-token savings."
+  },
+  {
+    "id": "et-x06",
+    "type": "single",
+    "prompt": "An architecture decision record (ADR) for adopting/rejecting a technique should include…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the evidence compared (baseline vs. candidate on your evals), costs, migration effort, fallback, and a review date, so future engineers know why, and when to reconsider"
+      },
+      {
+        "id": "b",
+        "text": "…only the final choice"
+      },
+      {
+        "id": "c",
+        "text": "…marketing materials from the vendor"
+      },
+      {
+        "id": "d",
+        "text": "…nothing; decisions speak for themselves"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Decisions with recorded evidence survive team changes and hype cycles. 'Hold, revisit in Q2 when X matures' is a complete, successful outcome."
+  },
+  {
+    "id": "et-x07",
+    "type": "single",
+    "prompt": "A team wants to fine-tune because 'the prompt is getting long.' The first question is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…whether prompt caching already makes the long stable prefix nearly free: fine-tuning to save cached tokens usually buys complexity for pennies"
+      },
+      {
+        "id": "b",
+        "text": "…which GPU to buy"
+      },
+      {
+        "id": "c",
+        "text": "…how many epochs to run"
+      },
+      {
+        "id": "d",
+        "text": "…nothing; long prompts always justify tuning"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Climb the ladder in order: the caching rung (Module 8) often dissolves the stated motivation before the fine-tuning rung is reached."
+  },
+  {
+    "id": "et-x08",
+    "type": "single",
+    "prompt": "Choosing between a base model and an instruct/chat model for fine-tuning: the instruct model is usually right when…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…your task is assistant-shaped (instructions in, helpful output): you're adjusting behavior on top of post-training rather than rebuilding it from a raw text-continuer"
+      },
+      {
+        "id": "b",
+        "text": "…never; base models are always better"
+      },
+      {
+        "id": "c",
+        "text": "…you want the model to forget safety training"
+      },
+      {
+        "id": "d",
+        "text": "…your data is under 10 examples"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Start from the checkpoint closest to your target behavior. Base models suit research and heavy custom post-training; product fine-tunes start from instruct."
+  }
+]

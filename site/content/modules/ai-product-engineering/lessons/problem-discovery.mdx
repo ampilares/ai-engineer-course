@@ -1,0 +1,57 @@
+An AI feature is not a product outcome. “Add a copilot” describes an interface metaphor; it does not identify whose work improves, which decision changes, or whether the improvement matters. Product engineering starts with observed work and a falsifiable value hypothesis.
+
+## Follow the decision and its consequence
+
+Identify the user, triggering situation, current goal, available evidence, decision/action, downstream recipient, and consequence of error. Observe real cases, including exceptions and workarounds. What users say the process is and what logs show may differ. Map where judgment is genuinely variable and where the pain comes from missing data, access, or integration.
+
+Write the hypothesis in operational terms: “For support specialists handling eligible account questions, presenting cited policy passages and a draft will reduce median handling time by 20% while keeping critical-error rate below 1% and not increasing customer recontacts.” This statement names population, intervention, outcome, and guardrail.
+
+<Check
+  question="Which is the strongest product hypothesis?"
+  options={[
+    "A cited drafting assistant will reduce eligible-case handling time by 20% without increasing critical errors or recontacts",
+    "Users will love our advanced AI",
+    "We will add an agent to every page",
+    "The new model has a larger context window"
+  ]}
+  answer={0}
+  explanation="A useful hypothesis defines the user population, intervention, measurable outcome, and protected constraints."
+  hint="Which statement can a pilot disprove?"
+/>
+
+## Define eligibility and non-goals
+
+AI products are often safer and more valuable when they handle a bounded population. Define which languages, document types, accounts, risk levels, and actions are eligible. Route unsupported cases clearly. Avoid claiming universal assistance while silently failing for users outside the training and evaluation distribution.
+
+Name non-goals. A draft assistant may not make policy decisions; a search assistant may not execute account changes; a triage model may not diagnose a person. Non-goals focus implementation and communicate the boundary to users and reviewers.
+
+## Build the value tree
+
+Connect model metrics to product behavior and business outcome:
+
+`retrieval recall → supported draft rate → user acceptance with correction → handling time/recontact → service cost and customer outcome`
+
+Every arrow is an assumption. Higher retrieval recall may add noisy context and slow reviewers; acceptance can be dangerous if users over-trust fluent drafts. Measure leading metrics for diagnosis and lagging outcomes for value. Add counter-metrics for shifted work, exclusion, complaints, safety, and reviewer fatigue.
+
+<Check
+  question="Draft acceptance rises after launch, but customer recontacts and correction time also rise. What does this show?"
+  options={[
+    "Acceptance alone was a weak proxy; downstream outcomes reveal lower realized value",
+    "The product is successful because one metric rose",
+    "Customers should be excluded from measurement",
+    "The system needs higher temperature"
+  ]}
+  answer={0}
+  explanation="Users may accept drafts that require later recovery. Product success needs the full outcome chain and protected metrics."
+  hint="Did the workflow outcome improve?"
+/>
+
+## Guided build: opportunity and evidence brief
+
+Choose a workflow and conduct at least three user conversations or structured observations plus a sample of 20 cases. Capture current steps, time, failure/rework, exceptions, evidence sources, decisions, and pain. Write three hypotheses: AI-assisted, deterministic improvement, and process/policy change.
+
+Select one with a value/risk/feasibility scorecard. Define eligible users/cases, non-goals, primary outcome, leading diagnostic metrics, guardrails, baseline, and stop condition. Create a low-fidelity prototype or walkthrough and test whether users understand what it will and will not do before building the model path.
+
+<Callout type="tip">
+The most valuable discovery result can be “do not build this.” Finding a missing integration, policy conflict, or unmeasurable outcome early is saved engineering capacity.
+</Callout>

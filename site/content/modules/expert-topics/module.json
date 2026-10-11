@@ -1,0 +1,31 @@
+{
+  "slug": "expert-topics",
+  "number": 17,
+  "title": "Expert Topics & Capstone",
+  "phase": "expert",
+  "summary": "When fine-tuning, local inference, and advanced retrieval pay off: plus how to keep learning, and your capstone.",
+  "outcomes": [
+    "Decide correctly between prompting, RAG, and fine-tuning",
+    "Weigh local/open models against hosted APIs on cost, privacy, and control",
+    "Recognize advanced retrieval and optimization techniques and when they earn their cost",
+    "Plan, build, and defend a production capstone"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "fine-tuning-and-local",
+      "title": "Fine-tuning, local inference, and quantization",
+      "minutes": 29
+    },
+    {
+      "slug": "advanced-and-staying-current",
+      "title": "Advanced retrieval and staying current",
+      "minutes": 27
+    },
+    {
+      "slug": "capstone",
+      "title": "The capstone: build and defend",
+      "minutes": 25
+    }
+  ]
+}

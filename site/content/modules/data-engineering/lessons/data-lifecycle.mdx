@@ -1,0 +1,55 @@
+AI data changes after launch. Documents are corrected, permissions change, labels mature, features drift, users request deletion, and upstream systems redefine fields. Operating the lifecycle is what keeps yesterday’s dataset from becoming today’s incident.
+
+## Freshness has several clocks
+
+Track source event time, source update time, ingestion time, publication time, and last successful validation. “Updated today” is ambiguous if the underlying source has not changed for a month or a pipeline published only half its partitions. Define freshness per source and use case. A quarterly handbook and a live account balance need different service levels.
+
+Prefer versioned, atomic publication. Build and validate a candidate snapshot or index, then switch a pointer so readers see either the old complete version or the new complete version. Retain enough prior versions for rollback under a documented policy. Consumers should record which version they used.
+
+<Check
+  question="A RAG index rebuild updates chunks in place for two hours while users query it. What failure can occur?"
+  options={[
+    "Users can retrieve a mixture of old, new, and partially deleted content",
+    "Embedding vectors become encrypted",
+    "The model temperature rises",
+    "SQL stops supporting joins"
+  ]}
+  answer={0}
+  explanation="In-place publication exposes an inconsistent intermediate state. Build a complete candidate and switch atomically."
+  hint="What does a reader see halfway through the rebuild?"
+/>
+
+## Permission is data, not prompt text
+
+Carry tenant, classification, owner, and allowed-principal metadata from source to every derivative. Enforce authorization in storage/retrieval queries before content reaches a model. Test changes in both directions: granting access and revoking it. A cached answer, embedding, trace, or eval example can outlive the source permission unless lifecycle propagation is designed.
+
+Use row- or document-level filters backed by authenticated identity. Do not rely on the model to conceal content it received. Record access-policy version in traces when permission behavior matters.
+
+## Correction and deletion must reach derivatives
+
+Maintain a derivative inventory: normalized tables, feature snapshots, chunks, vectors, caches, model/eval datasets, traces, exports, and backups. A source correction should trigger targeted recomputation. A deletion request should remove or tombstone active derivatives promptly and age out backups according to policy. Some artifacts may need retraining rather than surgical removal; document the decision and applicable obligations.
+
+Data drift monitoring should distinguish input distribution, missingness, relationship-to-label, and performance. Not every distribution change harms quality, and stable distributions do not prove stable outcomes. Join drift signals with sampled evaluation and downstream metrics.
+
+<Check
+  question="A document is deleted from the source repository, but its vector chunks remain searchable. Which design is missing?"
+  options={[
+    "Lifecycle propagation from source identity to derived chunks and index deletion",
+    "A larger context window",
+    "More few-shot examples",
+    "A higher top-p setting"
+  ]}
+  answer={0}
+  explanation="Derived data needs stable source identity and explicit delete propagation. Removing the visible source alone does not remove searchable copies."
+  hint="How does the index know which derived records came from the source?"
+/>
+
+## Guided build: operate a changing dataset
+
+Extend the module pipeline with versioned publication and a derivative manifest. Simulate a late correction, permission revocation, document deletion, schema addition, and distribution shift. Prove which active versions and derivatives change for each event.
+
+Add freshness and completeness reporting, atomic promotion, rollback, and an end-to-end deletion test. Write service levels for update and deletion propagation and a runbook for failed publication. Your module project passes when a reviewer can reproduce a dataset version and verify that obsolete or unauthorized data is absent from the active system.
+
+<Callout type="tip">
+Use stable source identities everywhere. Content text is a poor delete key because corrections change the text; a stable ID plus version lets every derivative be found and replaced.
+</Callout>

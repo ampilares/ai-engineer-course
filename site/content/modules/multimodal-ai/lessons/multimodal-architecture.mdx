@@ -1,0 +1,53 @@
+Multimodal systems accept or produce more than text: documents, images, diagrams, audio, video, or sensor data. The engineering question is not “Can one model see and hear?” It is which representation and pipeline preserve the evidence needed for the task.
+
+## Native model or staged pipeline?
+
+A native multimodal model can reason jointly over an image and prompt, which is useful when layout, visual relationships, or open-ended interpretation matter. A staged pipeline uses specialists, OCR, speech recognition, object detection, table extraction, then passes structured output to rules or a language model. Stages add interfaces and error propagation, but they can be cheaper, faster, easier to measure, and easier to correct.
+
+Use the least complex design that meets the task. Barcode reading, document page numbers, and audio duration have deterministic tools. A language model should not estimate what a parser can measure exactly. Preserve the original media and intermediate artifacts so a reviewer can distinguish input quality, perception failure, and reasoning failure.
+
+<Check
+  question="A warehouse app needs the exact barcode value from clear product photos. What should be the default first approach?"
+  options={[
+    "A deterministic barcode decoder with validation, using a multimodal model only for unsupported exceptions",
+    "Ask a general model to guess the digits from the image",
+    "Convert the photo to a long text description first",
+    "Increase temperature until the code looks plausible"
+  ]}
+  answer={0}
+  explanation="Exact machine-readable marks have specialized deterministic decoders. General visual reasoning adds unnecessary error and cost."
+  hint="Which part of the task is semantic rather than exact?"
+/>
+
+## Validate media before inference
+
+At ingestion, verify type from file content rather than extension, enforce byte and pixel/duration limits, reject decompression bombs, normalize orientation, and strip unneeded metadata. Virus scanning and sandboxed parsing may be required for untrusted files. Store a content hash, source, capture time, transform history, and consent/permission metadata.
+
+Normalization changes evidence. Resizing may erase small text; audio compression can remove quiet speech; converting a PDF to plain text destroys layout and images. Keep the original immutable and version every derivative. Document coordinate systems and timestamps so an extracted claim can link back to a page region or audio interval.
+
+## Context and cost across modalities
+
+Providers account for visual or audio inputs differently, but the stable lesson is that resolution, frame count, page count, and duration drive cost and latency. Sample video deliberately rather than sending every frame. Crop or tile large images only if the task can tolerate lost global context. Route low-resolution previews to triage and retrieve the original region for detailed work.
+
+<Check
+  question="Why store page coordinates or audio timestamps with extracted evidence?"
+  options={[
+    "They let users and evaluators verify a claim against the exact region or interval",
+    "They make the model deterministic",
+    "They replace access control",
+    "They guarantee OCR is correct"
+  ]}
+  answer={0}
+  explanation="Multimodal provenance must point beyond a filename to the precise evidence location used."
+  hint="How would a reviewer check the extraction?"
+/>
+
+## Guided design: compare two architectures
+
+Choose one task involving a document, image, or recording. Design a native multimodal path and a staged specialist path. For each, show ingestion validation, transforms, model/tool boundaries, provenance, storage, fallback, human review, and deletion.
+
+Create 20 representative inputs, including low quality, unsupported format, oversized media, rotated/cropped content, and an out-of-scope case. Measure end-to-end task success, stage-local failures, latency, cost, and reviewability. Select an architecture based on evidence and state which future condition would make you reconsider it.
+
+<Callout type="warning">
+Media can contain hidden or barely visible instructions, personal data, and malicious file structures. “The user only uploaded an image” does not make the input safe or non-sensitive.
+</Callout>

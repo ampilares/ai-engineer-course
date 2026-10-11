@@ -1,0 +1,67 @@
+Language models are probability machines; evaluations are statistics; A/B tests are hypothesis tests. If vectors are AI's geometry, probability is its native tongue, and a few core habits of probabilistic thinking will serve you in every module ahead.
+
+## Probability as quantified uncertainty
+
+A probability is a number between 0 and 1 that quantifies uncertainty. It can describe a long-run frequency, such as defects per thousand products, or a degree of belief conditional on current evidence, such as the probability of rain given a forecast. For repeated, comparable cases, `0.85` should mean that the outcome occurs about 85 times in 100. Two disciplines follow:
+
+- **Probabilities of all the options sum to 1.** A model distributing belief over 100,000 possible next tokens is dividing exactly 1.0 of probability among them: boosting one option necessarily shrinks others.
+- **Calibration is a quality bar** (you met it in spirit already): a system whose "80% confident" claims are right 80% of the time is calibrated. One whose 80% means "who knows" is decorating its guesses.
+
+## Distributions: the shape of uncertainty
+
+A **distribution** assigns a probability to every possible outcome: picture a bar chart over the options. What matters practically is its *shape*:
+
+- **Peaked** (one bar dominates) → the model strongly favors a small number of outcomes. For many code models, a prompt such as `import numpy as` will strongly favor a continuation containing `np`, although the exact distribution depends on the model and tokenizer.
+- **Flat** (many similar bars) → genuine uncertainty. After `Once upon a time,` many continuations are plausible.
+
+You've already manipulated this: Module 7's temperature dial *reshapes* a distribution (sharpening it toward the peak or flattening it toward uniform) without changing what the model knows.
+
+<Check
+  question="A model's next-token distribution is nearly flat across many tokens. What does this tell you?"
+  options={[
+    "The model is broken",
+    "The context genuinely underdetermines what comes next: many continuations are about equally plausible, so sampled outputs will vary a lot",
+    "The vocabulary is too large",
+    "The temperature is 0"
+  ]}
+  answer={1}
+  explanation="A flat distribution IS the model expressing uncertainty. It also predicts behavior: run the same prompt twice and you'll likely get different outputs, which is why deterministic tasks want peaked distributions and low temperature."
+  hint="What does the shape say about how determined the continuation is?"
+/>
+
+## Conditional probability: the 'given' changes everything
+
+P(rain) and P(rain **given** dark clouds) are different numbers: probability updates as evidence arrives. This "given" is the deepest connective in AI:
+
+- A language model computes P(next token **given** all tokens so far): change the prompt, change the condition, change every probability. *That is mechanically why prompting works.*
+- The classic trap is inverting conditions: P(positive test | disease) ≠ P(disease | positive test). When the condition is rare, these diverge wildly: a 99%-accurate test on a 1-in-1000 condition yields mostly false alarms among its positives. You met this exact structure as precision vs. recall in Module 5's threshold widget.
+
+<Check
+  question="A defect affects 1 in 1,000 products. A detector flags defects with 99% accuracy (both directions). A product is flagged. Roughly how likely is it actually defective?"
+  options={[
+    "99%: the detector is 99% accurate",
+    "About 9%: among 1,000 products there's ~1 true defect (caught) but ~10 false alarms from the 999 good ones, so a flag is mostly a false alarm",
+    "50%: it either is or isn't",
+    "1 in 1,000: the flag changes nothing"
+  ]}
+  answer={1}
+  explanation="Base rates dominate rare events: ~1 true positive versus ~10 false positives means a flag is defective only ~1 time in 11. This is why an apparently accurate fraud or defect system can still overwhelm reviewers with false alarms, and why Module 5 emphasizes precision rather than accuracy alone."
+  hint="Count outcomes in 1,000 products: how many true flags vs. false flags?"
+/>
+
+## Samples lie when they're small
+
+Flip a fair coin 10 times and 7 heads is unremarkable; 7,000 in 10,000 means the coin is loaded. **Small samples produce wide uncertainty; larger samples make estimates more stable.** Sample size alone is not enough: biased or unrepresentative data can remain misleading at any scale. This is why Module 5 requires representative test sets, Module 14 requires evaluation sets that cover important segments, and Module 12 asks you to simulate A/B tests before trusting an apparent uplift.
+
+<Callout type="note">
+Build a professional reflex: whenever a result looks impressive, ask *how many observations produced it, how representative were they, what is the uncertainty, and what is the base rate?* Those questions expose many misleading AI claims.
+</Callout>
+
+<GoDeeper>
+  <VideoEmbed id="HZGCoVF3YvM" title="Bayes theorem, the geometry of changing beliefs" creator="3Blue1Brown" />
+  <LinkCard href="https://seeing-theory.brown.edu/" title="Seeing Theory" source="Brown University" why="A beautiful visual introduction to probability and statistics: interactive like this course." />
+</GoDeeper>
+
+## Practice: reason from counts
+
+Create a table for 10,000 cases of a rare event with a chosen base rate, sensitivity, and specificity. Count true positives, false positives, true negatives, and false negatives. Then calculate the probability that a flagged case is truly positive. Repeat with a base rate ten times larger and explain why the detector's apparent usefulness changes even though its sensitivity and specificity do not.

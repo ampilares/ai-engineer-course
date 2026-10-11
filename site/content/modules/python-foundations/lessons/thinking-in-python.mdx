@@ -1,0 +1,97 @@
+Programming is giving a machine unambiguous instructions. Python is the language this entire course (and most of the AI industry) writes those instructions in. This module assumes **zero** prior coding; by its end you'll read and write the Python that every later module builds on. And you'll practice right here in the browser: no installation required yet.
+
+## Values and names
+
+Python programs manipulate **values**: numbers, text, true/false flags. You give values names with `=`:
+
+```python
+price = 4180          # an integer
+vendor = "Nordwind"   # a string (text in quotes)
+paid = False          # a boolean: True or False
+rate = 0.19           # a float (decimal number)
+```
+
+A name is a label stuck on a value: `price` now *means* 4180 wherever you use it. Everything after `#` is a **comment**: notes for humans, ignored by Python.
+
+You combine values with operators, and `print()` shows results:
+
+```python
+total = price * (1 + rate)
+print(f"Total incl. tax: {total}")   # f-string: puts values inside text
+```
+
+That `f"...{total}"` is an **f-string**: the `{}` slots get filled with the value. You'll use it constantly.
+
+<Check
+  question="After running `x = 5` and then `x = x + 2`, what is x?"
+  options={[
+    "5: names can't be reassigned",
+    "7: the right side computes first (5 + 2), then the name x is moved to the new value",
+    "52: the numbers are glued together",
+    "An error: x appears on both sides"
+  ]}
+  answer={1}
+  explanation="`=` isn't math equality; it's assignment. Python evaluates the right-hand side using the current value of x (5), gets 7, and re-points the name x at it."
+  hint="Read `=` as 'becomes', not 'equals'."
+/>
+
+## Decisions: if, elif, else
+
+Programs choose between paths with conditions:
+
+```python
+if total > 10000:
+    review = "manager approval required"
+elif total > 1000:
+    review = "standard review"
+else:
+    review = "auto-approve"
+```
+
+Two things matter here. Comparisons (`>`, `<`, `==` for equals, `!=` for not-equals) produce `True` or `False`. And **indentation is the structure**: the indented lines belong to their condition. Python has no braces; the spaces *are* the syntax: four spaces per level, and consistency is mandatory.
+
+Now write your first real code:
+
+<PythonPractice
+  title="Your first program"
+  instructions="Create a variable `hours` set to 6, and a variable `status`: if hours is greater than 8, status should be the string 'overtime'; otherwise it should be 'normal'. (The checker looks at both variables.)"
+  starter={"hours = 6\n# your if/else here\n"}
+  test={"assert hours == 6, 'keep hours = 6'\nassert status == 'normal', \"status should be 'normal' when hours is 6\"\nhours2 = 9\nstatus2 = 'overtime' if hours2 > 8 else 'normal'\nassert status2 == 'overtime'\nprint('Looks right!')"}
+  solution={"hours = 6\nif hours > 8:\n    status = \"overtime\"\nelse:\n    status = \"normal\""}
+/>
+
+## Strings: the data type AI runs on
+
+Language models eat and produce text, so strings get special attention all course long:
+
+```python
+name = "  Ada Lovelace \n"
+clean = name.strip()          # "Ada Lovelace": whitespace removed
+loud = clean.upper()          # "ADA LOVELACE"
+parts = clean.split(" ")      # ["Ada", "Lovelace"]: a list (next lessons)
+"Ada" in clean                # True: substring check
+```
+
+Those `.strip()`, `.upper()` are **methods**: capabilities attached to a value, called with a dot. Different types have different methods; text manipulation like this is the daily bread of data cleaning and prompt building.
+
+<Check
+  question={'What does `"Invoice INV-88213".split(" ")` produce?'}
+  options={[
+    "The string with spaces removed",
+    "A list of the two pieces: ['Invoice', 'INV-88213']",
+    "An error: strings can't be split",
+    "The number 88213"
+  ]}
+  answer={1}
+  explanation="split(' ') cuts the string at every space and returns the pieces as a list. Splitting, stripping, and joining strings is half of all practical data work."
+  hint="Split cuts text into pieces at the separator you give it."
+/>
+
+<Callout type="tip">
+**Errors are normal.** When you ran code above and got a red message, that's Python telling you exactly what it couldn't do and on which line. Professionals read error messages carefully instead of fearing them: a skill you're building from lesson one.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.python.org/3/tutorial/introduction.html" title="An Informal Introduction to Python" source="python.org" why="The official tutorial's gentle first chapter: a good second pass over today's ideas." />
+  <LinkCard href="https://automatetheboringstuff.com/" title="Automate the Boring Stuff with Python" source="automatetheboringstuff.com" why="Free book that turns exactly these basics into useful little programs." />
+</GoDeeper>

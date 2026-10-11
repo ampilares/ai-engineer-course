@@ -1,0 +1,506 @@
+[
+  {
+    "id": "at-q01",
+    "type": "single",
+    "prompt": "In tool calling, the security-critical fact about the division of labor is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the model only emits a structured request; your code validates, executes or refuses, and returns results: every guardrail lives on your side"
+      },
+      {
+        "id": "b",
+        "text": "…the provider executes tools on their servers"
+      },
+      {
+        "id": "c",
+        "text": "…tools run inside the model's weights"
+      },
+      {
+        "id": "d",
+        "text": "…tool calls bypass the network entirely"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The model requests; your code disposes. Validation, permissions, rate limits, and approvals all attach at the execution step you own."
+  },
+  {
+    "id": "at-q02",
+    "type": "single",
+    "prompt": "An agent frequently picks the wrong tool. The first fix to try is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…sharpening tool names/descriptions and removing overlapping tools: schemas are the prompt that drives tool choice"
+      },
+      {
+        "id": "b",
+        "text": "…doubling the number of available tools"
+      },
+      {
+        "id": "c",
+        "text": "…raising temperature"
+      },
+      {
+        "id": "d",
+        "text": "…removing all tool descriptions to reduce noise"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Tool selection is conditioned on the schemas. Distinct, well-described, non-overlapping tools fix misrouting the same way better prompts fix misclassification."
+  },
+  {
+    "id": "at-q03",
+    "type": "single",
+    "prompt": "Why should tool errors return informative messages (e.g., 'order not found; IDs look like ORD-1234') rather than bare failures?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The error text becomes context the model reasons with: informative errors enable sensible recovery instead of flailing retries"
+      },
+      {
+        "id": "b",
+        "text": "Stack traces are too long for the context window"
+      },
+      {
+        "id": "c",
+        "text": "It's only a cosmetic preference"
+      },
+      {
+        "id": "d",
+        "text": "Errors should be hidden from the model entirely"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The loop feeds results back into reasoning. An error that explains what went wrong and what valid input looks like is a course correction; a bare failure invites creative guessing."
+  },
+  {
+    "id": "at-q04",
+    "type": "single",
+    "prompt": "A 10-step agent whose each step is 95% reliable completes correctly about…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…60% of the time: per-step reliability multiplies, which is the core argument for shorter chains and deterministic workflows"
+      },
+      {
+        "id": "b",
+        "text": "…95% of the time: reliability doesn't compound"
+      },
+      {
+        "id": "c",
+        "text": "…99% of the time: steps correct each other"
+      },
+      {
+        "id": "d",
+        "text": "…5% of the time"
+      }
+    ],
+    "answer": "a",
+    "explanation": "0.95^10 ≈ 0.60. Every step the model controls is a reliability tax: spend model judgment only where ambiguity earns it."
+  },
+  {
+    "id": "at-q05",
+    "type": "single",
+    "prompt": "Which task genuinely warrants an agent rather than a workflow?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Open-ended investigation where each lookup's result determines the next step (e.g., diagnosing why an invoice doesn't reconcile)"
+      },
+      {
+        "id": "b",
+        "text": "A fixed extract → validate → post → confirm pipeline"
+      },
+      {
+        "id": "c",
+        "text": "Nightly CSV imports"
+      },
+      {
+        "id": "d",
+        "text": "Sending the same weekly report"
+      }
+    ],
+    "answer": "a",
+    "explanation": "If the flowchart can be drawn in advance, code owns the arrows. Agents earn their cost only when the branching is unenumerable, and even then with read-heavy tools and budgets."
+  },
+  {
+    "id": "at-q06",
+    "type": "single",
+    "prompt": "Every production agent loop needs a budget (max iterations/cost/time) because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…an agent that can't reach its goal will otherwise burn tokens indefinitely, and hitting the budget should route to a human as a normal outcome"
+      },
+      {
+        "id": "b",
+        "text": "…providers require it contractually"
+      },
+      {
+        "id": "c",
+        "text": "…budgets make the model smarter"
+      },
+      {
+        "id": "d",
+        "text": "…loops are illegal without them"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Budgets convert 'runaway' into 'escalated'. Budget exhaustion is a routable outcome, not an exception."
+  },
+  {
+    "id": "at-q07",
+    "type": "single",
+    "prompt": "'Approve the action, not the plan' means human gates should review…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the concrete parameterized call about to execute ('refund €89 on ORD-4821'), because reasoning can drift between an approved plan and the eventual action"
+      },
+      {
+        "id": "b",
+        "text": "…the agent's opening statement of intent"
+      },
+      {
+        "id": "c",
+        "text": "…the system prompt once at deployment"
+      },
+      {
+        "id": "d",
+        "text": "…nothing; approval gates are unnecessary with good prompts"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The action names amounts, targets, and recipients: the things a human can sanity-check. Plans approved early don't constrain what the loop later does."
+  },
+  {
+    "id": "at-q08",
+    "type": "single",
+    "prompt": "Why does least privilege stop many agent failures that detection-based defenses miss?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A capability that doesn't exist can't be misused: no detection required; the summarizer without send_email cannot exfiltrate, however confused it gets"
+      },
+      {
+        "id": "b",
+        "text": "It makes the model more intelligent"
+      },
+      {
+        "id": "c",
+        "text": "It reduces token costs to zero"
+      },
+      {
+        "id": "d",
+        "text": "It doesn't; broad tool access is safer"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Absence of capability is unconditional: it works against injection, drift, and bugs alike, with no classifier to evade."
+  },
+  {
+    "id": "at-q09",
+    "type": "single",
+    "prompt": "What does MCP (Model Context Protocol) standardize?",
+    "options": [
+      {
+        "id": "a",
+        "text": "How AI applications discover and call external tools/resources: one server per system, reusable by any MCP client, instead of bespoke per-app integrations"
+      },
+      {
+        "id": "b",
+        "text": "The neural architecture of models"
+      },
+      {
+        "id": "c",
+        "text": "Token pricing across providers"
+      },
+      {
+        "id": "d",
+        "text": "Prompt wording conventions"
+      }
+    ],
+    "answer": "a",
+    "explanation": "MCP is plumbing standardization, where integrations live, not what models can do. All safety bounds apply to MCP tools unchanged."
+  },
+  {
+    "id": "at-q10",
+    "type": "single",
+    "prompt": "An agent's step-by-step state (tool calls, results, decisions) should be durably recorded because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…crashes become resumable, actions auditable, and failures diagnosable rather than restarting without state or leaving no action record"
+      },
+      {
+        "id": "b",
+        "text": "…it makes each model call cheaper"
+      },
+      {
+        "id": "c",
+        "text": "…models refuse to run without logs"
+      },
+      {
+        "id": "d",
+        "text": "…state should live only in the context window"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Durable state is the Module-1 database habit applied to agents: recovery, audit, and debugging all depend on knowing exactly what happened."
+  },
+  {
+    "id": "at-q11",
+    "type": "multi",
+    "prompt": "Which bounds belong on a production agent with a write-capable tool? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Least-privilege tool set for the specific task"
+      },
+      {
+        "id": "b",
+        "text": "Human approval gate on the write action"
+      },
+      {
+        "id": "c",
+        "text": "Iteration/cost budget with escalation on exhaustion"
+      },
+      {
+        "id": "d",
+        "text": "Unlimited automatic retries of failed writes"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "The three walls: privilege, approval, budget. Unlimited retries of side-effectful actions is the double-charge machine: retries are bounded and idempotent or not at all."
+  },
+  {
+    "id": "at-q12",
+    "type": "single",
+    "prompt": "Agents typically cost far more than single completions because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…each loop step can add a model call and more context, so a multi-step run may consume many times the tokens of a single completion and must be measured"
+      },
+      {
+        "id": "b",
+        "text": "…providers charge a per-agent license fee"
+      },
+      {
+        "id": "c",
+        "text": "…tools are billed per schema"
+      },
+      {
+        "id": "d",
+        "text": "…they don't; agents are cheaper"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Steps × growing context = multiplicative token spend. One more reason the workflow-vs-agent judgment is an economic decision, not an aesthetic one."
+  },
+  {
+    "id": "at-x01",
+    "type": "single",
+    "prompt": "A 40-step agent drags its full raw transcript into every call. The context-engineering fix is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…maintain explicit working state (goal, facts established, actions taken, pending) and feed that forward: compressing noise while keeping signal"
+      },
+      {
+        "id": "b",
+        "text": "…a model with a bigger window, forever"
+      },
+      {
+        "id": "c",
+        "text": "…deleting all history each step"
+      },
+      {
+        "id": "d",
+        "text": "…raising temperature to improve focus"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Transcript is mostly noise; state is signal. Structured state fixes cost, the lost-in-the-middle effect, and drift simultaneously."
+  },
+  {
+    "id": "at-x02",
+    "type": "single",
+    "prompt": "After summarization, an agent recalls a customer's account number from its own summary. Before a consequential action it must…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…re-fetch the exact identifier from the system of record: summaries are lossy model output, and paraphrased identifiers are corrupted identifiers"
+      },
+      {
+        "id": "b",
+        "text": "…proceed; summaries are memory"
+      },
+      {
+        "id": "c",
+        "text": "…ask the model to double-check itself"
+      },
+      {
+        "id": "d",
+        "text": "…lower the temperature and re-summarize"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Verify-before-act for exacts: identifiers survive verbatim or get re-read from durable storage. A summary's confidence is not provenance."
+  },
+  {
+    "id": "at-x03",
+    "type": "single",
+    "prompt": "Cross-session 'memory' (assistant remembers user preferences weeks later) is correctly built as…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…durable facts stored outside the context (database/vector store), retrieved by relevance per request: RAG pointed at your own history"
+      },
+      {
+        "id": "b",
+        "text": "…an infinitely growing context window"
+      },
+      {
+        "id": "c",
+        "text": "…fine-tuning the model nightly per user"
+      },
+      {
+        "id": "d",
+        "text": "…browser cookies containing the transcript"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Nothing persists in the window between sessions. Store outside, retrieve relevantly: same primitive as document RAG, different corpus."
+  },
+  {
+    "id": "at-x04",
+    "type": "single",
+    "prompt": "Rolling summarization should preserve which content classes verbatim or near-verbatim?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Commitments/constraints and exact identifiers (order numbers, emails, amounts), while used-up retrieval chunks and verbose tool payloads can die"
+      },
+      {
+        "id": "b",
+        "text": "Greetings and pleasantries"
+      },
+      {
+        "id": "c",
+        "text": "Everything equally, compressed uniformly"
+      },
+      {
+        "id": "d",
+        "text": "Nothing; a summary can safely omit exact facts and commitments"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Compression is a design decision about what the system may never recall again. Facts that gate future actions survive; ambient noise doesn't."
+  },
+  {
+    "id": "at-x05",
+    "type": "single",
+    "prompt": "Orchestrator–workers beats a free-form multi-agent 'discussion' when…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the task decomposes into independent sub-tasks with a mechanical integration step: each worker gets a small clean context; a discussion adds lossy handoffs with no structural payoff"
+      },
+      {
+        "id": "b",
+        "text": "…the task is a single lookup"
+      },
+      {
+        "id": "c",
+        "text": "…never; discussions are strictly superior"
+      },
+      {
+        "id": "d",
+        "text": "…the org chart says so"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Multi-agent structure should mirror task structure. Parallel independent research fits orchestrator-workers exactly; committees mostly perform meetings in tokens."
+  },
+  {
+    "id": "at-x06",
+    "type": "single",
+    "prompt": "Your 4-agent ensemble scores 84% vs. 82% for a single well-context-engineered agent at a third of the cost. Ship…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the single agent: complexity must clear a margin, not a tie: the two points don't pay for 3× cost, new failure surfaces, and harder debugging"
+      },
+      {
+        "id": "b",
+        "text": "…the ensemble; higher number wins"
+      },
+      {
+        "id": "c",
+        "text": "…both in parallel, doubling cost again"
+      },
+      {
+        "id": "d",
+        "text": "…neither; go back to rules"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The baseline discipline from Module 5, applied to architecture: permanent complexity cost demands decisive, not marginal, wins."
+  },
+  {
+    "id": "at-x07",
+    "type": "single",
+    "prompt": "In a multi-agent system, least privilege and budgets apply…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…per worker AND to the whole: each agent gets only its task's tools, and the system has global caps on depth, workers, and spend: an orchestrator that spawns workers spawns costs"
+      },
+      {
+        "id": "b",
+        "text": "…only to the orchestrator"
+      },
+      {
+        "id": "c",
+        "text": "…only to workers with write tools"
+      },
+      {
+        "id": "d",
+        "text": "…not at all; bounds are single-agent concepts"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Every single-agent wall persists per agent, plus new global ones. And one correlated trace for the ensemble, or debugging becomes archaeology."
+  },
+  {
+    "id": "at-x08",
+    "type": "single",
+    "prompt": "The generator–critic pattern works economically because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…evaluating output against a rubric is easier (and cheaper) than generating it: the critic catches what the generator's momentum missed, like an inline LLM-as-judge"
+      },
+      {
+        "id": "b",
+        "text": "…adding a second model automatically removes correlated errors"
+      },
+      {
+        "id": "c",
+        "text": "…critics never err"
+      },
+      {
+        "id": "d",
+        "text": "…it eliminates the need for evals"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Asymmetry of verification: checking is cheaper than producing. The same asymmetry powers LLM-as-judge (Module 14): this is that pattern moved inline."
+  }
+]

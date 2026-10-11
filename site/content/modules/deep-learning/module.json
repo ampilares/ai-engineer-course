@@ -1,0 +1,31 @@
+{
+  "slug": "deep-learning",
+  "number": 6,
+  "title": "Deep Learning",
+  "phase": "ml",
+  "summary": "How neural networks learn representations: neurons, loss, gradient descent, training dynamics, and when depth pays off.",
+  "outcomes": [
+    "Explain neurons, weights, activations, and layers without hand-waving",
+    "Describe training as loss minimization via gradient descent and backpropagation",
+    "Diagnose learning-rate problems, overfitting, and data issues from training curves",
+    "Know when deep learning beats classical ML, and when it doesn't"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "neurons-and-layers",
+      "title": "Neurons, layers, and learned features",
+      "minutes": 25
+    },
+    {
+      "slug": "loss-and-gradients",
+      "title": "Loss and gradient descent",
+      "minutes": 26
+    },
+    {
+      "slug": "training-in-practice",
+      "title": "Training in practice",
+      "minutes": 27
+    }
+  ]
+}

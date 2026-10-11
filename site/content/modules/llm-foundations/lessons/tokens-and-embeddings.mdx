@@ -1,0 +1,81 @@
+Models don't read letters and don't read words. They read **tokens** (subword chunks from a fixed vocabulary) and immediately convert each one into a vector of numbers called an **embedding**. These two translation steps explain a surprising amount of LLM behavior, from API pricing to why models miscount the r's in "strawberry."
+
+## Tokenization: text into chunks
+
+A tokenizer is built (before training, via byte-pair encoding) by repeatedly merging the most frequent character pairs in a huge corpus until a vocabulary of ~50k–200k chunks exists. Common words become single tokens; rare words shatter into pieces. Try it:
+
+<TokenizerExplorer />
+
+Play with the samples and notice what falls out:
+
+- **English prose** is cheap: a token per common word (~4 characters/token on average).
+- **Code, rare words, and other languages** shatter into more tokens: the same information costs more.
+- **Numbers** split oddly ("1234.56" is several tokens), which is one reason arithmetic is unnatural for LLMs.
+
+The practical consequences are immediate: APIs price per token; context windows are measured in tokens; and the model literally cannot see inside a token: "strawberry" may be one opaque chunk, making "count the r's" a genuinely alien question.
+
+<Check
+  question="Why can the same paragraph translated into a less-represented language require more tokens through a model API?"
+  options={[
+    "API providers add an explicit surcharge based on the language field",
+    "The tokenizer learned fewer reusable pieces for that language, so the text may split into more, smaller tokens",
+    "Unicode characters always occupy more model context than Latin characters",
+    "Translation tools append metadata that the tokenizer counts as content"
+  ]}
+  answer={1}
+  explanation="Subword tokenizers create reusable pieces from patterns in their training corpus. Text with less-represented patterns, including some languages, code, or scientific sequences, can split into smaller pieces and use more tokens. The effect varies by tokenizer."
+  hint="How does the tokenizer decide which character sequences become reusable pieces?"
+/>
+
+## Embeddings: meaning as geometry
+
+Each token ID indexes into a learned table to retrieve its **embedding**, typically a vector with hundreds or thousands of dimensions. Training shapes these vectors so that tokens used in related contexts often develop related representations. This is the first sense in which meaning becomes geometry, although contextual layers will change each token's representation based on the surrounding text.
+
+<EmbeddingMap />
+
+This one idea powers half the modern AI stack:
+
+- Inside the model, embeddings are the working currency every layer transforms.
+- Outside the model, **embedding entire sentences or documents** gives you semantic search: embed a query, embed your documents, and *nearest vectors = most related content*: even with zero words in common. That is the engine of retrieval-augmented generation in Module 9.
+
+<Check
+  question="A support-ticket search embeds all tickets as vectors. A query about 'refund not received' matches a ticket saying 'my money never came back' despite sharing no keywords. Why?"
+  options={[
+    "The system secretly translates both into keywords",
+    "Both texts express similar meaning, so training placed their embeddings close together, and the search returns nearest vectors",
+    "It's a coincidence of alphabetical ordering",
+    "Both tickets came from the same customer"
+  ]}
+  answer={1}
+  explanation="Embedding similarity captures meaning, not spelling. Contexts of 'refund not received' and 'money never came back' overlap heavily in training text, so their vectors are neighbors: exactly what keyword search can't do."
+  hint="What does distance mean in embedding space?"
+/>
+
+<Callout type="note">
+**Positions matter too.** "Dog bites man" and "man bites dog" contain identical tokens. Transformers add positional information to each embedding so the model knows token order: worth knowing exists, mechanics not required.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://platform.openai.com/tokenizer" title="Interactive tokenizer" source="OpenAI" why="Paste your real prompts and see the exact production tokenization and count." />
+  <VideoEmbed id="wjZofJX0v4M" title="Transformers (how LLMs work) explained visually" creator="3Blue1Brown" />
+</GoDeeper>
+
+## Tokenization is an interface constraint
+
+Token counts vary across languages, code, whitespace, and uncommon identifiers. A character limit is therefore not a reliable token limit. Count with the tokenizer for the exact model family when budgets matter, and reserve room for system instructions, tool schemas, retrieved context, conversation history, and output. Truncation should be an explicit policy, drop oldest turns, summarize, or reject, not an accidental slice through the most important evidence.
+
+Embedding vectors depend on the model, version, and input convention. “Query” and “document” modes may be trained differently. Similarity scores are meaningful only within the same embedding space; re-embedding half an index with a new model silently corrupts retrieval. Store the embedding model/version beside every vector and rebuild the index atomically.
+
+Cosine similarity measures geometric closeness, not truth, permission, causality, or recency. Two contradictory statements can be semantically close. Embeddings locate candidates; downstream filters and evidence checks decide whether they are usable.
+
+## Guided build: measure the interface
+
+Create a small set containing English prose, another language, source code, a table, and exact product identifiers. Record characters, tokens, and tokens-per-character for each. Then embed at least 30 short items and inspect nearest neighbours for:
+
+- a paraphrase;
+- a negated statement;
+- an exact identifier;
+- two semantically similar but contradictory claims;
+- an out-of-domain query.
+
+Document where token cost or vector similarity violates your intuition. Propose a truncation policy and the metadata required to migrate the embedding model safely.

@@ -1,0 +1,506 @@
+[
+  {
+    "id": "ba-q01",
+    "type": "single",
+    "prompt": "The first artifact of a good automation project is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…an honest map of the current process with volumes, times, and error rates: revealing which (usually small) steps are judgment-shaped"
+      },
+      {
+        "id": "b",
+        "text": "…a fine-tuned model"
+      },
+      {
+        "id": "c",
+        "text": "…a purchased AI platform license"
+      },
+      {
+        "id": "d",
+        "text": "…a press release"
+      }
+    ],
+    "answer": "a",
+    "explanation": "You place AI into a process; understanding the process comes first. The map plus the volume/ambiguity/error-cost scoring finds the AI-shaped hole."
+  },
+  {
+    "id": "ba-q02",
+    "type": "single",
+    "prompt": "A fully deterministic step ('copy field A into system B') should be implemented with…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…plain code: a model adds cost and a nonzero failure rate to something software does perfectly"
+      },
+      {
+        "id": "b",
+        "text": "…a large language model for future flexibility"
+      },
+      {
+        "id": "c",
+        "text": "…an autonomous agent"
+      },
+      {
+        "id": "d",
+        "text": "…a human, permanently"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Deterministic work gets deterministic tools. Model calls are spent only on judgment-shaped steps: the economic version of 'workflow before agent'."
+  },
+  {
+    "id": "ba-q03",
+    "type": "single",
+    "prompt": "Why must the manual baseline be measured BEFORE building the automation?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Once automation rolls out, the honest 'before' is gone, and without it, ROI is an unprovable feeling"
+      },
+      {
+        "id": "b",
+        "text": "Baselines expire after 30 days"
+      },
+      {
+        "id": "c",
+        "text": "Models train on baselines"
+      },
+      {
+        "id": "d",
+        "text": "It's optional; success is self-evident"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Minutes/item, error rate, cycle time (measured up front) are what turn 'it feels faster' into a business case a CFO can verify."
+  },
+  {
+    "id": "ba-q04",
+    "type": "single",
+    "prompt": "Webhooks are delivered 'at least once'. The engineering consequence is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…duplicates will arrive, so processing must be idempotent: dedupe on event ID before acting and use idempotency keys on external calls"
+      },
+      {
+        "id": "b",
+        "text": "…you should ask senders to guarantee exactly-once"
+      },
+      {
+        "id": "c",
+        "text": "…webhooks are unsuitable for production"
+      },
+      {
+        "id": "d",
+        "text": "…a short sleep before processing prevents duplicates"
+      }
+    ],
+    "answer": "a",
+    "explanation": "At-least-once is a law of distributed delivery. You can't prevent the duplicate; you make it harmless: running twice must equal running once."
+  },
+  {
+    "id": "ba-q05",
+    "type": "single",
+    "prompt": "What does putting a queue between trigger and processing buy you?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Spikes become backlog instead of dropped requests; failures land in a dead-letter queue for inspection; workers scale independently"
+      },
+      {
+        "id": "b",
+        "text": "Lower model API prices"
+      },
+      {
+        "id": "c",
+        "text": "Exactly-once webhook delivery"
+      },
+      {
+        "id": "d",
+        "text": "Nothing; queues only add latency"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Decoupling receipt from processing is the standard absorber for bursty reality, with the dead-letter queue as the visible place failures go instead of vanishing."
+  },
+  {
+    "id": "ba-q06",
+    "type": "single",
+    "prompt": "A model step returns low-confidence extraction for one item. Correct handling is to…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…route that item to a human review queue with the document and draft, and record the correction: low confidence is permanent for the item, so retrying just resamples uncertainty"
+      },
+      {
+        "id": "b",
+        "text": "…retry until the confidence number rises"
+      },
+      {
+        "id": "c",
+        "text": "…post it anyway to protect throughput"
+      },
+      {
+        "id": "d",
+        "text": "…halt the entire workflow"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Transient failures retry, while permanent or ambiguous conditions route to a safe outcome. Confidence routing limits automatic processing to cases that pass defined checks, and reviewed corrections can become evaluation data. The resulting quality must be measured rather than assumed."
+  },
+  {
+    "id": "ba-q07",
+    "type": "single",
+    "prompt": "Automation handles 78% of items clean; 22% go to a 3-minute human review. This is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the design working: the review queue is what makes the 78% trustworthy, and the hours saved are the result, not a failure to reach 100%"
+      },
+      {
+        "id": "b",
+        "text": "…a failure until 100% automation is achieved"
+      },
+      {
+        "id": "c",
+        "text": "…a reason to remove the review step and accept errors"
+      },
+      {
+        "id": "d",
+        "text": "…impossible to evaluate"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The goal was measured value, not full autonomy. Removing the safety valve to chase 100% trades a working system for incidents."
+  },
+  {
+    "id": "ba-q08",
+    "type": "single",
+    "prompt": "Which costs belong in an honest automation ROI? ",
+    "options": [
+      {
+        "id": "a",
+        "text": "API tokens, hosting, the review queue's human minutes, and ongoing maintenance time: alongside the savings"
+      },
+      {
+        "id": "b",
+        "text": "Only the API bill"
+      },
+      {
+        "id": "c",
+        "text": "None; savings alone suffice"
+      },
+      {
+        "id": "d",
+        "text": "Only one-time development cost"
+      }
+    ],
+    "answer": "a",
+    "explanation": "All-in accounting is what keeps stakeholder trust when someone redoes your napkin math, and they will."
+  },
+  {
+    "id": "ba-q09",
+    "type": "single",
+    "prompt": "Why keep the manual process executable after rollout?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Upstream formats and providers WILL have bad days; a fallback turns degradation into an operations event instead of a business stoppage"
+      },
+      {
+        "id": "b",
+        "text": "To double every item's processing cost forever"
+      },
+      {
+        "id": "c",
+        "text": "Because automations never change"
+      },
+      {
+        "id": "d",
+        "text": "To keep headcount justifications simple"
+      }
+    ],
+    "answer": "a",
+    "explanation": "An automation with no fallback is a new single point of failure. Drift and outages were promised by earlier modules; the fallback prices them in."
+  },
+  {
+    "id": "ba-q10",
+    "type": "single",
+    "prompt": "Pilot success criteria should be defined before the pilot runs because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…pre-registration prevents both sunk-cost 'success' declarations and anecdote-driven cancellations"
+      },
+      {
+        "id": "b",
+        "text": "…criteria cannot be typed after a pilot starts"
+      },
+      {
+        "id": "c",
+        "text": "…regulators audit all pilots"
+      },
+      {
+        "id": "d",
+        "text": "…it makes no difference"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Deciding what 'good' means before seeing results is basic experimental honesty: the pilot-scale version of not tuning on the test set."
+  },
+  {
+    "id": "ba-q11",
+    "type": "multi",
+    "prompt": "Which elements make a workflow survive its own crashes and upstream failures? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Durable per-run state in a database"
+      },
+      {
+        "id": "b",
+        "text": "Bounded retries with backoff for transient errors, then dead-letter"
+      },
+      {
+        "id": "c",
+        "text": "Idempotent step design"
+      },
+      {
+        "id": "d",
+        "text": "Keeping all progress in worker memory for speed"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "State in the database (resumable), bounded retries (self-healing), idempotency (safe replays). In-memory-only state is exactly what crashes erase."
+  },
+  {
+    "id": "ba-q12",
+    "type": "single",
+    "prompt": "The strongest predictor that an automation gets adopted rather than resisted is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the operators co-designed it, keep an override, and their new reviewer role is explicit: it's visibly their tool"
+      },
+      {
+        "id": "b",
+        "text": "…a mandatory-use policy from management"
+      },
+      {
+        "id": "c",
+        "text": "…hiding the error rate from the team"
+      },
+      {
+        "id": "d",
+        "text": "…a bigger model behind it"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Adoption is a change-management outcome. Automation done WITH the team sticks; automation done TO the team gets quietly worked around."
+  },
+  {
+    "id": "ba-x01",
+    "type": "single",
+    "prompt": "Incoming webhooks should be verified (signature/secret) because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…your trigger URL is reachable by anyone: unverified, an attacker can inject fabricated events that your pipeline dutifully processes"
+      },
+      {
+        "id": "b",
+        "text": "…verification improves latency"
+      },
+      {
+        "id": "c",
+        "text": "…webhooks fail without it"
+      },
+      {
+        "id": "d",
+        "text": "…it's only needed for financial data"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A webhook endpoint is an open door; the signature is the key check. Trigger authenticity is part of the trust boundary."
+  },
+  {
+    "id": "ba-x02",
+    "type": "single",
+    "prompt": "The idempotency key for a workflow step is best composed of…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the event/record ID plus the step name, so each step of each item is dedupable independently, and a retried step 3 can't skip because step 2 already ran"
+      },
+      {
+        "id": "b",
+        "text": "…a fresh random UUID per attempt"
+      },
+      {
+        "id": "c",
+        "text": "…the current timestamp"
+      },
+      {
+        "id": "d",
+        "text": "…the worker's hostname"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Keys must be deterministic per logical operation: same work → same key → deduped; different steps → different keys. Random keys defeat the whole purpose."
+  },
+  {
+    "id": "ba-x03",
+    "type": "single",
+    "prompt": "'Automation rate' (share auto-processed) rose from 78% to 91% after loosening the confidence threshold. What must be checked before celebrating?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The error rate among auto-processed items: throughput gains from a looser threshold may just be errors reclassified as successes"
+      },
+      {
+        "id": "b",
+        "text": "Nothing; higher automation is the goal"
+      },
+      {
+        "id": "c",
+        "text": "The dashboard's font size"
+      },
+      {
+        "id": "d",
+        "text": "Whether the queue is empty"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The threshold trades review load against error rate (precision/recall in business clothing). Moving it changes BOTH numbers; report them together."
+  },
+  {
+    "id": "ba-x04",
+    "type": "single",
+    "prompt": "A well-designed human review queue item contains…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the source document, the model's draft with confidence, the reason it routed here, and one-click approve/correct: everything needed to decide in seconds"
+      },
+      {
+        "id": "b",
+        "text": "…only the record ID, to avoid bias"
+      },
+      {
+        "id": "c",
+        "text": "…the entire database"
+      },
+      {
+        "id": "d",
+        "text": "…a blank form to re-enter from scratch"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Review UX determines whether the queue is a 3-minute task or a 15-minute one, and corrections captured here feed the eval set."
+  },
+  {
+    "id": "ba-x05",
+    "type": "single",
+    "prompt": "The manual fallback path should be rehearsed periodically because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…an unexercised fallback rots (people forget, credentials expire, volumes outgrow it), and you discover that during the outage, which is the worst time"
+      },
+      {
+        "id": "b",
+        "text": "…rehearsal is billable"
+      },
+      {
+        "id": "c",
+        "text": "…automation improves by watching"
+      },
+      {
+        "id": "d",
+        "text": "…a written runbook guarantees the fallback will work without rehearsal"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A fallback is a capability, and capabilities decay without exercise: the same logic as incident game days (Module 16)."
+  },
+  {
+    "id": "ba-x06",
+    "type": "single",
+    "prompt": "A growing exception/review queue with stable input volume is an early signal of…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…drift: inputs are changing shape (new formats, segments) faster than the automation handles them: investigate the queue's contents as diagnostic data"
+      },
+      {
+        "id": "b",
+        "text": "…database storage approaching its capacity limit"
+      },
+      {
+        "id": "c",
+        "text": "…database fragmentation"
+      },
+      {
+        "id": "d",
+        "text": "…seasonal weather"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The queue is a drift detector: what lands there is precisely what the system no longer handles. Its composition is a prioritized to-do list."
+  },
+  {
+    "id": "ba-x07",
+    "type": "single",
+    "prompt": "Batch (nightly) versus realtime (webhook) triggering should be chosen by…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the business latency requirement: if decisions can wait hours, batch is simpler, cheaper, and easier to operate; realtime earns its complexity only when freshness pays"
+      },
+      {
+        "id": "b",
+        "text": "…the automation platform's default trigger mode"
+      },
+      {
+        "id": "c",
+        "text": "…batch always, for safety"
+      },
+      {
+        "id": "d",
+        "text": "…whichever the vendor demo showed"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Latency requirements are business requirements. Overpaying for unneeded freshness is the infrastructure version of using a frontier model for classification."
+  },
+  {
+    "id": "ba-x08",
+    "type": "single",
+    "prompt": "In n8n-style visual workflows, the error-workflow (a flow triggered by failures) exists to…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…give failures a designed path (notify owners, record context, route to humans) instead of dying silently inside a node"
+      },
+      {
+        "id": "b",
+        "text": "…make diagrams symmetrical"
+      },
+      {
+        "id": "c",
+        "text": "…retry forever automatically"
+      },
+      {
+        "id": "d",
+        "text": "…replace testing"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Same principle as code: failure paths are designed, not hoped away. Visual tools just make the design literal: a red wire to somewhere intentional."
+  }
+]

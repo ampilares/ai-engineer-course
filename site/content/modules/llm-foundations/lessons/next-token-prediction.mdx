@@ -1,0 +1,82 @@
+Strip away the chat interface, the personality, the apparent reasoning, and a large language model does exactly one thing: given a sequence of tokens, it outputs a **probability for every possible next token**. That's the entire machine. Everything else is this operation repeated.
+
+## The loop that writes everything
+
+When a model "writes an essay," this happens:
+
+1. Your prompt is converted into tokens (next lesson).
+2. The model computes a probability distribution over its whole vocabulary (~100k tokens) for what comes next.
+3. One token is **sampled** from that distribution.
+4. The chosen token is appended to the sequence, and the process repeats: one token at a time, each conditioned on everything so far.
+
+A decoder still emits the response one token at a time. It does not maintain a guaranteed symbolic outline that the application can inspect. Plans may be represented implicitly in internal activations or explicitly in generated context, and reasoning models may spend additional tokens constructing them. The final structure still emerges through sequential generation conditioned on the prompt and all tokens produced so far.
+
+<Check
+  question="Mid-generation, a model has written 'The patient should take 500'. What does the model compute next?"
+  options={[
+    "It looks up the correct dosage in its medical database",
+    "A probability distribution over every token in its vocabulary: 'mg' being likely, but ' elephants' having some tiny probability too",
+    "The rest of the sentence all at once",
+    "A confidence score for whether it's right"
+  ]}
+  answer={1}
+  explanation="One distribution over the whole vocabulary, every step. There is no database lookup and no whole-sentence planning, which is also your first glimpse of why fluent-sounding dosage advice needs verification."
+  hint="One operation, repeated. What is it?"
+/>
+
+## Why a simple objective produces capable behavior
+
+Predicting the next token *well* is secretly hard. To predict the next word of:
+
+- *"The capital of Australia is"*: you need geography.
+- `def fibonacci(n): if n <= 1: return`: you need to execute code in your head.
+- *"She put the ice cream in the oven. An hour later it was"*: you need physics and time.
+- *"I asked for a refund and they said no, so I feel"*: you need a theory of human emotion.
+
+Train a large enough model on a large enough slice of human text, and getting the next token right **forces** it to internalize compressed approximations of all of this. Capability is a side effect of compression. This is the deepest idea in the module: nobody taught the model grammar, facts, or logic: they precipitated out of the prediction task.
+
+## What this single fact already predicts
+
+Before you learn any internals, next-token prediction alone explains behaviors you'll manage for the rest of the course:
+
+- **Fluency ≠ truth.** The model produces *plausible* continuations. Plausible and true usually coincide on well-represented facts, and diverge on rare ones. That divergence has a name: hallucination (final lesson).
+- **Wording moves behavior.** The prompt is the conditioning context; change it and every downstream probability shifts. That's why "prompt engineering" isn't superstition (Module 8).
+- **It can't know when it doesn't know**: the machine always produces a distribution; there's no built-in "empty result." Abstention has to be engineered around the model.
+
+<Check
+  question="Why does massive next-token training produce models that can debug code, despite 'debugging' never being an explicit objective?"
+  options={[
+    "A hidden debugging module is bolted on at the end",
+    "Predicting tokens in millions of code files, bug reports, and fixes forces the model to internalize how code behaves: capability emerges from compression",
+    "The models search Stack Overflow at inference time",
+    "They can't; all debugging output is memorized verbatim"
+  ]}
+  answer={1}
+  explanation="Good prediction on diverse text requires modeling the processes that generated the text, including program behavior. Skills precipitate out of the prediction objective rather than being individually engineered."
+  hint="What must you understand to predict the next token of a bug fix?"
+/>
+
+<GoDeeper>
+  <VideoEmbed id="LPZh9BOjkQs" title="Large Language Models explained briefly" creator="3Blue1Brown" />
+  <LinkCard href="https://karpathy.ai/zero-to-hero.html" title="Neural Networks: Zero to Hero" source="Andrej Karpathy" why="Build this exact prediction machine from scratch: the expert route through Modules 6–7." />
+</GoDeeper>
+
+## From text to a learning signal
+
+Training text is shifted by one position: the tokens at positions 1 through *n−1* are inputs, and positions 2 through *n* are targets. One sequence therefore supplies many supervised examples at once. At every position the model produces a **logit** for every vocabulary token; softmax turns those scores into a probability distribution, and cross-entropy penalizes the probability assigned to the observed next token. Backpropagation then adjusts billions of shared parameters.
+
+The same model can summarize, translate, classify, and write code because each task can be represented as text followed by an appropriate continuation. Post-training makes useful continuations easier to elicit, but generation still remains repeated probability estimation. This explains two engineering facts: a fluent answer is not proof of truth, and small changes in context can change every later probability.
+
+Teacher-forced training sees the correct previous token, while inference sees the model’s own sampled tokens. An early mistake can therefore move generation into a different region of probability space. Evaluation must cover complete outputs, not only the first token.
+
+## Guided build: make the objective visible
+
+Take five short domain sentences and tokenize them. For each sequence, write three input/target pairs created by the shift. Then build or use a tiny bigram language model to:
+
+- count next-token frequencies;
+- convert counts to probabilities;
+- compute the negative log-likelihood of one sequence;
+- generate with greedy decoding and sampling;
+- compare output after changing one prefix token.
+
+Finish with a short explanation of why low training loss does not guarantee factual or instruction-following behavior. The deliverable should connect the arithmetic of one position to the behavior of a deployed chat system.

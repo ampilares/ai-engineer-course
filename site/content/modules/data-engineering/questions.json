@@ -1,0 +1,510 @@
+[
+  {
+    "id": "dataeng-q01",
+    "type": "single",
+    "prompt": "Why must a source contract define whether a delivery is an event stream, snapshot, or correction?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The same missing or repeated record has different meaning under each update model"
+      },
+      {
+        "id": "b",
+        "text": "Only event streams support JSON"
+      },
+      {
+        "id": "c",
+        "text": "Snapshots cannot be stored in databases"
+      },
+      {
+        "id": "d",
+        "text": "Corrections never require provenance"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Update semantics determine how to apply absence, duplication, ordering, and deletion without corrupting the published state."
+  },
+  {
+    "id": "dataeng-q02",
+    "type": "single",
+    "prompt": "Which fields best support point-in-time reproducibility?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Stable source ID, event/effective time, ingestion time, source version, and pipeline run"
+      },
+      {
+        "id": "b",
+        "text": "Only the current row value"
+      },
+      {
+        "id": "c",
+        "text": "The analyst's display name"
+      },
+      {
+        "id": "d",
+        "text": "A random filename generated on every run"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Reconstruction needs identity, business time, arrival time, source version, and transformation provenance."
+  },
+  {
+    "id": "dataeng-q03",
+    "type": "single",
+    "prompt": "A retry reprocesses the same source delivery. What property prevents duplicate published records?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Idempotent writes keyed by a deterministic source identity"
+      },
+      {
+        "id": "b",
+        "text": "A larger model"
+      },
+      {
+        "id": "c",
+        "text": "Higher concurrency"
+      },
+      {
+        "id": "d",
+        "text": "Random row IDs on each attempt"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Replaying an idempotent stage converges to the same state because duplicate logical records share a key."
+  },
+  {
+    "id": "dataeng-q04",
+    "type": "multi",
+    "prompt": "Which are dataset-level quality checks? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Freshness against the source service level"
+      },
+      {
+        "id": "b",
+        "text": "Volume and reconciliation totals"
+      },
+      {
+        "id": "c",
+        "text": "Duplicate rate by stable key"
+      },
+      {
+        "id": "d",
+        "text": "Whether one sample row parses successfully"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Freshness, completeness/volume, and duplication describe the dataset. One valid row cannot establish those properties."
+  },
+  {
+    "id": "dataeng-q05",
+    "type": "single",
+    "prompt": "What is the safest way to publish a rebuilt retrieval index?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Build and validate a complete version, then atomically switch readers to it"
+      },
+      {
+        "id": "b",
+        "text": "Delete the active index before starting"
+      },
+      {
+        "id": "c",
+        "text": "Update random chunks in place while serving traffic"
+      },
+      {
+        "id": "d",
+        "text": "Ask the model to ignore inconsistent chunks"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Versioned atomic publication prevents readers from seeing a partial mixture and retains a rollback target."
+  },
+  {
+    "id": "dataeng-q06",
+    "type": "single",
+    "prompt": "Why retain reviewer disagreement instead of silently replacing it with an adjudicated label?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It reveals ambiguity, rubric weakness, and irreducible uncertainty in the measurement"
+      },
+      {
+        "id": "b",
+        "text": "It guarantees 100% model accuracy"
+      },
+      {
+        "id": "c",
+        "text": "It removes the need for a rubric"
+      },
+      {
+        "id": "d",
+        "text": "It makes every class balanced"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Original decisions and disagreement are valuable provenance; adjudication should not erase evidence that the task is ambiguous."
+  },
+  {
+    "id": "dataeng-q07",
+    "type": "single",
+    "prompt": "Corrections from a low-confidence review queue estimate which quantity well?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Error patterns in the selected low-confidence population, not unbiased overall production quality"
+      },
+      {
+        "id": "b",
+        "text": "The exact overall accuracy for all requests"
+      },
+      {
+        "id": "c",
+        "text": "Provider uptime"
+      },
+      {
+        "id": "d",
+        "text": "Database storage cost"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Routing creates selection bias. A random audit sample is needed to estimate overall population performance."
+  },
+  {
+    "id": "dataeng-q08",
+    "type": "single",
+    "prompt": "A bad parser version affected one week of chunks. What makes a targeted backfill possible?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Lineage from chunk and index versions to source deliveries, parser version, and pipeline runs"
+      },
+      {
+        "id": "b",
+        "text": "Only the current number of chunks"
+      },
+      {
+        "id": "c",
+        "text": "A larger context window"
+      },
+      {
+        "id": "d",
+        "text": "Removing all timestamps"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Lineage identifies the affected outputs and exact inputs/transformation needed for bounded recomputation."
+  },
+  {
+    "id": "dataeng-q09",
+    "type": "single",
+    "prompt": "Where should document access control be enforced for a knowledge assistant?",
+    "options": [
+      {
+        "id": "a",
+        "text": "During retrieval, before unauthorized content enters model context"
+      },
+      {
+        "id": "b",
+        "text": "Only in the final answer's wording"
+      },
+      {
+        "id": "c",
+        "text": "Inside the embedding vector"
+      },
+      {
+        "id": "d",
+        "text": "After the answer is cached"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Instructions are not an authorization boundary; restricted content must be excluded before context construction."
+  },
+  {
+    "id": "dataeng-q10",
+    "type": "multi",
+    "prompt": "Which derived stores may need deletion propagation? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Normalized tables and feature snapshots"
+      },
+      {
+        "id": "b",
+        "text": "Chunks, embeddings, and caches"
+      },
+      {
+        "id": "c",
+        "text": "Evaluation examples and traces, subject to policy"
+      },
+      {
+        "id": "d",
+        "text": "Only the visible source file; derivatives are unrelated"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "A derivative inventory is required because source data can persist in tables, vectors, caches, evals, telemetry, and backups."
+  },
+  {
+    "id": "dataeng-q11",
+    "type": "single",
+    "prompt": "Why keep a random audit sample alongside active-learning or failure samples?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It supports less biased estimates of production quality and catches errors outside the selection strategy"
+      },
+      {
+        "id": "b",
+        "text": "It guarantees all rare cases are sampled"
+      },
+      {
+        "id": "c",
+        "text": "It eliminates reviewer disagreement"
+      },
+      {
+        "id": "d",
+        "text": "It makes labels free"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Targeted samples accelerate learning but distort prevalence; random audits preserve visibility into the wider population."
+  },
+  {
+    "id": "dataeng-q12",
+    "type": "single",
+    "prompt": "A feature distribution shifts, but sampled task performance is unchanged. What is the correct conclusion?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Investigate and monitor; distribution drift is a signal, not proof of harmful performance drift"
+      },
+      {
+        "id": "b",
+        "text": "Retrain immediately without evaluation"
+      },
+      {
+        "id": "c",
+        "text": "Ignore all future drift alerts"
+      },
+      {
+        "id": "d",
+        "text": "The source contract is unnecessary"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Input drift can be harmless or consequential. Join it with performance, segment, and pipeline evidence before acting."
+  },
+  {
+    "id": "de-x01",
+    "type": "single",
+    "prompt": "A pipeline stage is 'idempotent' when…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…running it twice with the same input produces the same final state as running it once: via deterministic keys and upserts or atomic partition replacement"
+      },
+      {
+        "id": "b",
+        "text": "…it never fails"
+      },
+      {
+        "id": "c",
+        "text": "…it runs on a schedule"
+      },
+      {
+        "id": "d",
+        "text": "…it processes one record at a time"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Retries and replays are guaranteed in distributed systems; idempotency is what makes them harmless instead of duplicating data."
+  },
+  {
+    "id": "de-x02",
+    "type": "single",
+    "prompt": "A dead-letter queue that nobody monitors is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a slower way to lose data: quarantine only works when the queue has an owner, an alert, and a review workflow"
+      },
+      {
+        "id": "b",
+        "text": "…perfectly fine; the data is technically retained"
+      },
+      {
+        "id": "c",
+        "text": "…a performance optimization"
+      },
+      {
+        "id": "d",
+        "text": "…required by SQL standards"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The DLQ is a promise that failures get human attention. Without an owner and a replay process, it becomes write-only storage while unresolved failures accumulate."
+  },
+  {
+    "id": "de-x03",
+    "type": "single",
+    "prompt": "Why do backfills (historical recomputation) need isolated outputs and promotion checks?",
+    "options": [
+      {
+        "id": "a",
+        "text": "So recomputed history can be verified before replacing production data, and a buggy backfill can't clobber current good datasets"
+      },
+      {
+        "id": "b",
+        "text": "Because old data is legally different"
+      },
+      {
+        "id": "c",
+        "text": "To make backfills slower"
+      },
+      {
+        "id": "d",
+        "text": "They don't; backfills should write directly to production"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A backfill is a mass-write with a bug's blast radius measured in months of data. Stage, verify, then promote: blue/green thinking applied to datasets."
+  },
+  {
+    "id": "de-x04",
+    "type": "single",
+    "prompt": "A currency-conversion bug is found in last month's pipeline code. Lineage lets you…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…enumerate exactly which dataset versions, models, reports, and decisions consumed the affected outputs: sizing the blast radius instead of guessing"
+      },
+      {
+        "id": "b",
+        "text": "…undo the bug automatically"
+      },
+      {
+        "id": "c",
+        "text": "…blame the right engineer"
+      },
+      {
+        "id": "d",
+        "text": "…avoid writing tests"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Lineage answers 'who consumed this version?' Without it teams either underreact (miss poisoned consumers) or rebuild everything (weeks of waste)."
+  },
+  {
+    "id": "de-x05",
+    "type": "single",
+    "prompt": "Inter-annotator agreement is measured during labeling because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…if trained humans disagree on labels, the label definition is ambiguous, and no model (or eval) built on those labels can be trusted beyond that ambiguity"
+      },
+      {
+        "id": "b",
+        "text": "…it speeds up labeling"
+      },
+      {
+        "id": "c",
+        "text": "…regulations require three annotators"
+      },
+      {
+        "id": "d",
+        "text": "…models require an odd number of labels"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Label quality caps everything downstream. Low agreement means fix the guidelines, not average the noise."
+  },
+  {
+    "id": "de-x06",
+    "type": "single",
+    "prompt": "Human corrections from a review queue are most valuable when routed into…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…versioned datasets that feed evals (and eventually fine-tuning): turning operational work into permanent quality assets"
+      },
+      {
+        "id": "b",
+        "text": "…a spreadsheet nobody reads"
+      },
+      {
+        "id": "c",
+        "text": "…immediate automatic retraining without review"
+      },
+      {
+        "id": "d",
+        "text": "…deletion after 24 hours"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Corrections are continuous ground truth. The feedback loop (capture, curate, evaluate) is what makes AI systems improve instead of merely run."
+  },
+  {
+    "id": "de-x07",
+    "type": "single",
+    "prompt": "A user exercises their right to deletion. For your AI data platform this must propagate to…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…source copies, derived datasets, indexes/embeddings, and caches, which requires knowing where the person's data flowed (lineage, again)"
+      },
+      {
+        "id": "b",
+        "text": "…only the original upload folder"
+      },
+      {
+        "id": "c",
+        "text": "…nothing; derived data is exempt"
+      },
+      {
+        "id": "d",
+        "text": "…the model's weights via retraining that night"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Deletion is a data-flow problem: every derived copy is still their data. Designing for deletion up front beats forensic archaeology under a deadline."
+  },
+  {
+    "id": "de-x08",
+    "type": "single",
+    "prompt": "An upstream team renames a column in the export your pipeline consumes. The defense that catches this at the boundary is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a schema contract check that fails fast or quarantines unexpected structure and alerts both teams before nulls flow downstream"
+      },
+      {
+        "id": "b",
+        "text": "…hoping the column name never mattered"
+      },
+      {
+        "id": "c",
+        "text": "…retrying the pipeline until the column returns"
+      },
+      {
+        "id": "d",
+        "text": "…a bigger database"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Schema drift is a when, not an if. Contracts turn it into a loud, attributable event at the boundary rather than a quiet corruption in every consumer."
+  }
+]

@@ -1,0 +1,71 @@
+No single control makes an AI system safe. Injection defeats filters; models err; humans tire; dependencies fail. Security comes from **layers**, each catching what the previous missed, arranged so that no single failure is catastrophic. This lesson assembles the stack you've been building all course.
+
+## The layers, from the model outward
+
+1. **Input boundaries:** Treat all external text, including user input, retrieved chunks, tool results, and uploaded files, as untrusted. Delimit it and validate its structure. This layer is necessary but insufficient.
+2. **Least privilege**: the wall. Every component gets the narrowest tools, scopes, and data access that let it do its job. Read-only where writes aren't needed; this task's data, not the whole database. Most attacks and accidents die here, undetected, because the capability is absent (Modules 10 and 15).
+3. **Human approval for consequential actions**: irreversible, financial, external-communication, or high-blast-radius actions pause for a human who sees the concrete action (Module 10's gate). The safety valve that assumes the layers above it already failed.
+4. **Output validation:** Never let raw model output reach a dangerous sink. Validate it against a schema and business rules. Never pass model-generated code to `eval()`, interpolate model output into SQL, or render it as unsanitized HTML. Model output is untrusted input to the next system and requires the same discipline as user input.
+5. **Monitoring and rate limits**: bound the blast radius of a compromise in progress (a hijacked agent hits a spend/action cap), and surface anomalies for response (Module 14's traces and alerts).
+
+<Check
+  question="An AI coding assistant runs model-generated Python to 'help with data tasks' via eval(). Why is this dangerous regardless of prompt quality?"
+  options={[
+    "eval() is slow",
+    "Model output is untrusted input to the next system; executing it hands arbitrary code execution to anyone who can influence the model, including via indirect prompt injection in the data being processed",
+    "Python can't be sandboxed at all",
+    "It only matters if the user is malicious"
+  ]}
+  answer={1}
+  explanation="'Model output → executor' is the classic sink failure. Combined with injection, a poisoned input file becomes remote code execution. Model output gets the same suspicion as user input: validate, sandbox, or don't execute."
+  hint="Where does the model's output flow next, and who can influence the model?"
+/>
+
+## Why layering, not perfection
+
+The mindset shift is from *"make each layer perfect"* to *"assume each layer sometimes fails."* Injection filter fails 5% of the time? Least privilege means the leaked-through instruction has nothing dangerous to call. Least privilege misconfigured on one tool? The approval gate catches the consequential action. Approval fatigue lets one through? Monitoring and rate limits bound the damage and raise the alarm. Independent layers multiply: three imperfect controls at 90% each leave 0.1% getting through everything, and you engineer the layers to be *independent* so failures don't correlate.
+
+<Check
+  question="Your injection classifier is ~92% effective. A stakeholder asks if that's enough to ship an agent with database-write tools. The correct answer is…"
+  options={[
+    "Yes: 92% is a passing grade",
+    "No: a filter is one probabilistic layer; ship only with independent layers beneath it (least privilege on the write tools, approval gates, output validation, rate limits) so the ~8% that slips through can't do serious harm",
+    "Yes, if you raise it to 95%",
+    "No: remove the classifier and rely on the model's judgment"
+  ]}
+  answer={1}
+  explanation="Any single control's residual failure rate is unacceptable alone for consequential capabilities. Defense in depth exists precisely because no filter reaches 100%: the layers below assume it doesn't."
+  hint="What catches the 8% the classifier misses?"
+/>
+
+## Threat modeling: think like the attacker, on purpose
+
+Before shipping, systematically ask: **what could go wrong, who benefits, and what's the blast radius?** A lightweight pass:
+
+- **Enumerate assets**: data, tools, actions the system touches. Which are sensitive? Which are irreversible?
+- **Enumerate entry points**: every place untrusted content enters (inputs, RAG corpus, tool results, uploads).
+- **Trace attack paths**: for each entry point, what's the worst reachable action? (Highest-blast-radius action + a path to trigger it = your top priority.)
+- **Red-team it**: actually try: inject via each entry point, request out-of-scope actions, feed malformed and adversarial inputs, attempt the trifecta. Findings become permanent eval cases (Module 14), so a defeated attack stays defeated.
+
+<Callout type="note">
+**Module project: threat model + red-team report.** For your Module 10/8 system: enumerate assets, entry points, and the highest-blast-radius action; map at least three attack paths; attempt them (document what worked); then show the layered mitigations and add each successful attack to your eval suite as a regression guard.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://genai.owasp.org/llm-top-10/" title="OWASP Top 10 for LLM Applications" source="OWASP" why="Structures your threat model: excessive agency, insecure output handling, and more, each with mitigations." />
+  <LinkCard href="https://atlas.mitre.org/" title="MITRE ATLAS" source="MITRE" why="A knowledge base of real-world attacks on AI systems to stress-test your threat model against." />
+</GoDeeper>
+
+## Put authorization at the point of effect
+
+Authenticate the person, then authorize the exact operation and resource immediately before execution. Do not inherit permission from the model’s conversation, a retrieved document, or the fact that a tool is visible. Use short-lived credentials scoped by tenant and capability. Filter data before it enters context and re-check write conditions after approval.
+
+Constrain egress as well as tools. A sandboxed worker should reach only approved destinations, file paths, and APIs. Separate read and write capabilities, limit returned fields, cap rows and bytes, and isolate tenants. Log policy decisions and side-effect receipts so an incident can be reconstructed without storing unnecessary content.
+
+Human approval is strongest when the reviewer sees a comprehensible diff or action summary, evidence, destination, and risk, not a generic “approve agent” button. High-risk operations may require two-person control or a fresh authentication step. Emergency disable switches and credential revocation should work without deploying new code.
+
+## Guided build: enforce a capability policy
+
+Threat-model your tool-enabled system using assets, actors, trust boundaries, entry points, and abuse cases. Implement at least five independent controls: scoped tool set, resource authorization, argument validation, egress restriction, approval, rate/budget limit, secret isolation, or output filtering.
+
+Re-run the attack corpus and show which layer stops each consequence. Then disable one layer at a time to demonstrate why the remaining controls matter. Submit the threat model, policy tests, residual-risk register, and emergency shutdown procedure.

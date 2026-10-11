@@ -1,0 +1,36 @@
+{
+  "slug": "multimodal-ai",
+  "number": 11,
+  "title": "Multimodal AI Systems",
+  "phase": "rag",
+  "summary": "Engineer systems that combine documents, images, audio, and realtime interaction with modality-aware pipelines, evaluation, safety, and user experience.",
+  "outcomes": [
+    "Choose native multimodal models or staged specialist pipelines based on evidence and constraints",
+    "Build document pipelines that preserve layout, tables, provenance, and confidence",
+    "Design vision, speech, and realtime interactions around latency, interruption, and fallback",
+    "Evaluate multimodal quality and safety by modality, segment, and end-to-end task outcome"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "multimodal-architecture",
+      "title": "Multimodal architecture and input pipelines",
+      "minutes": 25
+    },
+    {
+      "slug": "document-ai",
+      "title": "Document AI: OCR, layout, tables, and extraction",
+      "minutes": 28
+    },
+    {
+      "slug": "vision-audio-realtime",
+      "title": "Vision, speech, and realtime interaction",
+      "minutes": 28
+    },
+    {
+      "slug": "multimodal-evaluation",
+      "title": "Evaluating and securing multimodal systems",
+      "minutes": 26
+    }
+  ]
+}

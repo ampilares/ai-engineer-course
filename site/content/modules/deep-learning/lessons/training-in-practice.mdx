@@ -1,0 +1,89 @@
+Between the theory of gradient descent and a model that works lies a craft: reading training curves, catching overfitting, and (most often in practice) standing on someone else's pretrained shoulders.
+
+## Reading the curves
+
+During training you watch two lines: **training loss** and **validation loss**. Their relationship is a diagnosis chart:
+
+| Pattern | Diagnosis | Treatment |
+|---|---|---|
+| Both falling, close together | healthy | keep going |
+| Both high and flat | underfitting | more capacity, better features, higher LR, train longer |
+| Train falls, validation rises | **overfitting** | more data, augmentation, regularization, early stop |
+| Loss explodes or oscillates | learning rate too high | reduce LR |
+| Train loss ≈ 0 instantly | data bug or leakage | inspect the data before celebrating |
+
+That last row deserves its own sentence: **too-good-to-be-true results are data bugs until proven otherwise.** The label snuck into the features far more often than you built a miracle.
+
+<Check
+  question="Around epoch 15, training loss keeps falling but validation loss starts climbing. What is happening and what do you do?"
+  options={[
+    "The framework is malfunctioning, so architecture and data checks are unnecessary",
+    "Overfitting has begun: the model is memorizing training specifics: stop early at the validation minimum, or add data/regularization",
+    "The validation set is too small; delete it",
+    "Learning rate is too low; increase it"
+  ]}
+  answer={1}
+  explanation="Diverging curves are the definition of overfitting: continued improvement on seen data at the expense of unseen data. The checkpoint at the validation minimum is the model you actually want."
+  hint="Which of the two curves measures what production will see?"
+/>
+
+## The anti-overfitting toolkit
+
+Common responses include **more or better data**, which adds signal; **data augmentation**, when transformations preserve the label; **early stopping**, which keeps the checkpoint with the best validation result; **regularization**, such as weight decay or dropout; and a **smaller model** when the available data cannot support the current capacity. Choose the intervention from the training and validation curves instead of applying every technique at once.
+
+## Transfer learning: the professional default
+
+Training deep networks from scratch needs data and compute most teams don't have. The standard move is **transfer learning**: take a network pretrained on a huge general dataset, and adapt it to your task with a small dataset: either by training just a new final layer on top of its representations, or by **fine-tuning** some of its layers gently.
+
+Why it works: the pretrained early and middle layers already learned universal features (edges and textures; syntax and semantics). Your task rarely needs those relearned: it needs the last mile adjusted.
+
+<Check
+  question="You must classify product photos into 12 categories with only 3,000 labeled images. The strongest approach is…"
+  options={[
+    "Train a large CNN from scratch on the 3,000 images",
+    "Start from a model pretrained on millions of images and fine-tune it (or train a small head on its representations)",
+    "Use a spreadsheet of pixel averages",
+    "Freeze the randomly initialized model and tune only the classifier head"
+  ]}
+  answer={1}
+  explanation="3,000 images is far too few to learn general vision from scratch, but plenty to adapt pretrained representations to 12 categories. Transfer learning is the default whenever your data is small relative to the task."
+  hint="Which universal knowledge (edges, textures, shapes) does your small dataset NOT need to teach?"
+/>
+
+<Callout type="note">
+This is also the economic story of the LLM era, one module early: enormous pretraining once, cheap adaptation everywhere: via fine-tuning or, cheaper still, via prompting. When Module 17 weighs "fine-tune vs. prompt vs. retrieve," it's continuing this exact conversation.
+</Callout>
+
+## GPUs, briefly
+
+Neural network math is mostly matrix multiplication: millions of independent multiply-adds. GPUs execute thousands of them in parallel, which is the entire reason deep learning is practical. For this course: free Colab/Kaggle GPU tiers cover every lab; you never need to buy hardware.
+
+<Callout type="tip">
+**Module project: trained and analyzed.** Using fastai or PyTorch on a free GPU: pick an image or text classification dataset; establish a naive baseline; fine-tune a pretrained model; plot training vs. validation curves and mark where overfitting begins; and write an error analysis by segment (which classes confuse the model, and what do the failures have in common?).
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://course.fast.ai/" title="Practical Deep Learning for Coders" source="fast.ai" why="The best free hands-on deep learning course; its top-down style pairs perfectly with this module." />
+  <LinkCard href="https://pytorch.org/tutorials/beginner/basics/intro.html" title="PyTorch: Learn the Basics" source="pytorch.org" why="The tensor-and-training-loop fundamentals used by nearly all modern AI code." />
+</GoDeeper>
+
+## Reproducible experiments beat one-off runs
+
+A training result is not reproducible if the dataset snapshot, split, preprocessing, code, pretrained checkpoint, and hyperparameters are unknown. Give every run an identifier and save those inputs with its curves and final metrics. Set random seeds for comparability, while remembering that some GPU operations remain nondeterministic. Repeat important comparisons when normal run-to-run variation could reverse the conclusion.
+
+Start with a small slice that completes in minutes. Verify labels, class balance, shapes, and the ability to overfit a tiny batch. Then establish the pretrained baseline before tuning. Change one major variable at a time, record the hypothesis, and compare on the same validation set. Select the checkpoint by the target validation metric, not automatically by lowest training loss.
+
+Before deployment, evaluate the exported artifact, not only the in-memory model. Preprocessing differences, class-order mistakes, precision conversion, and missing normalization often appear only after export.
+
+## Guided build: an experiment report
+
+Fine-tune a pretrained model and produce an experiment table with run ID, dataset version, trainable layers, learning rate, batch size, augmentation, best epoch, target metric, and inference time. Include:
+
+- a naive and a transfer-learning baseline;
+- a tiny-batch overfit check;
+- training and validation curves;
+- errors grouped by class and by one operational segment;
+- evaluation of the saved/reloaded model;
+- a recommendation stating whether the gain justifies the added complexity.
+
+A notebook that happened to work once is not the deliverable. A documented experiment that another learner can reproduce is.

@@ -1,0 +1,64 @@
+Module 7 showed that additional generated reasoning can give a model more computation before it commits to an answer. **Reasoning models** are optimized to spend extra inference effort on decomposition, search, checking, and revision. That effort can improve accuracy on difficult tasks, but it also increases latency and cost. Deciding when the trade is worthwhile is an engineering decision that belongs beside model selection and routing.
+
+## What a reasoning model actually does
+
+Mechanically, the model still generates tokens autoregressively. Some of those tokens represent internal reasoning or a scratchpad used before the visible answer. Providers may expose an effort control, a token budget, a summary, or no reasoning trace at all. Post-training methods, which can include reinforcement learning and distillation, teach models to use this additional computation for decomposition, self-checking, and revision.
+
+The engineering-relevant properties:
+
+- **Test-time compute can be a dial.** Many APIs expose an effort level or budget, but the available controls differ by model and provider. More effort can improve difficult tasks, usually with diminishing returns that your evaluation must measure.
+- **Additional reasoning consumes resources.** Internal reasoning can increase metered tokens, request price, and latency, but billing rules differ across providers. Estimate cost from the provider's current documentation and confirm it with request-level usage data.
+- **It is still probabilistic generation.** Additional reasoning can reduce error rates on some multi-step problems, but it does not eliminate hallucination, guarantee faithful explanations, or provide current knowledge. Grounding, validation, and external verification remain necessary.
+
+<Check
+  question="A reasoning model spends 4,000 thinking tokens before a 150-token answer. What are you paying for, mechanically?"
+  options={[
+    "A larger neural network being temporarily activated",
+    "Additional sequential generation whose intermediate state can condition the final answer, with cost determined by the provider's metering rules",
+    "A database of verified solutions",
+    "Nothing; thinking tokens are free"
+  ]}
+  answer={1}
+  explanation="Additional generated reasoning gives the model more sequential computation before the final answer. The exact metering and visibility vary by provider, so the decision must combine task accuracy, measured usage, latency, and price."
+  hint="What did Module 7 say each generated token buys?"
+/>
+
+## When reasoning pays and when it does not
+
+Route by task shape, and let your eval set draw the line (Module 14's decision engine, again):
+
+**Often worth evaluating:** multi-step mathematics and logic; debugging and code architecture; planning for bounded agents; analysis where several constraints interact; and rubric-based grading with substantial judgment.
+
+**Often unnecessary:** extraction, classification, formatting, and straightforward question answering over retrieved text. A fast standard model may match the required quality at lower cost and latency. Treat these categories as hypotheses rather than rules, then confirm them on representative data.
+
+The production pattern that falls out is **tiered routing with escalation**: standard model for the easy majority → escalate to reasoning (or bigger budget) when confidence is low, validation fails, or the task class is known-hard. You already own every piece of this architecture from confidence routing (Module 8).
+
+<Check
+  question="Your pipeline classifies support tickets (easy) and occasionally must untangle multi-account billing disputes (genuinely hard). The right use of a reasoning model is…"
+  options={[
+    "Use it for every request because one model is easier to operate",
+    "Route classification to a fast standard model and escalate only the disputes to the reasoning model, after validating both routes on the evaluation set",
+    "Never use reasoning models; they're too expensive",
+    "Use it only for the classification, where volume is high"
+  ]}
+  answer={1}
+  explanation="Additional reasoning effort belongs where multi-step difficulty justifies it, while high-volume routine work usually belongs on a faster tier. The evaluation set confirms the routing boundary."
+  hint="Match the expensive dial to the task shape that needs it."
+/>
+
+## Working with thinking output
+
+Do not treat a reasoning trace as a faithful account of how the model reached its answer. Some providers do not expose it, and a plausible trace can accompany an incorrect result. Use traces or provider summaries only as supporting diagnostic signals. Evaluate the final answer against external evidence, tests, and schema constraints. Never parse business data from a scratchpad; the contract remains the schema-validated final output from Module 8. In user-facing products, provide a concise justification and relevant evidence rather than exposing private internal reasoning.
+
+<Callout type="note">
+Reasoning models usually need less step-by-step scaffolding. They benefit from a clear problem statement, complete constraints, relevant evidence, and explicit success criteria. The specification discipline from earlier lessons transfers unchanged.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking" title="Extended thinking" source="docs.anthropic.com" why="A concrete API for thinking budgets: see the dial this lesson describes." />
+  <LinkCard href="https://artificialanalysis.ai/" title="Artificial Analysis" source="artificialanalysis.ai" why="Compare reasoning vs. standard model cost/latency/quality trade-offs across providers." />
+</GoDeeper>
+
+## Guided build: publish a routing decision
+
+Assemble at least 30 tasks split between routine and genuinely multi-step cases. Run a standard model and a reasoning model or higher-effort setting on every case. Record task quality, p50 and p95 latency, input and output usage, estimated cost, and validation failures. Propose a routing rule, test it against an always-standard and an always-reasoning baseline, and document where the rule fails. Your conclusion may be that one model tier is sufficient.

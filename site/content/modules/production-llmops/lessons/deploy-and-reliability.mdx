@@ -1,0 +1,78 @@
+A system that works in your terminal and a system users depend on are separated by the work of this module. LLMOps is DevOps with three new twists: the core component is **probabilistic**, its dependency is a **third-party API with its own outages and price**, and its behavior **drifts** as inputs and models change. Everything else you already know still applies.
+
+## Deployment shapes
+
+Match the shape to the workload:
+
+- **Synchronous API** (request → response): interactive features. Simple; you own the latency budget end to end. Most chat and assist features.
+- **Asynchronous / queue-based** (Module 13): batch and long-running jobs. Submit → process → notify. Absorbs spikes and long tasks; the default for document pipelines and agents.
+- **Scheduled/batch**: periodic runs (nightly classification, digests). Cheapest per item; latency-insensitive.
+
+For a solo builder on a VPS (this course's own deployment story), the whole thing is often one container behind a reverse proxy with automatic TLS, a queue for heavy work, and a database for state: deliberately boring. Reach for more infrastructure when measurements demand it, not before.
+
+## Configuration is not code
+
+The LLMOps-specific discipline: **prompts, model IDs, and parameters live in versioned configuration, deployable without a code change.** Why it's non-negotiable:
+
+- Providers deprecate models on a schedule: swapping one must be a config change, not a code hunt across call sites.
+- A prompt regression should be revertible through a configuration rollback or deployment, which requires prompts and model settings to be versioned configuration.
+- Config changes get the same review, versioning, and eval gate (Module 14) as code, because they change behavior just as much.
+
+<Check
+  question="Your provider emails that your pinned model retires in 30 days. In a well-built system, migrating is…"
+  options={[
+    "A multi-week refactor hunting hardcoded model strings across the codebase",
+    "A config change to the new model ID, validated by running your eval suite to confirm quality holds, then deployed, with instant rollback if it regresses",
+    "Impossible; you must rebuild from scratch",
+    "Handled automatically by the provider with no action"
+  ]}
+  answer={1}
+  explanation="Model IDs in config + an eval suite make provider migrations routine: swap, evaluate, deploy, rollback-if-needed. Hardcoded model strings and no evals turn a scheduled email into a fire drill."
+  hint="Where should the model ID have lived, and what tells you the swap is safe?"
+/>
+
+## Reliability patterns for a flaky dependency
+
+Model APIs will time out, rate-limit, overload, and occasionally return nonsense. Production systems assume it:
+
+- **Timeouts + bounded retries with backoff** (Module 3): mandatory on every call.
+- **Fallbacks**: a smaller/alternate model, a cached response, or a graceful "try again shortly" beats a hard failure. Degrade, don't collapse.
+- **Circuit breakers**: when a dependency is clearly down, stop hammering it: fail fast to the fallback for a cooling-off period instead of piling up timeouts.
+- **Graceful degradation**: design the *product* so a model outage disables a feature without taking down the app. The search box still searches when the AI summary is unavailable.
+- **Idempotency:** Retries and queue replays can run a step more than once, so repeated execution must not duplicate a side effect.
+
+<Check
+  question="Your model provider has a major outage. Which design keeps your product usable rather than down?"
+  options={[
+    "Retrying the failed provider in a tight loop until it recovers",
+    "A circuit breaker that fails fast to a fallback (smaller model, cached result, or a feature-disabled-but-app-works state) once the provider is detected down",
+    "Showing users a stack trace and a 500 page",
+    "Nothing can be done during a provider outage"
+  ]}
+  answer={1}
+  explanation="Graceful degradation + circuit breaking isolate the failure to the AI feature instead of the whole product. Tight-loop retries make the outage worse and still leave users stuck."
+  hint="Should one dependency's outage take down the entire application?"
+/>
+
+<Callout type="tip">
+Deploy changes the way Module 14 taught you to trust: behind flags, to a fraction of traffic first (canary), watching quality/latency/cost/error dashboards, with one-command rollback ready. The eval gate catches regressions before release; the canary catches what the eval set didn't think of.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://caddyserver.com/docs/" title="Caddy documentation" source="caddyserver.com" why="Automatic-HTTPS reverse proxy: the boring, reliable front door for a VPS deployment." />
+  <LinkCard href="https://docs.docker.com/get-started/" title="Docker getting started" source="docker.com" why="Containerize the app for reproducible one-command deploys and rollbacks." />
+</GoDeeper>
+
+## Choose synchronous or asynchronous deliberately
+
+Interactive requests need a short end-to-end deadline, streaming where useful, and graceful degradation. Long document or agent work belongs in a durable queue with status, cancellation, retry, and notification. Do not hold an HTTP connection open for work that may take minutes. Apply backpressure when arrival rate exceeds safe concurrency; an unlimited queue converts overload into hours of hidden delay.
+
+Deploy immutable versions of code, prompt, schema, model routing, retrieval index, and feature flags. Use canary or shadow traffic to compare a candidate on representative inputs before full rollout. Database and index migrations need compatibility across old and new application versions. Health checks should distinguish “process is alive” from “ready to accept work.”
+
+Fallback behavior must preserve the product contract. A cheaper model may be acceptable for summarization but unsafe for a high-precision extraction. A useful degradation can be read-only mode, queued processing, cached verified results, or human routing, not automatically another opaque answer.
+
+## Guided build: deploy under failure
+
+Package one project as an interactive service or worker. Add readiness/liveness checks, bounded concurrency, request/workflow deadlines, retry policy, and graceful shutdown. Load-test normal and burst traffic, then simulate provider failure, slow database, queue growth, and a bad prompt release.
+
+Demonstrate canary rollout and rollback without losing accepted work. Report throughput, p50/p95 latency, error rate, queue age, and recovery time. Include the deployment diagram and an operator runbook.

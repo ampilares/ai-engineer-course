@@ -1,0 +1,99 @@
+A model that answers in prose is a demo. A model that reliably fills a **schema** is a component you can build systems on. Structured output is the bridge between probabilistic text and deterministic software: arguably the single most-used primitive in applied AI engineering.
+
+## The contract: define, demand, validate
+
+```python
+from pydantic import BaseModel, field_validator
+
+class InvoiceExtract(BaseModel):
+    vendor: str
+    invoice_number: str
+    total_cents: int
+    currency: str            # ISO 4217
+    due_date: str | None     # YYYY-MM-DD; null if absent
+
+    @field_validator("currency")
+    @classmethod
+    def iso_currency(cls, v: str) -> str:
+        if len(v) != 3 or not v.isalpha():
+            raise ValueError("must be a 3-letter ISO code")
+        return v.upper()
+```
+
+Use four layers. First, define the schema in code and provide it to the model through the provider's structured-output or tool-schema mode when available. Second, validate every response with the same schema object because syntactic constraints do not guarantee correct values. Third, on a repairable failure, retry once with a concise validation error such as "`total_cents` must be an integer; return corrected JSON only." Fourth, route repeated failures to a human or a safe terminal state. Never let unvalidated model output reach downstream systems.
+
+<Check
+  question="Why validate model output even when using a provider's schema-constrained mode?"
+  options={[
+    "Validation makes the response arrive faster",
+    "Constrained decoding guarantees syntactic shape at best: semantic nonsense (negative totals, impossible dates, wrong currency) still fits the schema; and your validator is the single enforcement point if you ever change modes or models",
+    "Providers charge extra for unvalidated output",
+    "There is no reason; it's pure superstition"
+  ]}
+  answer={1}
+  explanation="Schema-valid ≠ correct. 'total_cents: -50000' parses beautifully. Business-rule validation (Pydantic validators, cross-field checks) is yours, and it also decouples your safety from any provider feature."
+  hint="What can be JSON-perfect and still be wrong?"
+/>
+
+## Schema design moves the quality needle
+
+The schema isn't just plumbing: it shapes model behavior:
+
+- **Field names and descriptions are prompt text.** `total_cents: int: grand total including tax, in cents` outperforms `amt: int`.
+- **Enums beat free strings.** `category: "billing" | "technical" | "other"` eliminates a whole class of creative misspellings.
+- **Make uncertainty representable.** A nullable field plus a `confidence: float` per critical field gives the model a legal way to say "not stated": otherwise it will *invent* a due date rather than omit one. You are designing the model's abstention path.
+- **Order matters.** Since generation is sequential (Module 7), putting a `summary` or `reasoning` field *before* the extracted fields lets the model "think" before committing values: schema-shaped chain of thought.
+
+<Check
+  question="Your extractor keeps inventing due dates for invoices that don't state one. The schema-level fix is…"
+  options={[
+    "Punish the model with a sterner system prompt",
+    "Make due_date nullable, describe explicitly when to use null, and add an example where the correct output is null",
+    "Remove the due_date field entirely",
+    "Raise temperature so it varies more"
+  ]}
+  answer={1}
+  explanation="Models fill required-looking fields with plausible values: hallucination by schema pressure. Give absence a legal representation and demonstrate it. (Removing the field loses real dates; sternness doesn't change the output space.)"
+  hint="What is the model's legal move when the document is silent?"
+/>
+
+## Confidence routing: the pattern behind every AI product
+
+With validated, confidence-annotated output you can build the workhorse architecture of applied AI:
+
+```text
+model output → validate → confidence ≥ threshold? → auto-process
+                        → confidence < threshold  → human review queue
+                        → invalid after retry     → human review queue
+```
+
+Confidence routing can make a model useful even when its raw accuracy is insufficient for full automation. Automatically process only outputs that pass schema, business-rule, and confidence checks, then route ambiguous or invalid cases to a human. End-to-end quality depends on how well the threshold separates cases and how reliable the review process is; it is not guaranteed by the pattern. The threshold is a business decision informed by Module 5's precision and recall trade-off. Reviewed corrections can become evaluation data in Module 14 and, after curation, training data in Module 17.
+
+<Callout type="note">
+**Module project: structured AI worker.** Build the extractor: 30+ real-ish documents (emails, invoices, or transcripts), a Pydantic schema with validators and nullable+confidence fields, retry-on-invalid, and a review queue for low confidence. Compare two prompts × two models on your 30 examples and write down which config wins and why. This artifact carries directly into Modules 9, 13, and 14.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.pydantic.dev/latest/" title="Pydantic documentation" source="pydantic.dev" why="The validation library at the center of this pattern (and of most Python AI codebases)." />
+  <LinkCard href="https://docs.anthropic.com/en/docs/build-with-claude/structured-outputs" title="Structured outputs" source="docs.anthropic.com" why="Provider-side schema enforcement: the belt to your validator's suspenders." />
+</GoDeeper>
+
+## Syntactic validity is only the first gate
+
+Schema-valid output can still be wrong. Add semantic checks: totals equal line items, dates fall in an allowed range, identifiers exist, currency belongs to an enum, and mutually exclusive fields do not appear together. Use discriminated unions for genuinely different outcomes such as `approved`, `needs_review`, and `rejected`; one giant object full of optional fields permits impossible combinations.
+
+Distinguish “unknown” from an empty string, zero, or false. Require evidence spans or source references for fields that matter. Confidence emitted by the same model is not calibrated probability. Route using observable signals such as missing evidence, validation failures, disagreement between passes, or measured performance for that document type.
+
+On failure, prefer a bounded repair step that receives validation errors and the original output. Never retry indefinitely, and never let a repaired structure erase the raw attempt. Some inputs should go directly to review rather than paying for repeated guesses.
+
+## Guided build: an extraction contract
+
+Define a strict schema for a real document type with at least one enum, nested list, nullable field, and discriminated outcome. Test 30 varied documents. Track:
+
+- parse success and semantic-validation success separately;
+- field-level accuracy for critical fields;
+- evidence coverage;
+- repair success by error type;
+- review rate and cost per accepted record.
+
+Feed deliberately inconsistent documents through the system and prove that deterministic checks prevent downstream action. Your service passes when every input reaches a named terminal state and no malformed or semantically impossible result is silently accepted.

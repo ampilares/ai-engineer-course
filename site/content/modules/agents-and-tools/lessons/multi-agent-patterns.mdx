@@ -1,0 +1,56 @@
+Once one bounded agent works, a team of specialized agents can seem like the natural next step. Multi-agent architectures are useful when the task contains genuine opportunities for parallel work, independent context, or specialized permissions. They also introduce more interfaces, cost, and failure modes. This lesson presents the patterns that justify that complexity and a method for rejecting those that do not.
+
+## Why "more agents" is not "more intelligence"
+
+Recall the reliability arithmetic from the workflow-versus-agent lesson: chained probabilistic steps multiply the opportunity for failure. Multi-agent systems add two important failure surfaces. **Inter-agent communication** is a lossy interface because one agent often acts on another agent's summary rather than its full evidence. **Diffuse accountability** makes diagnosis harder because a failure may originate in decomposition, a worker result, a handoff, or integration.
+
+So the default judgment extends naturally: **one model call beats an agent when the path is known; one agent beats many when one context can hold the job.** Reach for multiple agents only when a *structural* reason forces it.
+
+## The patterns that earn their keep
+
+- **Orchestrator and workers:** A lead agent decomposes the task, dispatches focused subtasks to workers, and integrates their results. The pattern fits genuinely independent work such as parallel research questions or per-document analysis. Each worker receives a focused context, and the orchestrator must specify the task, evidence, output contract, and integration rule clearly.
+- **Generator and critic:** One agent produces a candidate and another reviews it against a rubric before release. This is an inline form of the LLM-as-judge pattern from Module 14. It is useful only when the critic is validated, independent enough to catch relevant errors, and cheaper than the failures it prevents.
+- **Specialist routing:** A triage step sends work to agents with different tools and permissions, such as billing or technical support. This may be a deterministic workflow or a small classifier rather than an agent. Use the least variable component that routes the cases accurately.
+
+Free-form agent discussions, voting committees, and organizational hierarchies rarely justify their cost unless the task itself requires debate among independently grounded perspectives. Structure should mirror the work and its evidence boundaries, not a company org chart.
+
+<Check
+  question="A task requires researching 12 independent suppliers and synthesizing a comparison. Why does orchestrator–workers fit while a five-agent 'discussion panel' doesn't?"
+  options={[
+    "Panels are always wrong for everything",
+    "The task decomposes into independent sub-tasks with a clear integration step: each worker gets a small clean context and results merge mechanically; a panel adds lossy handoffs and diffuse accountability with no structural payoff",
+    "Workers are smarter than panelists",
+    "Twelve is too many for a panel"
+  ]}
+  answer={1}
+  explanation="Multi-agent structure should mirror task structure. Independent parallel lookups + integration = orchestrator–workers' exact shape. Discussion, by contrast, adds interfaces (and failure modes) the task never asked for."
+  hint="Where does the task itself have natural seams?"
+/>
+
+## Engineering rules that don't change
+
+Every bound from the single-agent lesson applies to each agent and to the system as a whole. Give each worker least privilege, set limits on nesting depth, worker count, tokens, time, and spend, and retain approval gates for consequential actions regardless of which agent proposes them. Use one correlated trace for the complete run so that a reviewer can follow decomposition, handoffs, tool calls, integration, and the final decision.
+
+Benchmark the ensemble against the strongest single-agent or deterministic baseline on the same evaluation set. The multi-agent design must improve an outcome that matters by enough to justify its ongoing complexity, latency, and cost. A near-tie favors the simpler architecture.
+
+<Check
+  question="Your new orchestrator + 3 workers scores 84% on your eval set. Your best single agent with improved context engineering scores 82% at a third of the cost and complexity. The disciplined call is…"
+  options={[
+    "Ship the multi-agent system because 84 is numerically higher than 82",
+    "Ship the single agent because a two-point gain does not justify three times the cost, additional failure surfaces, and harder debugging",
+    "Ship both and let users choose",
+    "Add two more workers to widen the gap"
+  ]}
+  answer={1}
+  explanation="Module 5's baseline discipline, again: complexity carries permanent operating cost, so it must win decisively. A near-tie says the structure isn't where the value is."
+  hint="What did the baseline lesson say about small gains over simpler systems?"
+/>
+
+<GoDeeper>
+  <LinkCard href="https://www.anthropic.com/engineering/built-multi-agent-research-system" title="How we built a multi-agent research system" source="Anthropic" why="An honest production account of orchestrator–workers, including costs and failure modes." />
+  <LinkCard href="https://www.anthropic.com/engineering/building-effective-agents" title="Building Effective Agents" source="Anthropic" why="The composability-first taxonomy this lesson extends; its warnings age well." />
+</GoDeeper>
+
+## Guided build: earn the extra agents
+
+Choose a task with at least six independent items, such as comparing suppliers or reviewing documents. Implement a strong single-agent baseline and one orchestrator-worker version. Use the same tools, source material, and evaluation rubric. Test at least 20 cases and report task quality, missing-evidence rate, handoff errors, p95 latency, token use, and cost. Inspect three failures end to end. Recommend the multi-agent design only if the measured gain clears a threshold you defined before the experiment.

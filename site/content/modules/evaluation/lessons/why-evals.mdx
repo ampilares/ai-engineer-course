@@ -1,0 +1,72 @@
+Here's the scene that defines this module. Someone tweaks a prompt, tries three examples, says "looks better!", and ships. Two weeks later support tickets reveal the tweak broke a case that used to work. Nobody knows which of the last five changes did it. **This is what building without evals looks like, and it is the default state of most AI projects.**
+
+## Why classical testing isn't enough
+
+Module 3's tests assert exact outcomes: `assert validate(x) == []`. Model outputs break both assumptions: they're **probabilistic** (same input can vary) and often **open-ended** (many phrasings are correct; no single expected string exists).
+
+The discipline survives; the mechanics evolve. An **eval** is the probabilistic analogue of a test suite:
+
+```text
+dataset:  representative inputs (+ expected outputs or criteria)
+runner:   your actual system, executed against the dataset
+graders:  per-example scoring: exact where possible, judged where not
+report:   aggregate scores + the list of failures, compared to baseline
+```
+
+Run it before every change ships (prompt edits, model swaps, retrieval tweaks) exactly like CI. "A change is not an improvement until a representative test set says so" is this course's second principle, and this is the module that makes it executable.
+
+<Check
+  question="A prompt tweak fixes the failing example you were staring at. Before shipping, the eval suite reveals it broke 4 of your 60 regression cases. What just happened?"
+  options={[
+    "The eval suite is buggy; the tweak looked fine",
+    "You caught silent regression: prompt changes shift behavior across the whole input distribution, not just the case you watched: this is precisely what evals exist to catch",
+    "4 out of 60 doesn't matter; ship it",
+    "Prompts cannot cause regressions"
+  ]}
+  answer={1}
+  explanation="Prompts are global behavior modifiers. The fix-one-break-five pattern is constant in LLM work and invisible without a regression set: 'looks better on my example' is how systems rot."
+  hint="What did the tweak change besides the example you were looking at?"
+/>
+
+## What "good" means is a decision
+
+Before measuring quality you must define it, concretely, for *your* task. For a support-drafting system it may be: factually consistent with the retrieved policy (critical), correct tone (important), under 120 words (preferred). Three practices keep definitions honest:
+
+- **Weight criteria by consequence.** A policy-contradiction failure is not the same severity as a tone miss; score them separately, gate releases on the critical ones.
+- **Write the rubric down.** If two humans can't agree on scores using your rubric, no automated grader can either.
+- **Track the pair, not the point.** Like precision/recall in Module 5, most quality dimensions trade off (completeness vs. brevity; caution vs. helpfulness). Improving one number while its partner silently falls is the classic self-deception.
+
+<Check
+  question="Your dashboard proudly shows 'average answer helpfulness: 4.2 → 4.5' after a change. Which follow-up question does this module train you to ask first?"
+  options={[
+    "Can we get to 4.6?",
+    "What happened to the paired and critical metrics (faithfulness, abstention on unanswerables, the failure list) while the average rose?",
+    "Which font should the dashboard use?",
+    "Can we ship the average to customers?"
+  ]}
+  answer={1}
+  explanation="Averages hide regressions in critical, rarer behaviors (e.g., the system got friendlier AND started hallucinating on edge cases). Gate on critical criteria and inspect failures; don't steer by one rising mean."
+  hint="What can rise while something more important falls?"
+/>
+
+<Callout type="note">
+Evals are also your **decision engine** for the economics of Module 8: "can the smaller model handle classification?" requires comparative evidence from running both models on the same evaluation set. Teams with evals iterate boldly (swap models, restructure prompts, upgrade providers) because the safety net tells them within minutes whether anything broke.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://hamel.dev/blog/posts/evals/" title="Your AI Product Needs Evals" source="Hamel Husain" why="The essay that turned eval discipline into standard practice: practical and battle-tested." />
+</GoDeeper>
+
+## Build an evaluation stack
+
+Different questions need different evidence. Deterministic unit and contract tests protect code and schemas. Component evals isolate retrieval, classification, tool choice, or citation support. End-to-end evals measure complete task outcomes. Safety and adversarial sets probe rare severe failures. Online metrics reveal real distribution and user behavior, while controlled experiments estimate business impact.
+
+Write a scorecard before optimizing: primary quality metric, protected safety constraints, latency and cost budgets, segment minimums, and rules for manual review. A single weighted average can allow a serious regression to hide behind a cosmetic gain, so some criteria should be hard gates.
+
+Scores have uncertainty. Report sample counts and inspect whether a small difference is larger than annotation disagreement or run-to-run variation. Preserve a held-out set for final decisions, and add production failures to a growing regression set without rewriting history.
+
+## Guided build: a release gate
+
+For one course project, define a layered eval plan and create at least 50 cases. Tag source, task type, difficulty, segment, expected behavior, and risk. Establish the current system as a baseline, then evaluate one proposed change.
+
+Produce a comparison with aggregate and segment results, latency, cost, failure examples, and confidence or uncertainty notes. Write an explicit ship/no-ship decision. Automate the deterministic checks and critical eval thresholds so a pull request or release candidate fails visibly when behavior regresses.

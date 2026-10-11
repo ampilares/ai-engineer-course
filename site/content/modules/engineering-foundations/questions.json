@@ -1,0 +1,477 @@
+[
+  {
+    "id": "ef-q01",
+    "type": "single",
+    "prompt": "An AI invoice extractor occasionally outputs a total that doesn't match the line items. Which measure guarantees such invoices never silently reach the accounting system?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A deterministic validation step that compares totals and routes mismatches to a human"
+      },
+      {
+        "id": "b",
+        "text": "A more capable model"
+      },
+      {
+        "id": "c",
+        "text": "A prompt instructing the model to double-check its math"
+      },
+      {
+        "id": "d",
+        "text": "Temperature set to zero"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Only a deterministic check catches every mismatch regardless of the model's behavior. Better models and prompts reduce error rates; validation bounds the blast radius."
+  },
+  {
+    "id": "ef-q02",
+    "type": "single",
+    "prompt": "Your request to an external API returns status 400. What is the correct response?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Retry with exponential backoff until it succeeds"
+      },
+      {
+        "id": "b",
+        "text": "Fix your request: a 400 means the request itself is malformed, so retries are pointless"
+      },
+      {
+        "id": "c",
+        "text": "Wait for the server to recover"
+      },
+      {
+        "id": "d",
+        "text": "Switch to a different HTTP library"
+      }
+    ],
+    "answer": "b",
+    "explanation": "4xx errors are client errors: the request is wrong and will stay wrong on retry. Retry logic belongs to transient failures like 429 and 5xx."
+  },
+  {
+    "id": "ef-q03",
+    "type": "single",
+    "prompt": "Which failures deserve automatic retries with backoff?",
+    "options": [
+      {
+        "id": "a",
+        "text": "401 Unauthorized and 403 Forbidden"
+      },
+      {
+        "id": "b",
+        "text": "400 Bad Request"
+      },
+      {
+        "id": "c",
+        "text": "429 Too Many Requests and 503 Service Unavailable"
+      },
+      {
+        "id": "d",
+        "text": "404 Not Found"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Rate limits and server-side outages are transient: waiting and retrying (with a cap) is exactly right. Auth errors, malformed requests, and missing resources won't heal with time."
+  },
+  {
+    "id": "ef-q04",
+    "type": "single",
+    "prompt": "A payment API call times out and you don't know whether it was processed. The call carried an Idempotency-Key. Why is retrying now safe?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Timeouts always mean the request never arrived"
+      },
+      {
+        "id": "b",
+        "text": "The server deduplicates requests with the same key, so the charge happens at most once"
+      },
+      {
+        "id": "c",
+        "text": "The key encrypts the payment details"
+      },
+      {
+        "id": "d",
+        "text": "It isn't safe; retries of payments are always forbidden"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Idempotency keys exist precisely for ambiguous outcomes: the server recognizes the repeated key and does not apply the operation twice."
+  },
+  {
+    "id": "ef-q05",
+    "type": "single",
+    "prompt": "Why must every production HTTP call set a timeout?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Timeouts make responses arrive faster"
+      },
+      {
+        "id": "b",
+        "text": "Without one, a hung upstream server can hang your system indefinitely"
+      },
+      {
+        "id": "c",
+        "text": "APIs reject requests that don't declare a timeout"
+      },
+      {
+        "id": "d",
+        "text": "Timeouts are only needed for file downloads"
+      }
+    ],
+    "answer": "b",
+    "explanation": "A timeout converts 'stuck forever' into a handleable error. It doesn't speed anything up: it bounds the damage when the other side misbehaves."
+  },
+  {
+    "id": "ef-q06",
+    "type": "single",
+    "prompt": "Which query returns cities whose average temperature since July 2026 exceeds 20°C?",
+    "code": "-- table: readings(city TEXT, temp_c REAL, recorded_at TEXT)",
+    "options": [
+      {
+        "id": "a",
+        "text": "SELECT city FROM readings WHERE AVG(temp_c) > 20 GROUP BY city"
+      },
+      {
+        "id": "b",
+        "text": "SELECT city FROM readings WHERE recorded_at >= '2026-07-01' GROUP BY city HAVING AVG(temp_c) > 20"
+      },
+      {
+        "id": "c",
+        "text": "SELECT city FROM readings HAVING temp_c > 20"
+      },
+      {
+        "id": "d",
+        "text": "SELECT AVG(city) FROM readings WHERE temp_c > 20"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Row filters (the date) go in WHERE; filters on aggregated values (the average) go in HAVING after GROUP BY. Using AVG in WHERE is invalid because aggregates don't exist yet at that stage."
+  },
+  {
+    "id": "ef-q07",
+    "type": "single",
+    "prompt": "What makes parameterized SQL queries immune to SQL injection?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Parameters are scanned against a list of dangerous keywords"
+      },
+      {
+        "id": "b",
+        "text": "The query structure is fixed before data is bound, so user input can never be executed as SQL"
+      },
+      {
+        "id": "c",
+        "text": "Parameters are hashed before storage"
+      },
+      {
+        "id": "d",
+        "text": "The database refuses queries containing quotes"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Separation of code and data: the SQL shape is compiled first and values are bound as pure data afterward. No blocklist needed: there is simply no path for data to become instructions."
+  },
+  {
+    "id": "ef-q08",
+    "type": "multi",
+    "prompt": "Which practices belong in the handling of API keys and secrets? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Store them in environment variables or a secret manager"
+      },
+      {
+        "id": "b",
+        "text": "Commit them to the repository so the team can find them"
+      },
+      {
+        "id": "c",
+        "text": "Give each key the narrowest permissions that still work"
+      },
+      {
+        "id": "d",
+        "text": "Rotate any key that was ever exposed publicly"
+      }
+    ],
+    "answer": [
+      "a",
+      "c",
+      "d"
+    ],
+    "explanation": "Secrets never enter version control: Git history is forever and repos leak. Least privilege and rotation-on-exposure limit the damage when (not if) something goes wrong."
+  },
+  {
+    "id": "ef-q09",
+    "type": "single",
+    "prompt": "A 3-hour batch job dies at item 4,812 of 5,000 because one network call raised an uncaught exception. Which redesign fixes the actual problem?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Handle expected failures per item (retry with a limit, record, continue) and persist progress incrementally"
+      },
+      {
+        "id": "b",
+        "text": "Wrap the entire job in one try/except that ignores all errors"
+      },
+      {
+        "id": "c",
+        "text": "Run the job on a faster machine"
+      },
+      {
+        "id": "d",
+        "text": "Remove the network calls"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Transient failures are expected; isolate them per item and make progress durable so a crash costs seconds. Swallowing all exceptions hides real bugs and corrupts results silently."
+  },
+  {
+    "id": "ef-q10",
+    "type": "single",
+    "prompt": "Why do tests of failure paths (timeouts, malformed input, duplicates) matter more than additional happy-path tests?",
+    "options": [
+      {
+        "id": "a",
+        "text": "They run faster"
+      },
+      {
+        "id": "b",
+        "text": "Production traffic reliably contains those failure cases, and untested handling of them is where systems break"
+      },
+      {
+        "id": "c",
+        "text": "Happy-path tests are impossible to write"
+      },
+      {
+        "id": "d",
+        "text": "Failure tests are required by law"
+      }
+    ],
+    "answer": "b",
+    "explanation": "The happy path gets exercised constantly and breaks loudly in development. The failure paths run rarely, break silently, and meet real traffic: exactly where confidence is needed most."
+  },
+  {
+    "id": "ef-q11",
+    "type": "short",
+    "prompt": "In HTTP, which header carries a token of the form 'Bearer sk-…' to authenticate a request? (one word)",
+    "accept": [
+      "authorization",
+      "authorization header",
+      "the authorization header"
+    ],
+    "explanation": "API authentication most commonly travels in the Authorization header, e.g. 'Authorization: Bearer <token>'."
+  },
+  {
+    "id": "ef-q12",
+    "type": "numeric",
+    "prompt": "Your API allows 30 requests per minute. Respecting the limit exactly, what is the minimum number of whole minutes needed to make 450 requests?",
+    "answer": 15,
+    "tolerance": 0,
+    "unit": "minutes",
+    "explanation": "450 ÷ 30 = 15 minutes. Rate-limit arithmetic like this decides batch job duration and whether you need to request a higher tier."
+  },
+  {
+    "id": "ef-q13",
+    "type": "single",
+    "prompt": "Model prompts and configuration should be version-controlled like code primarily because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…it makes the repository look complete"
+      },
+      {
+        "id": "b",
+        "text": "…when quality shifts, you can pinpoint what changed and re-run evaluations against any past version"
+      },
+      {
+        "id": "c",
+        "text": "…prompts are too long to store in a database"
+      },
+      {
+        "id": "d",
+        "text": "…Git encrypts prompts against theft"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Debugging quality regressions requires knowing exactly what changed and when. Versioned prompts + a repeatable eval suite turn a mystery into a binary search."
+  },
+  {
+    "id": "ef-q14",
+    "type": "single",
+    "prompt": "Why should money amounts be stored as integer cents rather than floating-point euros?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Integers use less memory"
+      },
+      {
+        "id": "b",
+        "text": "Binary floats cannot represent many decimal fractions exactly, so rounding errors accumulate in sums"
+      },
+      {
+        "id": "c",
+        "text": "Databases cannot store floats"
+      },
+      {
+        "id": "d",
+        "text": "Regulations forbid decimal points"
+      }
+    ],
+    "answer": "b",
+    "explanation": "0.1 + 0.2 ≠ 0.3 in binary floating point. Financial arithmetic uses integers (or decimal types) so every cent stays exact."
+  },
+  {
+    "id": "ef-x01",
+    "type": "single",
+    "prompt": "In REST semantics, why should a data-fetching endpoint use GET rather than POST?",
+    "options": [
+      {
+        "id": "a",
+        "text": "GET declares the request safe and repeatable (cacheable, retryable, and bookmarkable) while POST signals a state change"
+      },
+      {
+        "id": "b",
+        "text": "GET is faster on all networks"
+      },
+      {
+        "id": "c",
+        "text": "POST cannot return JSON"
+      },
+      {
+        "id": "d",
+        "text": "There is no difference"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Verbs carry contracts: intermediaries and clients treat GET as side-effect-free. Fetching via POST forfeits caching and safe retries; mutating via GET invites disaster from prefetchers."
+  },
+  {
+    "id": "ef-x02",
+    "type": "single",
+    "prompt": "An API returns results in pages of 100. Your job processed page 1 and stopped. The subtle bug class this represents is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "silent partial ingestion: always follow pagination (next tokens/links) to completion and reconcile expected vs. received counts"
+      },
+      {
+        "id": "b",
+        "text": "rate limiting"
+      },
+      {
+        "id": "c",
+        "text": "a JSON syntax error"
+      },
+      {
+        "id": "d",
+        "text": "an authentication failure"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Nothing errored: you just quietly got 100 of 4,000 records. Pagination handling plus count reconciliation catches what status codes can't."
+  },
+  {
+    "id": "ef-x03",
+    "type": "single",
+    "prompt": "A PRIMARY KEY (or UNIQUE constraint) on orders.order_id primarily buys you…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…database-enforced integrity: duplicates become impossible to insert, making the table safe to upsert against"
+      },
+      {
+        "id": "b",
+        "text": "…alphabetical ordering of rows"
+      },
+      {
+        "id": "c",
+        "text": "…automatic backups"
+      },
+      {
+        "id": "d",
+        "text": "…smaller file size"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Constraints move correctness from 'code remembers to check' to 'storage refuses to be wrong': the foundation idempotent pipelines build on."
+  },
+  {
+    "id": "ef-x04",
+    "type": "single",
+    "prompt": "Why do small, well-described commits beat one giant 'initial commit'?",
+    "options": [
+      {
+        "id": "a",
+        "text": "History becomes searchable and reviewable: 'what changed and why' has an answer per change, which is what debugging and code review consume"
+      },
+      {
+        "id": "b",
+        "text": "Git charges per commit size"
+      },
+      {
+        "id": "c",
+        "text": "Large commits corrupt repositories"
+      },
+      {
+        "id": "d",
+        "text": "It only matters for open source"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Version control's value is the story it records. One blob commit records nothing, and reviewers (human or AI) can only review what's legible."
+  },
+  {
+    "id": "ef-x05",
+    "type": "single",
+    "prompt": "Configuration like API keys belongs in environment variables (or a secret store) rather than code because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…code is shared, versioned, and long-lived while secrets must stay private and rotatable: mixing them leaks keys into Git history forever"
+      },
+      {
+        "id": "b",
+        "text": "…environment variables execute faster"
+      },
+      {
+        "id": "c",
+        "text": "…code files cannot contain strings"
+      },
+      {
+        "id": "d",
+        "text": "…it makes deployment harder, which is safer"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The .env-plus-gitignore pattern separates what ships from what authenticates. Git history is effectively permanent: a committed key is a compromised key."
+  },
+  {
+    "id": "ef-x06",
+    "type": "single",
+    "prompt": "Your ETL script hits a record with malformed JSON in one field. Production-grade handling is to…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…catch the parse error for that record, quarantine it with context for review, count it, and continue the batch"
+      },
+      {
+        "id": "b",
+        "text": "…crash the whole batch to be safe"
+      },
+      {
+        "id": "c",
+        "text": "…silently skip it with no trace"
+      },
+      {
+        "id": "d",
+        "text": "…guess the intended value"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Per-record isolation + quarantine + visibility: the batch completes, the bad record is reviewable, and the failure rate is measurable. Crash-everything and silent-skip both destroy information."
+  }
+]

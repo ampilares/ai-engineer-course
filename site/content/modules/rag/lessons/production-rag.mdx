@@ -1,0 +1,60 @@
+The RAG you've built so far answers questions correctly in a lab. Production adds the constraints that actually sink knowledge assistants: documents change hourly, different users may see different documents, and the corpus grows 100×. This lesson covers the three disciplines (freshness, permissions, scale) that separate a demo index from a system of record.
+
+## Freshness: the index is a cache, and caches go stale
+
+Your vector index is a *derived copy* of the source documents, and every derived copy drifts. The policy PDF gets revised; the old chunks keep answering. Production RAG treats ingestion as a **continuous pipeline** (Module 4's habits, pointed at retrieval):
+
+- **Detect changes**: webhooks or modified-since polling on sources, not monthly re-crawls. Track per-document `version` and `ingested_at`.
+- **Upsert and delete, not append:** Changed documents replace their old chunks. Stable chunk IDs derived from the source and position make replacement practical. Deleted documents must also delete their chunks. An append-only index can continue serving retracted policies and create a compliance incident.
+- **Surface freshness to the model and user**: chunk metadata carries source and effective dates; retrieval can prefer or filter by them; citations expose the version and effective date used for the answer.
+- **Alert on staleness**: `now − max(ingested_at)` per source is a metric with a threshold (Module 14). Silent pipeline death is the most common way RAG rots.
+
+<Check
+  question="Legal retracts a policy document, but the assistant keeps citing it for weeks. What was structurally wrong with the ingestion design?"
+  options={[
+    "The embedding model was outdated",
+    "The index was append-only: nothing propagated deletions, so the derived copy kept serving what the source had retracted: ingestion must upsert changes AND delete removals, keyed by stable chunk IDs",
+    "The chunks were too large",
+    "Users asked the question incorrectly"
+  ]}
+  answer={1}
+  explanation="An index is a cache of the sources. Deletion propagation is as essential as insertion, and it's the half everyone forgets until a retracted document shows up in an answer with a confident citation."
+  hint="What should happen in the index when a source document disappears?"
+/>
+
+## Permissions: filter at retrieval, enforce at the index
+
+Module 9 stated the rule (*unauthorized chunks never enter the context*) and Module 15 explained why prompts can't enforce it. Production mechanics:
+
+- **Access tags on every chunk at ingestion** (inherited from the source system's ACLs), and **mandatory filters at query time**: the retrieval call itself carries the user's permissions; unauthorized chunks are never even scored.
+- **Sync permission *changes***: revoking someone's access to a folder must reflect in query filters promptly; permission drift is quieter than document drift and more dangerous.
+- **Multi-tenant = hard isolation.** Separate collections (or provably mandatory tenant filters) per customer. A shared index with an optional filter is one forgotten `WHERE` clause away from a cross-customer breach: make the wrong query *impossible*, not just avoided.
+
+## Scale: what actually changes at 100×
+
+Scale changes several implementation choices. Exact search may give way to **approximate nearest-neighbor** indexes, making recall and latency a tunable trade-off that retrieval evaluations must verify. Ingestion often becomes a queued, monitored pipeline with a dead-letter queue. An embedding-model upgrade becomes a migration because vectors from different models are not directly comparable; build a separate index, evaluate it, then cut over with rollback available. Retrieval latency also becomes part of the end-to-end p95 budget because it precedes every generated answer.
+
+The core concepts remain stable: chunking, hybrid search, metadata filtering, and stage-level evaluation still apply. Scale changes the operational design around them. Production RAG therefore depends as much on pipelines, access control, monitoring, and deployment discipline as it does on retrieval algorithms.
+
+<Check
+  question="You upgrade to a better embedding model. Why can't you just start embedding new chunks with it into the existing index?"
+  options={[
+    "New models produce longer vectors that don't fit",
+    "Vectors from different embedding models live in incomparable spaces: similarity between old and new vectors is meaningless, so retrieval silently breaks; you re-embed the corpus into a new index and swap after evals pass",
+    "The database automatically converts vectors between embedding spaces",
+    "You can; vectors are vectors"
+  ]}
+  answer={1}
+  explanation="Each embedding model defines its own geometry (Module 2: meaning as direction, but per-model). Mixing spaces makes distances gibberish. The operational pattern is blue/green: build the new index fully, verify recall on your eval set, then cut over with rollback ready (Module 16)."
+  hint="Are two different models' '0.9 similarity' measured on the same ruler?"
+/>
+
+
+## Guided build: operate one production constraint
+
+Extend your Module 9 knowledge assistant along one axis. Either add update and deletion propagation with a measurable freshness objective, or add per-user access filtering with tests that prove tenant isolation. Include a failure injection, an alert or release gate, a recovery procedure, and evidence that the answer path uses only the current authorized index. Document the constraints you did not implement and the risk they would create in production.
+
+<GoDeeper>
+  <LinkCard href="https://qdrant.tech/documentation/concepts/filtering/" title="Filtered vector search" source="qdrant.tech" why="How mandatory metadata filters combine with ANN search: the permissions mechanism in practice." />
+  <LinkCard href="https://www.anthropic.com/engineering/contextual-retrieval" title="Contextual Retrieval" source="Anthropic" why="A production-tested ingestion upgrade to revisit once the basics above are solid." />
+</GoDeeper>

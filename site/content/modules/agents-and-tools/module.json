@@ -1,0 +1,41 @@
+{
+  "slug": "agents-and-tools",
+  "number": 10,
+  "title": "Tools, Agents & MCP",
+  "phase": "rag",
+  "summary": "Give models hands: carefully: tool calling, agent loops, workflow-vs-agent judgment, MCP, and human approval gates.",
+  "outcomes": [
+    "Implement tool calling: schemas, execution, and result handling",
+    "Explain the agent loop and its failure modes",
+    "Choose deterministic workflows over agents when paths are known",
+    "Bound agents with least privilege, loop budgets, and approval gates; place MCP correctly"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "tool-calling",
+      "title": "Tool calling: giving models hands",
+      "minutes": 26
+    },
+    {
+      "slug": "agent-loops",
+      "title": "The agent loop, and how it fails",
+      "minutes": 27
+    },
+    {
+      "slug": "workflow-vs-agent",
+      "title": "Workflow vs. agent, and MCP",
+      "minutes": 26
+    },
+    {
+      "slug": "context-engineering",
+      "title": "Context engineering: memory and state",
+      "minutes": 15
+    },
+    {
+      "slug": "multi-agent-patterns",
+      "title": "Multi-agent and orchestration patterns",
+      "minutes": 14
+    }
+  ]
+}

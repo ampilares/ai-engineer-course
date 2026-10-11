@@ -1,0 +1,36 @@
+{
+  "slug": "rag",
+  "number": 9,
+  "title": "Retrieval-Augmented Generation",
+  "phase": "rag",
+  "summary": "Ground model answers in your own changing knowledge: chunking, embedding search, hybrid retrieval, citations, and abstention.",
+  "outcomes": [
+    "Explain when RAG beats prompting and fine-tuning for knowledge problems",
+    "Design ingestion and chunking that preserves findability",
+    "Combine semantic and keyword retrieval, and rerank",
+    "Enforce citations and abstention, and evaluate retrieval separately from answers"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "why-retrieval",
+      "title": "Why retrieval: grounding models in your knowledge",
+      "minutes": 25
+    },
+    {
+      "slug": "chunking-and-search",
+      "title": "Chunking, embedding search, and hybrid retrieval",
+      "minutes": 28
+    },
+    {
+      "slug": "citations-and-evaluation",
+      "title": "Citations, abstention, and evaluating RAG",
+      "minutes": 28
+    },
+    {
+      "slug": "production-rag",
+      "title": "Production RAG: freshness, permissions, and scale",
+      "minutes": 15
+    }
+  ]
+}

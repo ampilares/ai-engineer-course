@@ -1,0 +1,59 @@
+Many résumés now claim experience building LLM applications, so hiring teams look for evidence that distinguishes a working demonstration from disciplined engineering. This course has asked you to produce that evidence since Module 3. This lesson turns the project ladder into a portfolio that a technical reviewer can understand and verify quickly.
+
+## What reviewers actually look for
+
+When an experienced engineer opens your repository, they look for evidence that you can define a problem, measure a system, handle failure, and communicate trade-offs. In rough priority order, they check:
+
+1. **Does the README answer "what, why, how well" in 60 seconds?** Problem, approach, honest results (including failures), and how to run it. A metrics table beats adjectives.
+2. **Is there an evaluation?** An `evals/` folder with a representative dataset, grader definitions, and reproducible results shows that quality claims are measured rather than asserted.
+3. **Are the failure paths handled?** They will read your error handling before your happy path. Timeouts, validation, retries, and a human-review route are what "production-minded" looks like in code.
+4. **Do the commits tell a story?** Focused commits with clear messages provide evidence of an iterative engineering process. Avoid publishing a project as one unexplained initial commit.
+
+The practical conclusion is that **a few deep projects are stronger than many shallow ones**. A knowledge assistant with retrieval evaluations, access controls, and a threat model demonstrates more capability than several minimally documented chat interfaces.
+
+<Check
+  question="Two portfolios: A has 10 projects, each a working demo with a one-line README. B has 3 projects, each with an eval suite, honest metrics, handled failure paths, and a decision log. Why does B usually win the interview?"
+  options={[
+    "Reviewers only have time to open three repositories",
+    "B provides verifiable evidence of evaluation, reliability, and judgment, while A proves only that each demonstration can run",
+    "Reviewers never open more than three repos",
+    "It doesn't; more projects always win"
+  ]}
+  answer={1}
+  explanation="The important skill is not merely obtaining a model response; it is building a system whose behavior can be measured and trusted. Evaluations, failure handling, and documented trade-offs provide direct evidence of that skill."
+  hint="Which portfolio demonstrates the thing companies actually struggle to hire for?"
+/>
+
+## Packaging the course ladder
+
+You already own the raw material; packaging is the remaining work:
+
+- **Pick your three.** Strong default: the structured extraction service (Module 8), the cited knowledge assistant with retrieval evals (Module 9), and your capstone workflow (Module 17). Together they cover the full competency arc: primitives → retrieval → production.
+- **Write the README as a case study**: problem → constraints → architecture (one diagram) → results table → limitations and next steps. A candid limitations section demonstrates the judgment that technical interviews are designed to assess.
+- **Show the certificate, link the evidence.** Your [certificate](/graduates) with per-module scores is a credential; the repos are the proof it points to. Put both on your profile and CV.
+- **Write one substantial post** (blog or README-essay) explaining a *decision*: "why I chose a workflow over an agent," "what my retrieval eval taught me." Writing about judgment reaches hiring managers that keyword lists never touch.
+
+<Check
+  question="What's the single highest-signal addition you can make to an AI project repo before job hunting?"
+  options={[
+    "A logo and badges",
+    "An evals/ folder with a representative dataset, graders, and honestly reported results: the artifact that distinguishes engineering from demo-building at a glance",
+    "More features",
+    "Screenshots of the UI"
+  ]}
+  answer={1}
+  explanation="Evaluations show that you measure what you build. A representative dataset, explicit graders, and reproducible results let reviewers verify your engineering claims."
+  hint="What does 95% of AI portfolios lack that this course drilled into you?"
+/>
+
+<Callout type="tip">
+**Honest reporting builds credibility.** A statement such as "92% extraction accuracy; performance drops on handwritten invoices; the failure analysis is linked here" communicates both evidence and limitations. Inflated claims are easy to challenge in a technical screen and can undermine otherwise valid work.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://www.gitkraken.com/learn/git/best-practices/git-commit-message" title="Commit message conventions" source="GitKraken" why="Small thing, real signal: commit hygiene is part of the portfolio surface." />
+</GoDeeper>
+
+## Guided build: run a reviewer test
+
+Choose one portfolio project and give a technically experienced peer 15 minutes to inspect it without your help. Ask them to state the problem, architecture, main result, largest limitation, and reproduction steps. Record where they became confused, then revise the README and repository structure. Finish with a one-page evidence map linking each major claim to code, an evaluation result, a trace, or a decision record.

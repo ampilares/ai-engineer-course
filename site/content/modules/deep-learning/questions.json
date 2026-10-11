@@ -1,0 +1,506 @@
+[
+  {
+    "id": "dl-q01",
+    "type": "single",
+    "prompt": "What computation does a single artificial neuron perform?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A weighted sum of its inputs plus a bias, passed through a nonlinear activation"
+      },
+      {
+        "id": "b",
+        "text": "An exact database lookup of the input"
+      },
+      {
+        "id": "c",
+        "text": "A random number draw scaled by the input"
+      },
+      {
+        "id": "d",
+        "text": "A sort of its inputs"
+      }
+    ],
+    "answer": "a",
+    "explanation": "output = activation(Σ wᵢxᵢ + b). The weights and biases are the parameters that training adjusts."
+  },
+  {
+    "id": "dl-q02",
+    "type": "single",
+    "prompt": "Without nonlinear activation functions, a 100-layer network is equivalent to…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a single linear transformation"
+      },
+      {
+        "id": "b",
+        "text": "…a decision tree"
+      },
+      {
+        "id": "c",
+        "text": "…a 50-layer network"
+      },
+      {
+        "id": "d",
+        "text": "…nothing; it cannot run"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Composing linear maps yields a linear map. Nonlinearities between layers are what give depth its expressive power."
+  },
+  {
+    "id": "dl-q03",
+    "type": "single",
+    "prompt": "'Representation learning' means that deep networks…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…require hand-engineered features for every task"
+      },
+      {
+        "id": "b",
+        "text": "…discover useful intermediate features (edges → parts → objects) purely from optimizing the loss"
+      },
+      {
+        "id": "c",
+        "text": "…store the training data verbatim"
+      },
+      {
+        "id": "d",
+        "text": "…only work on numeric spreadsheets"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Hierarchical features emerge because they are an efficient route to low loss: nobody programs them. This is why deep learning wins on images, audio, and text, where features can't be listed by hand."
+  },
+  {
+    "id": "dl-q04",
+    "type": "single",
+    "prompt": "What does the gradient of the loss with respect to a weight tell you?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The weight's current value"
+      },
+      {
+        "id": "b",
+        "text": "How the loss changes as that weight changes, so stepping against it reduces the loss"
+      },
+      {
+        "id": "c",
+        "text": "How many epochs remain"
+      },
+      {
+        "id": "d",
+        "text": "The size of the dataset"
+      }
+    ],
+    "answer": "b",
+    "explanation": "The gradient is the local slope. Gradient descent updates every weight a small step in the direction that locally decreases wrongness."
+  },
+  {
+    "id": "dl-q05",
+    "type": "single",
+    "prompt": "Training loss oscillates violently and then diverges to infinity. The first thing to try is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…lowering the learning rate substantially"
+      },
+      {
+        "id": "b",
+        "text": "…adding more layers"
+      },
+      {
+        "id": "c",
+        "text": "…switching to a bigger dataset"
+      },
+      {
+        "id": "d",
+        "text": "…increasing the learning rate"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Oscillation-then-divergence is the classic signature of steps that overshoot the minimum and climb the valley walls. Cut the LR (often 10×) and retry."
+  },
+  {
+    "id": "dl-q06",
+    "type": "single",
+    "prompt": "Backpropagation is best described as…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…an efficient application of the chain rule that computes the loss gradient for every parameter in one backward pass"
+      },
+      {
+        "id": "b",
+        "text": "…running the network backwards to generate inputs"
+      },
+      {
+        "id": "c",
+        "text": "…a technique for labeling data"
+      },
+      {
+        "id": "d",
+        "text": "…a way to compress the model after training"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Backprop assigns each weight its share of blame for the error, at roughly the cost of one forward pass: making gradient descent feasible for millions of parameters."
+  },
+  {
+    "id": "dl-q07",
+    "type": "single",
+    "prompt": "Training loss keeps decreasing while validation loss starts rising. This means…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the model has begun overfitting; keep the checkpoint at the validation minimum"
+      },
+      {
+        "id": "b",
+        "text": "…training is healthy; run more epochs and ship the last checkpoint"
+      },
+      {
+        "id": "c",
+        "text": "…the validation set is broken"
+      },
+      {
+        "id": "d",
+        "text": "…the learning rate is too low"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Diverging curves define overfitting: gains on seen data at the expense of unseen data. Early stopping at the validation minimum recovers the best general model."
+  },
+  {
+    "id": "dl-q08",
+    "type": "single",
+    "prompt": "Your brand-new model reaches near-zero training loss within seconds on a hard problem. The professional reaction is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…publish immediately"
+      },
+      {
+        "id": "b",
+        "text": "…suspect a data bug or leakage: the label is probably visible in the features"
+      },
+      {
+        "id": "c",
+        "text": "…increase the learning rate to confirm"
+      },
+      {
+        "id": "d",
+        "text": "…delete the validation set as unnecessary"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Too-good-to-be-true is a data bug until proven otherwise. Check for label proxies and duplicated rows before believing any miracle."
+  },
+  {
+    "id": "dl-q09",
+    "type": "single",
+    "prompt": "With 3,000 labeled images and 12 categories, the strongest practical approach is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…fine-tuning a model pretrained on millions of general images"
+      },
+      {
+        "id": "b",
+        "text": "…training a large CNN from random initialization"
+      },
+      {
+        "id": "c",
+        "text": "…averaging pixel values per category"
+      },
+      {
+        "id": "d",
+        "text": "…refusing the task until millions of labels exist"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Pretrained networks already know edges, textures, and shapes; small data only needs to adapt the last mile. Transfer learning is the default under data scarcity."
+  },
+  {
+    "id": "dl-q10",
+    "type": "multi",
+    "prompt": "Which techniques combat overfitting? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "More or augmented training data"
+      },
+      {
+        "id": "b",
+        "text": "Early stopping at the validation-loss minimum"
+      },
+      {
+        "id": "c",
+        "text": "Dropout / weight decay"
+      },
+      {
+        "id": "d",
+        "text": "Raising the learning rate until loss diverges"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Data, early stopping, and regularization all narrow the generalization gap. Divergence is a failure mode, not a treatment."
+  },
+  {
+    "id": "dl-q11",
+    "type": "single",
+    "prompt": "Why are GPUs central to deep learning?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Network training is dominated by matrix multiplications, which GPUs execute with massive parallelism"
+      },
+      {
+        "id": "b",
+        "text": "GPUs have larger hard drives"
+      },
+      {
+        "id": "c",
+        "text": "GPUs are required to store labels"
+      },
+      {
+        "id": "d",
+        "text": "CPUs cannot do floating-point math"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Thousands of independent multiply-adds per layer map perfectly onto GPU parallelism: the difference between hours and months of training."
+  },
+  {
+    "id": "dl-q12",
+    "type": "single",
+    "prompt": "For a typical tabular business dataset (rows and columns of known features), deep learning usually…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…loses to or merely matches gradient-boosted trees while being harder to operate"
+      },
+      {
+        "id": "b",
+        "text": "…is the only approach that works"
+      },
+      {
+        "id": "c",
+        "text": "…is illegal to use"
+      },
+      {
+        "id": "d",
+        "text": "…beats trees by an order of magnitude"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Depth's advantage is learning features from raw unstructured data. When features already exist as columns, boosted trees remain the pragmatic benchmark."
+  },
+  {
+    "id": "dl-x01",
+    "type": "single",
+    "prompt": "An 'epoch' of training is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…one full pass over the training dataset, usually made of many mini-batch gradient steps"
+      },
+      {
+        "id": "b",
+        "text": "…one gradient update"
+      },
+      {
+        "id": "c",
+        "text": "…one prediction"
+      },
+      {
+        "id": "d",
+        "text": "…one hour of GPU time"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Batches estimate gradients cheaply; an epoch is the bookkeeping unit of 'saw all the data once'. Models typically train for several epochs."
+  },
+  {
+    "id": "dl-x02",
+    "type": "single",
+    "prompt": "With early stopping, which checkpoint do you ship?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The one at the validation-loss minimum, not the final epoch, whose extra training bought only memorization"
+      },
+      {
+        "id": "b",
+        "text": "The last checkpoint, since more training is always better"
+      },
+      {
+        "id": "c",
+        "text": "The first checkpoint, since it's least overfit"
+      },
+      {
+        "id": "d",
+        "text": "A random checkpoint for fairness"
+      }
+    ],
+    "answer": "a",
+    "explanation": "After the validation minimum, train loss keeps improving while generalization worsens. The best-generalizing weights are the ones you save and serve."
+  },
+  {
+    "id": "dl-x03",
+    "type": "single",
+    "prompt": "In transfer learning with a small dataset, why freeze most pretrained layers and train only the top?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The early layers hold general features your data needn't relearn; freezing them prevents your small dataset from destroying them while you fit the task-specific head"
+      },
+      {
+        "id": "b",
+        "text": "Frozen layers use no memory"
+      },
+      {
+        "id": "c",
+        "text": "It makes the model smaller on disk"
+      },
+      {
+        "id": "d",
+        "text": "Freezing is required by GPU drivers"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Small data can't re-earn general vision/language features but can easily wreck them (catastrophic forgetting). Freeze the general, tune the specific."
+  },
+  {
+    "id": "dl-x04",
+    "type": "single",
+    "prompt": "Dropout randomly silences neurons during training. At inference time…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…it is disabled: all neurons participate, and the network behaves deterministically"
+      },
+      {
+        "id": "b",
+        "text": "…it stays on, adding helpful randomness to predictions"
+      },
+      {
+        "id": "c",
+        "text": "…half the network is permanently deleted"
+      },
+      {
+        "id": "d",
+        "text": "…the model retrains itself"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Dropout is a training-time regularizer that prevents co-dependent neurons. Serving uses the full ensemble-like network with dropout off."
+  },
+  {
+    "id": "dl-x05",
+    "type": "single",
+    "prompt": "Both training and validation loss are high and flat. The remedy list starts with…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…more capacity, better features/inputs, longer training, or a higher learning rate: this is underfitting, not overfitting"
+      },
+      {
+        "id": "b",
+        "text": "…more dropout and early stopping"
+      },
+      {
+        "id": "c",
+        "text": "…a smaller model"
+      },
+      {
+        "id": "d",
+        "text": "…deleting training data"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Regularization treats the gap between curves; here there is no gap: the model can't even fit the training data. Diagnosis before treatment."
+  },
+  {
+    "id": "dl-x06",
+    "type": "single",
+    "prompt": "Data augmentation (flips, crops, noise on images) combats overfitting by…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…manufacturing label-preserving variations, effectively enlarging the dataset and teaching invariances the task should have"
+      },
+      {
+        "id": "b",
+        "text": "…making images prettier"
+      },
+      {
+        "id": "c",
+        "text": "…reducing the number of classes"
+      },
+      {
+        "id": "d",
+        "text": "…shrinking the model"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A cat flipped is still a cat; the network learns that truth instead of memorizing exact pixels. More effective signal per labeled example."
+  },
+  {
+    "id": "dl-x07",
+    "type": "single",
+    "prompt": "Choosing between two architectures should be decided by…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…their validation-set performance (with the test set kept untouched for the final honest number)"
+      },
+      {
+        "id": "b",
+        "text": "…training-set performance"
+      },
+      {
+        "id": "c",
+        "text": "…which has more parameters"
+      },
+      {
+        "id": "d",
+        "text": "…test-set performance, checked repeatedly during development"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Model selection is 'tuning': it spends the validation set, not the test set. Repeated test-set peeking silently overfits your choices to it."
+  },
+  {
+    "id": "dl-x08",
+    "type": "single",
+    "prompt": "Mini-batches serve GPUs well because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a batch's examples are processed in parallel as one large matrix operation: utilizing thousands of cores per step while keeping gradient estimates cheap"
+      },
+      {
+        "id": "b",
+        "text": "…small batches use more memory"
+      },
+      {
+        "id": "c",
+        "text": "…GPUs cannot process single examples"
+      },
+      {
+        "id": "d",
+        "text": "…batches eliminate the need for gradients"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Batching converts many small computations into few large matrix multiplies: the shape GPUs are built for. Batch size trades memory, speed, and gradient noise."
+  }
+]

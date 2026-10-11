@@ -1,0 +1,77 @@
+You've reached the techniques everyone asks about first and needs last. Fine-tuning and self-hosting are powerful and occasionally exactly right, but reaching for them before exhausting prompting and retrieval is the most common expensive mistake in the field. This lesson gives you the judgment to know when they pay.
+
+## The decision ladder: climb only as needed
+
+For any capability gap, try the rungs in order and stop when the problem is solved:
+
+1. **Prompting**: behavior and format problems. Cheapest, instant, versionable. Solves more than beginners expect.
+2. **RAG**: knowledge problems (current, private, citable). Module 9.
+3. **Fine-tuning**: *consistent format/style/domain-tone at scale*, latency/cost reduction by teaching a small model one narrow job, or a specialized task no prompt reliably nails.
+4. **Training from scratch**: essentially never for an AI engineer.
+
+The trap is skipping to rung 3 for a rung-1 or rung-2 problem. Fine-tuning to add *facts* is the classic error: it's unreliable at teaching knowledge (that's retrieval's job), bakes in a snapshot that goes stale, and can't cite. Fine-tuning shapes *how* a model behaves far more than *what* it knows.
+
+<Check
+  question="You want your assistant to always respond in your company's specific structured format and terse house style, across millions of calls. Best tool?"
+  options={[
+    "Fine-tuning: consistent format/style at scale is exactly what it's for; it can also shrink the prompt and let a smaller, cheaper model do the job",
+    "RAG: retrieve the style guide each time",
+    "A longer system prompt is always superior to fine-tuning",
+    "Training a model from scratch"
+  ]}
+  answer={0}
+  explanation="Format/style/tone at scale is fine-tuning's sweet spot: bake the behavior into the weights, drop the lengthy formatting instructions from every prompt, and often down-tier the model. Facts would be the wrong reason; style is the right one."
+  hint="Is this a knowledge gap or a consistent-behavior-at-scale gap?"
+/>
+
+## How fine-tuning actually works (and its costs)
+
+Fine-tuning continues training a pretrained model on curated input and output examples. Depending on the task, useful datasets may contain hundreds to thousands of high-quality examples. **Parameter-efficient methods such as LoRA** update a smaller set of added weights instead of every model parameter, reducing training and storage requirements. The visible costs are data curation and the training run. The ongoing costs include versioning, evaluation, deployment, drift monitoring, and renewed tuning when the base model or requirements change. Treat the tuned model as a new ML artifact and adopt it only when it produces a measured gain over a strong prompted baseline on the Module 14 evaluation set.
+
+## Local and open models: the other axis
+
+Independently of fine-tuning, you can run **open-weight models** on your own hardware instead of calling a hosted API. The trade:
+
+| | Hosted API | Self-hosted open model |
+|---|---|---|
+| Setup/ops | trivial | you run the infra |
+| Data | leaves your network (check terms) | never leaves | 
+| Cost shape | per token | fixed hardware, cheap at high volume |
+| Top capability | frontier | strong-but-usually-behind |
+| Control | provider's roadmap/deprecations | fully yours |
+
+Self-hosting wins on **strict data residency** (regulated/sensitive data that must not leave), **high steady volume** (fixed hardware beats per-token at scale), and **control/no-deprecation** needs. It loses on convenience and peak capability.
+
+**Quantization** makes local models practical: store weights at lower precision (16-bit → 8- or 4-bit), shrinking memory and speeding inference for a usually-small quality cost: the difference between a model needing a data-center GPU and one running on a good laptop.
+
+<Check
+  question="A hospital must run an AI feature on patient records that legally cannot leave its premises, at steady high volume. Which approach fits?"
+  options={[
+    "A hosted frontier API with a strong privacy policy",
+    "A self-hosted open-weight model (quantized to fit available hardware), so data never leaves the network and per-item cost is bounded by fixed infrastructure",
+    "Fine-tuning a hosted model on the records",
+    "Emailing records to a provider's enterprise tier"
+  ]}
+  answer={1}
+  explanation="Hard data-residency plus steady volume is the canonical self-hosting case: the data stays in-network by construction, and fixed hardware amortizes well. Quantization makes the model fit realistic hardware."
+  hint="What's non-negotiable here: capability, or that data never leaves?"
+/>
+
+<GoDeeper>
+  <LinkCard href="https://huggingface.co/docs/peft/index" title="PEFT / LoRA documentation" source="Hugging Face" why="Parameter-efficient fine-tuning in practice, runnable on modest hardware." />
+  <LinkCard href="https://github.com/ollama/ollama" title="Ollama" source="GitHub" why="Run quantized open models locally in minutes: the hands-on half of this lesson." />
+</GoDeeper>
+
+## Design the adaptation experiment
+
+Fine-tuning needs a narrow hypothesis such as “improve schema adherence for these document classes” or “adopt the organization’s response style with a shorter prompt.” Build train, validation, and untouched test sets from distinct entities or time periods. Clean contradictory labels, balance important slices, and include refusals and edge cases. Synthetic examples can expand coverage but should not become the sole evidence for real performance.
+
+Parameter-efficient methods reduce trainable weights and storage, but they do not remove data, evaluation, or serving complexity. Quantization reduces memory and may improve throughput, while potentially changing accuracy, especially for small numerical differences or uncommon languages. Local serving adds capacity planning, batching, warm-up, hardware utilization, model provenance, and security patching to the system owner’s job.
+
+Compare against prompt, retrieval, and hosted-model baselines on the same test. Include total cost of ownership: engineering time, GPU idle/peak capacity, operations, upgrades, and incident support.
+
+## Guided build: one controlled adaptation
+
+Choose a measurable failure repeated across at least 100 examples. Establish the cheapest baseline, then run one adaptation such as parameter-efficient fine-tuning, quantization, or local serving. Keep all unrelated variables fixed.
+
+Report quality by segment, invalid/refusal rate, latency, memory, throughput, cost, and operational requirements. Evaluate regression tasks outside the target slice. Finish with a go/no-go decision and rollback plan. “The fine-tuned output looks nicer” is not sufficient evidence.

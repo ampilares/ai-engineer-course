@@ -1,0 +1,76 @@
+Retrieval quality is decided long before any query arrives: at **ingestion**, when documents are split into chunks and indexed. Get chunking wrong and no search algorithm can save you: the answer to a user's question may literally not exist as a retrievable unit.
+
+## Chunking: the trade-off you can feel
+
+Chunks must be small enough that a match is *specific*, and large enough that a match is *sufficient*. Try both failure modes yourself:
+
+<ChunkAndRetrieve />
+
+Set chunk size to 1 sentence and query for the reimbursement amount: you may retrieve the amount but lose the conditions around it. Set it to 5 and relevance scores blur as each chunk dilutes toward "a bit about everything." Production practice:
+
+- **Split on structure, not character counts**: headings, paragraphs, list items. A chunk should be a self-contained thought (a policy clause, a function, a FAQ pair).
+- **Overlap adjacent chunks** slightly so answers spanning a boundary survive.
+- **Attach metadata**: source document, section title, date, access tags. You'll need it for citations, filtering, and permissions.
+
+## Semantic search: embeddings do the finding
+
+Embed each chunk during ingestion, embed the query at request time, and return the nearest chunk vectors, typically using cosine similarity. This is the same operation demonstrated by Module 7's EmbeddingMap at production scale. A **vector database**, or a NumPy array for a modest corpus, performs the nearest-neighbor lookup efficiently.
+
+Semantic search finds "my money never came back" when you ask about refunds. But it has a blind spot: **exact identifiers**. Error codes, product SKUs, person names, `ERR_CONN_RESET`: embeddings blur precisely what must stay sharp.
+
+## Hybrid retrieval: both kinds of finding
+
+The standard architecture runs two searches and merges:
+
+- **Keyword search (BM25)**: exact-term matching, unbeatable for identifiers and rare terms.
+- **Semantic search**: meaning matching, unbeatable for paraphrase.
+- **Fusion → rerank:** merge both lists, then optionally pass the top ~20 candidates through a **reranker** (a model that scores query-chunk pairs jointly, far more accurately than embedding distance) and keep the top 3–5 for the prompt.
+
+<Check
+  question="Users searching 'ERR_CONN_RESET fix' get generic networking articles instead of the exact KB page for that error code. Pure semantic search is failing because…"
+  options={[
+    "…the embedding model is too small",
+    "…embeddings capture meaning-similarity, which blurs exact identifiers: hybrid retrieval with keyword search (BM25) restores exact-match power",
+    "…the error code isn't in the knowledge base",
+    "…the chunks are too small"
+  ]}
+  answer={1}
+  explanation="'ERR_CONN_RESET' embeds near all connection-error prose: its exactness is lost in the blur. BM25 treats it as the rare, high-signal term it is. This complementarity is why hybrid is the default, not the exception."
+  hint="What does an embedding do to a rare exact string?"
+/>
+
+<Check
+  question="Why chunk on document structure (headings, paragraphs) instead of fixed 500-character windows?"
+  options={[
+    "Fixed windows are slower to compute",
+    "Structural chunks keep each unit a self-contained thought, so retrieved chunks are interpretable and complete; arbitrary windows split sentences and separate answers from their conditions",
+    "Embeddings only work on paragraphs",
+    "Vector databases require structural chunks"
+  ]}
+  answer={1}
+  explanation="A chunk is the atom of retrieval AND the atom of context: whatever you retrieve is what the model reads. Half a policy clause retrieved is a wrong answer manufactured."
+  hint="The chunk you retrieve is exactly what the model gets to read."
+/>
+
+<Callout type="tip">
+**Sizing honesty:** for corpora under ~100k chunks, exact nearest-neighbor search in memory is fast enough; you may not need a vector database at all. Reach for infrastructure when measurements say so: build-before-framework applies to retrieval too.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://www.sbert.net/" title="Sentence-Transformers" source="sbert.net" why="Free local embedding models: embed your lab corpus without an API bill." />
+  <LinkCard href="https://qdrant.tech/documentation/" title="Qdrant documentation" source="qdrant.tech" why="A representative open-source vector DB with hybrid search, for when the corpus outgrows NumPy." />
+</GoDeeper>
+
+## Operate the index as a versioned artifact
+
+Parsing quality is part of retrieval. Remove navigation noise, repeated headers, and broken OCR while preserving headings, tables, lists, and page references. Give every chunk a stable ID derived from source and location, plus content hash, document version, language, timestamp, and access tags. Upsert changed chunks and delete removed ones; an append-only index quietly serves obsolete policy forever.
+
+At query time, apply structured filters before or during search. Normalize acronyms and known aliases, and consider query rewriting only when evals show vocabulary mismatch. Use reciprocal-rank fusion or another explicit method to combine keyword and semantic rankings rather than comparing incomparable raw scores. Reranking improves precision but adds latency, so measure recall before and after each stage.
+
+Do not tune chunk size on anecdotes. Build queries with known relevant passages, sweep structural strategies, top-*k*, hybrid weights, filters, and rerank depth, then compare recall, precision, context tokens, and latency.
+
+## Guided build: retrieval benchmark
+
+Ingest at least 20 documents with headings and metadata. Create 40 queries spanning paraphrases, exact identifiers, multi-condition questions, stale content, permission-restricted content, and unanswerable cases. Label relevant chunk IDs before tuning.
+
+Compare at least three retrieval configurations. Report recall@k, mean reciprocal rank, context token count, and p95 retrieval latency. Inspect ten misses and assign cause: parsing, chunk boundary, metadata, query mismatch, embedding, fusion, or reranking. Ship the smallest configuration that meets the recall target and prove that updates and deletions change the published index correctly.

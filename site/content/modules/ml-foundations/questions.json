@@ -1,0 +1,490 @@
+[
+  {
+    "id": "ml-q01",
+    "type": "single",
+    "prompt": "A fraud dataset is 1% fraud. A model that always predicts 'not fraud' scores 99% accuracy. What does this demonstrate?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The model is excellent and should be deployed"
+      },
+      {
+        "id": "b",
+        "text": "Accuracy is misleading under class imbalance; precision and recall on the rare class are needed"
+      },
+      {
+        "id": "c",
+        "text": "Fraud detection is impossible"
+      },
+      {
+        "id": "d",
+        "text": "The dataset needs more rows"
+      }
+    ],
+    "answer": "b",
+    "explanation": "With rare positives, 'always no' is accurate and useless: recall on fraud is 0%. Imbalanced problems are judged by precision/recall on the class you care about."
+  },
+  {
+    "id": "ml-q02",
+    "type": "single",
+    "prompt": "Why does the test set lose its value each time you use it to guide a modeling decision?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The file gets corrupted by repeated reads"
+      },
+      {
+        "id": "b",
+        "text": "Your choices gradually overfit to it, so it stops estimating performance on truly unseen data"
+      },
+      {
+        "id": "c",
+        "text": "Test sets legally expire after one use"
+      },
+      {
+        "id": "d",
+        "text": "It doesn't: you should tune on the test set"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Every decision informed by test performance leaks information about the test set into the model. That's the validation set's job; the test set is spent honestly only once."
+  },
+  {
+    "id": "ml-q03",
+    "type": "single",
+    "prompt": "Scaling features using the mean and standard deviation of the ENTIRE dataset before splitting causes…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…no problem; statistics are just numbers"
+      },
+      {
+        "id": "b",
+        "text": "…preprocessing leakage: test-set statistics influence training, inflating measured performance"
+      },
+      {
+        "id": "c",
+        "text": "…underfitting"
+      },
+      {
+        "id": "d",
+        "text": "…the model to train slower"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Preprocessing must be fit on the training set only and then applied to validation/test. Otherwise information about held-out data flows into training: a subtle but real leak."
+  },
+  {
+    "id": "ml-q04",
+    "type": "single",
+    "prompt": "Model A: 99% train / 74% validation. Model B: 82% train / 81% validation. Which statement is correct?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A is better because its training score is higher"
+      },
+      {
+        "id": "b",
+        "text": "A is overfitting (large generalization gap); B generalizes better and is the one to ship"
+      },
+      {
+        "id": "c",
+        "text": "B is underfitting and must be discarded"
+      },
+      {
+        "id": "d",
+        "text": "Both are equally good"
+      }
+    ],
+    "answer": "b",
+    "explanation": "The 25-point gap is memorization. Unseen-data performance is the only score that matters, and B wins it."
+  },
+  {
+    "id": "ml-q05",
+    "type": "single",
+    "prompt": "For time-ordered data (e.g., sales history), the honest split is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…random shuffle 80/20"
+      },
+      {
+        "id": "b",
+        "text": "…train on earlier periods, test on the most recent, because production predicts the future from the past"
+      },
+      {
+        "id": "c",
+        "text": "…alphabetical by customer name"
+      },
+      {
+        "id": "d",
+        "text": "…no split; use all data for training"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Evaluation should rehearse deployment. Random splits let the model peek at the future, inflating every metric."
+  },
+  {
+    "id": "ml-q06",
+    "type": "numeric",
+    "prompt": "A model produces 80 true positives, 20 false positives, and 20 false negatives. What is its precision, as a percentage?",
+    "answer": 80,
+    "tolerance": 0.5,
+    "unit": "%",
+    "explanation": "Precision = TP/(TP+FP) = 80/100 = 80%. (Recall here is also 80/100 = 80%.)"
+  },
+  {
+    "id": "ml-q07",
+    "type": "single",
+    "prompt": "Raising a classifier's decision threshold typically causes…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…precision to rise and recall to fall"
+      },
+      {
+        "id": "b",
+        "text": "…both precision and recall to rise"
+      },
+      {
+        "id": "c",
+        "text": "…recall to rise and precision to fall"
+      },
+      {
+        "id": "d",
+        "text": "…no change to either"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A stricter bar means alarms fire only on stronger evidence (fewer false alarms → precision up) while weaker true cases are missed (recall down)."
+  },
+  {
+    "id": "ml-q08",
+    "type": "single",
+    "prompt": "In disease screening, tuning for high recall at the cost of precision is justified because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…false positives are more dangerous than false negatives"
+      },
+      {
+        "id": "b",
+        "text": "…a missed case can be fatal while a false alarm costs only a follow-up test"
+      },
+      {
+        "id": "c",
+        "text": "…recall is always the better metric in every domain"
+      },
+      {
+        "id": "d",
+        "text": "…precision cannot be computed for medical data"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Metric choice follows error costs. Screening's asymmetry (deadly FN, cheap FP) favors recall; a payment-blocking system with opposite costs favors precision."
+  },
+  {
+    "id": "ml-q09",
+    "type": "single",
+    "prompt": "Your new model beats 'predict last month's value' by 1 percentage point. The most professional response is to…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…celebrate and deploy immediately"
+      },
+      {
+        "id": "b",
+        "text": "…weigh the permanent pipeline/monitoring cost against the tiny gain, and look for better features before more model complexity"
+      },
+      {
+        "id": "c",
+        "text": "…delete the baseline so the comparison looks better"
+      },
+      {
+        "id": "d",
+        "text": "…double the model size"
+      }
+    ],
+    "answer": "b",
+    "explanation": "A near-baseline result says the signal isn't in your features. Complexity has a permanent operating cost that a one-point edge rarely repays."
+  },
+  {
+    "id": "ml-q10",
+    "type": "single",
+    "prompt": "Overall error is 9%; new customers err at 23%, existing at 6%. Why is segment-level error analysis the right next move?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It lets you delete the bad segment from the test set"
+      },
+      {
+        "id": "b",
+        "text": "It localizes the failure to a population, usually pointing to a fixable data gap (e.g., missing history for new customers)"
+      },
+      {
+        "id": "c",
+        "text": "It always proves the model needs more layers"
+      },
+      {
+        "id": "d",
+        "text": "Aggregates are more honest than breakdowns"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Aggregate metrics hide concentrated failures. Finding where errors cluster generates hypotheses, and data fixes usually beat model fixes."
+  },
+  {
+    "id": "ml-q11",
+    "type": "multi",
+    "prompt": "Which of the following are forms of leakage? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "A feature that is a consequence of the label (e.g., collection calls for default prediction)"
+      },
+      {
+        "id": "b",
+        "text": "Random-splitting time-series data"
+      },
+      {
+        "id": "c",
+        "text": "Near-duplicate records appearing in both train and test"
+      },
+      {
+        "id": "d",
+        "text": "Using a validation set to choose hyperparameters"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Target leakage, temporal leakage, and duplicate leakage all inflate scores dishonestly. Using validation for tuning is the validation set's intended job, not leakage."
+  },
+  {
+    "id": "ml-q12",
+    "type": "single",
+    "prompt": "For most tabular business data, the strongest default model family is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…gradient-boosted tree ensembles"
+      },
+      {
+        "id": "b",
+        "text": "…very deep neural networks"
+      },
+      {
+        "id": "c",
+        "text": "…k-nearest neighbors"
+      },
+      {
+        "id": "d",
+        "text": "…always linear regression, never anything else"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Boosted trees (XGBoost/LightGBM) remain the tabular benchmark to beat. Deep learning dominates unstructured data (images, audio, text) not spreadsheets."
+  },
+  {
+    "id": "ml-q13",
+    "type": "single",
+    "prompt": "A model is 'well calibrated' when…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…its accuracy exceeds 90%"
+      },
+      {
+        "id": "b",
+        "text": "…events it scores at 80% actually occur about 80% of the time"
+      },
+      {
+        "id": "c",
+        "text": "…it runs in under 100 ms"
+      },
+      {
+        "id": "d",
+        "text": "…precision equals recall"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Calibration means scores are trustworthy as probabilities: essential when thresholds, costs, or humans consume the scores downstream."
+  },
+  {
+    "id": "ml-x01",
+    "type": "single",
+    "prompt": "K-fold cross-validation exists primarily to…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…get a more reliable performance estimate from limited data by averaging over several train/validation splits"
+      },
+      {
+        "id": "b",
+        "text": "…train k different production models"
+      },
+      {
+        "id": "c",
+        "text": "…make training k times faster"
+      },
+      {
+        "id": "d",
+        "text": "…replace the test set entirely"
+      }
+    ],
+    "answer": "a",
+    "explanation": "One small validation split is a noisy estimate; k rotations average the noise. The untouched test set still delivers the final honest number."
+  },
+  {
+    "id": "ml-x02",
+    "type": "single",
+    "prompt": "For a 1%-positive fraud dataset, which training-time measures address the imbalance? ",
+    "options": [
+      {
+        "id": "a",
+        "text": "Class weights or resampling so the minority class influences the loss, plus evaluation by precision/recall rather than accuracy"
+      },
+      {
+        "id": "b",
+        "text": "Deleting most negative examples from the test set too"
+      },
+      {
+        "id": "c",
+        "text": "Using accuracy but reporting it twice"
+      },
+      {
+        "id": "d",
+        "text": "Nothing; imbalance only affects deep learning"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Weighting/resampling fixes the training signal; metric choice fixes the measurement. Touching the TEST distribution, however, would falsify the evaluation."
+  },
+  {
+    "id": "ml-x03",
+    "type": "single",
+    "prompt": "You must pick one number to compare classifiers on an imbalanced task where both false alarms and misses matter. The standard choice is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "F1: the harmonic mean of precision and recall, which punishes neglecting either"
+      },
+      {
+        "id": "b",
+        "text": "Accuracy"
+      },
+      {
+        "id": "c",
+        "text": "Training loss"
+      },
+      {
+        "id": "d",
+        "text": "Row count"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The harmonic mean collapses to zero if either component does: you can't F1 your way past ignoring one error type. (With asymmetric costs, weighted variants or the raw pair are better still.)"
+  },
+  {
+    "id": "ml-x04",
+    "type": "single",
+    "prompt": "A churn model uses 'support tickets in the 30 days after the prediction date' as a feature. The problem is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…temporal leakage: the feature isn't knowable at prediction time, so offline metrics inflate and production performance collapses"
+      },
+      {
+        "id": "b",
+        "text": "…support tickets are irrelevant to churn"
+      },
+      {
+        "id": "c",
+        "text": "…30 days is too short a window"
+      },
+      {
+        "id": "d",
+        "text": "…nothing; more features always help"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Every feature must pass the 'knowable at prediction moment' test. Future-derived features are answer keys smuggled into training."
+  },
+  {
+    "id": "ml-x05",
+    "type": "single",
+    "prompt": "How do you check whether a model's probability outputs are calibrated?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Bucket predictions by stated probability and compare each bucket's actual outcome rate: the 80% bucket should come true about 80% of the time"
+      },
+      {
+        "id": "b",
+        "text": "Check that probabilities are all above 0.5"
+      },
+      {
+        "id": "c",
+        "text": "Verify the probabilities sum to the row count"
+      },
+      {
+        "id": "d",
+        "text": "Calibration cannot be measured"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A reliability check per confidence bucket. Miscalibrated scores break every threshold and every human decision that consumes them."
+  },
+  {
+    "id": "ml-x06",
+    "type": "single",
+    "prompt": "MAE versus RMSE: when does RMSE tell a usefully different story?",
+    "options": [
+      {
+        "id": "a",
+        "text": "When large individual errors matter disproportionately: RMSE squares errors, so a few big misses dominate it while MAE averages them away"
+      },
+      {
+        "id": "b",
+        "text": "Never; they are always equal"
+      },
+      {
+        "id": "c",
+        "text": "When the data contains categories"
+      },
+      {
+        "id": "d",
+        "text": "Only on GPU hardware"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Choose the metric that mirrors the cost structure: forecast errors that occasionally ruin a day (not just nudge an average) argue for RMSE's outlier sensitivity."
+  },
+  {
+    "id": "ml-x07",
+    "type": "single",
+    "prompt": "'Data drift' in a deployed model means…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the input distribution has shifted from what the model trained on (new formats, segments, behaviors), degrading performance even though the code is unchanged"
+      },
+      {
+        "id": "b",
+        "text": "…the database is physically moving"
+      },
+      {
+        "id": "c",
+        "text": "…the model's weights decay over time"
+      },
+      {
+        "id": "d",
+        "text": "…users forget how to use the product"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The world moves; the model's snapshot doesn't. Monitoring input stats and quality proxies (correction rates) is the early-warning system."
+  }
+]

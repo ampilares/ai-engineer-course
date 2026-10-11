@@ -1,0 +1,41 @@
+{
+  "slug": "llm-primitives",
+  "number": 8,
+  "title": "LLM Application Primitives",
+  "phase": "llm",
+  "summary": "Turn model behavior into dependable software: API calls, prompts that are specifications, schema-valid outputs, and cost control.",
+  "outcomes": [
+    "Call model APIs with proper roles, error handling, and streaming awareness",
+    "Write prompts as testable specifications, not incantations",
+    "Guarantee machine-consumable output with schemas and validation",
+    "Engineer context, caching, and model choice for cost and latency budgets"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "calling-model-apis",
+      "title": "Calling model APIs like an engineer",
+      "minutes": 26
+    },
+    {
+      "slug": "prompting-as-specification",
+      "title": "Prompting as specification",
+      "minutes": 27
+    },
+    {
+      "slug": "structured-outputs",
+      "title": "Structured outputs: making models machine-readable",
+      "minutes": 27
+    },
+    {
+      "slug": "context-cost-latency",
+      "title": "Context, caching, cost, and latency",
+      "minutes": 26
+    },
+    {
+      "slug": "reasoning-models",
+      "title": "Reasoning models and test-time compute",
+      "minutes": 15
+    }
+  ]
+}

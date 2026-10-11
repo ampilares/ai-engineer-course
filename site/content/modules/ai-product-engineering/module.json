@@ -1,0 +1,36 @@
+{
+  "slug": "ai-product-engineering",
+  "number": 12,
+  "title": "AI Product Engineering & UX",
+  "phase": "automation",
+  "summary": "Turn model capability into a product people can use and trust: problem discovery, uncertainty-aware UX, architecture decisions, experiments, adoption, and lifecycle ownership.",
+  "outcomes": [
+    "Frame an AI product around a user decision and measurable outcome rather than a model feature",
+    "Design interfaces for uncertainty, evidence, correction, approval, and accessible fallback",
+    "Make build/buy and system-architecture decisions with explicit quality, risk, cost, and exit criteria",
+    "Run pilots and experiments that measure adoption, task outcomes, and unintended effects"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "problem-discovery",
+      "title": "Problem discovery and outcome definition",
+      "minutes": 26
+    },
+    {
+      "slug": "ai-ux-and-human-control",
+      "title": "AI UX, uncertainty, and human control",
+      "minutes": 28
+    },
+    {
+      "slug": "architecture-and-build-buy",
+      "title": "System architecture and build-versus-buy decisions",
+      "minutes": 27
+    },
+    {
+      "slug": "experiments-and-adoption",
+      "title": "Experiments, adoption, and product lifecycle",
+      "minutes": 26
+    }
+  ]
+}

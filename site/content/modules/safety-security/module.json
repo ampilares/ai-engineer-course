@@ -1,0 +1,31 @@
+{
+  "slug": "safety-security",
+  "number": 15,
+  "title": "Safety, Security & Governance",
+  "phase": "production",
+  "summary": "How AI systems fail and get attacked (prompt injection, data exposure, excessive agency) and the layered defenses that hold.",
+  "outcomes": [
+    "Explain prompt injection and why it can't be filtered away",
+    "Apply least privilege, approval gates, and defense in depth",
+    "Protect personal and confidential data across prompts, logs, and outputs",
+    "Threat-model an AI system and red-team it before attackers do"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "prompt-injection",
+      "title": "Prompt injection: the un-filterable attack",
+      "minutes": 27
+    },
+    {
+      "slug": "defense-in-depth",
+      "title": "Defense in depth for AI systems",
+      "minutes": 28
+    },
+    {
+      "slug": "privacy-and-governance",
+      "title": "Privacy, data protection, and governance",
+      "minutes": 28
+    }
+  ]
+}

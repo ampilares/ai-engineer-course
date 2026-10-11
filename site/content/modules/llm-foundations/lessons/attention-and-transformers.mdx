@@ -1,0 +1,86 @@
+An initial embedding represents each token before the model has considered its surroundings. The meaning of a word such as "bank" depends on other tokens that distinguish a river bank from a savings bank. **Self-attention** is the mechanism that lets token representations exchange and combine contextual information.
+
+## The problem attention solves
+
+In *"The animal didn't cross the street because **it** was too tired"*, resolving "it" requires connecting it to "animal", seven tokens away. Older architectures passed information along token-by-token like a game of telephone, degrading over distance. Attention instead gives **every token a direct connection to every other token**, with learned, content-dependent strengths. See it:
+
+<AttentionHeatmap />
+
+Click "it" and observe how its attention concentrates on "animal." If the ending changed to "too wide," a trained model might instead attend more strongly to "street." **The routing depends on content as well as position.** Attention weights are learned signals, not guaranteed explanations of the model's decision.
+
+## How the strengths are computed
+
+Each token's embedding is projected into three vectors with learned weights:
+
+- a **query**: "what am I looking for?"
+- a **key**: "what do I offer?"
+- a **value**: "what information do I carry?"
+
+Each token's query is dotted with every token's key → similarity scores → softmax → weights that sum to 1. The token's new representation is the **weighted average of all the values**. In our example: "it"-the-pronoun has a query like *seeking a singular animate referent*; "animal"'s key matches strongly; so "it"'s updated vector absorbs "animal"'s content. After this layer, "it" effectively *means* "the tired animal."
+
+One more mechanical fact matters for generation: a **causal mask** blocks each token from attending to tokens after it: you can't peek at the future you're trying to predict.
+
+<Check
+  question="In 'The animal didn't cross the street because it was too tired', attention lets 'it' resolve to 'animal'. If the sentence ended 'too wide', the same mechanism would attend 'it' to 'street'. What property of attention does this contrast demonstrate?"
+  options={[
+    "Attention weights are fixed by token position in the sentence",
+    "Attention routes information based on content: the same head produces different connections depending on what the sentence says",
+    "Attention only works on adjacent tokens",
+    "The model stores both sentences in its database"
+  ]}
+  answer={1}
+  explanation="The query/key match depends on the vectors' contents, which encode meaning from context. Same positions, different meaning ⇒ different routing. Content-dependent, learned routing is exactly what static architectures lacked."
+  hint="What changed between the two sentences: the positions or the meaning?"
+/>
+
+## The transformer block: attention plus thinking
+
+A transformer is a stack of identical blocks, each doing two things:
+
+1. **Attention**: tokens gather relevant context from each other (*communication*).
+2. **MLP / feed-forward layer**: each token independently processes what it gathered (*computation*; this is also where much factual knowledge appears to live).
+
+Wrapped in residual connections and normalization so gradients survive depth (Module 6's machinery), and with **many attention heads per layer** (each free to specialize in different relationships (syntax, coreference, rhyme…)) repeated dozens of times. After the final block, each position's vector is projected to a score per vocabulary token: the logits, one softmax away from next-token probabilities. The circle back to lesson 1 is complete.
+
+<Check
+  question="Roughly speaking, what division of labor exists inside each transformer block?"
+  options={[
+    "Attention lets tokens exchange information; the feed-forward layer processes each token's gathered context independently",
+    "Attention stores facts; the feed-forward layer moves tokens around",
+    "Both layers do the same thing twice for reliability",
+    "The block chooses one of the two layers randomly per token"
+  ]}
+  answer={0}
+  explanation="Communicate, then compute: attention mixes information across positions; the MLP transforms each position on its own. Stacked dozens of times, this pipeline produces the final next-token scores."
+  hint="One layer looks across tokens; the other looks within."
+/>
+
+<Callout type="note">
+**Scaling laws**, in one paragraph: loss falls smoothly and predictably as parameters, data, and compute grow together: a discovery that turned model training from alchemy into budgeting, and explains the sizes of today's models. Depth of coverage ends here; the exam asks nothing deeper.
+</Callout>
+
+<GoDeeper>
+  <VideoEmbed id="eMlx5fFNoYc" title="Attention in transformers, explained visually" creator="3Blue1Brown" />
+  <LinkCard href="https://jalammar.github.io/illustrated-transformer/" title="The Illustrated Transformer" source="Jay Alammar" why="The classic visual walkthrough: read after this lesson to add the matrix-level detail." />
+  <LinkCard href="https://arxiv.org/abs/1706.03762" title="Attention Is All You Need" source="arXiv" why="The 2017 paper that started it all: approachable after the visual treatments." />
+</GoDeeper>
+
+## The engineering details behind the diagram
+
+Self-attention needs position information because a set of token vectors alone has no order. Positional encodings or learned positional mechanisms let the network distinguish “dog bites person” from “person bites dog.” A **causal mask** prevents a decoder from attending to future tokens during next-token training. Multiple heads learn different projections, giving the layer several relationship patterns at once; their outputs are combined and passed through a feed-forward network, residual connections, and normalization.
+
+The raw attention matrix grows roughly with sequence length squared in standard attention. Longer context therefore consumes memory and compute rapidly, even when the useful evidence is small. During autoregressive generation, a **key-value cache** reuses earlier attention computations instead of recalculating the whole prefix for every new token. That cache improves speed but grows with sequence length and concurrent users.
+
+Attention weights can help inspect a toy mechanism, but they are not a complete explanation of model reasoning. Information is mixed across heads and layers, and high attention weight is not causal proof. Use behavior-based tests for claims about what the system relies on.
+
+## Guided build: trace information flow
+
+Use the attention widget or a small implementation to compare three short sequences where word order changes meaning. For one head:
+
+- identify query, key, and value shapes;
+- calculate one scaled dot-product score by hand;
+- apply a causal mask and normalize with softmax;
+- compare attention when a pronoun’s likely referent changes;
+- estimate how matrix entries change when sequence length doubles.
+
+Conclude with one design decision that reduces context length before reaching for a larger window. Your explanation should cover both the conceptual relationship and its latency/memory consequence.

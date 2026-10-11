@@ -1,0 +1,65 @@
+The most expensive design mistake in applied AI right now is building an agent where a workflow belongs. The judgment call is simple to state and career-defining to apply: **who controls the flow?**
+
+## Two architectures
+
+- **Workflow:** *your code* controls the sequence; models fill in judgment-shaped steps. `receive email → model: classify → if billing: model: extract fields → validate → if confident: create ticket; else: human`. Every arrow is deterministic; every model call has one bounded job.
+- **Agent:** *the model* controls the sequence: it decides what to do next, step by step, using tools, until done.
+
+The engineering trade is stark. Workflows are predictable, testable step-by-step, debuggable ("step 3 failed"), cheap (each call minimal), and reliable in the way multiplication punishes agents: a 10-step agent at 95% per-step reliability finishes right ~60% of the time; a workflow chains deterministic steps and spends model reliability only where it must.
+
+**Use an agent only when the path genuinely cannot be enumerated** (open-ended research, debugging, "figure out why this invoice doesn't reconcile") tasks where which step comes next depends on what the last step revealed.
+
+<Check
+  question="Invoice processing: extract fields → validate against PO → post to accounting → email confirmation, with human review of mismatches. Workflow or agent?"
+  options={[
+    "Agent: invoices vary, so the model should decide each step",
+    "Workflow: the path is fully known in advance; models handle the judgment steps (extraction, mismatch explanation) inside deterministic control flow",
+    "Agent: workflows are legacy technology",
+    "Neither can process invoices"
+  ]}
+  answer={1}
+  explanation="Documents vary; the PROCESS doesn't. Known path ⇒ your code owns the arrows, the model fills judgment slots, and reliability multiplies in your favor. The agent version costs more, fails more, and debugs worse."
+  hint="Can you draw the flowchart before running it? Then it's a workflow."
+/>
+
+<Check
+  question="'Investigate why customer #2231's January invoice doesn't reconcile: check the order history, payments, refunds, and currency conversions as needed.' Why does this lean agent?"
+  options={[
+    "It involves money, and money always needs agents",
+    "The investigation path depends on what each lookup reveals: the branching can't be enumerated in advance, which is precisely the case for a (read-only, budgeted) agent loop",
+    "It's too long for a prompt",
+    "It doesn't; a single model call suffices"
+  ]}
+  answer={1}
+  explanation="Diagnosis is inherently adaptive: finding a refund mismatch redirects the whole search. Note the bounds still apply: read-only tools and a step budget make this agent safe to run."
+  hint="Could you draw the complete flowchart before starting? What decides step 4?"
+/>
+
+## MCP: the USB port for tools
+
+The Model Context Protocol (MCP) standardizes how AI applications discover and call external tools. Instead of writing bespoke integration code for every application and system pair, a system can expose an **MCP server** that describes its tools, resources, and schemas. An MCP-capable client can then connect to authorized file, database, or ticketing capabilities through the same protocol.
+
+The strategic point for an engineer: MCP changes *where integrations live* (a standard interface, reusable across apps), not *what the model can do*. Every lesson in this module (least privilege, approval gates, budgets) applies identically to MCP tools. A standardized connector to your production database is a standardized blast radius; scope it accordingly.
+
+<Callout type="note">
+**Module project: bounded agent.** Build both shapes on your domain: (1) a workflow with 2–3 model steps inside deterministic control flow, and (2) a small agent (3–5 read tools, one gated write tool) with a 10-step budget, durable step log, and approval prompt before the write. Then write the paragraph that matters: which tasks each shape handled better, and why.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://modelcontextprotocol.io/" title="Model Context Protocol" source="modelcontextprotocol.io" why="The protocol spec and SDKs: build one small MCP server to demystify it." />
+  <LinkCard href="https://www.anthropic.com/engineering/building-effective-agents" title="Building Effective Agents" source="Anthropic" why="Worth a second read after this lesson: the workflow patterns catalog maps to your project." />
+</GoDeeper>
+
+## Use a spectrum, not a binary
+
+Useful architectures range from deterministic pipelines, to workflows with one model decision, to model-routed graphs, to open loops. Most production systems belong in the middle. Encode known order, retries, approvals, and compensation in a workflow engine; use a model only for the step whose input cannot be enumerated cleanly.
+
+MCP standardizes how clients discover and invoke tools, prompts, and resources. It does not decide whether a server is trustworthy. Review server ownership, authentication, capability scope, data retention, network access, version compatibility, and user consent. Pin or test interface versions and expose the smallest server set required for a task. A newly installed server changes the agent’s attack surface.
+
+Architecture should also include an exit. If a model decision repeatedly fails, the workflow needs a deterministic fallback, human queue, or safe cancellation path. Compensation, undoing or counteracting earlier actions, must be designed for multi-step writes that cannot be transactional.
+
+## Guided design: choose the least variable architecture
+
+Model one business task in three ways: deterministic workflow, workflow with a single LLM decision, and bounded agent. For each, estimate task coverage, failure modes, latency, cost, auditability, and required approvals. Select the least variable design that handles the real exception rate.
+
+If you use MCP, connect one local or sandboxed server and document its capabilities and trust boundary. Demonstrate denial of an out-of-scope call and behavior when the server schema changes. Submit the architecture decision record, sequence diagram, and test evidence.

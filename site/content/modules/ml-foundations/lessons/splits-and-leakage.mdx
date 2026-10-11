@@ -1,0 +1,93 @@
+A model's score on the data it trained on is worthless. Models can memorize; the entire point is predicting the **unseen**. So we evaluate every model on data it never touched, and most of the ways this goes wrong fall under one villainous word: **leakage**.
+
+## Three splits, three jobs
+
+- **Training set**: the model fits its parameters here.
+- **Validation set**: you compare candidate models and tune settings here. Because you peek repeatedly, your choices slowly overfit to it.
+- **Test set**: touched once, at the end, for the honest final number. Every peek before that spends its honesty.
+
+<Callout type="note">
+This discipline transfers wholesale to LLM work. In Module 14 the same three-way split reappears as: examples in your prompt, an eval set you iterate against, and a held-out set that tells you the truth. Different clothes, same body.
+</Callout>
+
+## Leakage: the silent score-inflater
+
+Leakage is any way information from outside the training set (especially from the future or from the label) sneaks into training. The result is always the same: spectacular offline metrics, disappointing production.
+
+The classic forms:
+
+1. **Target leakage**: a feature is a proxy for the answer. Predicting loan default using "number of collection calls received": collection calls *follow* default. The model learns to read the answer off the sheet.
+2. **Temporal leakage**: training on the future, testing on the past. Time-ordered data must be split by time: train on January–September, test on October+. A random split lets the model "predict" Tuesday using patterns it saw from Wednesday.
+3. **Preprocessing leakage**: computing statistics (means for scaling, vocabularies, imputation values) on *all* data before splitting. The test set has now whispered its statistics into training. Fit preprocessing on train only; apply it to the rest.
+4. **Duplicate leakage**: near-identical records landing in both train and test (the same customer, the same document re-exported). The model recognizes rather than generalizes.
+
+<Check
+  question="A credit model trained with the feature 'number of debt-collection calls' achieves 99% validation accuracy but fails in production. What happened?"
+  options={[
+    "The model needed more parameters",
+    "Target leakage: collection calls happen after default, so the feature encodes the label, and doesn't exist at prediction time",
+    "The validation set was too large",
+    "Accuracy is impossible for credit problems"
+  ]}
+  answer={1}
+  explanation="Collection calls are a consequence of default. In historical data they're a near-perfect proxy for the label; at prediction time (before any default) the feature is absent or zero. The model learned to read the answer, not to predict it."
+  hint="Does that feature exist at the moment the prediction must be made?"
+/>
+
+<Check
+  question="You have two years of sales data and want an honest estimate of next month's forecasting error. How should you split?"
+  options={[
+    "Randomly shuffle all rows, 80/20",
+    "Train on the earlier period and test on the most recent months, preserving time order",
+    "Use all data for training: more data is better",
+    "Split alphabetically by product name"
+  ]}
+  answer={1}
+  explanation="Production reality is 'predict the future from the past', so evaluation must rehearse exactly that. Random shuffling hands the model fragments of the future and inflates every metric."
+  hint="What will the model have to do in production, and how do you rehearse it?"
+/>
+
+## The generalization dial: overfitting and underfitting
+
+A model can fail in two opposite directions. **Underfitting** occurs when it is too simple or insufficiently trained to capture the real pattern, so it performs poorly on both training and new data. **Overfitting** occurs when it learns details and noise specific to the training set, producing strong training performance but weak performance on new data.
+
+The tell is the **gap**: training score high, validation score much lower ⇒ overfitting. Both low ⇒ underfitting. The cures are opposite (simplify/regularize/get more data vs. add capacity/features), which is why you diagnose before treating.
+
+<Check
+  question="Model A: 99% train / 74% validation. Model B: 82% train / 81% validation. Which do you ship, and what is Model A's diagnosis?"
+  options={[
+    "Ship A: 99% is the best number on the board",
+    "Ship B: A's train/validation gap shows it memorized noise (overfitting), and B generalizes better where it counts",
+    "Ship A: validation scores are just noise",
+    "Ship neither until one hits 100%"
+  ]}
+  answer={1}
+  explanation="You ship the model that performs on unseen data. A's 25-point gap is the signature of overfitting; its 99% is memorization, not skill. B is honest at 81%."
+  hint="Which number rehearses production: train or validation?"
+/>
+
+<GoDeeper>
+  <LinkCard href="https://developers.google.com/machine-learning/crash-course/overfitting/video-lecture" title="Overfitting and generalization" source="Google ML Crash Course" why="Short visual treatment of the generalization gap." />
+  <LinkCard href="https://scikit-learn.org/stable/modules/cross_validation.html" title="Cross-validation user guide" source="scikit-learn" why="The standard tooling for splits, including time-series-aware splitters." />
+</GoDeeper>
+
+## Split by the way reality repeats
+
+Random row splits assume rows are independent and identically distributed. Many real datasets violate that assumption. If several rows belong to the same customer, document, patient, device, or conversation, split by that group so the model cannot memorize an entity and meet it again in evaluation. For geographic deployment, hold out regions. For future performance, use rolling time windows and preserve a gap when labels mature slowly.
+
+Keep the entire preprocessing pipeline inside each training fold: imputation, scaling, feature selection, vocabulary construction, oversampling, and target encoding. Even a human looking at test errors and redesigning features is a form of adaptation to the test set. Maintain an untouched final set or collect a new prospective sample before making a launch claim.
+
+Record split provenance: the code version, cutoff dates, grouping key, random seed where applicable, excluded rows, and class balance. A reproducible split is part of the model artifact.
+
+## Guided audit: try to break the score
+
+Take your planned dataset and run a leakage review:
+
+1. Write when every feature becomes available relative to prediction.
+2. Search for features derived from the outcome or downstream process.
+3. Hash normalized records to find duplicates and near-duplicates.
+4. Count entities that would appear in more than one split.
+5. Fit preprocessing on training data only.
+6. Compare a random split with the realistic group or time split.
+
+Investigate any large score drop under the realistic split. The goal is not to preserve the impressive number; it is to obtain the number production is likely to deliver.

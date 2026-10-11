@@ -1,0 +1,66 @@
+A pipeline is reliable when the same declared inputs and code produce a known output, failures are visible, and recovery does not require guessing. Scheduling tasks is the easy part; maintaining trustworthy state is the work.
+
+## Build idempotent stages
+
+Divide the path into stages with explicit input and output contracts: discover, extract, validate, normalize, enrich, publish. Give each run and record stable identifiers. A stage should either replace a versioned partition atomically or upsert by a deterministic key. Writing random duplicate rows on every retry is not orchestration.
+
+Checkpoint after durable output, not merely after a function returns. Use bounded retries for transient failures and quarantine deterministic data failures. Backfills are normal operations: they need parameters, resource limits, isolated outputs, and promotion checks so historical recomputation does not overwhelm current production work.
+
+## Quality gates at the boundary
+
+Test data like an interface. Useful checks include:
+
+- schema and type compatibility;
+- required-field and uniqueness constraints;
+- accepted value ranges and referential integrity;
+- volume, freshness, and duplicate-rate expectations;
+- distribution changes by important segment;
+- reconciliation against source totals.
+
+Not every anomaly should stop the pipeline. Classify checks as fail, quarantine, warn, or observe, and assign an owner. A freshness warning without an owner is only a dashboard decoration. Compare against recent seasonal baselines rather than a fixed threshold when normal volume changes by weekday.
+
+<Check
+  question="A pipeline receives 40% fewer records than usual but every row passes schema validation. What is the missing quality control?"
+  options={[
+    "A volume/completeness check reconciled with expected source delivery",
+    "A larger database",
+    "A lower model temperature",
+    "A different JSON parser"
+  ]}
+  answer={0}
+  explanation="Row-level validity cannot detect missing rows. Dataset-level completeness and reconciliation checks catch partial deliveries."
+  hint="Can valid rows prove that all expected rows arrived?"
+/>
+
+Feel both safeguards working together: run the same messy batch with the gates on and off:
+
+<PipelineSimulator />
+
+## Lineage makes change reviewable
+
+Lineage links an output field or dataset to source versions, transformations, code/config, and run. At minimum, store dataset version, pipeline commit, run ID, source delivery IDs, timestamps, and quality results. For model artifacts, link training and eval data versions to the resulting model. For RAG, link index versions to parser, chunker, embedding model, and source snapshot.
+
+Use lineage for blast-radius analysis. When a currency conversion bug is found, ask which datasets, models, eval reports, and decisions consumed the affected version. Without lineage, teams either underreact or rebuild everything.
+
+<Check
+  question="An embedding parser bug affected documents ingested during one week. Which lineage record makes targeted repair possible?"
+  options={[
+    "Chunk-to-source version, parser version, pipeline run, and index version",
+    "Only the current vector count",
+    "The model provider’s marketing name",
+    "The course completion date"
+  ]}
+  answer={0}
+  explanation="Targeted backfill needs a path from affected outputs to the exact transformation and source inputs that created them."
+  hint="What identifies both the broken transformation and everything it produced?"
+/>
+
+## Guided build: fail, recover, and explain
+
+Turn the previous ingestion slice into a three-stage pipeline. Add checks for schema, uniqueness, freshness, volume, and one domain rule. Persist run state and quality results. Inject a partial source delivery, duplicate retry, transformation exception, and bad reference value.
+
+Demonstrate safe retry, quarantine, atomic publication, and a backfill into a new dataset version. Starting from one bad published row, trace back to the source delivery and code/config version. Submit a runbook explaining which failures page an operator, which wait for the next delivery, and which require source-owner coordination.
+
+<Callout type="warning">
+Do not automatically “fix” unexpected source values by coercing them to null. Silent repair can turn an upstream contract break into a plausible but biased training dataset.
+</Callout>

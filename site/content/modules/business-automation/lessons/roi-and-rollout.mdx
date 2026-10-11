@@ -1,0 +1,77 @@
+You've built a reliable workflow. Now comes the part that determines whether it survives contact with the organization: the **pilot**, the **numbers**, and the **rollout**. AI projects rarely die of bad models; they die of unmeasured value and unmanaged change.
+
+## Pilot like a scientist
+
+Run the automation **in parallel** with the manual process on a slice of real volume (one team, one region, two weeks). Parallel running de-risks everything: the manual process still catches what automation misses, and you harvest a paired comparison on identical traffic.
+
+Define success criteria *before* the pilot: "≥95% of auto-processed items correct, cycle time under 10 minutes, reviewers report net time savings." Pre-registered criteria prevent the two classic endings: calling a failure a success because sunk cost, or calling a success a failure because one anecdote.
+
+## The ROI arithmetic
+
+Keep it simple enough for a CFO to redo on a napkin:
+
+```text
+BEFORE (measured baseline):        900 invoices/mo × 11 min = 165 h ≈ €5,775/mo
+                                   error rate 2.1% → ~19 rework cases
+AFTER (pilot measurements):        automation handles 78% clean
+                                   human review 22% × 3 min = 9.9 h
+                                   error rate 0.5% → ~4 cases
+COSTS:                             API ~€140/mo + hosting €30 + maintenance ~0.1 FTE
+NET:                               ≈ €4,300/mo saved + 3 days faster cycle time
+```
+
+Two honesty rules. Count **all** the costs: API tokens, hosting, the review queue's human minutes, and the engineering time to maintain it. And report the **failure numbers** alongside the wins: the 22% review rate and what those items look like. Stakeholders who hear honest numbers trust your next proposal; stakeholders who catch inflated ones don't fund it.
+
+<Check
+  question="Your pilot shows automation fully handles 78% of items and routes 22% to a 3-minute human review. A colleague says 'it failed: it's not fully automated.' The correct framing is…"
+  options={[
+    "Agree and cancel the project until 100% automation is possible",
+    "The system converted 165 monthly hours into ~10 review hours with fewer errors: the human 22% is the design working (confidence routing), not the design failing",
+    "Hide the 22% from the report",
+    "Force the model to auto-process everything and accept the errors"
+  ]}
+  answer={1}
+  explanation="Full automation was never the goal; measured value was. The review queue is what makes the 78% trustworthy. Chasing 100% by removing the safety valve trades a working system for incident reports."
+  hint="What did the 22% queue buy the other 78%?"
+/>
+
+## Change management, compressed
+
+- **The operators decide adoption.** Involve them from mapping (they did the analysis with you), give them the override, and make the tool visibly *theirs*: "the assistant the AP team designed," not "the bot management installed."
+- **Fear is rational; address it with roles, not slogans**: the job shifts from typing to reviewing; say so explicitly, and mean it.
+- **Keep the manual path executable.** When (not if) the automation has a bad day (provider outage, format change upstream) the team must be able to fall back without drama. An automation with no manual fallback is a single point of failure you *added*.
+
+<Check
+  question="Six weeks after rollout, the upstream vendor changes their invoice PDF layout and extraction quality craters. Which prior decision saves you?"
+  options={[
+    "Having deleted the manual process to force adoption",
+    "The maintained manual fallback + the review queue absorbing the spike + monitoring that alerted on the confidence-rate drop: degradation became an operations event, not a crisis",
+    "A clause in the vendor contract forbidding layout changes",
+    "Nothing; the project was doomed"
+  ]}
+  answer={1}
+  explanation="Inputs drift: Module 5 promised this. Systems survive through fallback paths, human buffers, and monitoring that notices quality shifts (Module 14 formalizes the alerting). The failure mode was priced in."
+  hint="What operational shock-absorbers were designed in?"
+/>
+
+<Callout type="note">
+**Module project: guarded workflow with ROI.** Automate one real (or realistic) process end to end: trigger → deterministic steps → one model judgment with confidence routing → approval gate on the consequential action → durable state and dead-letter handling. Deliver the before/after table with all costs counted. This artifact plus its numbers is the spine of your capstone.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.n8n.io/courses/level-two/" title="n8n level two course" source="docs.n8n.io" why="Error workflows, sub-workflows, and production patterns for exactly this project." />
+</GoDeeper>
+
+## Measure realized value, not theoretical capacity
+
+Automation value depends on eligible volume, adoption, successful completion, and whether saved time is actually redeployed. Multiply those rates instead of assuming every case uses the system perfectly. Include review time, exception handling, support, integration maintenance, model calls, and incident risk. Run sensitivity analysis for volume, quality, and adoption rather than presenting one precise forecast.
+
+Choose a pilot design that supports a causal claim. A phased rollout, randomized eligible cases, or matched before/after cohort is stronger than comparing one good week with an old average. Track protected metrics, error severity, customer complaints, employee workload, and escalation, not only speed. Define stop conditions before the pilot begins.
+
+Rollout needs ownership. Name the process owner, technical owner, reviewer capacity, training plan, feedback channel, and decision forum. A pilot that succeeds only while its builder watches every run has not proved operability.
+
+## Guided build: pilot decision pack
+
+Create a baseline from at least 30 cases and design a limited pilot. Report eligibility, adoption, automation completion, human review, error/rework, cycle time, throughput, cost per completed case, and user feedback. Compare by case complexity rather than hiding hard cases in an average.
+
+Calculate conservative, expected, and optimistic annual value, including ongoing costs. End with one of four decisions: stop, redesign, extend the pilot, or scale. State the evidence threshold and owner for the next decision. The purpose of a pilot is to reduce uncertainty, including the possibility that the right answer is not to proceed.

@@ -1,0 +1,506 @@
+[
+  {
+    "id": "rag-q01",
+    "type": "single",
+    "prompt": "For answering from weekly-changing internal documentation, RAG beats fine-tuning primarily because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…retrieval reads current documents at question time, while fine-tuning bakes a stale snapshot into weights: uncitable and permission-blind"
+      },
+      {
+        "id": "b",
+        "text": "…fine-tuned models are always less fluent"
+      },
+      {
+        "id": "c",
+        "text": "…RAG requires no engineering"
+      },
+      {
+        "id": "d",
+        "text": "…fine-tuning cannot process documentation formats"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Knowledge that changes belongs outside the weights: update the index, not the model, and get citations and per-user access control as side benefits."
+  },
+  {
+    "id": "rag-q02",
+    "type": "single",
+    "prompt": "A RAG assistant answers wrongly; inspection shows the retrieved chunks were about the wrong product edition. The bug lives in…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…retrieval: the generator faithfully used wrong context; a bigger model would just phrase the same error better"
+      },
+      {
+        "id": "b",
+        "text": "…the generation model"
+      },
+      {
+        "id": "c",
+        "text": "…the user's phrasing"
+      },
+      {
+        "id": "d",
+        "text": "…the citation formatter"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Garbage in, eloquent garbage out. Stage-localized debugging (retrieve vs. generate) is the core RAG skill."
+  },
+  {
+    "id": "rag-q03",
+    "type": "single",
+    "prompt": "The fundamental chunking trade-off is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…small chunks match specifically but may lack surrounding context; large chunks carry context but dilute relevance scoring"
+      },
+      {
+        "id": "b",
+        "text": "…small chunks cost more per token"
+      },
+      {
+        "id": "c",
+        "text": "…large chunks cannot be embedded"
+      },
+      {
+        "id": "d",
+        "text": "…there is no trade-off; smaller is always better"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Specific-but-insufficient vs. sufficient-but-blurry. Structural chunking (clauses, sections) with slight overlap is the practical resolution."
+  },
+  {
+    "id": "rag-q04",
+    "type": "single",
+    "prompt": "Queries containing exact error codes retrieve poorly under pure semantic search because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…embeddings blur exact identifiers into general meaning-space: hybrid retrieval adds BM25 keyword matching to restore exactness"
+      },
+      {
+        "id": "b",
+        "text": "…error codes are filtered as profanity"
+      },
+      {
+        "id": "c",
+        "text": "…vectors cannot contain digits"
+      },
+      {
+        "id": "d",
+        "text": "…the codes are too recent to be indexed"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Semantic and keyword search fail in complementary ways: paraphrase vs. identifiers. Running both and merging is the default production architecture."
+  },
+  {
+    "id": "rag-q05",
+    "type": "single",
+    "prompt": "What does a reranker add on top of embedding-based retrieval?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It scores query-chunk pairs jointly with a model, ordering the top candidates far more accurately than raw vector distance"
+      },
+      {
+        "id": "b",
+        "text": "It compresses chunks to save tokens"
+      },
+      {
+        "id": "c",
+        "text": "It translates chunks into English"
+      },
+      {
+        "id": "d",
+        "text": "It replaces the need for embeddings entirely"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Embedding search is a fast wide net; the reranker is a careful judge over the top ~20, keeping the best 3–5 for the prompt."
+  },
+  {
+    "id": "rag-q06",
+    "type": "single",
+    "prompt": "Why must a RAG system have an explicit, exactly-phrased abstention response?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Models may still answer when evidence is missing; a defined abstention policy, measurable response, and routing path make insufficient evidence an explicit outcome"
+      },
+      {
+        "id": "b",
+        "text": "Regulations require the exact wording"
+      },
+      {
+        "id": "c",
+        "text": "It reduces token costs"
+      },
+      {
+        "id": "d",
+        "text": "It makes the bot sound humble"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Abstention is engineered, not emergent, and the exact phrasing makes it detectable, so evals can measure abstention rate on unanswerable questions."
+  },
+  {
+    "id": "rag-q07",
+    "type": "single",
+    "prompt": "Recall@5 answers which question?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Was at least one truly relevant chunk among the top 5 retrieved?"
+      },
+      {
+        "id": "b",
+        "text": "Did the model answer in under 5 seconds?"
+      },
+      {
+        "id": "c",
+        "text": "Were exactly 5 chunks retrieved?"
+      },
+      {
+        "id": "d",
+        "text": "Did the answer cite 5 sources?"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Recall@k measures whether generation ever had a chance. If the relevant chunk isn't in the top k, no downstream fix can help."
+  },
+  {
+    "id": "rag-q08",
+    "type": "single",
+    "prompt": "End-to-end quality is 71%; retrieval recall@5 is 62%. The right next investment is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…retrieval improvements (chunking, hybrid weights, reranking): recall caps everything downstream"
+      },
+      {
+        "id": "b",
+        "text": "…a larger generation model"
+      },
+      {
+        "id": "c",
+        "text": "…longer answers with more citations"
+      },
+      {
+        "id": "d",
+        "text": "…higher temperature"
+      }
+    ],
+    "answer": "a",
+    "explanation": "In ~38% of cases the generator never saw the answer. Raise the ceiling first; tune generation second. This is why the stages are evaluated separately."
+  },
+  {
+    "id": "rag-q09",
+    "type": "single",
+    "prompt": "Why do RAG eval sets deliberately include unanswerable questions?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The abstention rate on them is the hallucination alarm: a system that answers everything is fabricating on schedule"
+      },
+      {
+        "id": "b",
+        "text": "To pad the dataset size"
+      },
+      {
+        "id": "c",
+        "text": "To test network timeouts"
+      },
+      {
+        "id": "d",
+        "text": "Unanswerable questions should never be in evals"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Correct behavior on 'no answer exists' is refusal. Measuring it requires questions where refusal is the right answer."
+  },
+  {
+    "id": "rag-q10",
+    "type": "multi",
+    "prompt": "Which metadata should chunks carry at ingestion? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Source document and section (for citations)"
+      },
+      {
+        "id": "b",
+        "text": "Freshness/date information"
+      },
+      {
+        "id": "c",
+        "text": "Access-control tags (who may retrieve this)"
+      },
+      {
+        "id": "d",
+        "text": "A copy of every other chunk for context"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Citations, freshness filtering, and permission-aware retrieval all depend on metadata attached at ingestion. Duplicating the corpus into each chunk defeats chunking."
+  },
+  {
+    "id": "rag-q11",
+    "type": "single",
+    "prompt": "Per-user document permissions in RAG are enforced correctly by…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…filtering at retrieval time so unauthorized chunks never enter the context"
+      },
+      {
+        "id": "b",
+        "text": "…asking the model politely not to reveal restricted content it was given"
+      },
+      {
+        "id": "c",
+        "text": "…fine-tuning the model separately per user"
+      },
+      {
+        "id": "d",
+        "text": "…lowering temperature"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Anything in context can come out of the model: instructions are not a security boundary (Module 15 doubles down on this). Access control happens before the prompt is built."
+  },
+  {
+    "id": "rag-q12",
+    "type": "single",
+    "prompt": "Why are per-claim citations more than a UX nicety?",
+    "options": [
+      {
+        "id": "a",
+        "text": "They make every claim checkable: by users, reviewers, and automated faithfulness evals; an uncitable claim is a fabrication flag"
+      },
+      {
+        "id": "b",
+        "text": "They increase answer length, which improves quality"
+      },
+      {
+        "id": "c",
+        "text": "They are required by all embedding models"
+      },
+      {
+        "id": "d",
+        "text": "They reduce retrieval cost"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Verifiability is the product. Citations turn 'trust me' into 'check me', and give your evaluation pipeline a hook to grade faithfulness automatically."
+  },
+  {
+    "id": "rag-x01",
+    "type": "single",
+    "prompt": "Chunk overlap (repeating a sentence or two between adjacent chunks) exists to…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…keep answers that span a chunk boundary retrievable, without overlap, a fact split across the cut may match neither chunk well"
+      },
+      {
+        "id": "b",
+        "text": "…increase the index size for robustness"
+      },
+      {
+        "id": "c",
+        "text": "…confuse the reranker productively"
+      },
+      {
+        "id": "d",
+        "text": "…meet a vector-database requirement"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Boundaries are arbitrary; meaning isn't. Modest overlap insures against the cut landing mid-answer, at a small storage cost."
+  },
+  {
+    "id": "rag-x02",
+    "type": "single",
+    "prompt": "Adding a reranker improved answer quality but added 300ms. The correct evaluation frame is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…measure both: retrieval-metric gain (recall/MRR) and p95 latency cost, then decide against your latency budget: quality changes are never free-standing"
+      },
+      {
+        "id": "b",
+        "text": "…quality always wins; ship it"
+      },
+      {
+        "id": "c",
+        "text": "…latency always wins; remove it"
+      },
+      {
+        "id": "d",
+        "text": "…use the vendor's aggregate benchmark without measuring your workload"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Every pipeline stage buys something and costs something. The budgets (Module 16) and the evals (Module 14) jointly make the call, not either alone."
+  },
+  {
+    "id": "rag-x03",
+    "type": "single",
+    "prompt": "Why is the abstention response given an exact, fixed phrasing rather than letting the model improvise a refusal?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Exact phrasing is detectable (by evals measuring abstention rates, by routing logic, and by UX) while improvised refusals are unmeasurable and unroutable"
+      },
+      {
+        "id": "b",
+        "text": "Models cannot improvise refusals"
+      },
+      {
+        "id": "c",
+        "text": "A fixed response improves the model's underlying factual knowledge"
+      },
+      {
+        "id": "d",
+        "text": "Variable refusals cannot be displayed in a user interface"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Abstention is an engineered, instrumented behavior. If you can't detect it, you can't measure it; if you can't measure it, you can't maintain it."
+  },
+  {
+    "id": "rag-x04",
+    "type": "single",
+    "prompt": "Retrieval evals report recall@5 = 95% but users still get wrong answers on recently-changed policies. The likely culprit is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…index staleness: retrieval correctly finds chunks from outdated documents; freshness through change detection, upserts, and deletion propagation is a separate quality axis"
+      },
+      {
+        "id": "b",
+        "text": "…the recall metric is broken"
+      },
+      {
+        "id": "c",
+        "text": "…users asking wrong questions"
+      },
+      {
+        "id": "d",
+        "text": "…the generation model forgot its training"
+      }
+    ],
+    "answer": "a",
+    "explanation": "An index is a derived cache of sources. Recall measures finding what's indexed, not whether what's indexed still reflects reality. Both need monitoring."
+  },
+  {
+    "id": "rag-x05",
+    "type": "single",
+    "prompt": "Deleting a document from the source system must trigger…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…deletion of its chunks from the index (via stable chunk IDs): otherwise the assistant confidently cites retracted content indefinitely"
+      },
+      {
+        "id": "b",
+        "text": "…nothing; indexes are append-only by design"
+      },
+      {
+        "id": "c",
+        "text": "…a full rebuild of all embeddings"
+      },
+      {
+        "id": "d",
+        "text": "…a lower temperature"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Deletion propagation is the forgotten half of ingestion, and the compliance-relevant half, when the deleted document was retracted for a reason."
+  },
+  {
+    "id": "rag-x06",
+    "type": "single",
+    "prompt": "In a multi-tenant RAG product, per-tenant isolation belongs…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…in the data layer: separate collections or provably mandatory tenant filters, making a cross-tenant query impossible rather than merely avoided"
+      },
+      {
+        "id": "b",
+        "text": "…in the system prompt ('only discuss this tenant's documents')"
+      },
+      {
+        "id": "c",
+        "text": "…in the UI footer"
+      },
+      {
+        "id": "d",
+        "text": "…nowhere; embeddings anonymize content"
+      }
+    ],
+    "answer": "a",
+    "explanation": "One forgotten filter on a shared index is a cross-customer breach. Structure beats vigilance: make the wrong query unexpressible."
+  },
+  {
+    "id": "rag-x07",
+    "type": "single",
+    "prompt": "Upgrading the embedding model requires re-embedding the whole corpus because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…different models define different vector spaces: similarity between old and new vectors is meaningless, so mixed indexes silently break retrieval"
+      },
+      {
+        "id": "b",
+        "text": "…old vectors expire legally"
+      },
+      {
+        "id": "c",
+        "text": "…new models output incompatible file formats"
+      },
+      {
+        "id": "d",
+        "text": "…it doesn't; vectors are interchangeable"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Each model's geometry is its own ruler. Operationally: build the new index fully, verify recall on evals, blue/green swap with rollback ready."
+  },
+  {
+    "id": "rag-x08",
+    "type": "single",
+    "prompt": "The metric 'time since last successful ingestion per source' with an alert threshold exists to catch…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…silent pipeline death: the most common way RAG rots: nothing errors user-visibly, the index just quietly stops reflecting reality"
+      },
+      {
+        "id": "b",
+        "text": "…slow user queries"
+      },
+      {
+        "id": "c",
+        "text": "…expensive embeddings"
+      },
+      {
+        "id": "d",
+        "text": "…prompt injection"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Staleness is invisible at query time: answers keep flowing, just increasingly wrong. A freshness metric makes the invisible failure page someone."
+  }
+]

@@ -1,0 +1,69 @@
+Four mathematical ideas recur throughout this course: **vectors**, **probability**, **softmax**, and **gradients**. You do not need formal proofs to begin. You do need a practical intuition for what each idea represents, when it is useful, and where its limits appear. We begin with the representation that lets machines compare meaning.
+
+## A vector is just a list of numbers
+
+`[2.1, 0.8]` is a vector. So is a list of 1,536 numbers describing a sentence. Two mental pictures, both useful:
+
+- **A point/arrow in space**: `[2.1, 0.8]` is the arrow from the origin to that spot. With 2 numbers you can draw it; with 1,536 you can't, but the geometry works identically.
+- **A row of measurements**: each position measures one property. A customer as `[age, orders, days_since_login]`; a word as hundreds of learned properties no one individually named.
+
+Once values are represented as vectors, geometry provides useful notions of **distance** and **direction** between them.
+
+## Similarity is an angle
+
+Play with two vectors and watch three numbers:
+
+<VectorExplorer />
+
+The most common measure here is **cosine similarity**, which measures the *angle* between vectors while ignoring their lengths:
+
+- Pointing the same way → cosine ≈ **1** (similar)
+- Perpendicular → cosine ≈ **0** (unrelated)
+- Opposite → cosine ≈ **−1** (opposed)
+
+The **dot product** is the core operation used to compute it: multiply matching positions, then add the results (`a·b = a₁b₁ + a₂b₂ + …`). When Module 7 compares query and key vectors, and Module 9 retrieves chunks with similar embeddings, the systems use this same arithmetic in many more dimensions.
+
+Cosine similarity is a ranking signal, not a universal measure of correctness. A score such as `0.92` is meaningful only for a particular embedding model, dataset, and task. Choose acceptance thresholds with representative examples instead of importing a threshold from another system.
+
+<Check
+  question="Two sentence embeddings have cosine similarity 0.92. What does this mean?"
+  options={[
+    "The sentences share at least 92% of their words",
+    "Their vectors point in nearly the same direction, which suggests the embedding model represents the sentences as semantically related",
+    "Both sentences are 92 tokens long",
+    "One sentence caused the other"
+  ]}
+  answer={1}
+  explanation="Cosine measures agreement in direction. Embedding models are trained so that this direction often reflects semantic similarity, although the score must be calibrated for the model and task. Word overlap is not required."
+  hint="What does cosine measure: words, lengths, or angles?"
+/>
+
+## Matrices: many vectors, one grip
+
+A **matrix** is a grid of numbers, which you can also view as a stack of vectors. Multiplying a vector by a matrix transforms it by rotating, stretching, or remixing its components into a new vector. Matrix multiplication accounts for much of a neural network's computation, alongside biases, nonlinearities, normalization, routing, and other operations introduced later. You do not need to hand-compute large matrices in this course. You do need to recognize that most model parameters are learned numbers stored in matrices and related tensors.
+
+<Check
+  question="A neural network layer transforms a 768-number vector into a new 768-number vector. Mechanically, this is…"
+  options={[
+    "…a database lookup",
+    "…a matrix multiplication (plus a nonlinearity): the layer's learned numbers remix the input vector into the output vector",
+    "…random shuffling",
+    "…string concatenation"
+  ]}
+  answer={1}
+  explanation="Many layers apply a learned weight matrix and then add operations such as a bias and nonlinearity. GPUs are well suited to these highly parallel numerical operations, which is why they are widely used for AI workloads."
+  hint="What operation are GPUs famous for accelerating?"
+/>
+
+<Callout type="tip">
+**Dimensions beyond three use the same arithmetic.** A 1,536-dimensional embedding contains 1,536 learned coordinates. Individual coordinates are usually not named, independently meaningful properties, but distance, angle, and matrix operations still work as they do in two dimensions.
+</Callout>
+
+<GoDeeper>
+  <VideoEmbed id="fNk_zzaMoSs" title="Vectors | Chapter 1, Essence of linear algebra" creator="3Blue1Brown" />
+  <LinkCard href="https://www.3blue1brown.com/topics/linear-algebra" title="Essence of Linear Algebra (series)" source="3Blue1Brown" why="A clear visual series for developing the geometric intuition behind this lesson." />
+</GoDeeper>
+
+## Practice: test a similarity rule
+
+Write five pairs of short sentences: two clearly similar, two clearly unrelated, and one ambiguous. Predict their relative similarity before using an embedding tool. Compare the measured ranking with your prediction, record one surprising result, and explain why a production threshold would need a larger representative dataset.

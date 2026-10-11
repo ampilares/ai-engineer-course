@@ -1,0 +1,71 @@
+The frontier of applied AI moves monthly, but the *judgment* you've built is stable. This lesson surveys a few advanced techniques (enough to recognize and evaluate them) and then addresses the skill that outlasts every model release: staying current without drowning.
+
+## Advanced retrieval, in brief
+
+When basic hybrid RAG (Module 9) plateaus, these are the usual next moves: each earns its complexity only against measured need:
+
+- **Query rewriting / expansion**: reformulate the user's messy question into better search queries before retrieving. Big wins on conversational and underspecified queries.
+- **Multi-hop retrieval**: retrieve, read, then retrieve again based on what you learned (an agentic pattern from Module 10) for questions no single chunk answers.
+- **GraphRAG** (build a knowledge graph over the corpus so retrieval can traverse relationships, not just similarity) powerful for "how do these entities connect?" questions.
+- **Contextual retrieval / better chunk context**: attach surrounding context to each chunk before embedding, improving recall on ambiguous fragments.
+
+The meta-lesson repeats: **measure first (recall@k on your eval set), add complexity only where the numbers demand it.** Every technique here is a cost (in latency, money, and maintenance) that a retrieval eval must justify.
+
+<Check
+  question="Your RAG assistant handles single-fact questions well but fails on 'how does our refund policy interact with the EU cooling-off rules?', which needs information from two separate documents. Which technique most directly targets this?"
+  options={[
+    "Raising temperature",
+    "Multi-hop retrieval (retrieve, read, retrieve again) so the system can gather and connect information from multiple sources no single chunk contains",
+    "A larger single chunk size for everything",
+    "Fine-tuning the generator"
+  ]}
+  answer={1}
+  explanation="Questions requiring synthesis across documents exceed single-shot retrieval. Multi-hop (an agentic retrieval loop) gathers the pieces iteratively, but confirm the need on your eval set before adding the latency."
+  hint="How many separate documents must be consulted, and can one retrieval get them all?"
+/>
+
+## The skill that doesn't expire
+
+Specific APIs, model names, and SOTA techniques churn constantly, and this course was deliberately built so that almost nothing you learned depends on them. The durable layer:
+
+- **The primitives**: tokens, embeddings, attention, retrieval, tool loops, evals, least privilege. New models are new implementations of these; the concepts hold.
+- **The judgment**: workflow before agent, evals before optimization, build before framework, human authority for consequential actions, measure before you move. These are stances, not versions.
+- **The engineering**: reliability, observability, cost discipline, security. AI-specific in detail, timeless in principle.
+
+To stay current efficiently, follow a small set of primary sources, such as provider engineering blogs, official documentation, research papers, and a carefully chosen newsletter. When a new technique appears, ask which primitive it uses, what it costs, how you would evaluate it, and how it can fail. Build a small experiment when the technique is relevant. Implementation and measurement produce more durable understanding than passive reading.
+
+<Check
+  question="A new retrieval technique is trending with impressive benchmark numbers. Applying this course's judgment, your first move is…"
+  options={[
+    "Adopt it immediately across production: the benchmarks are impressive",
+    "Ask what primitive it extends, what it costs in latency/complexity, and how it scores on YOUR eval set for YOUR task: then adopt only if it beats your current approach on your data",
+    "Ignore all new techniques as hype",
+    "Wait for a provider to make it the default"
+  ]}
+  answer={1}
+  explanation="Benchmarks are someone else's task. The trained reflex (locate the primitive, price the complexity, evaluate on your own data) is exactly what keeps you current without chasing every trend. This reflex is the real graduation."
+  hint="Whose task did that benchmark measure: theirs or yours?"
+/>
+
+<Callout type="tip">
+You now have a practical mental model that connects neural-network foundations with production systems, SLOs, evaluations, security, and product decisions. The capstone asks you to demonstrate that you can apply and defend those connections in one bounded system.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://www.anthropic.com/engineering" title="Anthropic Engineering blog" source="anthropic.com" why="A primary source for applied technique: read with this course's evaluate-don't-adopt reflex." />
+  <LinkCard href="https://simonwillison.net/" title="Simon Willison's blog" source="simonwillison.net" why="A pragmatic, hype-resistant running commentary on what's actually new and useful in applied LLMs." />
+</GoDeeper>
+
+## Advanced retrieval is conditional routing
+
+Hard corpora often need more than one retrieval path. Route exact identifiers to keyword search, structured constraints to SQL, relationship questions to graph traversal, and broad semantic questions to hybrid text search. Parent-child retrieval can match small sections while returning their larger context. Multi-query retrieval can improve recall but multiplies cost and noise. Context compression can save tokens while risking loss of qualifying details.
+
+Agentic retrieval, where a model iteratively searches, reads, and reformulates, earns its complexity only on questions that genuinely require multiple evidence-gathering steps. Bound queries, sources, steps, and spend; preserve the full evidence trail; and compare against a strong single-pass baseline.
+
+To stay current, separate durable interfaces and evals from replaceable implementations. Maintain a technology radar with “adopt, trial, assess, hold,” record why each dependency exists, subscribe to provider deprecation/security notices, and schedule upgrade rehearsals. A release announcement is a hypothesis, not a migration reason.
+
+## Guided build: an upgrade or retrieval bake-off
+
+Choose one advanced technique or new model. Define the failure bucket it should improve and a representative held-out set. Compare it with the current baseline on quality, safety, latency, cost, complexity, and operability.
+
+Document the decision in an architecture record, including migration effort, fallback, and a review date. If the candidate does not produce a material net gain, record “hold” as a successful result. Disciplined rejection is part of expert engineering.

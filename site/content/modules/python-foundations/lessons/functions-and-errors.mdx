@@ -1,0 +1,84 @@
+A program of any size is built from **functions**: named, reusable blocks that take inputs and return outputs. Functions are also where this course's engineering standards begin: typed signatures, one job per function, and honest error handling.
+
+## Defining and calling
+
+```python
+def net_to_gross(net: float, rate: float = 0.19) -> float:
+    """Add tax to a net amount."""
+    return net * (1 + rate)
+
+price = net_to_gross(100.0)        # 119.0: rate used its default
+special = net_to_gross(100.0, 0.07)  # 107.0
+```
+
+Read the pieces: `def` starts a definition; parameters in parentheses are the inputs; `-> float` announces what comes back; the indented body runs when *called*, not when defined; `return` hands the result to the caller. The `"""docstring"""` describes the function for humans (and, later, for AI tools reading your code).
+
+The type hints (`net: float`) don't change how the code runs (Python stays dynamic) but they document intent, let tools catch mistakes before runtime, and are non-negotiable style in this course.
+
+<Check
+  question="What does this function return for f(3)? "
+  options={[
+    "Nothing: it only prints",
+    "9: the body computes 3 * 3 and returns it",
+    "6: Python multiplies by 2 by default",
+    "An error"
+  ]}
+  answer={1}
+  explanation="def f(x: int) -> int: return x * x: calling f(3) evaluates the body with x = 3 and returns 9. Printing and returning are different: return hands a value back for further use."
+  hint="The body is `return x * x`."
+/>
+
+<PythonPractice
+  title="Write a function"
+  instructions="Define a function `classify(amount)` that returns the string 'high' if amount is greater than 1000, and 'low' otherwise."
+  starter={"def classify(amount: float) -> str:\n    # your code here\n    ...\n"}
+  test={"assert classify(5000) == 'high'\nassert classify(1000) == 'low'\nassert classify(3) == 'low'\nprint('classify() works!')"}
+  solution={"def classify(amount: float) -> str:\n    if amount > 1000:\n        return \"high\"\n    return \"low\""}
+/>
+
+## When things go wrong: exceptions
+
+Code fails: files are missing, text isn't a number, networks drop. Python signals failure by **raising an exception**, which crashes the program *unless you catch it*:
+
+```python
+def parse_amount(text: str) -> float | None:
+    """Turn '4,180.00' into a number; None if it isn't one."""
+    try:
+        return float(text.replace(",", ""))
+    except ValueError:
+        return None
+```
+
+The pattern: `try` the risky thing; `except SpecificError` handles that failure. Two professional habits, both previewing Module 3:
+
+- **Catch the specific exception**, not everything. A bare `except:` silences bugs you needed to see.
+- **Turn failures into data** where callers can act on it: here, `None` means "not a number", and the `float | None` hint tells everyone to expect that.
+
+<Check
+  question="Why is `except ValueError:` better than a bare `except:` in parse_amount?"
+  options={[
+    "It runs faster",
+    "A bare except also swallows unrelated bugs (typos, wrong variables), hiding real defects; catching only ValueError handles the one failure you expect and lets everything else surface loudly",
+    "Bare excepts are not valid Python",
+    "There is no difference"
+  ]}
+  answer={1}
+  explanation="Handle the failures you anticipate; let the ones you didn't anticipate crash visibly so you learn about them. Silencing everything is how corrupted data flows quietly through systems."
+  hint="What else could go wrong inside the try block besides bad input?"
+/>
+
+<PythonPractice
+  title="Handle bad input"
+  instructions="Write `safe_int(text)` that returns the integer form of text, or -1 if the text is not a valid integer. Use try/except with ValueError."
+  starter={"def safe_int(text: str) -> int:\n    # try to convert with int(text); return -1 on ValueError\n    ...\n"}
+  test={"assert safe_int('42') == 42\nassert safe_int('oops') == -1\nassert safe_int('-7') == -7\nprint('safe_int() handles both paths!')"}
+  solution={"def safe_int(text: str) -> int:\n    try:\n        return int(text)\n    except ValueError:\n        return -1"}
+/>
+
+<Callout type="note">
+**Why the fuss about error paths in lesson two?** Because Module 3 will show that production AI systems are mostly error handling around one model call, and engineers who treat failure as a first-class output write systems that survive reality. You're learning it as a reflex, not a retrofit.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.python.org/3/tutorial/errors.html" title="Errors and Exceptions" source="python.org" why="The official chapter on try/except, with the full picture of exception types." />
+</GoDeeper>

@@ -1,0 +1,36 @@
+{
+  "slug": "engineering-foundations",
+  "number": 3,
+  "title": "Engineering Foundations",
+  "phase": "foundations",
+  "summary": "Python, APIs, SQL, testing, and Git: the reliable-plumbing skills every AI system stands on.",
+  "outcomes": [
+    "Move data between files, APIs, and a database with typed, tested Python",
+    "Explain HTTP status codes, authentication, timeouts, and retries",
+    "Query and design simple relational tables",
+    "Use Git and tests as your safety net"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "why-engineering-first",
+      "title": "Why AI engineering starts without AI",
+      "minutes": 25
+    },
+    {
+      "slug": "apis-and-http",
+      "title": "Talking to APIs: HTTP from first principles",
+      "minutes": 28
+    },
+    {
+      "slug": "data-and-sql",
+      "title": "Storing data: files, SQL, and SQLite",
+      "minutes": 27
+    },
+    {
+      "slug": "testing-and-git",
+      "title": "Tests and Git: your safety net",
+      "minutes": 24
+    }
+  ]
+}

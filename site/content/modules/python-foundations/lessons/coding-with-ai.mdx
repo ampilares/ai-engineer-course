@@ -1,0 +1,66 @@
+You are learning to code in the first era where AI writes most of the code. That's an accelerant if you use it deliberately and a trap if you don't, and since this entire course is about engineering *with* AI, using AI *to build* is itself a core skill. This lesson sets the working discipline you'll use for the next seventeen modules.
+
+## The one rule
+
+**You may keep only code you can explain.** Line by line, out loud, including *why* it's there. Borrowed code you can't explain is a liability you've signed for: you can't debug it, can't modify it safely, and can't answer for it in a review, or an incident.
+
+This rule isn't anti-AI; it's what makes heavy AI use *sustainable*. Explain-ability is the difference between learning with a tireless tutor and outsourcing your own competence.
+
+## Two modes, used on purpose
+
+- **Tutor mode (default while learning):** you write the code; AI explains concepts, reviews your attempt, and answers "why doesn't this work?": ideally *without* handing you the full solution first. "Explain what's wrong with my loop, but don't fix it for me" is a legitimate and powerful prompt.
+- **Pair mode (default once fluent):** AI drafts; you specify, review, and decide. The skills that matter shift up a level (writing precise specifications and reviewing critically) but they *rest on* being able to write the code yourself. That's why this module made you type every exercise.
+
+<Check
+  question="You're stuck on the collections exercise. Which use of an AI assistant best serves you at this stage?"
+  options={[
+    "Paste the exercise and submit whatever code comes back",
+    "Ask it to explain why your attempt fails and give a hint: then write the fix yourself and re-run",
+    "Ask it to do the whole module for you overnight",
+    "Avoid AI entirely; assistance is cheating"
+  ]}
+  answer={1}
+  explanation="The struggle-then-hint loop is where the skill forms; the paste-and-submit loop forms nothing. AI as tutor accelerates learning; AI as answer machine replaces it. (And option 4 throws away the era's best tutor.)"
+  hint="Which option leaves you able to solve the next one alone?"
+/>
+
+## Reviewing AI code: the checklist
+
+When AI drafts code for you (increasingly often from Module 3 on), review it like a senior engineer reviews a junior's PR:
+
+1. **Read every line.** If a line is mysterious, ask the assistant to explain it: then decide if it survives.
+2. **Check the failure paths first.** Does it handle the empty list, the missing key, the malformed input, the timeout? AI-generated code is notoriously sunny-day biased.
+3. **Test it on an edge case** before trusting it: you know from this module that `[]`, `None`, and bad input are where truth lives.
+4. **Watch for invented APIs.** Assistants sometimes call functions that don't exist (you'll recognize this in Module 7 as hallucination). If you don't know the library, verify against its docs.
+5. **Keep your naming and style.** You own this codebase; generated code adapts to it, not the reverse.
+
+<Check
+  question="An assistant writes a parser for your invoice files. It runs perfectly on the sample file. Before relying on it you should…"
+  options={[
+    "Ship it: it worked on the sample",
+    "Feed it an empty file, a malformed file, and a file with missing fields, and read every line: sunny-day success says nothing about the failure paths where parsers actually break",
+    "Ask the assistant if it's sure, and trust a yes",
+    "Rewrite it from scratch on principle"
+  ]}
+  answer={1}
+  explanation="Review + adversarial testing is the discipline. 'Are you sure?' invites confident agreement (models aim to please: Module 7 explains why), and blind rewrites waste the assistance. Verify like an engineer."
+  hint="Where do parsers break: the happy path or the edges?"
+/>
+
+## Prompting an assistant is specification-writing
+
+You'll formally learn prompting in Module 8, but the seed is here: the quality of AI help tracks the quality of your request. Compare:
+
+> "write code to process the file"
+
+> "Write a Python function `load_invoices(path: str) -> list[dict]` that reads a JSON file containing a list of invoice objects, skips entries missing a 'total' field (counting them), and returns the valid ones. Use try/except for file-not-found. Type hints and a docstring."
+
+The second gets near-perfect results because it *is* a specification: signature, behavior, edge cases, style. Vague requests produce plausible-but-wrong code: a sentence you'll hear again about every AI system in this course.
+
+<Callout type="note">
+**Module project: build something yours.** With AI as tutor, write a small script on your machine: read a JSON file of records (invent your own domain), validate each entry, print a summary, and write the cleaned data to a new file. Every line must pass the explain-it-aloud test. This is the ancestor of every system you'll build here.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://www.anthropic.com/engineering/claude-code-best-practices" title="Agentic coding best practices" source="Anthropic" why="How professionals structure work with AI coding tools: specs, review loops, and guardrails." />
+</GoDeeper>

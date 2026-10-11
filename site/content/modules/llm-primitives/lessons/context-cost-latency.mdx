@@ -1,0 +1,73 @@
+A feature that costs $0.002 per call is a rounding error in a demo and a $6,000/month line item at 100k calls/day. Cost and latency engineering isn't optimization theater: it decides which AI products are economically possible at all. The good news: Module 7 gave you the mechanics; this lesson turns them into levers.
+
+## Know your unit economics: before launch
+
+Play with the real levers:
+
+<CostLatencyCalculator />
+
+Work through your own numbers and internalize the hierarchy the widget demonstrates:
+
+1. **Output tokens dominate**: ~5× the price of input and the source of nearly all latency (one forward pass each). *Asking for shorter outputs is the cheapest optimization in existence*: request the JSON only, cap verbosity, skip the pleasantries.
+2. **Prompt caching can materially reduce repeated-input cost.** Many providers discount eligible cached prefix tokens, but eligibility, retention, and discount rates vary. Place stable instructions, schemas, and examples before variable request data when the provider's caching rules support that structure. Confirm savings from usage records and current pricing rather than assuming a fixed percentage.
+3. **Model tiering beats model loyalty.** Route the easy 80% (classification, routing, cleanup) to a small cheap model; save the frontier model for the hard 20%. Your evaluation set in Module 14 identifies the quality boundary with evidence.
+
+<Check
+  question="A prompt is 3,200 tokens: 2,900 of fixed rules/schema/examples + 300 of per-document text. Volume is high. The single most impactful cost change is…"
+  options={[
+    "Put the static 2,900 tokens first and enable prompt caching, cutting most input cost ~90%",
+    "Remove all few-shot examples to shorten the prompt",
+    "Switch every call to the largest model for fewer retries",
+    "Batch documents so each prompt is 30,000 tokens"
+  ]}
+  answer={0}
+  explanation="The static prefix is cache-eligible: same tokens, same KV computation, ~10% price. Deleting examples saves less and costs quality; giant batches often hurt quality and blow past output limits."
+  hint="Which 2,900 tokens are identical on every single call?"
+/>
+
+## Latency: what the user feels
+
+- **Time-to-first-token (TTFT)**: dominated by prefill (prompt length) and queueing.
+- **Generation time**: output length × per-token time. Long answers *are* slow answers.
+
+The main engineering levers are to generate fewer tokens, stream when users benefit from progressive output, parallelize independent calls, use smaller models on latency-sensitive paths, move suitable work to asynchronous processing, and set timeouts with product-appropriate fallbacks. Measure both time to first useful output and time to completion because streaming improves perceived responsiveness without reducing total work.
+
+## Budgets are architecture
+
+Decide *before building*: cost per task ≤ €X, p95 latency ≤ Y seconds. These constraints pick your models, prompt sizes, and caching strategy, not the other way around. And meter from day one: log tokens and cost per request, aggregated by feature. A recursive summarizer with no cost cap is a credit-card incident with extra steps; per-feature budgets with alerts are the smoke detector.
+
+<Check
+  question="Your assistant feels sluggish. Traces show TTFT 400ms but 25 seconds of generation for ~900-token answers. Users skim only the first lines. What do you do first?"
+  options={[
+    "Constrain answers to be dramatically shorter and stream them: attacking generation length, the actual bottleneck users don't even consume",
+    "Move to a bigger model for smarter answers",
+    "Double max_tokens so answers are more complete",
+    "Remove the timeout so answers always finish"
+  ]}
+  answer={0}
+  explanation="The trace localizes the pain: 900 sequential output tokens. Shorter answers cut latency and cost simultaneously, and users already told you (by skimming) that the length was waste. Streaming fixes the perceived wait for what remains."
+  hint="Which phase is slow, and who asked for 900 tokens?"
+/>
+
+<Callout type="tip">
+The pattern behind this whole lesson: **measure, then move the biggest lever.** Traces before optimizations; budgets before launches; evals before model swaps. That triad is Module 14's entire personality, arriving early.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching" title="Prompt caching" source="docs.anthropic.com" why="The exact mechanics and pricing of the static-prefix trick." />
+  <LinkCard href="https://artificialanalysis.ai/" title="Artificial Analysis" source="artificialanalysis.ai" why="Independent cross-provider price/latency/quality benchmarks for tiering decisions." />
+</GoDeeper>
+
+## Budget the full request path
+
+Token price is only one cost. Include embeddings, reranking, retries, tool calls, moderation, storage, human review, and idle capacity for self-hosted models. Express economics per completed business outcome, not per API call. A cheaper model that doubles review work or retry rate can be more expensive overall.
+
+Break latency into queue time, network connection, provider time to first token, generation time, tool execution, and validation. Percentiles matter: p95 and p99 expose the slow users hidden by an average. Set an end-to-end deadline, then allocate a budget to each stage. Parallelize independent retrieval or tool calls, but bound concurrency so one traffic spike does not create rate-limit failures.
+
+Cache only when the reuse key is correct. Include relevant model, prompt, schema, permissions, and source-data version. Never let one tenant’s cached answer serve another. Semantic caching has a higher false-hit risk than exact caching and needs task-specific evaluation.
+
+## Guided build: cost and latency envelope
+
+For your structured worker, estimate low, typical, and high input/output token counts and monthly volume. Add retry and human-review rates. Calculate cost per accepted item and the break-even volume against the manual process.
+
+Instrument 50 calls and report p50/p95 total latency plus stage timings. Test a smaller model, shorter context, exact cache, and bounded parallelism one at a time. Choose a configuration that meets an explicit quality floor, p95 target, and monthly budget. Record the rejected options and why; architecture is the set of trade-offs you can defend.

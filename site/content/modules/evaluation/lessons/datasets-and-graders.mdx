@@ -1,0 +1,72 @@
+An eval is only as honest as its dataset and only as scalable as its graders. This lesson builds both.
+
+## The dataset: representative, adversarial, alive
+
+Start with 30–50 examples; grow continuously. Source them from reality, not imagination:
+
+- **Real traffic**: sampled inputs from production (or the pilot), stratified across the segments that matter (Module 5's habit: by customer type, document format, language).
+- **The failure museum**: every production failure becomes a permanent eval case. This is the compounding loop: each bug fixed is a bug that can never silently return.
+- **Edge cases and adversarial inputs**: empty documents, wrong-language emails, prompt-injection attempts, the unanswerable questions from Module 9.
+
+Keep the dataset **versioned** (it's code), and split it mentally the way Module 5 taught: the set you iterate against daily, and a held-out slice you check rarely, because a prompt tuned against the same 50 examples for weeks has quietly overfit to them.
+
+<Check
+  question="After three weeks of tuning prompts against the same 50 eval examples, scores hit 96%, but users still complain. The likely explanation is…"
+  options={[
+    "Users are wrong",
+    "You've overfit to the eval set: weeks of peeking optimized for those 50 specifics: the same disease as tuning on a test set in Module 5; refresh from real traffic and keep a held-out slice",
+    "The model got worse overnight",
+    "96% is too low; aim for 100%"
+  ]}
+  answer={1}
+  explanation="Iterating against a fixed set optimizes for that set. The cure is the classical one: held-out data and a dataset that keeps growing from production reality."
+  hint="What happened when Module 5 tuned against the validation set too long?"
+/>
+
+## Graders: three tiers, cheapest first
+
+1. **Code checks**: exact and free. Schema validity, required fields, length caps, citation presence, the abstention phrase, forbidden content. A surprising share of "quality" is checkable this way; always exhaust this tier first.
+2. **Reference comparison**: when a gold answer exists (extraction, classification), compare structurally: field-by-field, order-insensitive where appropriate.
+3. **LLM as judge:** For open-ended qualities such as faithfulness, tone, or helpfulness, ask a model to grade outputs against a written rubric. Grade one criterion at a time and prefer a small, well-defined scale over an ambiguous 1–10 score. Model judges make large evaluation runs practical, but they are also probabilistic systems, so:
+
+**Calibrate the judge before trusting it.** Grade 30–50 outputs yourself; run the judge on the same set; measure agreement. Below ~85–90%, fix the rubric or the judge prompt: don't deploy a grader that disagrees with you. And know the standard judge biases: preferring longer answers, preferring its own model family's phrasing, position bias in A/B comparisons (mitigate by randomizing order and grading criteria separately).
+
+<Check
+  question="Your LLM judge rates a response 'faithful' that a human reviewer flags as contradicting the source policy. What's the correct process response?"
+  options={[
+    "Trust the judge; it's cheaper than the human",
+    "Add the case to the judge-calibration set, fix the rubric/judge prompt until it catches this class of error, and re-measure human-judge agreement: the judge is a system you engineer, not an oracle",
+    "Stop using LLM judges forever",
+    "Average the two opinions"
+  ]}
+  answer={1}
+  explanation="Judges are calibrated instruments: human agreement is their accuracy metric, disagreements are their training curriculum. Uncalibrated judges automate your blind spots at scale."
+  hint="What do you do when any measuring instrument disagrees with ground truth?"
+/>
+
+## Wiring it into the pipeline
+
+The full loop, which is the module project: dataset in Git → runner executes your real system → graders score → report compares to the last baseline → **CI gate**: critical criteria regression blocks the merge. Failures link to their traces (next lesson) so "score dropped" turns into "these six examples broke, here's each one's trace."
+
+<Callout type="tip">
+Grade **stages separately** wherever your system has them: retrieval vs. generation (Module 9), extraction vs. routing (Module 13). End-to-end scores tell you *that* something broke; stage scores tell you *what*.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.ragas.io/" title="Ragas" source="docs.ragas.io" why="Ready-made graders for RAG faithfulness and relevance: see how judge prompts are engineered." />
+  <LinkCard href="https://github.com/openai/evals" title="OpenAI Evals" source="GitHub" why="A mature open-source eval harness worth borrowing structure from." />
+</GoDeeper>
+
+## Dataset quality is an engineering discipline
+
+Sample from real traffic by time, source, user segment, difficulty, and outcome; do not let the most vocal failure mode become the entire set. Deduplicate near-identical cases and separate development, regression, and held-out samples. Version examples and labels append-only where possible. When an expected answer changes because policy changed, record effective dates rather than silently editing the past.
+
+Human grading needs a rubric with observable criteria and examples at decision boundaries. Measure agreement on an overlap sample. Disagreement can expose an ambiguous rubric or genuinely subjective task; neither is solved by forcing one label without discussion.
+
+An LLM judge should receive only the information required to grade and should return criterion-level reasoning or evidence plus a score. Test order bias, verbosity bias, self-preference, prompt injection inside candidate outputs, and performance by segment. Calibrate against blinded human labels and route uncertain or high-impact cases to people.
+
+## Guided build: validate the grader
+
+Create a rubric with at least three criteria and grade 40 outputs using deterministic checks where possible, two human raters on an overlap set, and an LLM judge. Include deliberately fluent-but-wrong, terse-but-correct, injected, and borderline examples.
+
+Report human agreement, judge agreement with the adjudicated labels, false-pass and false-fail rates, segment performance, and cost. Choose an operating threshold and manual-review zone. The judge is acceptable only for the decisions its validation supports; a convenient score is not evidence of validity.

@@ -1,0 +1,31 @@
+{
+  "slug": "production-llmops",
+  "number": 16,
+  "title": "Production & LLMOps",
+  "phase": "production",
+  "summary": "Run AI systems reliably at an acceptable unit cost: deployment shapes, reliability patterns, monitoring, cost engineering, and incidents.",
+  "outcomes": [
+    "Choose a deployment shape and manage versioned prompts, models, and configs",
+    "Apply reliability patterns: timeouts, fallbacks, circuit breakers, graceful degradation",
+    "Run to SLOs and a cost budget with dashboards and alerts",
+    "Handle incidents and roll back safely"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "deploy-and-reliability",
+      "title": "Deployment shapes and reliability patterns",
+      "minutes": 27
+    },
+    {
+      "slug": "cost-and-slos",
+      "title": "Cost engineering and SLOs",
+      "minutes": 26
+    },
+    {
+      "slug": "incidents-and-rollback",
+      "title": "Incidents, rollback, and the improvement loop",
+      "minutes": 27
+    }
+  ]
+}

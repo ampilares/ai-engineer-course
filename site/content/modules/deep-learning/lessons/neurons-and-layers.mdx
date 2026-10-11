@@ -1,0 +1,86 @@
+Classical ML asked *you* to supply the features: you decided that "days since last login" predicts churn. Deep learning's bargain is different: give the network raw-ish data and enough examples, and it will **learn the features itself**. That single idea is why neural networks conquered images, audio, and text: domains where nobody can hand-write the features.
+
+## A neuron is a weighted opinion
+
+One artificial neuron does something almost insultingly simple:
+
+```text
+output = activation( w₁·x₁ + w₂·x₂ + … + wₙ·xₙ + b )
+```
+
+Multiply each input by a **weight** (how much this neuron cares about it), add a **bias**, then pass the sum through a nonlinear **activation function**: most commonly ReLU, which is just `max(0, x)`: negative sums become zero, positive sums pass through.
+
+The weights and biases are the model's **parameters**: the numbers training will adjust. When someone says a model "has 7 billion parameters," this is what they're counting.
+
+<Check
+  question="Why is the nonlinear activation function essential? Without it, a stack of many layers…"
+  options={[
+    "…runs too fast to be accurate",
+    "…collapses into a single linear transformation, no matter how many layers you stack",
+    "…uses too much memory",
+    "…can only process images"
+  ]}
+  answer={1}
+  explanation="A composition of linear functions is still linear: 100 linear layers equal one. The nonlinearity between layers is what lets networks bend and fold input space into arbitrarily complex decision boundaries."
+  hint="What is a linear function of a linear function?"
+/>
+
+## Layers: features made of features
+
+Stack neurons into a **layer**; stack layers into a network. Each layer transforms the previous layer's output, and something remarkable emerges in trained networks: a hierarchy of abstraction:
+
+- In image models: early layers detect edges → middle layers combine edges into textures and parts → late layers respond to whole objects.
+- In language models (Module 7): early layers handle spelling-and-syntax-ish patterns → later layers track meaning, entities, and long-range relationships.
+
+Nobody programs this hierarchy. It **emerges** because it's an efficient way to compress the data's structure: the network discovers that "eye-like patch" is a useful intermediate concept for recognizing faces, without ever being told eyes exist.
+
+The output of a late layer (a list of, say, 768 numbers describing the input) is called a **representation**, or when used standalone, an **embedding**. Hold that word: Modules 7 and 9 are built on it.
+
+<Check
+  question="A trained face-recognition network has middle-layer neurons that respond to eye-like patterns, though 'eye' appears nowhere in the code or labels. How?"
+  options={[
+    "An engineer secretly labeled the eyes",
+    "Gradient-based training discovered that detecting such intermediate patterns reduces loss: useful features emerge rather than being programmed",
+    "The camera firmware detects eyes first",
+    "It's a coincidence that disappears on retraining"
+  ]}
+  answer={1}
+  explanation="Training only pushes parameters to reduce prediction error. Intermediate features like edges → eye-patches → faces arise because hierarchies are an efficient path to low loss. Representation learning IS deep learning's superpower."
+  hint="What is the only signal training optimizes, and what kinds of internal structure help it?"
+/>
+
+## When depth helps and when it does not
+
+| Data | Winner (usually) | Why |
+|---|---|---|
+| Tabular rows/columns | Gradient-boosted trees | Features already exist; depth adds little but opacity |
+| Images, audio, video | Deep networks | Features are unlistable; hierarchy is everything |
+| Text | Transformers (Module 7) | Same, plus long-range structure |
+| Tiny datasets | Classical ML or transfer learning | Deep nets from scratch need data to burn |
+
+The practical corollary: as an AI engineer you will mostly **use** pretrained deep models rather than train them from scratch, but you'll debug, evaluate, and fine-tune them, which requires exactly the mental model this module builds.
+
+<GoDeeper>
+  <VideoEmbed id="aircAruvnKk" title="But what is a neural network?" creator="3Blue1Brown" />
+  <LinkCard href="https://playground.tensorflow.org/" title="Neural Network Playground" source="TensorFlow" why="Train a tiny network in your browser and watch decision boundaries form: the perfect companion to this lesson." />
+</GoDeeper>
+
+## Shapes are the language of neural networks
+
+Most implementation bugs in deep learning are shape bugs. A batch of 32 RGB images at 224×224 has shape `[32, 3, 224, 224]`; a text batch might be `[batch, sequence, hidden]`. Each layer declares a transformation between shapes. Write those shapes beside the code and assert them at important boundaries.
+
+Parameters are learned values; **hyperparameters** such as layer count, hidden width, learning rate, and batch size are choices made by the engineer. More parameters increase capacity but also memory, compute, data needs, and overfitting risk. The useful question is not “How large can the model be?” but “What is the smallest model that clears the target on representative data?”
+
+Representations can be inspected. Project embeddings, find nearest neighbours, and compare clusters by label or segment. These views do not prove what a model “understands,” but they can reveal duplicates, mislabeled examples, spurious correlations, and domains the representation separates poorly.
+
+## Guided build: trace a forward pass
+
+Implement a tiny network for a small classification problem. For one batch, record:
+
+- the input, hidden activation, logits, and probability shapes;
+- the number of trainable parameters in each layer;
+- what changes when the activation is removed;
+- nearest neighbours for three learned representations;
+- one case where a simpler model performs as well.
+
+Explain the complete path from one input to one prediction without using “the model figures it out” as a step. The goal is a debuggable mental model, not a large network.

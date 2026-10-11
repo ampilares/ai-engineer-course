@@ -1,0 +1,55 @@
+An AI product is a portfolio of replaceable decisions: model, retrieval, tools, orchestration, storage, evaluation, safety, and user interface. Architecture should make the risky assumptions testable and the likely changes reversible.
+
+## Start with quality attributes
+
+Before selecting a provider or framework, rank the system’s needs: task quality, evidence, privacy, data residency, latency, availability, scale, customization, portability, auditability, and cost. A realtime assistant and a nightly extraction worker should not inherit the same architecture by default.
+
+Draw trust boundaries and data flow. Identify where untrusted content enters, where sensitive data is stored or sent, where identity is checked, and where side effects occur. Define stable internal contracts for model completion, embeddings, retrieval, tools, and traces. Keep provider-specific features behind those boundaries while allowing deliberate use when their measured value is real.
+
+<Check
+  question="What does provider portability realistically mean?"
+  options={[
+    "Own stable internal interfaces and evals so a migration is bounded, while accepting that behavior still requires revalidation",
+    "Assume every model returns identical behavior without testing",
+    "Avoid all useful provider features",
+    "Change provider names with search-and-replace in every file"
+  ]}
+  answer={0}
+  explanation="Interface control reduces migration scope; behavioral portability still depends on representative evaluation."
+  hint="Can an interface guarantee model behavior?"
+/>
+
+## Build, buy, or combine
+
+Buying can accelerate commodity capabilities and transfer some operations; building gives control where workflow, data, or differentiation matters. Compare total lifecycle cost: implementation, integration, evaluation, review, usage, support, compliance, migration, and incident response. Check data-use terms, retention, sub-processors, access control, export, deletion, regional availability, rate limits, deprecation policy, and exit path with the appropriate organizational reviewers.
+
+Run a time-boxed bake-off on your eval set. Do not evaluate only the happy-path API. Test failure semantics, observability, permission model, quotas, bulk export, and support responsiveness. A low unit price can be offset by high invalid-output or review rates.
+
+## Record decisions and triggers
+
+An architecture decision record states context, options, evidence, decision, consequences, rollback, and review trigger. Triggers might be quality below a floor, volume beyond a threshold, provider deprecation, new residency requirement, or cost per outcome above budget. Without a trigger, “temporary” architecture can become permanent by inertia.
+
+Use model routing only when classification overhead and error do not erase savings. Version the route and evaluate each path; premium cases, failures, or high-risk actions may need a different model or human queue.
+
+<Check
+  question="Vendor A costs half per call but doubles human review rate. Which comparison is correct?"
+  options={[
+    "Compare total cost per accepted business outcome, including review and failures",
+    "Choose A because token price is the only cost",
+    "Ignore quality until after full rollout",
+    "Average the two vendors' names"
+  ]}
+  answer={0}
+  explanation="Product economics include retries, review, error recovery, operations, and outcome quality, not just API price."
+  hint="What work is created after the call?"
+/>
+
+## Guided build: architecture decision pack
+
+Design your candidate product with a context diagram and one sequence diagram for success plus one for failure. Mark trust, authorization, storage, model/tool boundaries, observability, and human authority. Compare at least three implementation options: hosted integrated service, composable hosted components, and a local/open component where feasible.
+
+Run a 30-case bake-off or evidence review. Score quality, latency, cost per accepted task, privacy/security fit, operational burden, portability, and exit cost. Write the decision record with rejected options, fallback, and a measurable review trigger. The design passes when another engineer can identify where each critical requirement is enforced.
+
+<Callout type="tip">
+Framework choice should follow the architecture. First implement the primitive path and its tests; then adopt an abstraction only when it removes measured repeated work without hiding controls you need.
+</Callout>

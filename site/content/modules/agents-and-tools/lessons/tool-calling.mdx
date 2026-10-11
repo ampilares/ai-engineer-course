@@ -1,0 +1,83 @@
+A language model can only emit tokens. It cannot query your database, send an email, or check today's weather. **Tool calling** bridges that gap, and it's worth being precise about the mechanism, because the precision is where the safety lives: *the model never executes anything; it asks, your code acts.*
+
+## The mechanism, step by step
+
+You describe available tools as schemas in the request:
+
+```json
+{
+  "name": "get_order",
+  "description": "Fetch an order's status, items, and delivery info by its ID.",
+  "input_schema": {
+    "type": "object",
+    "properties": { "order_id": { "type": "string", "description": "e.g. ORD-4821" } },
+    "required": ["order_id"]
+  }
+}
+```
+
+The exchange then goes:
+
+1. User: *"Where is my order ORD-4821?"*
+2. Model responds, not with prose but with a **structured tool-use request**: `get_order({"order_id": "ORD-4821"})`. Generation pauses.
+3. **Your code** validates the arguments, decides whether to comply, executes the real API call, and returns the result as a new message.
+4. The model continues, now conditioned on real data: *"Your order shipped Tuesday and arrives tomorrow."*
+
+Everything you know from structured outputs applies because a tool call is schema-constrained generation. The security consequence is architectural: the model proposes a call, while application code decides whether and how to execute it. Argument validation, authentication, authorization, rate limits, approval gates, and result validation all belong in the application-controlled execution step.
+
+<Check
+  question="In the tool-calling protocol, what does the model actually do when it 'uses' a tool?"
+  options={[
+    "It executes the API call directly from the provider's servers",
+    "It emits a structured request naming the tool and arguments; your code validates, executes (or refuses), and returns the result for the model to continue with",
+    "It downloads the tool's code and runs it in a sandbox",
+    "It guesses what the tool would return"
+  ]}
+  answer={1}
+  explanation="The model only ever produces tokens. Execution, validation, and refusal happen in your code, which is exactly where every safety control attaches."
+  hint="Who owns step 3?"
+/>
+
+## Designing tools the model can use well
+
+Tool schemas are prompts (the model reads them to decide what to call), so the same craft applies:
+
+- **Descriptions decide behavior.** "Fetch an order's status, items, and delivery info by ID" tells the model *when* this tool is the answer. Vague descriptions produce wrong tool choices.
+- **Few, distinct tools beat many overlapping ones.** If `search_orders` and `find_order` coexist, the model will choose wrongly at the worst time.
+- **Design errors as information.** Return `{"error": "order not found; IDs look like ORD-1234"}` and the model can recover sensibly; return a bare stack trace and it will flail.
+- **Read tools ≠ write tools.** `get_order` is harmless; `issue_refund` moves money. Separate them mentally now: the next lesson builds the entire safety story on that line.
+
+<Check
+  question="Your agent keeps calling search_products when users ask about their orders. The most likely fix is…"
+  options={[
+    "A bigger model",
+    "Rewriting tool names and descriptions so each tool's purpose and applicability are unmistakable, and removing overlap between tools",
+    "Adding ten more tools for variety",
+    "Raising temperature so it explores other tools"
+  ]}
+  answer={1}
+  explanation="Tool choice is conditioned on the schemas you wrote. Ambiguous or overlapping descriptions produce misrouting; sharp, distinct ones fix it: the same show-don't-hope logic as prompting."
+  hint="What information does the model use to pick a tool?"
+/>
+
+<Callout type="note">
+Tool calling also lets a model request facts that were not placed in context in advance. Your application may assemble retrieval context before the model call, or the model may request `search_knowledge_base` as a tool during the run. Both patterns still require authorization, evidence tracking, bounded results, and retrieval evaluation.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.anthropic.com/en/docs/build-with-claude/tool-use/overview" title="Tool use documentation" source="docs.anthropic.com" why="The full request/response protocol this lesson summarized, with runnable examples." />
+</GoDeeper>
+
+## Treat every tool as a typed capability
+
+A tool schema is an API contract for a non-deterministic caller. Use a narrow verb, unambiguous field names, enums, formats, examples, and explicit defaults. Avoid a universal `run_command` or `call_api` tool: broad capabilities are difficult to select correctly, authorize, or audit. Return compact structured results with stable error codes so the model can distinguish “not found,” “not allowed,” and “temporarily unavailable.”
+
+The application, not the model, validates arguments, authenticates the user, authorizes the specific resource, executes the call, and validates the result. A model-generated tool call is a proposal. For write operations, add an idempotency key and display the exact effect before approval. Do not automatically retry ambiguous, non-idempotent side effects.
+
+Tool outputs are untrusted input too. A web page or ticket can contain instructions aimed at the model. Label results as data, minimize what is returned, and never expand privileges because a tool result asks you to.
+
+## Guided build: one safe read and one guarded write
+
+Implement a read-only search tool and a write tool such as creating a draft ticket. Test valid use, missing arguments, unknown enum values, unauthorized resource IDs, timeout, duplicate write, and malicious instructions inside a result.
+
+Record the proposed call, validated arguments, authorization decision, approval identity where required, execution result, and correlation ID. Build an eval set of 30 requests containing cases where no tool should be used. The deliverable passes when invalid or unauthorized proposals cannot reach the underlying service and repeated approved requests have at-most-once effect.

@@ -1,0 +1,184 @@
+[
+  {
+    "id": "gh-q01",
+    "type": "single",
+    "prompt": "The single highest-signal artifact in an AI project portfolio is…",
+    "options": [
+      { "id": "a", "text": "…an evals/ folder with a representative dataset, graders, and honestly reported results" },
+      { "id": "b", "text": "…an animated logo and badge wall" },
+      { "id": "c", "text": "…a very long feature list" },
+      { "id": "d", "text": "…screenshots of the chat UI" }
+    ],
+    "answer": "a",
+    "explanation": "Evals prove you measure what you build: the discipline employers struggle to hire for and tutorials never produce."
+  },
+  {
+    "id": "gh-q02",
+    "type": "single",
+    "prompt": "Why do three deep projects beat twelve shallow ones in a portfolio?",
+    "options": [
+      { "id": "a", "text": "Depth in evaluations, failure handling, and decision records provides verifiable evidence of engineering judgment; project count alone does not" },
+      { "id": "b", "text": "Reviewers can't count past three" },
+      { "id": "c", "text": "GitHub limits visible repositories" },
+      { "id": "d", "text": "They don't; more is always better" }
+    ],
+    "answer": "a",
+    "explanation": "The scarce skill is making systems trustworthy, not making models respond. Depth carries that signal; a dozen weekend demos carry none."
+  },
+  {
+    "id": "gh-q03",
+    "type": "single",
+    "prompt": "Reporting '92% accuracy; fails on handwritten invoices; failure analysis below' rather than 'high accuracy' is strategically smart because…",
+    "options": [
+      { "id": "a", "text": "…honest limits read as senior, survive technical probing, and lend credibility to the claims that ARE strong; inflated claims collapse in the first screen" },
+      { "id": "b", "text": "…it lowers expectations so any job feels easy" },
+      { "id": "c", "text": "…recruiters skip the details anyway" },
+      { "id": "d", "text": "…it isn't; always present only wins" }
+    ],
+    "answer": "a",
+    "explanation": "Interviews probe claims two questions deep. Measured honesty is the presentation style of people who've actually operated systems."
+  },
+  {
+    "id": "gh-q04",
+    "type": "single",
+    "prompt": "In an AI system-design interview, the strongest opening move is…",
+    "options": [
+      { "id": "a", "text": "…clarifying the job: who uses it, at what volume, and what an error costs: before proposing any architecture" },
+      { "id": "b", "text": "…naming your favorite framework" },
+      { "id": "c", "text": "…proposing fine-tuning the largest model" },
+      { "id": "d", "text": "…drawing a multi-agent swarm" }
+    ],
+    "answer": "a",
+    "explanation": "Requirements before architecture signals seniority in thirty seconds, and the answers genuinely change the right design."
+  },
+  {
+    "id": "gh-q05",
+    "type": "multi",
+    "prompt": "Which elements belong in a winning AI system-design answer? Select all that apply.",
+    "options": [
+      { "id": "a", "text": "A small eval set before any tuning" },
+      { "id": "b", "text": "Deterministic steps where possible; the model only where ambiguity earns it" },
+      { "id": "c", "text": "Approval gates on consequential actions, and named failure modes (retrieval miss, provider outage, injection)" },
+      { "id": "d", "text": "A promise that the model won't make mistakes" }
+    ],
+    "answer": ["a", "b", "c"],
+    "explanation": "Evals, workflow-first judgment, and volunteered risk analysis are the three senior signals. Promising a mistake-free model signals the opposite."
+  },
+  {
+    "id": "gh-q06",
+    "type": "single",
+    "prompt": "Asked about a tool you've never used, the strongest interview response is…",
+    "options": [
+      { "id": "a", "text": "…admit the gap, then reason from primitives: what it must solve, what you'd measure on your eval set, what risks you'd check" },
+      { "id": "b", "text": "…bluff; probing is rare" },
+      { "id": "c", "text": "…redirect to a memorized topic" },
+      { "id": "d", "text": "…go silent" }
+    ],
+    "answer": "a",
+    "explanation": "They're hiring your process for the unknown: daily life in this field. Honest gap + transferable framework routinely outscores cached facts; bluffs die on the second probe."
+  },
+  {
+    "id": "gh-q07",
+    "type": "single",
+    "prompt": "For someone currently employed in a non-AI role, the most reliable route to production AI experience is usually…",
+    "options": [
+      { "id": "a", "text": "…building a measured, guarded automation for their own team's workflow: domain knowledge, data access, and a willing first user are advantages outside candidates lack" },
+      { "id": "b", "text": "…quitting to apply at research labs" },
+      { "id": "c", "text": "…waiting until feeling fully ready" },
+      { "id": "d", "text": "…collecting more certificates first" }
+    ],
+    "answer": "a",
+    "explanation": "The internal transition converts existing access into production evidence (and negotiating leverage) without passing anyone's résumé filter first."
+  },
+  {
+    "id": "gh-q08",
+    "type": "single",
+    "prompt": "The first-90-days playbook prioritizes a boring high-volume workflow over a flashy agent project because…",
+    "options": [
+      { "id": "a", "text": "…trust compounds from delivered, measured, adopted wins, and low-blast-radius, high-ROI automations are where those live; earned trust then funds ambition" },
+      { "id": "b", "text": "…agents are always a mistake" },
+      { "id": "c", "text": "…new hires aren't allowed interesting work" },
+      { "id": "d", "text": "…flashy projects are harder to demo" }
+    ],
+    "answer": "a",
+    "explanation": "The unadopted impressive demo is the classic new-AI-hire failure. A grateful team saying 'this saved us 30 hours a week' is career capital."
+  },
+  {
+    "id": "gh-q09",
+    "type": "single",
+    "prompt": "When reporting AI work to leadership, the effective framing is…",
+    "options": [
+      { "id": "a", "text": "…outcomes: cycle time, error rate, hours saved, and the human controls in place" },
+      { "id": "b", "text": "…the architecture: models, rerankers, and frameworks used" },
+      { "id": "c", "text": "…token counts and GPU specs" },
+      { "id": "d", "text": "…a live demo with no numbers" }
+    ],
+    "answer": "a",
+    "explanation": "Leadership funds outcomes. 'Deployed a RAG agent' earns a nod; 'cut cycle time 80% with approvals on payments' earns the next project."
+  },
+  {
+    "id": "gh-q10",
+    "type": "single",
+    "prompt": "Freelance AI automation work is priced most effectively…",
+    "options": [
+      { "id": "a", "text": "…on the value of hours and errors saved (the measured ROI), not on your hours spent" },
+      { "id": "b", "text": "…strictly per hour worked" },
+      { "id": "c", "text": "…by model API costs plus 10%" },
+      { "id": "d", "text": "…as low as possible to win volume" }
+    ],
+    "answer": "a",
+    "explanation": "Your Module 13 ROI table IS the sales deck: a workflow saving €4,000/month justifies value pricing regardless of build hours."
+  },
+  {
+    "id": "gh-q11",
+    "type": "single",
+    "prompt": "In a coding interview where AI assistants are permitted, interviewers are primarily watching…",
+    "options": [
+      { "id": "a", "text": "…how you specify, review, and verify the generated code: the failure-path checks and edge-case tests you apply" },
+      { "id": "b", "text": "…your typing speed" },
+      { "id": "c", "text": "…whether you avoid the assistant entirely" },
+      { "id": "d", "text": "…how large a prompt you can write" }
+    ],
+    "answer": "a",
+    "explanation": "AI-permitted interviews test the review discipline from Module 1: read every line, test the edges, verify unfamiliar APIs. That's the on-the-job skill."
+  },
+  {
+    "id": "gh-q12",
+    "type": "single",
+    "prompt": "Which job posts signal a team where this course's skills fit best?",
+    "options": [
+      { "id": "a", "text": "Ones mentioning evals, reliability, production LLM features, or human-in-the-loop: regardless of exact title" },
+      { "id": "b", "text": "Only posts titled exactly 'AI Engineer'" },
+      { "id": "c", "text": "Research positions requiring publications" },
+      { "id": "d", "text": "Any post containing the word 'AI'" }
+    ],
+    "answer": "a",
+    "explanation": "Titles are noisy; job descriptions aren't. Teams that talk about evaluation and production reliability are the ones practicing this course's discipline."
+  },
+  {
+    "id": "gh-q13",
+    "type": "single",
+    "prompt": "The interview stage that most directly reuses your capstone preparation is…",
+    "options": [
+      { "id": "a", "text": "…the judgment/behavioral round: its questions are the oral-defense prompts (biggest error source? highest blast radius? why an LLM at all?)" },
+      { "id": "b", "text": "…the typing test" },
+      { "id": "c", "text": "…salary negotiation" },
+      { "id": "d", "text": "…none; interviews and the course are unrelated" }
+    ],
+    "answer": "a",
+    "explanation": "You rehearsed the hard questions while defending your capstone. The interview asks them with a logo attached."
+  },
+  {
+    "id": "gh-q14",
+    "type": "single",
+    "prompt": "The career habit this course says compounds most over years is…",
+    "options": [
+      { "id": "a", "text": "…keep building small end-to-end things, evaluate new techniques on your own data, and write publicly about what you learn" },
+      { "id": "b", "text": "…memorizing each month's SOTA model names" },
+      { "id": "c", "text": "…changing jobs every six months" },
+      { "id": "d", "text": "…collecting certifications" }
+    ],
+    "answer": "a",
+    "explanation": "Primitives + evals + building + a public record of judgment: the same durable layer from Module 17, applied to a career."
+  }
+]

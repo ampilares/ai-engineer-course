@@ -1,0 +1,78 @@
+Machine learning fits a function from examples of inputs and outcomes so it can predict outcomes for new inputs. Libraries can train the function, but the central engineering skill is deciding **whether and how** a business question should become a prediction problem.
+
+## The framing checklist
+
+Take "we want to reduce customer churn." Before any model:
+
+1. **What exactly is the label?** "Churned" = cancelled within 90 days? Stopped logging in? The label definition *is* the problem definition, and vague labels produce confident nonsense.
+2. **When is the prediction made, and what is known at that moment?** If you predict churn on June 1st, every feature must be knowable *on June 1st*. Using July's support tickets to predict June churn works brilliantly in training and never in reality.
+3. **What action follows the prediction?** A churn score nobody acts on is a dashboard ornament. If the action is "offer a discount," you need the prediction *early enough* for the offer to matter.
+4. **What does a wrong prediction cost?** Missing a churner (false negative) loses a customer; a needless discount (false positive) costs margin. These costs are rarely equal, and they should drive your metric choice, coming up in lesson 3.
+
+<Check
+  question="A hospital wants to predict which patients will miss appointments, using each patient's full visit history. Which framing mistake is most tempting here?"
+  options={[
+    "Using too few features",
+    "Including information (like later visits or the outcome's aftermath) that wouldn't be known at prediction time",
+    "Making the model too small",
+    "Predicting a number instead of a category"
+  ]}
+  answer={1}
+  explanation="The prediction must be made before the appointment, using only what's known then. Any feature that leaks post-appointment information (cancellation notes, subsequent bookings) inflates training performance and evaporates in deployment."
+  hint="Re-read framing question 2: what is known at the moment of prediction?"
+/>
+
+## Supervised, unsupervised, and the honest third option
+
+- **Supervised learning**: you have labeled examples (spam/not-spam, price paid). Most business ML is here.
+- **Unsupervised learning**: no labels; find structure (cluster similar customers, detect anomalies).
+- **The honest third option: don't use ML.** If the rule is expressible ("flag orders over €10k from new accounts"), write the rule. It's transparent, testable, and free. ML earns its complexity only when rules can't capture the pattern.
+
+This "simplest thing first" instinct returns in every later module: swap "rules vs ML" for "workflow vs agent" and it's the same judgment.
+
+## Features, labels, and the dataset
+
+A supervised dataset is a table: **feature** columns (what you know) and one **label** column (what you want to predict). Two hygiene rules dominate everything else:
+
+- **Provenance:** know where every column comes from and when it becomes available. A feature's *availability time* matters as much as its predictive power.
+- **Representativeness:** the model will meet tomorrow's data, not yesterday's. If training data is all from December, expect surprises in July. Data changing under a deployed model even has a name (**drift**) and Module 14 builds the monitoring to catch it.
+
+<Check
+  question="A rule can perfectly express your fraud policy: 'flag transfers over €10,000 to new accounts.' Why is implementing the rule better than training a model on historical flags?"
+  options={[
+    "Rules run on cheaper servers",
+    "The rule is exact, explainable, testable, and free: ML would only approximate it with added opacity and maintenance cost",
+    "Models cannot process transfer amounts",
+    "It isn't better; ML is always preferable"
+  ]}
+  answer={1}
+  explanation="ML approximates patterns from data. When you already know the pattern exactly, an approximation is strictly worse. Save model complexity for patterns rules can't express, and keep this instinct for the agent modules."
+  hint="What does ML add when the answer is already fully specified?"
+/>
+
+<GoDeeper>
+  <LinkCard href="https://developers.google.com/machine-learning/crash-course" title="Machine Learning Crash Course" source="Google" why="Free, visual, exercise-driven coverage of every concept in this module." />
+  <LinkCard href="https://www.kaggle.com/learn/intro-to-machine-learning" title="Intro to Machine Learning" source="Kaggle Learn" why="Hands-on notebooks to practice framing and fitting on real datasets." />
+</GoDeeper>
+
+## From business decision to training row
+
+Good framing begins with the decision that will consume the prediction. “Predict churn” is incomplete. “Each Monday, rank active subscribers for a retention team that can contact 500 people, using only information available Sunday night, and optimize retained margin after contact cost” is actionable. It specifies the unit, decision time, capacity, available features, and business loss.
+
+Define the **observation window** used to build features and a later **outcome window** used to assign the label. Draw the cutoff time. Any feature created after that cutoff is unavailable at prediction time even if it appears in the warehouse today. Decide how quickly labels arrive; a ninety-day churn label cannot support next-day learning without proxies.
+
+Prediction is justified only when the action changes an outcome. A perfectly predicted event with no available intervention is a dashboard, not a product. Compare against a rule or queue that users already trust, and identify who will act on the score.
+
+## Guided build: write a prediction brief
+
+Choose one candidate problem and write a one-page brief with:
+
+- the entity being scored and the exact prediction moment;
+- the action taken at two different score thresholds;
+- the label and how long it takes to observe;
+- allowed feature sources at the cutoff time;
+- the cost of false positives and false negatives;
+- a non-model baseline;
+- a reason to refuse ML if the decision, label, or intervention is missing.
+
+Create five example rows as they would have existed at prediction time. Mark the feature cutoff and label window on a timeline. Your framing passes when someone could build the dataset without asking what a row means or accidentally using future information.

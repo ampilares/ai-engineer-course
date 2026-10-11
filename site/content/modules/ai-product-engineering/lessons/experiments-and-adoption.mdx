@@ -1,0 +1,65 @@
+A strong offline eval is necessary and insufficient. It shows how a system behaves on a defined dataset; it does not prove that people will use it correctly, that the workflow will improve, or that downstream effects are acceptable. Product evidence continues after deployment.
+
+## Move through evidence stages
+
+Use increasing exposure:
+
+1. **Offline:** tests, evals, security review, and synthetic load.
+2. **Shadow:** process real eligible inputs without showing output or taking action; compare safely.
+3. **Internal/dogfood:** trained users test with support and no high-impact authority.
+4. **Limited pilot:** bounded population, volume, features, and duration with stop conditions.
+5. **Controlled rollout:** expand gradually while preserving comparison and rollback.
+
+Shadow mode cannot measure user behavior, but it exposes latency, integration, traffic mix, and disagreement. A pilot needs enough operational duration to encounter exceptions, reviewer absences, and ordinary workload, not only a scheduled demonstration.
+
+<Check
+  question="What can shadow mode establish well?"
+  options={[
+    "Integration behavior, traffic distribution, latency, and model decisions without exposing users to the output",
+    "Long-term user adoption with certainty",
+    "That approvals work under real responsibility",
+    "That every business outcome will improve"
+  ]}
+  answer={0}
+  explanation="Shadow traffic gives production-shaped technical evidence while withholding the intervention; it cannot measure user response to that intervention."
+  hint="Do users see or act on shadow output?"
+/>
+
+## Experiment on eligible outcomes
+
+Randomize when practical, or use phased rollout/matched cohorts with transparent limitations. Assign by a unit that avoids contamination: if one employee uses both variants and learns from them, request-level randomization may blur the effect. Predefine primary outcome, guardrails, population, duration, exclusions, and analysis. Do not stop the experiment the first day a preferred metric rises.
+
+Model versions can change during a product test only if the change is logged and analyzed; otherwise the intervention is unstable. Track exposure to the exact system version. Segment by task complexity and user experience, averages can hide a system that helps experts while harming novices.
+
+Build the statistical instinct directly: set a true effect (including zero) and watch what small samples claim:
+
+<ABTestSimulator />
+
+## Adoption is a workflow outcome
+
+Measure eligible usage, successful use, correction, abandonment, override, escalation, repeat use, and time shifted elsewhere. Interview non-users and people who stopped using the feature. Low adoption can mean poor fit, missing trust, inadequate training, workflow friction, or a rational rejection of low-quality output.
+
+Create an ownership loop for feedback triage, dataset/eval updates, prompt/model changes, release gates, incident review, and product decisions. Define sunset criteria. An unused or unsafe AI feature should be removed rather than kept to protect a launch narrative.
+
+<Check
+  question="Usage is high because the AI step is mandatory, but task time and error recovery worsen. Is adoption evidence positive?"
+  options={[
+    "No; forced exposure is not realized value, and task outcomes regressed",
+    "Yes; usage alone proves success",
+    "Yes; mandatory tools cannot be evaluated",
+    "No; all AI features should be optional forever"
+  ]}
+  answer={0}
+  explanation="Adoption metrics need agency and outcome context. Mandatory use can create high usage while making the workflow worse."
+  hint="Did people choose it, and did the job improve?"
+/>
+
+## Guided build: pilot and lifecycle plan
+
+Turn the module prototype into a staged evidence plan. Define offline gates, shadow metrics, pilot population, exposure assignment, primary outcome, guardrails, stop conditions, support owner, rollback, and decision date. Create an event taxonomy that links exposure to system version and downstream outcome without collecting unnecessary personal data.
+
+Run a simulated or limited test with at least 30 cases and five users/peer participants. Report eligibility, exposure, successful use, correction, abandonment, time, quality, and qualitative reasons. End with stop, redesign, continue, or scale. Add quarterly review and sunset triggers so ownership continues after launch.
+
+<Callout type="note">
+Do not turn every interaction into an experiment. High-impact decisions, privacy-sensitive collection, and vulnerable users may require stronger review, consent, or alternative evidence designs.
+</Callout>

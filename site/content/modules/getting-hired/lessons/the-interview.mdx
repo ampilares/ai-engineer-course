@@ -1,0 +1,59 @@
+You have already practised many of the skills assessed in an AI-engineering interview. Capstone defense questions, decision logs, evaluation reports, and project demonstrations all prepare you to explain technical choices under scrutiny. This lesson maps a typical interview process to the evidence you have built.
+
+## The typical loop
+
+1. **Screen**: "walk me through an AI project you built." Your portfolio case study, told in three minutes: problem, architecture, *measured* results, one honest failure. Practice it aloud; rambling here ends loops early.
+2. **Coding**: standard software engineering plus AI-relevant tasks: parse malformed JSON safely, call an API with retries, or chunk documents. If an AI assistant is permitted, the interviewer may assess how carefully you review, test, and correct its output.
+3. **System design**: the centerpiece: *"Design a support assistant over our internal docs"* or *"an invoice-processing pipeline."* This is Modules 8–16 as a conversation.
+4. **Judgment/behavioral**: "tell me about a time the model was wrong in production," "how do you decide agent vs. workflow?" Your decision logs are the answer bank.
+
+## Winning the system-design round
+
+The differentiating move: **interviewers are testing for engineering judgment around the model, not model trivia.** A winning structure:
+
+- **Clarify the job first** (Module 12's discipline): who uses it, what volume, what does an error cost? Thirty seconds of questions signals seniority instantly.
+- **Draw the dependable system skeleton**: ingestion → retrieval or context assembly → model step with schema validation → confidence routing → human queue for consequential cases. Use deterministic code where the path is known and model judgment where ambiguity requires it.
+- **State the quality and control plan**: explain that you would build a representative evaluation set before optimizing, and place an approval gate before consequential actions. Be prepared to justify the dataset, graders, threshold, and approval experience.
+- **Volunteer the failure modes**: what happens when retrieval misses, the provider is down, an injection arrives in a document (Module 15). Naming risks unprompted is the strongest senior signal available.
+
+<Check
+  question="Interview prompt: 'Design an assistant that answers questions over our contracts.' Which opening scores highest?"
+  options={[
+    "'I'd fine-tune the biggest available model on the contracts'",
+    "'First, some questions: who's asking, how current must answers be, and what happens if an answer is wrong? Then I'd sketch retrieval with citations, an abstention path, and an eval set built from real questions'",
+    "'I'd use LangChain'",
+    "'Contracts are too risky for AI'"
+  ]}
+  answer={1}
+  explanation="Clarify → architecture with grounding and abstention → evaluation. It demonstrates the full judgment stack (and correctly avoids fine-tuning for a knowledge problem: Module 17's ladder). Naming a framework is not a design."
+  hint="What did Module 12 say comes before any architecture?"
+/>
+
+## Handling what you don't know
+
+You will be asked questions you cannot answer from memory. Respond by naming the gap and reasoning from stable principles: *"I have not used that vector database, but I would evaluate recall on our dataset, mandatory permission filters, index-update latency, operating cost, and recovery options."* An honest gap followed by a transferable evaluation framework is stronger than an unsupported claim. Interviewers will often probe the evidence behind each assertion.
+
+<Check
+  question="Asked about a retrieval technique you've never used, the strongest response is…"
+  options={[
+    "Bluff confidently: they probably won't probe",
+    "Admit the gap, then reason aloud from primitives: what problem it must solve, what you'd measure (recall@k on your eval set), and what risks you'd check: showing the framework transfers",
+    "Change the subject to something you know",
+    "'I'd ask ChatGPT' with no elaboration"
+  ]}
+  answer={1}
+  explanation="Interviews test how you approach unfamiliar problems. State the gap, reason from stable principles, describe what you would verify, and name the evidence that would support a decision. AI-assisted research can be part of that process, but it does not replace the evaluation framework."
+  hint="What are they actually hiring: your cached facts, or your process for the uncached?"
+/>
+
+## Preparation checklist
+
+- Rehearse your three project narratives aloud (3 minutes each, ending on a measured result and an honest limitation).
+- Redo the capstone oral-defense prompts (Module 17): they are the behavioral round.
+- Do two mock system designs from cold: "AI triage for support tickets," "document pipeline for claims." Time-box 25 minutes, speak aloud, sketch.
+- Review your evaluation results before the interview. Concrete numbers, such as a retrieval metric before and after a chunking change, make your project claims specific and credible.
+
+<GoDeeper>
+  <LinkCard href="https://www.anthropic.com/engineering/building-effective-agents" title="Building Effective Agents" source="Anthropic" why="The workflow-vs-agent judgment interviewers most often probe, from the source." />
+  <LinkCard href="https://interviewing.io/guides/system-design-interview" title="System design interview guide" source="interviewing.io" why="General system-design craft that pairs with this lesson's AI-specific layer." />
+</GoDeeper>

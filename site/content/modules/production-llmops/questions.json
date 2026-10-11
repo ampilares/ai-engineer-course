@@ -1,0 +1,506 @@
+[
+  {
+    "id": "pr-q01",
+    "type": "single",
+    "prompt": "How does LLMOps differ from ordinary DevOps?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The core component is probabilistic, the key dependency is a third-party API with its own outages and pricing, and behavior drifts as inputs/models change: otherwise the usual practices apply"
+      },
+      {
+        "id": "b",
+        "text": "It requires no version control"
+      },
+      {
+        "id": "c",
+        "text": "It has no deployment or monitoring concerns"
+      },
+      {
+        "id": "d",
+        "text": "It is entirely unrelated to DevOps"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Three twists layered on standard operations: nondeterminism, an external model dependency, and drift. Everything you know about deploys, monitoring, and rollback still holds."
+  },
+  {
+    "id": "pr-q02",
+    "type": "single",
+    "prompt": "Prompts, model IDs, and parameters should live in versioned configuration (deployable without code changes) because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…provider model deprecations become config swaps, prompt regressions revert in seconds, and config gets the same review + eval gate as code"
+      },
+      {
+        "id": "b",
+        "text": "…configuration files load faster"
+      },
+      {
+        "id": "c",
+        "text": "…prompts are too long for source code"
+      },
+      {
+        "id": "d",
+        "text": "…it hides the prompts from the team"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Config-driven behavior makes model migration and prompt rollback routine operations rather than emergencies, and it still passes through review and evals."
+  },
+  {
+    "id": "pr-q03",
+    "type": "single",
+    "prompt": "Your pinned model retires in 30 days. In a well-built system the migration is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…change the model ID in config, run the eval suite to confirm quality holds, deploy behind a canary, rollback if it regresses"
+      },
+      {
+        "id": "b",
+        "text": "…a multi-week hunt for hardcoded model strings"
+      },
+      {
+        "id": "c",
+        "text": "…impossible without rebuilding"
+      },
+      {
+        "id": "d",
+        "text": "…automatic, requiring nothing from you"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Config + evals turn a scheduled deprecation into a routine swap-evaluate-deploy. Hardcoded IDs and no evals turn it into a fire drill."
+  },
+  {
+    "id": "pr-q04",
+    "type": "single",
+    "prompt": "During a provider outage, which design keeps the product usable?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A circuit breaker failing fast to a fallback (smaller model, cache, or feature-disabled-app-works state) once the provider is detected down"
+      },
+      {
+        "id": "b",
+        "text": "Tight-loop retries against the down provider"
+      },
+      {
+        "id": "c",
+        "text": "A 500 error page for all users"
+      },
+      {
+        "id": "d",
+        "text": "Nothing can be done"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Graceful degradation + circuit breaking isolate the failure to the AI feature. Tight-loop retries worsen the outage and still strand users."
+  },
+  {
+    "id": "pr-q05",
+    "type": "multi",
+    "prompt": "Which reliability patterns belong on every model API call path? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Timeouts with bounded, backed-off retries"
+      },
+      {
+        "id": "b",
+        "text": "Fallbacks (alternate model, cached response, graceful message)"
+      },
+      {
+        "id": "c",
+        "text": "Idempotency for retried/replayed steps"
+      },
+      {
+        "id": "d",
+        "text": "Unlimited retries until the call succeeds"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Timeouts, fallbacks, and idempotency assume the flaky dependency will misbehave. Unlimited retries are a cost and cascading-failure hazard."
+  },
+  {
+    "id": "pr-q06",
+    "type": "single",
+    "prompt": "An AI feature costs €0.04/task while attributable revenue is €0.03/task, and users love it. The engineering priority is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…cost engineering before scaling: negative unit economics means more usage is more loss; apply generate-less, caching, and model tiering until cost/task is sustainable"
+      },
+      {
+        "id": "b",
+        "text": "…scale aggressively because users love it"
+      },
+      {
+        "id": "c",
+        "text": "…ignore cost and focus on usage"
+      },
+      {
+        "id": "d",
+        "text": "…shut the feature down permanently"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Scaling a per-task loss scales the loss. Fix unit economics with the lever hierarchy first; growth then helps instead of hurts."
+  },
+  {
+    "id": "pr-q07",
+    "type": "single",
+    "prompt": "The single cheapest cost optimization for most LLM features is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "Generate fewer output tokens (shorter answers, tighter schemas)"
+      },
+      {
+        "id": "b",
+        "text": "Always switch to the largest model"
+      },
+      {
+        "id": "c",
+        "text": "Increase the context window"
+      },
+      {
+        "id": "d",
+        "text": "Disable caching"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Output tokens dominate cost and latency (Module 7/5). Generating less is free and helps both: the top of the lever hierarchy."
+  },
+  {
+    "id": "pr-q08",
+    "type": "single",
+    "prompt": "Latency SLOs are written on p95/p99 and set per feature because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the mean hides the slow tail users actually feel, and interactive vs. batch workloads have different latency needs"
+      },
+      {
+        "id": "b",
+        "text": "…percentiles are cheaper to compute"
+      },
+      {
+        "id": "c",
+        "text": "…a single global SLO is always best"
+      },
+      {
+        "id": "d",
+        "text": "…means are forbidden in monitoring"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Tail latency represents the experience of slower requests. One global target would misrepresent either the interactive feature or the nightly job, so SLOs should be defined per workload and measured with appropriate percentiles."
+  },
+  {
+    "id": "pr-q09",
+    "type": "single",
+    "prompt": "A prompt change deployed an hour ago is producing wrong outputs in production. Your FIRST action is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…roll back to the last known-good version to stop user impact, then diagnose the reverted change offline"
+      },
+      {
+        "id": "b",
+        "text": "…debug the prompt live in production"
+      },
+      {
+        "id": "c",
+        "text": "…push a quick untested fix"
+      },
+      {
+        "id": "d",
+        "text": "…wait for it to self-resolve"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Mitigate before diagnose. Rollback stops harm in seconds; root cause is then found calmly. Config-versioned prompts make this instant."
+  },
+  {
+    "id": "pr-q10",
+    "type": "single",
+    "prompt": "After resolving an incident, adding the failure to your eval suite accomplishes…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…permanent regression protection, that failure class is automatically caught before any future release"
+      },
+      {
+        "id": "b",
+        "text": "…assigning blame to the author"
+      },
+      {
+        "id": "c",
+        "text": "…inflating the dataset for appearances"
+      },
+      {
+        "id": "d",
+        "text": "…nothing useful"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The failure museum turns each incident into a test. A resolution without a regression case can silently recur."
+  },
+  {
+    "id": "pr-q11",
+    "type": "single",
+    "prompt": "Why write the incident runbook before you need it?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A 2am incident is the wrong time to invent how to roll back, disable a feature, or restore a backup: pre-written procedure is what makes fast, safe response possible"
+      },
+      {
+        "id": "b",
+        "text": "Runbooks are legally mandatory"
+      },
+      {
+        "id": "c",
+        "text": "It replaces the need for monitoring"
+      },
+      {
+        "id": "d",
+        "text": "So the model can read it"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Response speed is a capability built in advance: rollback commands, feature switches, notification paths, and restore steps documented before the crisis."
+  },
+  {
+    "id": "pr-q12",
+    "type": "single",
+    "prompt": "Canary deployment (release to a small traffic fraction first) complements the eval gate because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the eval suite catches known regression classes pre-release; the canary catches real-world problems the eval set didn't anticipate, with limited blast radius"
+      },
+      {
+        "id": "b",
+        "text": "…it makes deploys slower for safety's sake only"
+      },
+      {
+        "id": "c",
+        "text": "…it replaces the need for evals"
+      },
+      {
+        "id": "d",
+        "text": "…canaries are only for databases"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Two independent safety nets: offline evals for anticipated failures, canary + live dashboards for the unanticipated, with rollback ready either way."
+  },
+  {
+    "id": "pr-x01",
+    "type": "single",
+    "prompt": "A blue/green deployment for an AI system means…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…building the new version (config, index, or service) fully alongside the old, verifying it (evals + canary), then switching traffic with instant rollback available"
+      },
+      {
+        "id": "b",
+        "text": "…deploying only at night"
+      },
+      {
+        "id": "c",
+        "text": "…using two cloud providers"
+      },
+      {
+        "id": "d",
+        "text": "…coloring the dashboard"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Full-parallel-then-switch converts risky migrations (model swaps, index rebuilds) into reversible ones. The old version IS the rollback plan."
+  },
+  {
+    "id": "pr-x02",
+    "type": "single",
+    "prompt": "An error budget (the allowed slice of SLO failure) is useful because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…it converts reliability into a spendable resource: budget remaining → ship features; budget exhausted → stop and invest in reliability: an objective arbiter for the eternal argument"
+      },
+      {
+        "id": "b",
+        "text": "…it caps the number of bug reports"
+      },
+      {
+        "id": "c",
+        "text": "…it is a financial accounting term"
+      },
+      {
+        "id": "d",
+        "text": "…errors are free within budget so nobody looks at them"
+      }
+    ],
+    "answer": "a",
+    "explanation": "SLO + error budget turns 'how reliable is reliable enough' into policy, and stops both reliability perfectionism and feature-factory neglect."
+  },
+  {
+    "id": "pr-x03",
+    "type": "single",
+    "prompt": "Cost dashboards should aggregate spend per FEATURE (not just per API key) because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…optimization and accountability happen at feature level: 'summarization costs €90/day, extraction €12/day' directs effort; one blended number directs nothing"
+      },
+      {
+        "id": "b",
+        "text": "…API keys are secret"
+      },
+      {
+        "id": "c",
+        "text": "…providers require it"
+      },
+      {
+        "id": "d",
+        "text": "…features are easier to spell"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Tag every request with its feature. Per-feature unit economics is what makes cost engineering (and budget alerts) actionable."
+  },
+  {
+    "id": "pr-x04",
+    "type": "single",
+    "prompt": "Under a traffic spike, a queue-backed AI pipeline exhibits 'backpressure' correctly by…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…letting the queue lengthen for non-urgent work while workers process at a sustainable rate, rather than overwhelming the model API and causing repeated rate limits"
+      },
+      {
+        "id": "b",
+        "text": "…dropping requests silently"
+      },
+      {
+        "id": "c",
+        "text": "…spawning unlimited workers instantly"
+      },
+      {
+        "id": "d",
+        "text": "…crashing early to shed load"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Queues absorb bursts by design (Module 13). Monitoring queue depth and age tells you when 'absorbing' has become 'drowning': an alert, not a crash."
+  },
+  {
+    "id": "pr-x05",
+    "type": "single",
+    "prompt": "A fallback chain 'primary model → smaller model → cached/static response' should itself be…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…tested regularly (chaos-style): an unexercised fallback that fails during the real outage is two incidents stacked"
+      },
+      {
+        "id": "b",
+        "text": "…assumed to work by design"
+      },
+      {
+        "id": "c",
+        "text": "…secret from the team"
+      },
+      {
+        "id": "d",
+        "text": "…removed once the primary is stable"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Degradation paths rot like manual fallbacks (Module 13) and runbooks. Inject failure deliberately and watch the chain actually catch."
+  },
+  {
+    "id": "pr-x06",
+    "type": "single",
+    "prompt": "Pinning an exact model version in production (vs. auto-tracking 'latest') trades…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…stability for staleness: pinned versions change only when YOU migrate (with evals), while 'latest' imports provider changes untested into production"
+      },
+      {
+        "id": "b",
+        "text": "…nothing; versions are cosmetic"
+      },
+      {
+        "id": "c",
+        "text": "…cost for speed only"
+      },
+      {
+        "id": "d",
+        "text": "…security for convenience"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Model updates are behavior changes. Production wants controlled migrations on your schedule: pin, evaluate the new version, then switch."
+  },
+  {
+    "id": "pr-x07",
+    "type": "single",
+    "prompt": "Which alert is MOST urgent for an AI feature: latency p95 +10%, cost/day +15%, or validation-failure rate 2% → 9%?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Validation failures: a quality cliff usually means an upstream/provider/prompt change actively corrupting outputs; latency and cost drifts hurt slower"
+      },
+      {
+        "id": "b",
+        "text": "Latency, always"
+      },
+      {
+        "id": "c",
+        "text": "Cost, always"
+      },
+      {
+        "id": "d",
+        "text": "None; alerts are noise"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Triage by user harm velocity. A 4.5× jump in schema failures is a correctness incident in progress; the others are trends to investigate."
+  },
+  {
+    "id": "pr-x08",
+    "type": "single",
+    "prompt": "Rate-limit headroom planning means…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…knowing your provider tier's requests+tokens/minute versus your peak usage, with alerting before the ceiling: hitting limits at peak IS an outage for the unlucky requests"
+      },
+      {
+        "id": "b",
+        "text": "…requesting unlimited quota preemptively"
+      },
+      {
+        "id": "c",
+        "text": "…ignoring limits until errors appear"
+      },
+      {
+        "id": "d",
+        "text": "…using one API key per user"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Capacity planning applies to model APIs like any dependency: measure peak, keep margin, alert on approach, and know the upgrade path before you need it."
+  }
+]

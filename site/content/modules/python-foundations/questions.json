@@ -1,0 +1,225 @@
+[
+  {
+    "id": "py-q01",
+    "type": "single",
+    "prompt": "After `x = 10` and then `x = x - 4`, what is x?",
+    "options": [
+      { "id": "a", "text": "6: the right side evaluates with the current x, then the name is reassigned" },
+      { "id": "b", "text": "10: variables can't change" },
+      { "id": "c", "text": "104" },
+      { "id": "d", "text": "An error" }
+    ],
+    "answer": "a",
+    "explanation": "`=` is assignment, not equality: compute the right side (10 − 4), then re-point the name."
+  },
+  {
+    "id": "py-q02",
+    "type": "single",
+    "prompt": "In Python, the indented lines under an `if` statement are…",
+    "options": [
+      { "id": "a", "text": "…the body that runs when the condition is True: indentation IS the structure" },
+      { "id": "b", "text": "…decorative and ignored" },
+      { "id": "c", "text": "…comments" },
+      { "id": "d", "text": "…always executed regardless of the condition" }
+    ],
+    "answer": "a",
+    "explanation": "Python has no braces; consistent indentation defines which lines belong to which block."
+  },
+  {
+    "id": "py-q03",
+    "type": "single",
+    "prompt": "What is the value of `f\"total: {2 + 3}\"`?",
+    "options": [
+      { "id": "a", "text": "'total: 5': f-strings evaluate the expression inside the braces" },
+      { "id": "b", "text": "'total: 2 + 3'" },
+      { "id": "c", "text": "'total: {2 + 3}'" },
+      { "id": "d", "text": "An error" }
+    ],
+    "answer": "a",
+    "explanation": "f-strings interpolate: the {} slot is computed and inserted into the text."
+  },
+  {
+    "id": "py-q04",
+    "type": "single",
+    "prompt": "`return` differs from `print` because…",
+    "options": [
+      { "id": "a", "text": "…return hands a value back to the caller for further use; print only displays text and returns nothing useful" },
+      { "id": "b", "text": "…they are interchangeable" },
+      { "id": "c", "text": "…print is faster" },
+      { "id": "d", "text": "…return only works with numbers" }
+    ],
+    "answer": "a",
+    "explanation": "A function that prints but doesn't return gives its caller None: a classic beginner bug when the result is needed downstream."
+  },
+  {
+    "id": "py-q05",
+    "type": "single",
+    "prompt": "Why does this course require type hints like `def f(x: int) -> str` even though Python runs without them?",
+    "options": [
+      { "id": "a", "text": "They document intent, let tools catch mistakes before runtime, and tell every reader (human or AI) what flows where" },
+      { "id": "b", "text": "They make the code run faster" },
+      { "id": "c", "text": "Python refuses to run without them" },
+      { "id": "d", "text": "They encrypt the function" }
+    ],
+    "answer": "a",
+    "explanation": "Hints don't change execution: they change how safely code can be read, checked, and modified. Non-negotiable style here."
+  },
+  {
+    "id": "py-q06",
+    "type": "single",
+    "prompt": "Why is a bare `except:` considered harmful?",
+    "options": [
+      { "id": "a", "text": "It swallows every failure (including bugs you needed to see) so defects flow silently instead of surfacing" },
+      { "id": "b", "text": "It's a syntax error" },
+      { "id": "c", "text": "It only works in Python 2" },
+      { "id": "d", "text": "It slows the program down" }
+    ],
+    "answer": "a",
+    "explanation": "Catch the specific exception you expect (e.g., ValueError); let the unexpected crash loudly so you learn about it."
+  },
+  {
+    "id": "py-q07",
+    "type": "single",
+    "prompt": "For a dict `d` that may lack the key 'iban', what does `d.get('iban')` do that `d['iban']` doesn't?",
+    "options": [
+      { "id": "a", "text": "Returns None instead of raising KeyError, letting code check and route on absence" },
+      { "id": "b", "text": "Creates the key automatically" },
+      { "id": "c", "text": "Searches all values for 'iban'" },
+      { "id": "d", "text": "Nothing: they're identical" }
+    ],
+    "answer": "a",
+    "explanation": "get() turns absence into a handleable value; [] makes it a crash. Choosing between them is choosing your missing-data policy."
+  },
+  {
+    "id": "py-q08",
+    "type": "single",
+    "prompt": "What does `[x['id'] for x in rows if x['ok']]` compute?",
+    "options": [
+      { "id": "a", "text": "The list of id values from the rows where ok is truthy: filter and transform in one expression" },
+      { "id": "b", "text": "The number of rows" },
+      { "id": "c", "text": "A dict of ids" },
+      { "id": "d", "text": "It's invalid syntax" }
+    ],
+    "answer": "a",
+    "explanation": "A comprehension: for each row, if the condition holds, keep the expression. The everyday pattern of data work."
+  },
+  {
+    "id": "py-q09",
+    "type": "numeric",
+    "prompt": "For amounts = [120, 750, 500, 90], what does sum(a for a in amounts if a >= 500) evaluate to?",
+    "answer": 1250,
+    "tolerance": 0,
+    "explanation": "750 + 500 = 1250. The generator filters first, then sums: 120 and 90 don't qualify."
+  },
+  {
+    "id": "py-q10",
+    "type": "single",
+    "prompt": "Why does the `with open(...) as f:` form beat calling open() without it?",
+    "options": [
+      { "id": "a", "text": "The file is guaranteed to close even if an exception occurs inside the block" },
+      { "id": "b", "text": "It reads files twice as fast" },
+      { "id": "c", "text": "It automatically fixes encoding problems" },
+      { "id": "d", "text": "It's required for JSON files only" }
+    ],
+    "answer": "a",
+    "explanation": "with is cleanup-no-matter-what: no leaked file handles when the happy path fails halfway."
+  },
+  {
+    "id": "py-q11",
+    "type": "single",
+    "prompt": "JSON's objects and arrays correspond to which Python types?",
+    "options": [
+      { "id": "a", "text": "Dicts and lists" },
+      { "id": "b", "text": "Strings and integers" },
+      { "id": "c", "text": "Functions and classes" },
+      { "id": "d", "text": "Files and folders" }
+    ],
+    "answer": "a",
+    "explanation": "json.loads turns {...} into a dict and [...] into a list, which is why the list-of-dicts shape dominates real data."
+  },
+  {
+    "id": "py-q12",
+    "type": "single",
+    "prompt": "Text that is supposed to be JSON arrives from a model. The right way to parse it is…",
+    "options": [
+      { "id": "a", "text": "…json.loads inside try/except, because malformed text raises and that failure needs routing, not a crash" },
+      { "id": "b", "text": "…eval(), which is more flexible" },
+      { "id": "c", "text": "…trusting it: models emit valid JSON" },
+      { "id": "d", "text": "…regular expressions to extract the braces" }
+    ],
+    "answer": "a",
+    "explanation": "Model output is untrusted input. eval() on untrusted text is a security hole; loads-in-try/except is the professional parse."
+  },
+  {
+    "id": "py-q13",
+    "type": "single",
+    "prompt": "Virtual environments (venvs) exist so that…",
+    "options": [
+      { "id": "a", "text": "…each project has isolated package versions, so upgrading one project can't silently break another" },
+      { "id": "b", "text": "…Python runs in the cloud" },
+      { "id": "c", "text": "…code is encrypted at rest" },
+      { "id": "d", "text": "…scripts run without an interpreter" }
+    ],
+    "answer": "a",
+    "explanation": "Per-project isolation plus requirements.txt = reproducible environments: the cure for 'works on my machine'."
+  },
+  {
+    "id": "py-q14",
+    "type": "single",
+    "prompt": "This course's one rule for AI-assisted coding is…",
+    "options": [
+      { "id": "a", "text": "Keep only code you can explain line by line, including why it's there" },
+      { "id": "b", "text": "Never use AI assistance" },
+      { "id": "c", "text": "Accept whatever the assistant writes if it runs" },
+      { "id": "d", "text": "Use AI only for comments" }
+    ],
+    "answer": "a",
+    "explanation": "Explainability keeps you debuggable, reviewable, and accountable: it's what makes heavy AI use sustainable rather than skill-eroding."
+  },
+  {
+    "id": "py-q15",
+    "type": "multi",
+    "prompt": "AI drafts a file parser for you and it works on the sample file. Which review steps are required before trusting it? Select all that apply.",
+    "options": [
+      { "id": "a", "text": "Read every line and query anything mysterious" },
+      { "id": "b", "text": "Test the failure paths: empty file, malformed content, missing fields" },
+      { "id": "c", "text": "Verify unfamiliar library calls against real docs (assistants invent APIs)" },
+      { "id": "d", "text": "Ask the assistant 'are you sure?' and accept a confident yes" }
+    ],
+    "answer": ["a", "b", "c"],
+    "explanation": "Review like a senior engineer: read, adversarially test, verify. 'Are you sure?' invites confident agreement, not verification."
+  },
+  {
+    "id": "py-q16",
+    "type": "single",
+    "prompt": "While learning, the highest-value way to use an AI assistant when stuck is…",
+    "options": [
+      { "id": "a", "text": "…ask why your attempt fails and for a hint, then write the fix yourself" },
+      { "id": "b", "text": "…paste the exercise and submit the answer it returns" },
+      { "id": "c", "text": "…have it complete the whole module overnight" },
+      { "id": "d", "text": "…never ask it anything" }
+    ],
+    "answer": "a",
+    "explanation": "Struggle-then-hint builds the skill; paste-and-submit builds nothing. Tutor mode while learning, pair mode once fluent."
+  },
+  {
+    "id": "py-q17",
+    "type": "short",
+    "prompt": "Which Python keyword starts a function definition? (one word)",
+    "accept": ["def"],
+    "explanation": "def name(params): begins every function definition."
+  },
+  {
+    "id": "py-q18",
+    "type": "single",
+    "prompt": "`\"  Ada \".strip()` evaluates to…",
+    "options": [
+      { "id": "a", "text": "'Ada': leading and trailing whitespace removed" },
+      { "id": "b", "text": "'  Ada '" },
+      { "id": "c", "text": "'ada'" },
+      { "id": "d", "text": "['Ada']" }
+    ],
+    "answer": "a",
+    "explanation": "strip() trims whitespace from both ends: a constant companion in data cleaning."
+  }
+]

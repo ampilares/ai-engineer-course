@@ -1,0 +1,90 @@
+The fastest way to waste a month in ML is to start with the fanciest model. The professional move is the opposite: establish a **naive baseline** in an hour, then let evidence justify every step of added complexity.
+
+## Baselines: the floor you must beat
+
+A baseline is the simplest thing that could possibly work:
+
+- Classification: always predict the most common class.
+- Regression: always predict the mean (or last observed value).
+- Churn: "customers inactive 30+ days will churn."
+
+Baselines are cheap insurance against two failure modes. If your model barely beats the baseline, the features carry little signal: no amount of architecture fixes that. And if the *baseline itself* solves the business problem… ship the baseline; it has no training pipeline to maintain, no drift to monitor, and no GPU bill.
+
+<Check
+  question="Your gradient-boosted model predicts monthly demand with 12% error. 'Predict the same as last month' scores 13%. What's the right conclusion?"
+  options={[
+    "Ship the model: it wins",
+    "The 1-point gain probably doesn't justify a training pipeline, monitoring, and retraining; the features add little beyond momentum: investigate better signals or ship the naive rule",
+    "Ship both models together",
+    "The baseline must be buggy; real models always win big"
+  ]}
+  answer={1}
+  explanation="A complex model that barely beats 'copy last month' is telling you where the predictive power really lives. Complexity has a permanent operating cost: a one-point edge rarely covers it, and better features usually beat better algorithms."
+  hint="What does the tiny gap say about where the signal is?"
+/>
+
+## The classical toolbox that refuses to die
+
+For tabular business data (the majority of real problems), the winning tools are unglamorous:
+
+- **Linear/logistic regression**: fast, interpretable coefficients, hard to beat when relationships are roughly additive. Always a strong second baseline.
+- **Decision trees**: human-readable if/else splits; prone to overfitting alone…
+- **Gradient-boosted trees and random forests:** These ensembles are strong baselines for tabular data and often outperform deep learning when the dataset is structured and not extremely large. Compare them rather than assuming one family will always win.
+
+Deep learning (next module) earns its keep on *unstructured* data (images, audio, and text) where features can't be hand-listed. Knowing which world you're in is a core engineering judgment.
+
+## Error analysis: where the improvement actually lives
+
+A single metric says *how much* the model errs; it never says *why*. The highest-leverage hour in any ML project is reading errors: individually and **by segment**:
+
+```text
+overall error:            9%
+  new customers:         23%   ← the problem lives here
+  existing customers:     6%
+  mobile submissions:    19%   ← and here
+  desktop submissions:    7%
+```
+
+An aggregate 9% looked fine; the breakdown reveals the model is failing specific populations: perhaps features are missing for new customers, perhaps mobile photos are blurry. Each hypothesis suggests a *data* fix, which usually beats a *model* fix.
+
+<Check
+  question="Overall error is 9%, but it's 23% for new customers and 6% for everyone else. What's the highest-leverage next step?"
+  options={[
+    "Try a deeper model on the whole dataset",
+    "Investigate the new-customer segment: what features are missing or different for them, and can that data gap be fixed?",
+    "Remove new customers from the test set to improve the metric",
+    "Lower the decision threshold globally"
+  ]}
+  answer={1}
+  explanation="The aggregate hides a concentrated failure. Understanding why one segment fails (often missing history/features) points at a targeted data fix. Deleting the segment from the test set is metric fraud: the customers still exist."
+  hint="Where is the error concentrated, and what's different about those cases?"
+/>
+
+<Callout type="note">
+**Module project: predictive baseline.** Pick a tabular dataset in your chosen domain. Define the label and prediction moment; make a leakage-safe split; compute a naive baseline; train logistic regression and a tree ensemble; compare precision/recall at a threshold you justify in writing; and break errors down by at least two segments. Publish it as a short model card: intended use, data, metrics, and known failure segments.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://scikit-learn.org/stable/" title="scikit-learn" source="scikit-learn.org" why="The library for everything in this lesson; its user guide doubles as an ML textbook." />
+  <LinkCard href="https://www.kaggle.com/learn/intermediate-machine-learning" title="Intermediate Machine Learning" source="Kaggle Learn" why="Leakage, pipelines, and gradient boosting with runnable notebooks." />
+</GoDeeper>
+
+## Build the improvement ladder
+
+Use a sequence that makes every added complication earn its place:
+
+1. **Business baseline:** the current rule, human process, or “do nothing” outcome.
+2. **Naive statistical baseline:** majority class, last value, mean, or simple keyword rule.
+3. **Interpretable model:** logistic/linear regression or a shallow tree.
+4. **Strong tabular model:** a well-tuned boosted-tree pipeline.
+5. **Specialized complexity:** deep learning only if the data type, volume, and measured gap justify it.
+
+Keep the split and metric fixed while moving up the ladder. Otherwise you cannot attribute improvement. Include inference time, maintenance burden, explanation needs, and data requirements in the comparison; one extra metric point may not pay for a system that is ten times harder to operate.
+
+Error analysis turns the next iteration into evidence. Sample false positives and false negatives, add reason codes, and group them. Common buckets include ambiguous labels, missing context, data quality, distribution shift, and a genuinely hard boundary. Fix label or pipeline defects before tuning the model around them.
+
+## Guided build: publish a model card
+
+Train at least two baselines and one stronger model. Produce a compact model card containing intended use, out-of-scope use, data and split design, metrics with confidence intervals or sample counts, segment results, threshold, latency, known limitations, and monitoring triggers.
+
+Label at least 30 errors by reason. Choose the next change based on the largest actionable bucket, rerun the same evaluation, and record whether it improved that bucket without harming another segment. This experiment, not a leaderboard score, is the module’s completion evidence.

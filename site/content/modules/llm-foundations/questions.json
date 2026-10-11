@@ -1,0 +1,492 @@
+[
+  {
+    "id": "llm-q01",
+    "type": "single",
+    "prompt": "At its core, what single operation does a large language model perform?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Producing a probability distribution over its vocabulary for the next token, repeatedly"
+      },
+      {
+        "id": "b",
+        "text": "Looking up answers in a compressed database of the internet"
+      },
+      {
+        "id": "c",
+        "text": "Planning a full response, then rendering it"
+      },
+      {
+        "id": "d",
+        "text": "Translating text into logic and solving it"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Everything an LLM does is next-token prediction in a loop: no lookup, no whole-response planning. Apparent structure emerges token by token."
+  },
+  {
+    "id": "llm-q02",
+    "type": "single",
+    "prompt": "Why do capabilities like coding and translation emerge from mere next-token training?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Each capability is separately hard-coded by engineers after training"
+      },
+      {
+        "id": "b",
+        "text": "Predicting diverse text well forces the model to internalize the processes that generated the text: capability is a side effect of compression"
+      },
+      {
+        "id": "c",
+        "text": "The model queries external tools during pretraining"
+      },
+      {
+        "id": "d",
+        "text": "They don't; all outputs are memorized verbatim"
+      }
+    ],
+    "answer": "b",
+    "explanation": "To predict the next token of a bug fix or translation, you must model how code and languages work. Skills precipitate out of the objective."
+  },
+  {
+    "id": "llm-q03",
+    "type": "single",
+    "prompt": "Byte-pair encoding builds its vocabulary by…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…repeatedly merging the most frequent adjacent symbol pairs in a corpus until the target vocabulary size is reached"
+      },
+      {
+        "id": "b",
+        "text": "…taking the 100,000 most common dictionary words"
+      },
+      {
+        "id": "c",
+        "text": "…splitting text at every space"
+      },
+      {
+        "id": "d",
+        "text": "…assigning one token per character"
+      }
+    ],
+    "answer": "a",
+    "explanation": "BPE is frequency-driven merging. Common sequences become single tokens; rare strings fragment, which is why code and other languages cost more tokens."
+  },
+  {
+    "id": "llm-q04",
+    "type": "single",
+    "prompt": "What does it mean that two texts have nearby embedding vectors?",
+    "options": [
+      {
+        "id": "a",
+        "text": "They share many literal keywords"
+      },
+      {
+        "id": "b",
+        "text": "They were written by the same author"
+      },
+      {
+        "id": "c",
+        "text": "They express similar meaning as learned from context patterns: the basis of semantic search"
+      },
+      {
+        "id": "d",
+        "text": "They have the same length"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Training places tokens/texts used in similar contexts near each other: meaning becomes geometry. 'Refund not received' and 'my money never came back' are neighbors with zero shared keywords."
+  },
+  {
+    "id": "llm-q05",
+    "type": "single",
+    "prompt": "In self-attention, a token's new representation is computed as…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a weighted average of all tokens' value vectors, weighted by query-key similarity"
+      },
+      {
+        "id": "b",
+        "text": "…a copy of the previous token's vector"
+      },
+      {
+        "id": "c",
+        "text": "…a random mixture refreshed each run"
+      },
+      {
+        "id": "d",
+        "text": "…the maximum of all embedding entries"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Query·key scores → softmax weights → weighted sum of values. Content-dependent routing is what lets 'it' absorb 'animal', or 'street', depending on the sentence."
+  },
+  {
+    "id": "llm-q06",
+    "type": "single",
+    "prompt": "The causal mask in a decoder transformer ensures that…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…each token can attend only to itself and earlier tokens, never to future ones"
+      },
+      {
+        "id": "b",
+        "text": "…toxic tokens are removed"
+      },
+      {
+        "id": "c",
+        "text": "…attention weights are all equal"
+      },
+      {
+        "id": "d",
+        "text": "…the model runs faster on GPUs"
+      }
+    ],
+    "answer": "a",
+    "explanation": "You can't peek at the future you're trying to predict. The mask zeroes attention to later positions during training and generation."
+  },
+  {
+    "id": "llm-q07",
+    "type": "single",
+    "prompt": "For a deterministic extraction service (same input → same output), you set…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…temperature near 0"
+      },
+      {
+        "id": "b",
+        "text": "…temperature 2.0"
+      },
+      {
+        "id": "c",
+        "text": "…top-p to 1.0 with high temperature"
+      },
+      {
+        "id": "d",
+        "text": "…nothing; sampling never affects consistency"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Near-zero temperature concentrates probability on the argmax token: (near-)greedy, reproducible decoding. High temperature is for creative variety."
+  },
+  {
+    "id": "llm-q08",
+    "type": "single",
+    "prompt": "Why are output tokens both slower and priced higher than input tokens?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Output tokens are transmitted over slower networks"
+      },
+      {
+        "id": "b",
+        "text": "Generation requires one sequential forward pass per output token, while input is prefetched in parallel"
+      },
+      {
+        "id": "c",
+        "text": "Output tokens use a larger vocabulary"
+      },
+      {
+        "id": "d",
+        "text": "Providers round prices randomly"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Prefill is parallel; decoding is inherently sequential: N output tokens ≈ N model runs. Hence 'generate less' is the cheapest optimization."
+  },
+  {
+    "id": "llm-q09",
+    "type": "single",
+    "prompt": "What does the KV cache accomplish during generation?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It stores each token's keys and values so earlier positions aren't recomputed at every generation step"
+      },
+      {
+        "id": "b",
+        "text": "It caches final answers for repeated users"
+      },
+      {
+        "id": "c",
+        "text": "It compresses the model weights"
+      },
+      {
+        "id": "d",
+        "text": "It prevents hallucinations"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Without it, step N would recompute attention inputs for all N-1 prior tokens. It's also why cached prompt prefixes can be discounted: their KV entries already exist."
+  },
+  {
+    "id": "llm-q10",
+    "type": "single",
+    "prompt": "A base model answers a question with more questions. Which stage exists to fix precisely this?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Post-training (SFT + preference optimization), which teaches assistant behavior on top of pretrained knowledge"
+      },
+      {
+        "id": "b",
+        "text": "More pretraining on more internet text"
+      },
+      {
+        "id": "c",
+        "text": "A larger context window"
+      },
+      {
+        "id": "d",
+        "text": "Lower temperature"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The knowledge is present; the answering persona isn't. SFT provides the format; preference optimization sharpens helpfulness, honesty, and tone."
+  },
+  {
+    "id": "llm-q11",
+    "type": "single",
+    "prompt": "Which is the correct mechanical account of hallucination?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The model must always emit plausible tokens; where plausibility and truth diverge (rare facts, citations, post-cutoff events), fluent falsehood wins"
+      },
+      {
+        "id": "b",
+        "text": "A software bug that providers keep failing to patch"
+      },
+      {
+        "id": "c",
+        "text": "The model deliberately deceives users it dislikes"
+      },
+      {
+        "id": "d",
+        "text": "Random bit-flips in GPU memory"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Generation optimizes plausibility; truth is only correlated. The fix is engineering around it: retrieval grounding, verification, abstention paths, not scolding the model."
+  },
+  {
+    "id": "llm-q12",
+    "type": "single",
+    "prompt": "Your assistant must answer from the company's constantly-changing internal policies. The right primary tool is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…RAG: retrieve the current relevant policy text into context at question time"
+      },
+      {
+        "id": "b",
+        "text": "…fine-tuning the model on last year's policy PDF"
+      },
+      {
+        "id": "c",
+        "text": "…a higher temperature so it guesses adventurously"
+      },
+      {
+        "id": "d",
+        "text": "…waiting for the next pretraining run to include your policies"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Knowledge problem → retrieval. Fine-tuning bakes in a snapshot that staleness immediately invalidates; prompting alone lacks the facts. (Behavior → prompt; format at scale → fine-tune.)"
+  },
+  {
+    "id": "llm-q13",
+    "type": "multi",
+    "prompt": "Which statements about context windows are true? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Content outside the window simply doesn't exist for the model"
+      },
+      {
+        "id": "b",
+        "text": "Overflow truncation happens silently: the model won't tell you what it never saw"
+      },
+      {
+        "id": "c",
+        "text": "Models recall the middle of very long contexts as reliably as the edges"
+      },
+      {
+        "id": "d",
+        "text": "Attention cost grows roughly quadratically with context length"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "d"
+    ],
+    "explanation": "The 'lost in the middle' effect makes (c) false: edges are recalled better, which is why key instructions go at the start or end, and why retrieval beats context-stuffing."
+  },
+  {
+    "id": "llm-q14",
+    "type": "short",
+    "prompt": "What is the name of the attention-based neural architecture, introduced in 2017, that underlies modern LLMs? (one word)",
+    "accept": [
+      "transformer",
+      "the transformer",
+      "transformers"
+    ],
+    "explanation": "The transformer ('Attention Is All You Need', 2017) replaced recurrence with self-attention and made today's LLMs possible."
+  },
+  {
+    "id": "llm-x01",
+    "type": "single",
+    "prompt": "'Prefill' vs 'decode' in LLM inference: which statement is correct?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Prefill ingests the whole prompt in parallel (fast per token); decode generates one token at a time sequentially (slow per token), which is why long OUTPUTS hurt latency more than long inputs"
+      },
+      {
+        "id": "b",
+        "text": "Both phases are equally sequential"
+      },
+      {
+        "id": "c",
+        "text": "Decode happens before prefill"
+      },
+      {
+        "id": "d",
+        "text": "Prefill only happens for cached prompts"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The two-phase structure explains pricing and latency asymmetries, and why 'generate less' is the top optimization."
+  },
+  {
+    "id": "llm-x02",
+    "type": "single",
+    "prompt": "You place critical instructions in the middle of a 100k-token context. The risk is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the 'lost in the middle' effect: models attend most reliably to the start and end of long contexts, so mid-context instructions get skimmed"
+      },
+      {
+        "id": "b",
+        "text": "…the model will crash"
+      },
+      {
+        "id": "c",
+        "text": "…the instructions become training data"
+      },
+      {
+        "id": "d",
+        "text": "…nothing; position is irrelevant"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Long-context recall is U-shaped. Put load-bearing instructions at the edges, and prefer curated context over stuffed context."
+  },
+  {
+    "id": "llm-x03",
+    "type": "single",
+    "prompt": "'Logits' are…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the raw pre-softmax scores the model assigns each vocabulary token; softmax (with temperature) turns them into the sampling distribution"
+      },
+      {
+        "id": "b",
+        "text": "…the model's login credentials"
+      },
+      {
+        "id": "c",
+        "text": "…compressed embeddings"
+      },
+      {
+        "id": "d",
+        "text": "…the tokens themselves"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Score → softmax → probability → sample. Every sampling dial you use operates on the logits."
+  },
+  {
+    "id": "llm-x04",
+    "type": "single",
+    "prompt": "Preference-optimized models tend toward sycophancy, meaning engineers should…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…verify externally rather than asking the model 'are you sure?': trained agreeableness can shade into endorsing the user's framing"
+      },
+      {
+        "id": "b",
+        "text": "…trust confirmations that sound confident"
+      },
+      {
+        "id": "c",
+        "text": "…always ask twice and accept two yeses"
+      },
+      {
+        "id": "d",
+        "text": "…disable post-training"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Optimizing toward human approval creates a pull toward pleasing answers. Verification lives outside the model: evals, checks, systems of record."
+  },
+  {
+    "id": "llm-x05",
+    "type": "single",
+    "prompt": "Scaling laws describe that…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…loss falls smoothly and predictably as model size, data, and compute grow together: turning capability planning into budgeting rather than alchemy"
+      },
+      {
+        "id": "b",
+        "text": "…models double in size every month by law"
+      },
+      {
+        "id": "c",
+        "text": "…bigger models always memorize more and generalize less"
+      },
+      {
+        "id": "d",
+        "text": "…scaling stopped working in 2023"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The empirical regularity behind modern model sizes: predictable returns justified the investments that produced today's frontier models."
+  },
+  {
+    "id": "llm-x06",
+    "type": "single",
+    "prompt": "A prompt in English costs 500 tokens; its faithful Thai translation costs 1,400. The engineering consequences include…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…higher cost, more context consumed, and effectively less room for documents: tokenizer efficiency varies by language and should inform budgets for multilingual products"
+      },
+      {
+        "id": "b",
+        "text": "…nothing; tokens are free for non-English text"
+      },
+      {
+        "id": "c",
+        "text": "…the Thai response will be three times smarter"
+      },
+      {
+        "id": "d",
+        "text": "…the model refuses long languages"
+      }
+    ],
+    "answer": "a",
+    "explanation": "BPE efficiency mirrors training-data distribution. Multilingual products must budget tokens per language, not per word count."
+  }
+]

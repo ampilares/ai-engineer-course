@@ -1,0 +1,88 @@
+Programs that only compute in memory are toys. Real work reads data in, writes results out, and runs in an environment you control. This lesson moves you from browser exercises to running Python **on your own machine**, which the rest of the course requires.
+
+## Files: reading and writing
+
+```python
+# Write text to a file ('w' = write, overwrites; 'a' = append)
+with open("report.txt", "w", encoding="utf-8") as f:
+    f.write("42 invoices processed\n")
+
+# Read it back
+with open("report.txt", encoding="utf-8") as f:
+    content = f.read()
+```
+
+The `with` block guarantees the file closes even if an error occurs inside: the same "clean up no matter what" discipline you met with exceptions. And `encoding="utf-8"` prevents an entire category of mangled-character bugs; make it a reflex.
+
+## JSON: how systems talk
+
+**JSON** is the text format APIs, config files, and model outputs use, and it maps directly onto the Python you just learned: JSON objects ↔ dicts, arrays ↔ lists.
+
+```python
+import json
+
+invoice = {"vendor": "Nordwind", "total": 4180, "items": ["freight", "fuel"]}
+
+text = json.dumps(invoice, indent=2)   # dict → JSON string
+restored = json.loads(text)             # JSON string → dict
+restored["total"]                       # 4180
+```
+
+`dumps`/`loads` (and their file cousins `dump`/`load`) are the bridge you'll cross in every module: API responses in, model outputs parsed, eval datasets saved. One warning that will echo in Module 8: **text claiming to be JSON isn't always valid JSON**: `json.loads` raises on malformed input, so it belongs inside a `try/except` when the text comes from anywhere you don't control (including a model).
+
+<Check
+  question="A model replies with text that should be JSON. Which handling is correct?"
+  options={[
+    "Trust it: models always emit valid JSON",
+    "Parse inside try/except: json.loads raises on malformed text, and that failure needs a route (retry, fix, or human) rather than a crash",
+    "Use eval() on the text instead",
+    "Search the text for curly braces manually"
+  ]}
+  answer={1}
+  explanation="Model output is untrusted input (a theme that peaks in Module 15), and eval() on untrusted text is a security hole, not a parser. try/except json.loads is the professional move, exactly like safe_int in lesson two."
+  hint="What does json.loads do when the text is broken, and what should your program do then?"
+/>
+
+## Your machine: Python, venv, and packages
+
+Install [Python 3.12+](https://www.python.org/downloads/) and run these in a terminal:
+
+```bash
+mkdir ai-course && cd ai-course
+python -m venv .venv                 # create an isolated environment
+# activate it:
+#   Windows:  .venv\Scripts\activate
+#   macOS/Linux:  source .venv/bin/activate
+pip install httpx pytest             # install packages INTO this project
+python -c "print('hello from my machine')"
+```
+
+A **virtual environment** gives each project its own package versions. Without isolation, upgrading a library for one project can silently break another. Use one virtual environment per project and record dependencies in a lock file or requirements file so another person, including your future self, can rebuild the environment. For this course, `pip freeze > requirements.txt` is an acceptable starting point.
+
+`import` is how code uses packages and the standard library: you've seen `import json`; Module 3 will add `httpx` for APIs and `sqlite3` for databases. A **script** is just a `.py` file run with `python name.py`, from here on, labs happen there.
+
+<Check
+  question="Two projects on your machine need different versions of the same library. What's the standard solution?"
+  options={[
+    "Install the newer version globally and require both projects to use it",
+    "A virtual environment per project: each venv has its own installed packages, so versions never collide",
+    "Copy the dependency into each project without recording its version",
+    "Copy the library's source code into each project"
+  ]}
+  answer={1}
+  explanation="Per-project isolation is exactly what venvs exist for: plus a requirements.txt so environments are reproducible. This dependency discipline reduces avoidable 'it works on my machine' failures."
+  hint="Isolation per project, which tool provides it?"
+/>
+
+<Callout type="note">
+**Set up now.** Before the next module, have on your machine: Python 3.12+, a project folder with an activated venv, and VS Code (or any editor you like) with the Python extension. Ten minutes now saves an hour of friction later, and Module 3's labs assume it's done.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.python.org/3/library/json.html" title="json: official docs" source="python.org" why="dumps/loads and their options, including handling of non-ASCII text." />
+  <LinkCard href="https://code.visualstudio.com/docs/python/python-tutorial" title="Python in VS Code" source="code.visualstudio.com" why="Editor setup: interpreter selection, venvs, and debugging: the environment half of this lesson." />
+</GoDeeper>
+
+## Practice: prove the environment is reproducible
+
+Create a new project and virtual environment, then write a short script that saves a dictionary to JSON and reads it back. Record the dependency versions, deactivate the environment, create a fresh environment, reinstall the dependencies, and rerun the script. Keep the script, JSON file, dependency file, and exact setup commands as evidence that another student could reproduce the result.

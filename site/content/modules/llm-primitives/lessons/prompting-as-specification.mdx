@@ -1,0 +1,76 @@
+A prompt is a **specification**. Like a well-written engineering task, it should define the objective, context, constraints, output contract, and examples of acceptable results. Vague specifications can produce plausible but incorrect work because the model will often choose an interpretation instead of asking for clarification.
+
+## The anatomy of a working prompt
+
+```text
+ROLE        You process customer emails for a telecom's billing team.
+TASK        Classify each email into exactly one category and extract fields.
+CATEGORIES  billing_dispute | plan_change | cancellation | technical | other
+RULES       - If multiple apply, choose the customer's primary intent.
+            - Mentions of ending service = cancellation, even if polite.
+            - Do not infer fields that aren't stated; use null.
+FORMAT      JSON: {"category": ..., "account_id": ..., "summary": ...}
+EXAMPLES    [2–5 worked examples, including one tricky edge case]
+NOW PROCESS: {email}
+```
+
+Each block has a purpose. **Role and authority** establish the applicable instructions. **Explicit rules** resolve known ambiguities. **Format** makes output machine-consumable. **Examples**, often called few-shot prompting, demonstrate how the rules apply to representative cases. Include at least one difficult but realistic case, and verify the contribution of examples through evaluation rather than assuming they always help.
+
+<Check
+  question="Your classifier mislabels polite cancellations ('I'd like to explore ending my service…') as 'other'. The highest-leverage fix is…"
+  options={[
+    "Add an explicit rule AND a worked example of a polite cancellation to the prompt",
+    "Raise the temperature so it guesses differently",
+    "Switch providers immediately",
+    "Ask for 10 categories instead of 5"
+  ]}
+  answer={0}
+  explanation="A discovered ambiguity becomes a rule plus a demonstration: the rule states the policy, the example anchors it. This edit-test-repeat loop on a fixed set of real cases IS prompt engineering."
+  hint="The model resolved an ambiguity differently than you wanted. Where do you encode the resolution?"
+/>
+
+## Reasoning space: let the model think
+
+For some multi-step tasks, additional inference effort can improve output quality. A standard model may benefit from a concise plan, intermediate tool use, or an instruction to check constraints before answering. Reasoning models may provide dedicated effort controls. Do not assume that a visible chain of thought is faithful or necessary, and do not require private reasoning in user-facing output. Evaluate the final answer, evidence, and tool results against the task rubric.
+
+## Prompts are code. Treat them like it.
+
+- **Version them** (Git, not a shared doc): when quality shifts, you need the diff.
+- **Test them**: keep 30+ representative inputs with expected outputs; re-run on every edit. A prompt change that fixes one case and silently breaks five is *invisible without this*, and it happens constantly.
+- **Never concatenate untrusted input into instructions** unmarked: user text belongs in clearly delimited data sections (`<email>…</email>`), instructions belong to you. This boundary is your first defense against prompt injection (Module 15).
+
+<Check
+  question="Why do worked examples in a prompt typically beat longer instruction lists?"
+  options={[
+    "Examples use fewer tokens than instructions",
+    "Models are trained on vast text where patterns continue: imitating a demonstrated input→output mapping is closer to their native operation than executing described rules",
+    "Instructions are ignored entirely by all models",
+    "Examples disable safety filters"
+  ]}
+  answer={1}
+  explanation="Next-token predictors are pattern continuers. A demonstration constrains the output distribution more concretely than prose ever can, especially for format and edge cases. (Both together beat either alone.)"
+  hint="What operation is a language model natively doing: following or continuing?"
+/>
+
+<Callout type="note">
+Prompting changes **behavior**, not knowledge. If the model lacks facts (your policies, today's data), no phrasing will conjure them, that's retrieval's job (next module). Diagnose before you engineer: behavior problem → this lesson; knowledge problem → Module 9.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" title="Prompt engineering guide" source="docs.anthropic.com" why="Concrete, tested techniques that map one-to-one onto this lesson's anatomy." />
+  <LinkCard href="https://www.promptingguide.ai/" title="Prompt Engineering Guide" source="promptingguide.ai" why="Broad, provider-neutral survey with research references." />
+</GoDeeper>
+
+## Separate instructions, context, and data
+
+A robust prompt has named sections and clear precedence: task, allowed evidence, decision rules, output contract, examples, and the untrusted input. Delimit user or retrieved content and state that it is data, not instruction. This does not create a security boundary, Module 15 explains why, but it improves ordinary instruction following and makes the specification reviewable.
+
+Few-shot examples should cover decision boundaries, not repeat easy cases. Include a representative positive, negative, ambiguity, missing-information case, and the exact abstention or review outcome. Avoid examples containing irrelevant surface patterns the model can imitate. If an instruction and an example disagree, fix the prompt; models should not have to infer which artifact is current.
+
+Keep business rules in deterministic code when they can be expressed exactly. Prompts are appropriate for semantic judgment; they are a poor place for tax arithmetic, permission checks, or a hundred frequently changing policy clauses.
+
+## Guided build: version a prompt like code
+
+Write a prompt specification for extraction, classification, or evidence-based answering. Create at least 30 cases before tuning, including noisy input, conflicting text, missing fields, adversarial instructions, and an out-of-scope request. Establish a simple baseline prompt, then make three hypothesis-driven revisions.
+
+For each revision, record the intended change, aggregate score, regressions, token use, and three changed examples. Keep the best version only if it clears explicit acceptance thresholds without worsening a protected segment. The deliverable is the prompt, dataset, grader, and decision log, not the most impressive single response.

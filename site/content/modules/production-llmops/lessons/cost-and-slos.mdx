@@ -1,0 +1,78 @@
+An AI feature that delights users and loses money per request is a failed engineering project. Running to explicit **cost budgets** and **service-level objectives** is what makes an AI system a sustainable product rather than a demo with a countdown timer on its runway.
+
+## Unit economics as a first-class metric
+
+Module 8 gave you the mechanics; production makes them a live dashboard. Track **cost per task** (total model spend ÷ tasks handled) as prominently as latency and quality. It's the number that tells you whether scale is a triumph or a bankruptcy. Revisit the lever hierarchy against your real traffic:
+
+<CostLatencyCalculator />
+
+The optimization playbook, highest-leverage first:
+
+1. **Generate less**: the cheapest win, every time (shorter outputs, tighter schemas).
+2. **Cache**: prompt-prefix caching for shared context; response caching for repeated identical requests.
+3. **Tier models:** Route routine cases to the smallest model that meets the quality threshold and escalate difficult cases when the evaluation set shows a meaningful gain. Module 14 provides the decision method.
+4. **Batch** where latency allows: some providers discount batch processing heavily.
+5. **Trim retrieval/context**: fewer, better chunks beat stuffing (Module 9): cheaper *and* often more accurate.
+
+<Check
+  question="Your AI feature costs €0.04 per task and revenue attributable to it is €0.03 per task. Users love it. What's the engineering priority?"
+  options={[
+    "Scale it aggressively: users love it",
+    "Cost engineering before scaling: at negative unit economics, more usage means bigger losses; apply the lever hierarchy (generate less, cache, tier models) until cost/task is sustainable",
+    "Raise prices 10× immediately",
+    "Ignore cost; usage is what matters"
+  ]}
+  answer={1}
+  explanation="Loving a money-losing feature just means users will help you lose money faster at scale. Negative unit economics is a launch blocker, and the lever hierarchy is how you fix it before growth compounds the loss."
+  hint="What does scaling a per-task loss do?"
+/>
+
+## SLOs: promises you can measure
+
+A **service-level objective** is a target on a user-visible metric you actually monitor and defend:
+
+- *Latency:* "p95 response < 5s": always percentiles, never the mean (Module 14's tail-latency lesson).
+- *Availability:* "99.5% of requests succeed (incl. fallbacks) monthly."
+- *Quality:* "≥ 95% of auto-processed items correct": measured by your eval/monitoring pipeline.
+
+SLOs turn vague "make it fast and good" into commitments that drive engineering: an **error budget** (the allowed 0.5% failure) tells you when to stop shipping features and spend on reliability instead. And set them per feature: the interactive assistant and the nightly batch job have entirely different latency promises.
+
+<Check
+  question="Why are latency SLOs written on p95/p99 rather than the mean, and why per feature?"
+  options={[
+    "Percentiles are trendier",
+    "The mean hides slow requests that users still experience. An interactive feature and a latency-tolerant nightly batch job require different targets" ,
+    "p99 is cheaper to compute than the mean",
+    "SLOs must always be a single global number"
+  ]}
+  answer={1}
+  explanation="Tail latency is the lived experience of the unlucky; means bury it. And one global SLO would either over-constrain the batch job or under-serve the interactive one: SLOs are per-workload."
+  hint="Whose experience does the mean hide, and do all features have the same latency needs?"
+/>
+
+## Meter from day one
+
+Measure model usage and cost per request, tagged by feature, model, tenant or customer class where appropriate, and system version. Aggregate the measurements daily and configure budget alerts. Unbounded summarization, retries, or agent loops can create rapid and unexpected spend. You cannot control unit economics without request-level metering and ownership.
+
+<Callout type="note">
+This lesson closes the economic thread running since Module 8: measure unit cost, move the biggest lever, defend an SLO, alert on the budget. The same measure-then-optimize loop as evaluation and performance: cost is just another metric you refuse to fly blind on.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://sre.google/sre-book/service-level-objectives/" title="Service Level Objectives" source="Google SRE Book" why="The definitive treatment of SLOs and error budgets: every concept transfers directly to AI systems." />
+  <LinkCard href="https://langfuse.com/docs" title="Langfuse" source="langfuse.com" why="Open-source cost/latency/quality tracking per request: the meter this lesson insists on." />
+</GoDeeper>
+
+## Capacity is part of the promise
+
+Translate demand into requests per second, concurrent generations, tokens per minute, queue depth, and reviewer workload. Include peak-to-average ratio and provider quotas. A system can meet average latency while failing every Monday morning. Run load tests against controlled substitutes where provider testing would be costly, then validate a limited real path.
+
+Use an SLO with a time window and population: for example, a percentage of eligible requests completed correctly within a latency target over 28 days. Define exclusions narrowly. Track an error budget so reliability work and feature delivery share an explicit decision rule. Quality SLOs often rely on sampled human or automated grading, which means the sampling and grader are part of the measurement system.
+
+Optimize in descending order of leverage: remove unnecessary calls, reduce context/output, route easy cases to a smaller model, cache correctly, batch asynchronous work, and only then tune infrastructure. Guard every optimization with the same quality and safety evals.
+
+## Guided build: operating envelope
+
+Forecast typical and peak demand for your project. Set SLOs for availability, quality, p95 latency, and cost per successful outcome. Define the error budget and at least one alert tied to each user-visible promise.
+
+Run a stepped load test until one constraint fails. Identify saturation, then test two optimizations and show their effect on quality, latency, and cost. Produce a capacity plan for 1×, 5×, and 20× volume, including provider quotas and human-review capacity.

@@ -1,0 +1,20 @@
+{
+  "slug": "math-foundations",
+  "number": 2,
+  "title": "The Math You Actually Need",
+  "phase": "onramp",
+  "summary": "Vectors, probability, softmax, and gradients: the four ideas behind everything in AI, built as intuition rather than formulas.",
+  "outcomes": [
+    "Read vectors as points and directions, and similarity as geometry",
+    "Reason with probabilities, distributions, and conditional thinking",
+    "Understand logs, exponentials, and why softmax turns scores into probabilities",
+    "Grasp gradients as 'which way is downhill': the engine of all training"
+  ],
+  "examCount": 10,
+  "lessons": [
+    { "slug": "vectors-and-similarity", "title": "Vectors: meaning as geometry", "minutes": 15 },
+    { "slug": "probability-thinking", "title": "Probability: reasoning under uncertainty", "minutes": 15 },
+    { "slug": "logs-and-softmax", "title": "Logs, exponentials, and softmax", "minutes": 14 },
+    { "slug": "gradients-intuition", "title": "Gradients: which way is downhill", "minutes": 13 }
+  ]
+}

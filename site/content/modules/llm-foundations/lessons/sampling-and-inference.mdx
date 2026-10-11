@@ -1,0 +1,74 @@
+The model hands you a probability distribution; **something still has to pick a token**. That choice (sampling) is where you, the engineer, hold real dials. Understanding them separates people who *use* model APIs from people who *control* them.
+
+## The dials
+
+- **Temperature** rescales logits before softmax. As temperature approaches zero, probability concentrates on the highest-scoring tokens and output becomes more repeatable. Around `1.0`, the distribution remains close to the model's learned shape. Higher values flatten the distribution, increasing variation and often increasing error. Low temperature does not make an answer factually safe; it only changes decoding.
+- **Top-p (nucleus)** keeps only the smallest set of tokens whose probabilities sum to *p*, then renormalizes: a dynamic shortlist that adapts to the model's confidence.
+- **Top-k**: same idea with a fixed-size shortlist.
+
+Feel them (this is the same widget from the landing page: now you know what it's showing):
+
+<SamplingSimulator />
+
+Try two contrasting prompts at temperature `2.0`: `import numpy as` and `Once upon a time,`. A code-oriented model may still strongly favor `np` after the first prompt because the logit gap is large, while the second prompt permits many plausible continuations. **Temperature reshapes uncertainty that is already present; it does not add knowledge or guarantee diversity.**
+
+<Check
+  question="Your data-extraction service should give the same output for the same document every time. Which setting is right?"
+  options={[
+    "Temperature near 0 (greedy decoding): concentrate all probability on the top token",
+    "Temperature 2.0 for maximum intelligence",
+    "Top-p 0.1 with temperature 1.5",
+    "Sampling settings don't affect consistency"
+  ]}
+  answer={0}
+  explanation="Extraction wants reproducibility, not creativity: near-zero temperature makes decoding (near-)deterministic. High temperature is for brainstorming and variety: the opposite job."
+  hint="Do you want the distribution explored, or its peak?"
+/>
+
+## The context window: the model's entire world
+
+The model conditions on at most N tokens: its **context window**. Everything it "knows" about your request must be inside: instructions, documents, conversation history. Outside the window = does not exist. Three engineering facts follow:
+
+1. **Truncation is silent.** Overflow the window and something gets dropped; the model doesn't warn you it never saw page 40.
+2. **Attention cost grows quadratically** with length: long contexts are slow and expensive.
+3. **Long ≠ attentive.** Models recall the start and end of long contexts better than the middle (the "lost in the middle" effect): put crucial instructions at the edges, and don't stuff the window just because it fits. Module 9's retrieval exists largely to put *only the relevant* text in context.
+
+## Inference mechanics worth knowing
+
+- Generating N tokens = N sequential forward passes: why **output tokens dominate latency** and are priced several-fold above input tokens.
+- The **KV cache** stores each token's keys/values so they aren't recomputed every step: why long prompts cost mostly at the start ("prefill"), and why providers can discount cached prompt prefixes. Structure your prompts static-part-first to exploit this (Module 8).
+
+<Check
+  question="Provider pricing: input tokens $3/1M, output tokens $15/1M, and responses feel slower the longer they are. What mechanical fact explains both?"
+  options={[
+    "Output tokens are stored on more expensive disks",
+    "Each output token requires its own sequential forward pass through the model, while input tokens are processed in one parallel prefill",
+    "Output tokens are longer strings than input tokens",
+    "It's arbitrary pricing psychology"
+  ]}
+  answer={1}
+  explanation="Input is ingested in parallel; generation is inherently one-token-at-a-time. N output tokens ≈ N model runs: hence the price multiple and the latency. Engineering corollary: the cheapest fast system is the one that generates less."
+  hint="Which direction of the pipeline can be parallelized?"
+/>
+
+<Callout type="tip">
+Cheapest optimizations in the business, in order: ask for shorter outputs, cache shared prompt prefixes, use a smaller model where quality permits. You'll formalize this in the cost calculator in Module 8: you've already met it if you explored the widgets.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://huggingface.co/learn/llm-course/chapter1/1" title="Hugging Face LLM Course" source="huggingface.co" why="Free course covering tokenizers, generation parameters, and inference with runnable code." />
+</GoDeeper>
+
+## Decoding is a product policy
+
+Greedy decoding repeatedly selects the highest-probability token. It is stable but can produce brittle or repetitive text. Temperature rescales logits; top-*p* keeps the smallest set whose cumulative probability reaches a threshold. These controls interact, so change one at a time and evaluate on the actual task. Classification and extraction usually benefit from constrained outputs and low variability; brainstorming may benefit from a broader distribution.
+
+“Temperature zero” is not a mathematical guarantee of identical responses across providers or hardware. Model revisions, routing, floating-point kernels, and ties can still change output. Treat a seed, when available, as a debugging aid rather than a correctness boundary. Deterministic correctness comes from validation, tests, and idempotent downstream code.
+
+Latency has two parts: time to first token and time to finish. Streaming improves the former for a person watching, while shorter outputs, faster models, and parallelism change total completion time. Stop sequences and maximum-output limits need tests; a premature stop can produce an apparently successful but incomplete result.
+
+## Guided build: publish a decoding policy
+
+Run at least 30 representative prompts under greedy decoding and three sampling configurations. Repeat each configuration several times. Measure task success, output length, invalid-output rate, and variation between runs. Include one creative task and one extraction task.
+
+Choose a production decoding policy for each task and justify temperature, top-*p*, output cap, stop conditions, and retry behavior. Save failed outputs. The result should demonstrate that decoding settings are versioned, evaluated configuration, not a universal “creativity” slider.

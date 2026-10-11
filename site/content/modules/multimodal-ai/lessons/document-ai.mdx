@@ -1,0 +1,57 @@
+Documents are not bags of text. Meaning lives in headings, columns, labels, checkboxes, handwriting, stamps, page order, and the relationship between a table cell and its header. A document pipeline must preserve that structure before asking a model to reason over it.
+
+## Classify, parse, then reason
+
+A practical path is: validate file, split pages, classify document/page type, detect whether text is native or scanned, extract text and layout, identify tables/forms, normalize fields, validate, and route uncertainty. Use embedded PDF text when trustworthy; OCR scanned regions; apply specialist table or form extraction when structure matters.
+
+Reading order is a first-class output. Two-column text flattened row-by-row becomes nonsense. Store blocks with page number, bounding box, type, reading-order index, and extraction confidence. Keep table cells with row/column spans and header relationships rather than converting them immediately to prose.
+
+<Check
+  question="An invoice OCR returns every word correctly, but line items are matched to the wrong prices. Which quality dimension failed?"
+  options={[
+    "Layout/table structure and cell relationships, not character recognition",
+    "Token sampling temperature",
+    "API authentication",
+    "Vector similarity"
+  ]}
+  answer={0}
+  explanation="Correct characters do not preserve which value belongs to which row or header. Structural extraction needs its own evaluation."
+  hint="Were the words wrong, or their relationships?"
+/>
+
+## Extract with evidence and constraints
+
+Define a schema that includes value, normalized value, evidence page/region, and status such as `present`, `not_found`, or `illegible`. Apply deterministic constraints: totals reconcile, dates are plausible, identifiers match checksums, and currency is consistent. Cross-page documents may require grouping pages before extraction; classification should not treat page two as a separate unknown document.
+
+Confidence can combine OCR certainty, evidence presence, validation results, document type, and measured model performance on similar layouts. A number that fails reconciliation should be reviewed even if the model reports high confidence.
+
+See the whole idea at once: flip the scan quality and move the threshold until every damaged field routes to review:
+
+<DocExtractionDemo />
+
+## Documents change and can be hostile
+
+Templates drift as vendors update software. Monitor quality by vendor/layout, scan quality, language, and page count. Create a “new layout” route instead of forcing every unfamiliar page through the dominant template. Treat document text as untrusted: a résumé, invoice note, or white-on-white PDF text can contain prompt injection. Embedded scripts, links, attachments, and metadata expand the attack surface.
+
+<Check
+  question="A model extracts total 1,240.00 with high self-reported confidence, but line items sum to 1,024.00. What should route the document?"
+  options={[
+    "The deterministic reconciliation failure should force review",
+    "The model confidence should override arithmetic",
+    "The larger number should always win",
+    "The document should be silently discarded"
+  ]}
+  answer={0}
+  explanation="Observable validation evidence is stronger than uncalibrated model confidence. The mismatch needs resolution before action."
+  hint="Which signal can be checked exactly?"
+/>
+
+## Guided build: a document evidence pipeline
+
+Select at least 30 documents across three layouts, including scans, tables, rotated pages, missing fields, handwriting or low-quality images, and one injected instruction. Build classification, text/layout extraction, typed field extraction, evidence linking, validation, and review routing.
+
+Measure character/word accuracy on a sample, document classification, field-level exact or normalized match, table-cell correctness, evidence-region validity, reconciliation pass, review rate, latency, and cost. Report results by layout and scan quality. The artifact passes when a reviewer can click or locate the exact page region for every accepted critical field and unsafe instructions cannot trigger actions.
+
+<Callout type="tip">
+Keep a small visual regression set. Text-only assertions cannot reveal that a parser suddenly reversed columns, clipped a footer, or shifted every bounding box after a rendering-library update.
+</Callout>

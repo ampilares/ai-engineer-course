@@ -1,0 +1,199 @@
+[
+  {
+    "id": "ma-q01",
+    "type": "single",
+    "prompt": "Cosine similarity between two vectors measures…",
+    "options": [
+      { "id": "a", "text": "…the angle between them (direction agreement), ignoring their lengths: near 1 similar, near 0 unrelated, near −1 opposed" },
+      { "id": "b", "text": "…the difference in their lengths" },
+      { "id": "c", "text": "…how many elements they share exactly" },
+      { "id": "d", "text": "…their combined magnitude" }
+    ],
+    "answer": "a",
+    "explanation": "Direction encodes meaning in embedding spaces; cosine reads direction agreement: the core operation of semantic search and attention scoring."
+  },
+  {
+    "id": "ma-q02",
+    "type": "numeric",
+    "prompt": "Compute the dot product of a = [2, 3] and b = [4, 1].",
+    "answer": 11,
+    "tolerance": 0,
+    "explanation": "2×4 + 3×1 = 11. Multiply matching positions, sum: the workhorse behind similarity and attention scores."
+  },
+  {
+    "id": "ma-q03",
+    "type": "single",
+    "prompt": "A 1,536-dimensional embedding is best understood as…",
+    "options": [
+      { "id": "a", "text": "…a record of 1,536 learned measurements; distance and angle formulas work exactly as in 2-D" },
+      { "id": "b", "text": "…something humans fundamentally cannot reason about" },
+      { "id": "c", "text": "…1,536 separate vectors" },
+      { "id": "d", "text": "…a 1,536-character string" }
+    ],
+    "answer": "a",
+    "explanation": "High dimensions aren't mystical: the geometry generalizes unchanged. Your 2-D intuition about angles and neighbors transfers directly."
+  },
+  {
+    "id": "ma-q04",
+    "type": "single",
+    "prompt": "Mechanically, most of a neural network's computation consists of…",
+    "options": [
+      { "id": "a", "text": "…matrix multiplications (layers of learned weights transforming vectors), plus nonlinearities" },
+      { "id": "b", "text": "…database lookups" },
+      { "id": "c", "text": "…string operations" },
+      { "id": "d", "text": "…sorting algorithms" }
+    ],
+    "answer": "a",
+    "explanation": "'Billions of parameters' = the numbers inside these matrices, and it's why GPUs, built for parallel multiply-adds, power AI."
+  },
+  {
+    "id": "ma-q05",
+    "type": "single",
+    "prompt": "A model's next-token distribution is strongly peaked on one token. This indicates…",
+    "options": [
+      { "id": "a", "text": "…the context nearly determines the continuation; sampling will be consistent" },
+      { "id": "b", "text": "…the model is uncertain" },
+      { "id": "c", "text": "…an error in the tokenizer" },
+      { "id": "d", "text": "…the temperature must be high" }
+    ],
+    "answer": "a",
+    "explanation": "Peaked = determined ('import numpy as' → ' np'); flat = genuinely open. The shape of the distribution IS the model's uncertainty report."
+  },
+  {
+    "id": "ma-q06",
+    "type": "single",
+    "prompt": "A defect occurs in 1 of 1,000 items; a 99%-accurate detector flags an item. The chance it's truly defective is roughly…",
+    "options": [
+      { "id": "a", "text": "…9%: about 1 true flag versus ~10 false flags per 1,000 items; base rates dominate rare events" },
+      { "id": "b", "text": "…99%: matching the detector's accuracy" },
+      { "id": "c", "text": "…50%" },
+      { "id": "d", "text": "…0.1%: the flag is meaningless" }
+    ],
+    "answer": "a",
+    "explanation": "P(defect | flag) ≠ P(flag | defect). Counting outcomes exposes it: ~1 true positive, ~10 false positives → ~1 in 11. The precision/recall lesson in probability form."
+  },
+  {
+    "id": "ma-q07",
+    "type": "single",
+    "prompt": "Why must all probabilities in a model's next-token distribution sum to 1?",
+    "options": [
+      { "id": "a", "text": "It's a distribution over mutually exclusive options: exactly one token will be chosen, so total belief is fixed; boosting one option must shrink others" },
+      { "id": "b", "text": "To save memory" },
+      { "id": "c", "text": "They don't; sums vary by model" },
+      { "id": "d", "text": "Because vocabularies have exactly 100 tokens" }
+    ],
+    "answer": "a",
+    "explanation": "Softmax enforces it by construction. The zero-sum nature explains why sharpening (low temperature) concentrates and flattening spreads the same total belief."
+  },
+  {
+    "id": "ma-q08",
+    "type": "single",
+    "prompt": "Sequence likelihoods are computed as sums of log-probabilities rather than products of probabilities because…",
+    "options": [
+      { "id": "a", "text": "…multiplying hundreds of sub-1 numbers underflows toward zero, while log turns products into stable, comparable sums" },
+      { "id": "b", "text": "…logarithms make probabilities exceed 1" },
+      { "id": "c", "text": "…addition is forbidden on GPUs" },
+      { "id": "d", "text": "…there is no reason beyond convention" }
+    ],
+    "answer": "a",
+    "explanation": "log(a×b) = log a + log b: numerically stable and exactly what cross-entropy loss accumulates across tokens."
+  },
+  {
+    "id": "ma-q09",
+    "type": "single",
+    "prompt": "Softmax converts logits to probabilities by…",
+    "options": [
+      { "id": "a", "text": "…exponentiating every score (positive, gaps amplified) and dividing each by the total (sum to 1)" },
+      { "id": "b", "text": "…sorting the scores and ranking them" },
+      { "id": "c", "text": "…clipping scores to the range [0, 1]" },
+      { "id": "d", "text": "…discarding all but the top score" }
+    ],
+    "answer": "a",
+    "explanation": "e^zᵢ / Σe^zⱼ. The exponential's gap-amplification is why small logit differences become large probability differences."
+  },
+  {
+    "id": "ma-q10",
+    "type": "single",
+    "prompt": "Temperature mechanically works by…",
+    "options": [
+      { "id": "a", "text": "…dividing the logits before softmax: small T amplifies gaps (sharp, near-greedy), large T shrinks them (flat, random), without adding any knowledge" },
+      { "id": "b", "text": "…making the model think longer" },
+      { "id": "c", "text": "…adding new candidate tokens" },
+      { "id": "d", "text": "…heating the GPU for faster sampling" }
+    ],
+    "answer": "a",
+    "explanation": "T repartitions the same scores. That's why high temperature can't create certainty and low temperature can't create knowledge."
+  },
+  {
+    "id": "ma-q11",
+    "type": "single",
+    "prompt": "Cross-entropy loss for one prediction equals…",
+    "options": [
+      { "id": "a", "text": "…the negative log-probability assigned to the correct answer, with a small penalty for a high correct probability and a large penalty for a confident mistake" },
+      { "id": "b", "text": "…the count of wrong tokens" },
+      { "id": "c", "text": "…the sum of all logits" },
+      { "id": "d", "text": "…the model's temperature" }
+    ],
+    "answer": "a",
+    "explanation": "−log(0.9) ≈ 0.105 but −log(0.001) ≈ 6.9. This asymmetry (punishing confident wrongness) shaped every model you use."
+  },
+  {
+    "id": "ma-q12",
+    "type": "single",
+    "prompt": "The derivative of the loss with respect to a weight is −2.5. Gradient descent will…",
+    "options": [
+      { "id": "a", "text": "…increase the weight (step against the negative slope), scaled by the learning rate" },
+      { "id": "b", "text": "…decrease the weight" },
+      { "id": "c", "text": "…leave it unchanged" },
+      { "id": "d", "text": "…set it to −2.5" }
+    ],
+    "answer": "a",
+    "explanation": "Negative slope means the loss falls as the weight grows: downhill is in the increasing direction. w ← w − lr × (−2.5) increases w."
+  },
+  {
+    "id": "ma-q13",
+    "type": "single",
+    "prompt": "Why doesn't gradient descent need a map of the entire loss landscape?",
+    "options": [
+      { "id": "a", "text": "Following local slopes from a random start reliably reaches some good valley in high dimensions: global optimality isn't required, and mini-batch noise escapes shallow dips" },
+      { "id": "b", "text": "The landscape is fully known before training" },
+      { "id": "c", "text": "Modern losses have exactly one valley" },
+      { "id": "d", "text": "It does need one; training precomputes it" }
+    ],
+    "answer": "a",
+    "explanation": "'A good valley, found reliably' is the honest story: local information plus stochasticity suffices in practice."
+  },
+  {
+    "id": "ma-q14",
+    "type": "single",
+    "prompt": "The chain rule matters to deep learning because…",
+    "options": [
+      { "id": "a", "text": "…it computes how the loss changes with respect to every weight in every layer: organized efficiently, it is backpropagation" },
+      { "id": "b", "text": "…it links GPUs together" },
+      { "id": "c", "text": "…it prevents overfitting" },
+      { "id": "d", "text": "…it compresses the model" }
+    ],
+    "answer": "a",
+    "explanation": "Layered functions need blame passed backward through composition: the chain rule is that mechanism, and backprop is its efficient bookkeeping."
+  },
+  {
+    "id": "ma-q15",
+    "type": "multi",
+    "prompt": "Which statements about small samples are true? Select all that apply.",
+    "options": [
+      { "id": "a", "text": "Small samples swing wildly: 7 heads in 10 fair flips is unremarkable" },
+      { "id": "b", "text": "Impressive numbers deserve the questions: how many observations, and what's the base rate?" },
+      { "id": "c", "text": "An eval on 3 examples justifies shipping a prompt change" },
+      { "id": "d", "text": "Volume is what separates signal from noise" }
+    ],
+    "answer": ["a", "b", "d"],
+    "explanation": "Three examples measure nearly nothing, which is precisely why the evaluation module demands representative datasets and the product module simulates underpowered A/B tests."
+  },
+  {
+    "id": "ma-q16",
+    "type": "short",
+    "prompt": "What is the name of the function that converts a model's raw scores (logits) into a probability distribution? (one word)",
+    "accept": ["softmax", "the softmax", "softmax function"],
+    "explanation": "Softmax: exponentiate and normalize: the bridge between scores and probabilities in every model head."
+  }
+]

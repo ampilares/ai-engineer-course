@@ -1,0 +1,490 @@
+[
+  {
+    "id": "lp-q01",
+    "type": "single",
+    "prompt": "Chat model APIs are 'stateless'. This means…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…every request must include whatever conversation history the model should know, and each resent token is billed again"
+      },
+      {
+        "id": "b",
+        "text": "…the model forgets its training between calls"
+      },
+      {
+        "id": "c",
+        "text": "…responses are random"
+      },
+      {
+        "id": "d",
+        "text": "…only one user can talk to the model at a time"
+      }
+    ],
+    "answer": "a",
+    "explanation": "There is no server-side session. 'Memory' is your code resending history in `messages`: a cost and context-window decision you own."
+  },
+  {
+    "id": "lp-q02",
+    "type": "single",
+    "prompt": "Your batch pipeline received a response whose stop reason indicates it hit max_tokens. The correct handling is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…treat it as a truncation error: don't parse the partial output; retry with a higher cap or shorter task"
+      },
+      {
+        "id": "b",
+        "text": "…parse the JSON anyway, it's probably fine"
+      },
+      {
+        "id": "c",
+        "text": "…ignore stop reasons; they're informational"
+      },
+      {
+        "id": "d",
+        "text": "…lower max_tokens to save money"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A capped response is incomplete by definition: half a JSON object at best. Detect via stop reason and handle as a distinct failure path."
+  },
+  {
+    "id": "lp-q03",
+    "type": "single",
+    "prompt": "Why do few-shot examples usually improve output quality more than adding equivalent prose instructions?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Examples consume fewer tokens"
+      },
+      {
+        "id": "b",
+        "text": "Next-token predictors natively continue patterns; a demonstrated input→output mapping constrains the output distribution more concretely than described rules"
+      },
+      {
+        "id": "c",
+        "text": "Instructions are stripped by the API"
+      },
+      {
+        "id": "d",
+        "text": "Examples increase the temperature"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Show beats tell for pattern-continuation machines, especially for format and edge cases. Best practice: rules AND a worked example of the trickiest case."
+  },
+  {
+    "id": "lp-q04",
+    "type": "single",
+    "prompt": "Why does 'think step by step before answering' mechanically improve multi-step task accuracy?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It activates a hidden calculator"
+      },
+      {
+        "id": "b",
+        "text": "Each generated token gets one forward pass of computation; writing intermediate steps gives the model more sequential compute before committing to the answer"
+      },
+      {
+        "id": "c",
+        "text": "Longer outputs are always more accurate"
+      },
+      {
+        "id": "d",
+        "text": "It disables sampling"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Reasoning tokens are computation budget. The final answer is then conditioned on worked-out intermediate results instead of being produced in a single leap."
+  },
+  {
+    "id": "lp-q05",
+    "type": "single",
+    "prompt": "Untrusted user text should be placed in delimited data sections (e.g., <email>…</email>) rather than concatenated into instructions because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…it keeps a boundary between your instructions and attacker-influenceable data: the first defense against prompt injection"
+      },
+      {
+        "id": "b",
+        "text": "…XML tags compress better"
+      },
+      {
+        "id": "c",
+        "text": "…models cannot read undelimited text"
+      },
+      {
+        "id": "d",
+        "text": "…it makes responses more creative"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Same disease as SQL injection: data interpreted as instructions. Delimiting doesn't fully solve it (Module 15 does defense-in-depth) but it's the necessary first boundary."
+  },
+  {
+    "id": "lp-q06",
+    "type": "single",
+    "prompt": "Schema-constrained decoding guarantees valid JSON. Why must you still validate business rules on every response?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Syntactically perfect output can be semantically wrong: negative totals and invented dates fit schemas fine"
+      },
+      {
+        "id": "b",
+        "text": "JSON parsers are unreliable"
+      },
+      {
+        "id": "c",
+        "text": "Validation is only needed for XML"
+      },
+      {
+        "id": "d",
+        "text": "You don't; constrained mode is sufficient"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Shape ≠ truth. Cross-field checks, ranges, and enums are your enforcement point, and they keep protecting you if the provider mode changes."
+  },
+  {
+    "id": "lp-q07",
+    "type": "single",
+    "prompt": "An extractor invents plausible due dates when documents don't state one. The root cause is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the schema gives absence no legal representation, so the model fills the field with something plausible: fix with a nullable field, explicit null guidance, and a null example"
+      },
+      {
+        "id": "b",
+        "text": "…the model is malicious"
+      },
+      {
+        "id": "c",
+        "text": "…temperature is too low"
+      },
+      {
+        "id": "d",
+        "text": "…JSON cannot represent dates"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Hallucination by schema pressure: a required-looking field demands a value. Design the abstention path into the schema and demonstrate it."
+  },
+  {
+    "id": "lp-q08",
+    "type": "single",
+    "prompt": "How can confidence routing make a model useful when its raw accuracy is not sufficient for full automation?",
+    "options": [
+      {
+        "id": "a",
+        "text": "…auto-processing high-confidence outputs and routing low-confidence or invalid ones to human review"
+      },
+      {
+        "id": "b",
+        "text": "…running the model three times and majority-voting"
+      },
+      {
+        "id": "c",
+        "text": "…hiding the errors from users"
+      },
+      {
+        "id": "d",
+        "text": "…retraining the model nightly"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The system's accuracy is model + humans, with humans focused only where the model is unsure. The threshold is a business dial: precision/recall in production clothing."
+  },
+  {
+    "id": "lp-q09",
+    "type": "single",
+    "prompt": "A 3,000-token prompt is 90% fixed rules/examples and 10% per-request data, called 50,000×/day. The biggest single cost lever is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…ordering the prompt static-prefix-first and using prompt caching (cached tokens bill ~10%)"
+      },
+      {
+        "id": "b",
+        "text": "…deleting the examples"
+      },
+      {
+        "id": "c",
+        "text": "…switching to the most expensive model"
+      },
+      {
+        "id": "d",
+        "text": "…adding a longer system prompt"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The identical prefix re-bills full price on every call unless cached. Static-first ordering + caching cuts most input cost without touching quality."
+  },
+  {
+    "id": "lp-q10",
+    "type": "single",
+    "prompt": "Users say the assistant is slow. Traces: TTFT 400 ms, then 20+ seconds generating ~800-token answers nobody reads fully. First fix:",
+    "options": [
+      {
+        "id": "a",
+        "text": "Constrain answer length sharply and stream the output"
+      },
+      {
+        "id": "b",
+        "text": "Upgrade to a larger model"
+      },
+      {
+        "id": "c",
+        "text": "Raise max_tokens"
+      },
+      {
+        "id": "d",
+        "text": "Disable streaming to reduce overhead"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Generation length is the measured bottleneck; each output token is a sequential forward pass. Shorter answers cut latency and cost; streaming fixes perceived wait."
+  },
+  {
+    "id": "lp-q11",
+    "type": "multi",
+    "prompt": "Which belong in a production model-API wrapper module? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Timeouts and bounded retries with backoff for 429/5xx"
+      },
+      {
+        "id": "b",
+        "text": "Token and cost logging per request"
+      },
+      {
+        "id": "c",
+        "text": "Model IDs pinned in configuration, not scattered in code"
+      },
+      {
+        "id": "d",
+        "text": "Automatic infinite retries until the output parses"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "One thin wrapper centralizes reliability, observability, and portability. Infinite retries are a cost incident generator: retries are always bounded."
+  },
+  {
+    "id": "lp-q12",
+    "type": "single",
+    "prompt": "When is streaming the response worth it?",
+    "options": [
+      {
+        "id": "a",
+        "text": "When a human is watching: perceived latency drops to roughly time-to-first-token"
+      },
+      {
+        "id": "b",
+        "text": "In batch pipelines, to make JSON parse faster"
+      },
+      {
+        "id": "c",
+        "text": "Always; it reduces total generation time"
+      },
+      {
+        "id": "d",
+        "text": "Never; it's deprecated"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Streaming changes perception, not total time, and you can't validate half a JSON document. Human-facing: yes. Machine-facing: no benefit."
+  },
+  {
+    "id": "lp-q13",
+    "type": "numeric",
+    "prompt": "A call uses 2,000 input tokens at $3 per million and 500 output tokens at $15 per million. What is the cost per call in cents? (1 cent = $0.01)",
+    "answer": 1.35,
+    "tolerance": 0.05,
+    "unit": "cents",
+    "explanation": "Input: 2000/1M × $3 = $0.006. Output: 500/1M × $15 = $0.0075. Total $0.0135 = 1.35 cents, and note output ≈ 55% of cost from a quarter of the tokens."
+  },
+  {
+    "id": "lp-x01",
+    "type": "single",
+    "prompt": "Instructions in the system role differ from user-message instructions because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the system role carries the developer's standing authority and constraints, kept stable across requests (and cacheable): user turns are per-request content of lower authority"
+      },
+      {
+        "id": "b",
+        "text": "…the system role is secret and unreadable by the model"
+      },
+      {
+        "id": "c",
+        "text": "…user messages cannot contain instructions"
+      },
+      {
+        "id": "d",
+        "text": "…there is no difference at all"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Role separation is both an authority signal to the model and an engineering convenience (stable prefix = cache hits). It is not, however, a security boundary: Module 15."
+  },
+  {
+    "id": "lp-x02",
+    "type": "single",
+    "prompt": "A response arrives with stop reason 'refusal' on a legitimate business document. Production handling is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…treat it as a routable outcome: detect it, retry with adjusted framing if appropriate, else route to a human: never parse a refusal as if it were data"
+      },
+      {
+        "id": "b",
+        "text": "…crash the pipeline"
+      },
+      {
+        "id": "c",
+        "text": "…strip the refusal text into the database"
+      },
+      {
+        "id": "d",
+        "text": "…blacklist the customer"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Safety training occasionally misfires on legitimate content. Plan for it as a normal branch, like timeouts, not an exception that corrupts output."
+  },
+  {
+    "id": "lp-x03",
+    "type": "single",
+    "prompt": "Why does a reasoning model's 4,000-token 'thinking' improve hard-problem accuracy?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Each thinking token is another sequential forward pass whose intermediate results condition the final answer: computation purchased at output-token prices"
+      },
+      {
+        "id": "b",
+        "text": "The thinking activates a secret larger network"
+      },
+      {
+        "id": "c",
+        "text": "It queries external databases"
+      },
+      {
+        "id": "d",
+        "text": "It doesn't; thinking is cosmetic"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Test-time compute: decomposition, self-checks, and backtracking in the scratchpad give the final answer better inputs. Whether it's worth 25× tokens is an eval question."
+  },
+  {
+    "id": "lp-x04",
+    "type": "single",
+    "prompt": "The production-correct division of labor between standard and reasoning models is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…fast standard models for the easy majority (extraction, classification, simple Q&A); escalate to reasoning models for genuinely multi-step problems, with the line drawn by your eval set"
+      },
+      {
+        "id": "b",
+        "text": "…reasoning models for everything, since accuracy is accuracy"
+      },
+      {
+        "id": "c",
+        "text": "…standard models for everything, since cost is cost"
+      },
+      {
+        "id": "d",
+        "text": "…random assignment for fairness"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Tiered routing with escalation. 'Reasoning everywhere' is the new 'biggest model everywhere': same mistake, higher invoice."
+  },
+  {
+    "id": "lp-x05",
+    "type": "single",
+    "prompt": "Why must business data never be parsed out of a reasoning model's thinking scratchpad?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The scratchpad is unvalidated generated text: exploratory, sometimes wrong, and not schema-bound; the contract remains the validated final output"
+      },
+      {
+        "id": "b",
+        "text": "The scratchpad is encrypted"
+      },
+      {
+        "id": "c",
+        "text": "Parsing it is a copyright violation"
+      },
+      {
+        "id": "d",
+        "text": "It's fine to parse; thinking is more honest"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Thinking is diagnostic (great in traces), not authoritative. Hypotheses considered and discarded mid-scratchpad would poison any parser reading them."
+  },
+  {
+    "id": "lp-x06",
+    "type": "single",
+    "prompt": "Your few-shot examples all show clean, well-formed inputs. Production inputs are messy. The predictable result is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…degraded behavior on messy inputs: examples teach the distribution they show, so at least one demonstration should be a hard, messy case handled correctly"
+      },
+      {
+        "id": "b",
+        "text": "…no effect; examples only affect formatting"
+      },
+      {
+        "id": "c",
+        "text": "…improved robustness through contrast"
+      },
+      {
+        "id": "d",
+        "text": "…the model refuses messy inputs"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Models imitate the demonstrated pattern, including its blind spots. Spend an example on your ugliest realistic case; it's the highest-leverage slot in the prompt."
+  },
+  {
+    "id": "lp-x07",
+    "type": "single",
+    "prompt": "Temperature 0 plus identical input does not guarantee byte-identical outputs across time because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…provider-side factors (model updates, batching non-determinism, infrastructure) can vary, so idempotency and caching must key on your side, and evals must tolerate benign variation"
+      },
+      {
+        "id": "b",
+        "text": "…temperature 0 is actually random"
+      },
+      {
+        "id": "c",
+        "text": "…tokens expire"
+      },
+      {
+        "id": "d",
+        "text": "…it does guarantee it, always and forever"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Treat determinism as strong-but-not-absolute: design result caching, dedup, and comparisons accordingly, and pin model versions where reproducibility matters."
+  }
+]

@@ -1,0 +1,123 @@
+Every AI system is a data system wearing a trench coat. Before a model can extract, classify, or answer anything, the data has to arrive, be validated, and be stored somewhere queryable, and after the model runs, its outputs need the same treatment.
+
+## Files: where data arrives
+
+You'll meet three formats constantly:
+
+- **JSON**: the native tongue of APIs and model outputs. Nested, flexible, and easy to break: a missing key is a runtime error waiting to happen.
+- **CSV**: the native tongue of spreadsheets and exports. Deceptively simple: encodings, delimiters inside quotes, and type-less columns cause endless grief.
+- **Parquet**: columnar and compressed; what you graduate to when CSVs get big.
+
+The engineering habit that matters: **validate at the boundary**. The moment data enters your system, check it against what you expect: don't let malformed records travel deep into your pipeline before exploding.
+
+## SQL: a compact language with lasting value
+
+Relational databases store data in typed tables and answer questions with SQL. SQLite (a full database in a single file, no server) is perfect for learning and for a surprising share of production workloads.
+
+```sql
+CREATE TABLE readings (
+    id INTEGER PRIMARY KEY,
+    city TEXT NOT NULL,
+    temp_c REAL NOT NULL,
+    recorded_at TEXT NOT NULL
+);
+
+-- The questions you'll ask forever:
+SELECT city, AVG(temp_c) AS avg_temp
+FROM readings
+WHERE recorded_at >= '2026-07-01'
+GROUP BY city
+HAVING AVG(temp_c) > 20
+ORDER BY avg_temp DESC
+LIMIT 5;
+```
+
+Read that query aloud: *from the readings since July, group by city, keep cities averaging over 20°, sort, top five.* SQL is declarative: you state what you want; the database figures out how.
+
+<Check
+  question="You need each customer's total order value, but only for customers whose total exceeds €1,000. Which SQL clause filters on the aggregated total?"
+  options={[
+    "WHERE total > 1000",
+    "HAVING SUM(amount) > 1000",
+    "LIMIT 1000",
+    "ORDER BY SUM(amount) > 1000"
+  ]}
+  answer={1}
+  explanation="WHERE filters rows before grouping; HAVING filters groups after aggregation. A per-customer SUM only exists after GROUP BY, so the threshold belongs in HAVING."
+  hint="WHERE runs before GROUP BY; which clause runs after?"
+/>
+
+Now write real queries against a live database: right here:
+
+<SqlPractice
+  title="Filter with WHERE"
+  instructions="The `readings` table holds temperature measurements. Select the city and temp_c of every reading strictly above 25 degrees."
+  schema={"CREATE TABLE readings (id INTEGER PRIMARY KEY, city TEXT NOT NULL, temp_c REAL NOT NULL, recorded_at TEXT NOT NULL);\nINSERT INTO readings (city, temp_c, recorded_at) VALUES\n ('Hamburg', 22.5, '2026-07-01'), ('Hamburg', 26.1, '2026-07-02'),\n ('Lisbon', 31.0, '2026-07-01'), ('Lisbon', 29.4, '2026-07-02'),\n ('Oslo', 18.2, '2026-07-01'), ('Oslo', 25.0, '2026-07-02');"}
+  solutionQuery="SELECT city, temp_c FROM readings WHERE temp_c > 25"
+  starter={"SELECT city, temp_c FROM readings WHERE "}
+/>
+
+<SqlPractice
+  title="Group and aggregate"
+  instructions="Using the same table: return each city with its average temperature (columns: city, avg_temp), but only cities whose average is above 24. Remember which clause filters aggregated values."
+  schema={"CREATE TABLE readings (id INTEGER PRIMARY KEY, city TEXT NOT NULL, temp_c REAL NOT NULL, recorded_at TEXT NOT NULL);\nINSERT INTO readings (city, temp_c, recorded_at) VALUES\n ('Hamburg', 22.5, '2026-07-01'), ('Hamburg', 26.1, '2026-07-02'),\n ('Lisbon', 31.0, '2026-07-01'), ('Lisbon', 29.4, '2026-07-02'),\n ('Oslo', 18.2, '2026-07-01'), ('Oslo', 25.0, '2026-07-02');"}
+  solutionQuery="SELECT city, AVG(temp_c) AS avg_temp FROM readings GROUP BY city HAVING AVG(temp_c) > 24"
+  starter={"SELECT city, AVG(temp_c) AS avg_temp FROM readings\n"}
+/>
+
+## The one security rule of SQL
+
+Never build queries by pasting strings together:
+
+```python
+# NEVER: one malicious city name and your table is gone
+cursor.execute(f"SELECT * FROM readings WHERE city = '{city}'")
+
+# ALWAYS: parameterized: data stays data
+cursor.execute("SELECT * FROM readings WHERE city = ?", (city,))
+```
+
+This is **SQL injection**, and it has a sibling you'll meet in the security module: *prompt* injection, where untrusted text gets concatenated into model instructions. Same disease, different host, and the parameterized-query mindset (keep data and instructions separate) is the beginning of the cure for both.
+
+<Check
+  question="Why is the parameterized query safe where the f-string version isn't?"
+  options={[
+    "Parameters are encrypted before being sent to the database",
+    "The database receives the query structure and the data separately, so data can never be interpreted as SQL",
+    "Parameters are automatically checked against a list of dangerous words",
+    "It's faster, which leaves less time for an attack"
+  ]}
+  answer={1}
+  explanation="With placeholders, the SQL structure is fixed before any user data arrives; the value is bound as pure data. There's no string in which injected SQL could take effect: no blocklist needed."
+  hint="What does the database see first: the query shape, or the user's text?"
+/>
+
+## Databases as system memory
+
+In AI systems, the database isn't just for source data. You'll use it for **state** (which items are processed, pending, failed), **audit** (what did the model output, when, at what cost), and **evaluation** (inputs, expected outputs, actual outputs). When Module 13 builds durable workflows, "the workflow survives a crash" will mean exactly "its state lives in a database, not in a variable."
+
+<GoDeeper>
+  <LinkCard href="https://www.sqlitetutorial.net/" title="SQLite Tutorial" source="sqlitetutorial.net" why="Hands-on SQL practice against the same engine this course uses." />
+  <LinkCard href="https://docs.python.org/3/library/sqlite3.html" title="sqlite3: Python standard library" source="python.org" why="SQLite needs zero installation in Python; this is the module you'll import." />
+</GoDeeper>
+
+## Model the lifecycle, not just the object
+
+A useful schema records how work changes over time. For an AI extraction job, a single `documents` table is rarely enough. Separate the immutable input, processing attempts, validated result, and review decision. That lets you answer: Which source produced this result? Which model and prompt version ran? Was the item retried? Who approved it? Can we reproduce it?
+
+Use database constraints as executable rules. `NOT NULL`, `UNIQUE`, foreign keys, and `CHECK` constraints reject impossible states regardless of which code path writes the row. Wrap related writes in a transaction so they either all commit or none do. Add indexes for actual access patterns, such as `(status, created_at)` for a worker queue, after measuring queries, not by indexing every column.
+
+For changing data, prefer additive migrations and explicit schema versions. A model output is not “just JSON”: store the raw response for audit, but also parse the fields you query into typed columns. Track provenance with source ID, source timestamp, ingestion timestamp, and a content hash.
+
+## Guided build: a durable job store
+
+Extend your module project with tables for `source_records`, `processing_attempts`, and `results`. Then prove all of the following:
+
+- the same source record cannot be inserted twice;
+- an item can move through `pending`, `processing`, `succeeded`, `needs_review`, and `failed` states;
+- a crash after an attempt is recorded does not lose the source record;
+- a transaction prevents a result without its corresponding successful attempt;
+- a query reports success rate and average processing time by day;
+- parameterized queries safely handle punctuation and hostile-looking input.
+
+Include the schema and three representative queries in your learning log. Explain which constraints enforce correctness and which rules still belong in application code.

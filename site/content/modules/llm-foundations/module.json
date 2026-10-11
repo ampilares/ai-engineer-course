@@ -1,0 +1,41 @@
+{
+  "slug": "llm-foundations",
+  "number": 7,
+  "title": "How LLMs Work",
+  "phase": "llm",
+  "summary": "From text to tokens to attention to probabilities: what actually happens inside a language model, and why it hallucinates.",
+  "outcomes": [
+    "Explain next-token prediction, tokenization, and embeddings precisely",
+    "Describe self-attention and the transformer block at an intuitive level",
+    "Reason about sampling, temperature, and context windows",
+    "Distinguish pretraining, post-training, prompting, RAG, and fine-tuning, and explain hallucination"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "next-token-prediction",
+      "title": "One task to rule them all: next-token prediction",
+      "minutes": 22
+    },
+    {
+      "slug": "tokens-and-embeddings",
+      "title": "Tokens and embeddings",
+      "minutes": 25
+    },
+    {
+      "slug": "attention-and-transformers",
+      "title": "Attention and the transformer",
+      "minutes": 27
+    },
+    {
+      "slug": "sampling-and-inference",
+      "title": "Sampling, temperature, and inference",
+      "minutes": 25
+    },
+    {
+      "slug": "training-and-limits",
+      "title": "Pretraining, post-training, and why models hallucinate",
+      "minutes": 26
+    }
+  ]
+}

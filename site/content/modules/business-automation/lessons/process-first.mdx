@@ -1,0 +1,74 @@
+The question that starts a strong automation project is not "what can AI do?" It is "**where does this process consume time, create errors, or delay a decision?**" AI is one component placed within a process. Without understanding that process, a team can optimize the wrong step.
+
+## Map before you build
+
+Take any operating process (invoice handling, support triage, candidate screening) and draw it honestly:
+
+```text
+inbox → [human reads, 4 min] → [types into ERP, 3 min] → [checks against PO, 5 min]
+      → match? → [posts payment run]
+      → mismatch? (18%) → [emails vendor, waits ~3 days] → …
+volume: 900/month · error rate: 2.1% · cost: ~180 staff-hours/month
+```
+
+The map reveals where automation candidates live. Score each step on three axes:
+
+- **Volume × time**: how many staff-hours does this step consume?
+- **Ambiguity**: deterministic (copy field A to field B)? Then it needs *software*, not AI. Judgment-shaped (read a messy email, decide the intent)? That's the AI-shaped hole.
+- **Cost of error**: high-stakes steps keep a human in the loop regardless of accuracy stats.
+
+The classic finding: the AI-worthy step is *small*: one judgment moment inside mostly-mechanical flow. The invoice example needs OCR+extraction (AI), field mapping (code), PO comparison (code), and mismatch triage (AI-assist + human). Sprinkling "AI" over the whole process is how demos are born and money dies.
+
+<Check
+  question="A step in your process is 'copy the total from the extraction output into the ERP field'. What does it need?"
+  options={[
+    "A fine-tuned model for field copying",
+    "Plain code: the step is fully deterministic; using a model adds cost and a failure probability to something software does perfectly",
+    "An agent that decides whether to copy",
+    "A human, always"
+  ]}
+  answer={1}
+  explanation="Deterministic steps get deterministic tools. Every model call spends money and reliability; spend both only on judgment-shaped steps. This is 'workflow before agent' at the business level."
+  hint="Is there any ambiguity in the step?"
+/>
+
+## Pick processes worth winning
+
+Best first targets share a profile: **high volume, low-to-medium stakes, currently swallowing hours, with clear success criteria**. Support triage, data entry from documents, meeting-notes-to-CRM, report drafting. Worst first targets: rare, catastrophic-if-wrong, or politically sacred processes.
+
+And measure the **baseline before building**: minutes per item, error rate, cycle time, monthly volume. Without a baseline, you cannot make a credible before-and-after claim to a financial or operational decision-maker. Baseline measurement is inexpensive relative to implementation and should be completed before the pilot.
+
+<Check
+  question="Why must the manual baseline be measured before the automation is built rather than reconstructed afterward?"
+  options={[
+    "Regulations require pre-registration",
+    "After rollout the manual process changes or disappears, memories flatter themselves, and you lose the only honest 'before': making ROI unprovable",
+    "Baselines are only needed for ML models",
+    "It's not necessary; ROI is obvious when automation works"
+  ]}
+  answer={1}
+  explanation="Post-hoc baselines are unmeasurable or biased. 'We used to spend 11 minutes per invoice, now 90 seconds with 0.4% errors vs 2.1%' is a business case; 'it feels faster' is a shrug."
+  hint="What happens to the 'before' once the 'after' is deployed?"
+/>
+
+<Callout type="tip">
+The people who run the process today are your best analysts and your adoption make-or-break. They know where the bodies are buried ("Tuesdays the export is always malformed"), and automation done *to* them fails where automation done *with* them sticks. Interview first, build second.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://docs.n8n.io/" title="n8n documentation" source="docs.n8n.io" why="The open-source workflow tool used in this module's labs: self-hostable and free." />
+</GoDeeper>
+
+## Find the constraint, not the most visible task
+
+Map elapsed time as well as touch time. A five-minute classification step may sit inside a three-day wait for approval; automating classification cannot materially change cycle time. Mark queues, handoffs, rework, exception rates, data entry, and decisions. Ask which step constrains throughput and whether removing it merely moves the queue downstream.
+
+Score candidate interventions on volume, avoidable effort, variability, data availability, error consequence, reversibility, integration readiness, and ability to measure an outcome. High-volume, reversible work with a clear review path is a better starting point than rare consequential judgment. Sometimes the best change is a form validation rule, template, or API integration with no model.
+
+Include the people doing the work. Their exception knowledge reveals requirements absent from procedure documents, and their adoption determines realized value. Define what becomes easier for them, what remains their responsibility, and how they can challenge or correct the system.
+
+## Guided build: an evidence-backed opportunity brief
+
+Observe or interview one real process and sample at least 20 recent cases. Produce a current-state map with volumes, touch/wait time, error and rework rate, systems, handoffs, exceptions, and control points. Propose three interventions, including one non-AI option.
+
+Select one using a transparent scorecard. Define the user, target outcome, leading and lagging metrics, protected quality/safety constraints, and explicit non-goals. The brief passes when it shows why this intervention should change the process bottleneck rather than merely create an impressive demo.

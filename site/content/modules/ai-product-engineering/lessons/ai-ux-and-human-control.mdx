@@ -1,0 +1,55 @@
+Users experience an AI system as a sequence of decisions, delays, evidence, corrections, and consequences, not as a benchmark score. Good AI UX helps a person understand what happened, verify what matters, recover from error, and retain authority.
+
+## Match interaction to risk and variability
+
+Common patterns include suggestion, draft, ranked options, answer with sources, background automation with review queue, and agent proposal requiring approval. Use suggestion or draft when user judgment is central. Use bounded automation when outcomes are reversible and performance is measured. Do not disguise a consequential autonomous decision as a harmless convenience.
+
+Show scope and state: what sources or account the system is using, whether it is searching or acting, and whether output is final. For long work, provide progress, cancellation, and a durable result location. Avoid fake precision such as an unexplained “93% confidence.” Communicate uncertainty through missing evidence, validation warnings, disagreement, or known unsupported conditions.
+
+<Check
+  question="Which approval interface best supports a reviewer before an account-changing action?"
+  options={[
+    "Show the exact proposed change, affected account, evidence, validation warnings, and approve/reject controls",
+    "Display only a button labeled 'Trust AI'",
+    "Hide the destination to reduce clutter",
+    "Approve automatically if the explanation is long"
+  ]}
+  answer={0}
+  explanation="Meaningful approval requires understanding the specific effect and evidence, not generic consent to an agent."
+  hint="What must the reviewer know to accept responsibility?"
+/>
+
+## Design correction as a first-class path
+
+Let users edit a draft, change a cited source, mark a field unknown, retry a failed step, or escalate. Preserve the original proposal and the correction reason for audit when appropriate. Do not force users to regenerate an entire response to fix one field. Confirm irreversible actions at the last responsible moment, after current conditions are revalidated.
+
+Prevent automation bias. Place evidence beside the claim, make abstention visually normal, and occasionally audit accepted output. Reviewers need enough time and context; a queue that rewards clicks per minute can turn human approval into theater.
+
+## Accessibility, privacy, and dignity
+
+Provide keyboard access, screen-reader labels, captions/transcripts, non-audio/non-camera alternatives, readable focus and error states, and control over animation or realtime pace. Do not require users to disclose sensitive details in a conversational box when a structured secure field exists. Explain retention and sharing near the input, not only in a distant policy.
+
+Avoid anthropomorphic claims that obscure responsibility. A warm interface can be appropriate, but users should know they are interacting with an automated system and how to reach a person.
+
+<Check
+  question="Reviewers approve 99% of suggestions in under two seconds, but audits find serious misses. What is the likely control failure?"
+  options={[
+    "The approval step is not meaningful; workload, evidence, incentives, and interface need redesign",
+    "Reviewers need an even smaller button",
+    "The audit should be removed",
+    "The model should generate longer explanations"
+  ]}
+  answer={0}
+  explanation="A nominal human-in-the-loop control fails when people cannot or do not perform substantive review."
+  hint="Is approval producing independent judgment?"
+/>
+
+## Guided build: prototype error and recovery
+
+Create a clickable or coded prototype for one AI workflow covering success, insufficient evidence, invalid output, slow response, tool denial, user correction, rejected approval, cancellation, and human escalation. Test it with at least five representative users or structured peer sessions.
+
+Measure task completion, time, correction success, source verification, user understanding of scope, and critical mistakes. Ask users to explain what the system did and who remains responsible. Revise the interface based on observed behavior, not preference questions alone. Submit the state map, prototype, findings, and accessibility checklist.
+
+<Callout type="warning">
+A chain-of-thought-style explanation is not guaranteed to be a faithful account of model computation. Show verifiable evidence, rules applied, tool receipts, and concise decision reasons instead of presenting generated rationale as ground truth.
+</Callout>

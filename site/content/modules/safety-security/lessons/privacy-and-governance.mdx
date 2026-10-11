@@ -1,0 +1,72 @@
+AI systems are data systems, and data carries obligations: legal, ethical, and reputational. This lesson covers protecting the data that flows through prompts, logs, and outputs, and the governance that keeps a probabilistic system accountable.
+
+## Personal data flows everywhere in an AI system
+
+Trace one customer email through a support assistant and count the copies: it's in the prompt, sent to a model provider, echoed in the trace log (Module 14), maybe embedded into a vector store (Module 9), possibly quoted in the response. Each hop is a place personal data can leak or over-persist. Principles that keep you out of trouble:
+
+- **Data minimization**: send the model only the fields the task needs. The whole customer record in the prompt is a bigger breach when (not if) a log leaks. Redact or tokenize identifiers you don't need.
+- **Know your provider terms**: does the API retain or train on your data? Enterprise tiers and zero-retention options exist for regulated data; check before piping in anything sensitive.
+- **Redact traces and logs**: the observability you built is also a data liability. Strip secrets and unnecessary PII before storage; you cannot leak what you didn't keep.
+- **Respect the legal frame**: under GDPR-style regimes, individuals have rights (access, deletion, purpose limitation); "we fed it to the model and can't get it back" is not a compliant answer. Design for deletion and know your lawful basis.
+
+<Check
+  question="Your support assistant works fine sending each customer's full CRM record (address, full history, payment info) in every prompt. From a data-protection view, the flaw is…"
+  options={[
+    "Nothing: more context always helps the model",
+    "Violating data minimization: send only fields the task needs; the surplus multiplies breach impact across prompts, provider transfer, and logs",
+    "The prompt is too long to be fast",
+    "Customers dislike long prompts"
+  ]}
+  answer={1}
+  explanation="Every field sent is copied into provider transfer and every trace. Minimization shrinks the blast radius of any leak and is a legal expectation under most privacy regimes, not just good hygiene."
+  hint="What is the cost of every extra sensitive field when a log eventually leaks?"
+/>
+
+## Confidential and cross-tenant data
+
+Beyond personal data: trade secrets, privileged documents, other customers' data. The retrieval access-control rule from Module 9 is the enforcement point (**filter at retrieval so one user can never retrieve another's documents**) and it must be real code, not a prompt request ("only answer about this user's data" is not a security control). In multi-tenant systems, tenant isolation in the data layer is non-negotiable; a shared vector index without tenant filtering is a cross-customer leak waiting for a query.
+
+## Governance: accountability for probabilistic systems
+
+Governance is how an organization stays answerable for what its AI does:
+
+- **Versioning and audit**: prompts, models, datasets, and configs are versioned (Module 3), and consequential decisions are logged with enough context to reconstruct *why* the system did what it did. "The AI decided" is not an accountable answer; "template v14 + model X + these retrieved sources produced this, logged here" is.
+- **Human accountability**: a named owner is responsible for each AI-driven decision process. Automation doesn't dissolve responsibility; it relocates it to whoever deployed the system.
+- **Appropriate use boundaries**: some decisions (medical, legal, credit, hiring) carry regulatory and ethical constraints on automation, bias, and explainability. Know which apply before deploying; the highest-stakes domains keep humans meaningfully in the loop by design and by law.
+- **Bias and fairness**: models reflect their training data. Where decisions affect people, evaluate outcomes across groups (Module 5's segment analysis, now a fairness audit) and document known limitations.
+
+<Check
+  question="A regulator asks why your AI system declined a specific customer's request last March. Which prior practice lets you answer accountably?"
+  options={[
+    "Explaining that the model is a black box and the decision can't be reconstructed",
+    "Retrieving the logged trace: prompt/template version, model ID, the exact inputs and retrieved sources, and the named process owner: versioning and audit make the decision reconstructable",
+    "Re-running the current system and assuming it matches",
+    "Pointing to the provider's documentation"
+  ]}
+  answer={1}
+  explanation="Accountability requires reconstruction. Versioned prompts/models/data plus decision logs turn 'the AI did it' into an auditable record with a responsible human: the governance payoff of habits built since Module 3."
+  hint="What did versioning + traces make possible?"
+/>
+
+<Callout type="tip">
+The through-line of this whole module: **AI safety is systems engineering, not model trust.** Least privilege, human authority for consequential actions, data minimization, audit trails, defense in depth: you deploy safely by architecting the system around a fallible component, exactly as you'd build around any unreliable dependency.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://www.nist.gov/itl/ai-risk-management-framework" title="AI Risk Management Framework" source="NIST" why="A practical, voluntary framework for governing AI risk that maps onto this module's controls." />
+  <LinkCard href="https://genai.owasp.org/llm-top-10/" title="OWASP Top 10 for LLM Applications" source="OWASP" why="Sensitive-information-disclosure and excessive-agency entries reinforce this lesson's data and governance points." />
+</GoDeeper>
+
+## Govern the complete data lifecycle
+
+Inventory data from collection through prompts, embeddings, caches, traces, eval sets, human-review tools, backups, and deletion. For each store, record purpose, lawful/organizational authority, sensitivity, owner, location, access, retention, and downstream processors. Minimize before sending: replace identifiers, select needed fields, and aggregate where detail is unnecessary.
+
+Deletion must propagate. Removing a source document while leaving chunks, embeddings, cached answers, eval examples, and backups indefinitely is not effective deletion. Test tenant isolation and subject deletion as end-to-end operations. Treat free-text logs as high risk because people and models can place unexpected sensitive data in them.
+
+Governance matches oversight to consequence. Maintain a system card with intended use, excluded use, owners, data sources, model and dependency versions, evaluation, human controls, incident path, and review date. Require stronger review for systems affecting employment, credit, health, education, legal rights, safety, or vulnerable users. Consult applicable organizational and legal requirements for the deployment context; a generic checklist is not legal clearance.
+
+## Guided build: an AI impact and data assessment
+
+Create a data-flow diagram and register for your project. Run a tabletop exercise for cross-tenant retrieval, accidental personal data in traces, a deletion request, and a harmful automated decision. Record detection, containment, notification/coordination owner, evidence preserved, and prevention change.
+
+Publish a concise system card and residual-risk decision signed by the accountable owner in your simulated project. The assessment passes when every sensitive copy and consequential decision has an owner, retention rule, access control, and tested response.

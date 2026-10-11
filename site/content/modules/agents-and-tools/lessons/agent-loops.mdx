@@ -1,0 +1,71 @@
+One tool call handles one bounded operation. An **agent** closes a loop: the model selects an action, calls a tool, observes the result, updates its working state, and continues until it reaches a terminal condition. This loop enables the system to complete variable multi-step work. It also creates additional risk because model decisions can influence external state repeatedly. Compare the bounded and unbounded versions of the same task:
+
+<AgentLoopStepper />
+
+## What the loop adds and what it costs
+
+The bounded run verifies state before acting, recognizes a refund threshold above €50, pauses for approval, and then performs the authorized action. The unbounded run skips verification, retries without a progress rule, changes its approach without evidence, and quickly produces a consequential error.
+
+Learn these recurring failure modes:
+
+- **No state verification**: acting on assumptions instead of checking (`issue_refund` before `get_order`).
+- **Unbounded retries**: errors trigger "creative" variations; creativity plus side effects equals damage.
+- **No loop budget**: an agent that cannot reach its goal may continue consuming tokens and calling tools. Every loop needs maximum iterations, wall-clock time, and cost or usage limits.
+- **Error-cascade drift**: one misread result poisons every subsequent step's reasoning; the agent ends up solving the wrong problem diligently.
+- **Non-idempotent retries**: Module 3's double-charge problem, now automated.
+
+<Check
+  question="An agent asked to 'clean up stale test accounts' can't find a delete_test_accounts tool, so over 40 iterations it improvises with the generic delete_account tool, removing accounts matching 'test', including customer 'Testa GmbH'. Which two missing bounds most directly enabled this?"
+  options={[
+    "A bigger context window and lower temperature",
+    "A loop/iteration budget (40 improvising steps unchallenged) and an approval gate on destructive actions (deletes executed without human sign-off)",
+    "Faster tools and more parallelism",
+    "A prompt that asks the agent to be more careful without changing its capabilities"
+  ]}
+  answer={1}
+  explanation="Budgets stop runaway improvisation early; approval gates ensure irreversible actions get human eyes regardless of how the reasoning drifted. Least privilege (no delete tool for this task) would have been a third wall."
+  hint="One bound limits how long it can flail; the other guards the dangerous button."
+/>
+
+## The three walls around every production agent
+
+1. **Least privilege**: the agent gets exactly the tools this task needs, with the narrowest scopes. A summarization agent has no `send_email`. Most attacks and accidents die here, *without being detected*, because the capability simply doesn't exist.
+2. **Approval gates**: consequential actions (money, deletion, external communication, anything irreversible) pause the loop for a human. The unit of review is the *action*, not the plan: humans approve `refund €89 on ORD-4821`, not "I intend to help the customer."
+3. **Budgets**: iterations, tokens, cost, and wall-clock per task. Hitting a budget is a *routable outcome* (escalate to human), not an error.
+
+State lives outside the loop too: a durable record of every step, tool call, and result, so a crashed agent can resume (or be audited) rather than restart with amnesia. That's Module 3's database habit joining Module 10.
+
+<Check
+  question="Why is 'approve the action, not the plan' the right granularity for human oversight?"
+  options={[
+    "Plans are too long to read",
+    "The agent's plan can drift after approval: only the concrete action ('refund €89 to ORD-4821') states what will actually happen, with the details a human can sanity-check",
+    "Actions are cheaper to log",
+    "Reviewing each action always costs less than reviewing the initial plan"
+  ]}
+  answer={1}
+  explanation="Between plan and execution sit many reasoning steps that can go sideways. Gating the concrete, parameterized action means the human sees exactly what's about to hit the world: amounts, recipients, targets."
+  hint="What can change between 'I plan to help' and the actual API call?"
+/>
+
+<Callout type="tip">
+Cost intuition: an agent averaging 12 steps may require roughly 12 model calls with growing context. Depending on prompt reuse, tool payloads, caching, and summarization, total usage can be many times that of a single completion. Measure the complete run and use agents only when task variability justifies the additional cost.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://www.anthropic.com/engineering/building-effective-agents" title="Building Effective Agents" source="Anthropic" why="The essay whose taxonomy (workflows vs. agents, when each wins) this module teaches." />
+</GoDeeper>
+
+## State makes the loop recoverable
+
+An agent run is a state machine, even when a framework hides it. Persist the objective, messages or compact working state, proposed and completed actions, tool results, approvals, budget consumed, and terminal status. After a crash, resume from the last committed step; do not replay a side effect just because the conversation was reconstructed.
+
+Separate **working context** from durable business state. The prompt may contain a summary of progress, but the database remains authoritative for orders, approvals, and completed actions. Memory retrieval is another tool with relevance, privacy, and staleness failure modes, not an infallible extension of the model.
+
+Loops need terminal conditions for success, safe refusal, human escalation, budget exhaustion, repeated failure, and cancellation. Detect repeated identical calls and no-progress cycles. A planning step can help on long tasks, but plans are hypotheses to revise after tool evidence, not guarantees.
+
+## Guided build: bound and replay an agent
+
+Create an agent that completes a research or triage task using two read tools and one guarded write. Persist each transition. Configure maximum steps, wall-clock deadline, token/tool budget, allowed tools, and two no-progress rules.
+
+Test 25 scenarios including tool failure, contradictory results, an unanswerable objective, repeated-call temptation, malicious tool output, cancellation, and a crash immediately after the write succeeds. Resume the crashed run and prove the side effect is not repeated. Report task success, unnecessary-tool rate, average steps, budget breaches, and escalation quality, not just whether one demo completed.

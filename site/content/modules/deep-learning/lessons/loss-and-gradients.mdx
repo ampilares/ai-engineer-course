@@ -1,0 +1,73 @@
+A network begins life with random weights and produces garbage. Training is the process that turns garbage into competence, and it rests on two ideas you can hold in one hand: a **loss function** that measures how wrong the network is, and **gradient descent** that tells every weight which way to move to be less wrong.
+
+## Loss: wrongness as a single number
+
+A loss function compares predictions with targets and returns a number that training tries to minimize. Mean squared error is common for regression. **Cross-entropy** is common for classification and penalizes confident mistakes more strongly than uncertain ones. Predicting a probability of `0.01` for the correct class produces a much larger loss than predicting `0.4`. Language-model pretraining applies the same principle to next-token prediction, which Module 7 develops further.
+
+The loss defines *what the network cares about*. Choose it carelessly and the network will optimize precisely the wrong thing with superhuman diligence.
+
+## Gradient descent: downhill in a million dimensions
+
+Imagine the loss as a landscape where each horizontal direction is one weight and altitude is wrongness. Training wants the valley floor. Calculus provides the compass: the **gradient** (the direction of steepest ascent) computed for every weight at once. Step every weight a little *against* its gradient, and loss decreases:
+
+```text
+weight ← weight − learning_rate × gradient
+```
+
+Try it. The learning rate decides your step size, and it is the single most consequential dial in training:
+
+<GradientDescentPlayground />
+
+What you just felt on one curve is real: **too small** crawls (and can stall in a shallow dip); **too large** overshoots the valley and bounces or diverges. Real training does this for millions of weights simultaneously, from noisy estimates, but the failure modes look exactly like your slider experiments.
+
+<Check
+  question="Training loss bounces wildly and then grows toward infinity. The classic first diagnosis is…"
+  options={[
+    "…the dataset is too clean",
+    "…the learning rate is too high: steps overshoot the minimum and each bounce lands higher up the walls",
+    "…the network has too few layers",
+    "…the loss function is too easy"
+  ]}
+  answer={1}
+  explanation="Divergence with oscillation is the signature of oversized steps: each update leaps across the valley to a steeper point. First move: cut the learning rate (often by 10×)."
+  hint="You saw this exact behavior at 2.0 in the widget."
+/>
+
+## Backpropagation: assigning blame through layers
+
+The gradient for a deep network's early weights depends on everything after them. **Backpropagation** computes all gradients efficiently by walking the chain rule backward from the loss: it answers, for every one of the millions of weights, *"how much did you contribute to this error?"*: in one backward pass costing about as much as the forward pass. This blame-assignment machinery is what makes training deep stacks feasible at all.
+
+Two practical facts complete the picture:
+
+- **Mini-batches:** gradients are estimated on small random batches (say 32–512 examples), not the full dataset: noisy but cheap, and the noise even helps escape bad spots. One full pass over the data is an **epoch**.
+- **Optimizers:** plain gradient descent is rarely used raw. Adam and friends add per-weight step-size adaptation and momentum: think of them as power steering for the same downhill idea.
+
+<Check
+  question="What question does backpropagation answer during training?"
+  options={[
+    "Which training examples are mislabeled?",
+    "For each weight in every layer, how much and in which direction did it contribute to the loss, so it can be nudged accordingly",
+    "How many layers should the network have?",
+    "Whether the data was split correctly"
+  ]}
+  answer={1}
+  explanation="Backprop is the chain rule organized for efficiency: one backward pass yields the gradient of the loss with respect to every parameter, making million-weight downhill steps computable."
+  hint="Gradient descent needs a gradient per weight. Where do they all come from?"
+/>
+
+<GoDeeper>
+  <VideoEmbed id="IHZwWFHWa-w" title="Gradient descent, how neural networks learn" creator="3Blue1Brown" />
+  <LinkCard href="https://karpathy.ai/zero-to-hero.html" title="Neural Networks: Zero to Hero" source="Andrej Karpathy" why="Build backpropagation from scratch in Python: the single best deep-dive companion to this module." />
+</GoDeeper>
+
+## A training step, made explicit
+
+Every optimizer step follows the same order: load a mini-batch, run the forward pass, calculate loss, clear old gradients, backpropagate, update parameters, and record metrics. Accidentally retaining gradients across steps changes the update; applying activation and loss combinations incorrectly can make training numerically unstable. Prefer library losses that combine stable operations, such as cross-entropy applied to logits rather than hand-computing logarithms of softmax probabilities.
+
+Gradients are also diagnostics. A norm near zero across early layers can mean vanishing gradients or a disconnected computation graph. Exploding norms often accompany unstable learning rates or long recurrent paths; gradient clipping can contain the symptom while you inspect the cause. Track loss and gradient norms on a short overfit test: a sufficiently expressive model should be able to memorize one tiny batch. If it cannot, suspect the data, labels, loss, or training loop before launching a long run.
+
+## Guided build: make optimization fail on purpose
+
+Train the same tiny model under four settings: sensible learning rate, 100× smaller, 100× larger, and with labels randomly shuffled. Plot training loss and validation loss for each. Record gradient norms for several steps and explain the observed curves.
+
+Then overfit a single mini-batch and verify that loss approaches zero. If it does not, debug the pipeline until it does. Your lab report must distinguish optimization failure, generalization failure, and an impossible task; those diagnoses lead to different fixes.

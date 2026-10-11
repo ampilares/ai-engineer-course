@@ -1,0 +1,36 @@
+{
+  "slug": "data-engineering",
+  "number": 4,
+  "title": "Data Engineering for AI Systems",
+  "phase": "foundations",
+  "summary": "Build trustworthy data and knowledge pipelines: source contracts, idempotent ingestion, lineage, quality, labeling, feedback, and lifecycle operations.",
+  "outcomes": [
+    "Design batch, event, and change-data ingestion with explicit source contracts and provenance",
+    "Build idempotent, observable pipelines with data-quality gates and versioned datasets",
+    "Create labeling and feedback workflows that control bias and reviewer disagreement",
+    "Operate features and knowledge sources for freshness, permissions, correction, and deletion"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "source-to-dataset",
+      "title": "From source systems to trustworthy datasets",
+      "minutes": 25
+    },
+    {
+      "slug": "pipelines-quality-lineage",
+      "title": "Reliable pipelines, quality gates, and lineage",
+      "minutes": 27
+    },
+    {
+      "slug": "labeling-and-feedback",
+      "title": "Labels, review operations, and feedback loops",
+      "minutes": 26
+    },
+    {
+      "slug": "data-lifecycle",
+      "title": "Freshness, permissions, versioning, and deletion",
+      "minutes": 25
+    }
+  ]
+}

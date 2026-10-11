@@ -1,0 +1,103 @@
+Almost everything an AI engineer builds is glued together with HTTP APIs: you *call* model APIs, data APIs, and business systems, and you *expose* your own services the same way. Understanding the request/response cycle deeply (not just copy-pasting `requests.get`) is what lets you debug the weird failures.
+
+## One request, dissected
+
+```python
+import httpx
+
+response = httpx.get(
+    "https://api.open-meteo.com/v1/forecast",
+    params={"latitude": 52.52, "longitude": 13.41, "current": "temperature_2m"},
+    headers={"User-Agent": "paie-course/1.0"},
+    timeout=10.0,
+)
+response.raise_for_status()          # turn 4xx/5xx into exceptions
+data = response.json()               # parse the JSON body
+temp = data["current"]["temperature_2m"]
+```
+
+Every line encodes a decision:
+
+- **`params`** become the query string: visible in logs and caches, so never put secrets or personal data there.
+- **`timeout=10.0`**: without it, a hung server hangs *your* system forever. Production code always sets timeouts.
+- **`raise_for_status()`**: a `404` or `500` still returns a response object; without this check, the client may try to parse an error page as JSON.
+
+## Status codes: the API's body language
+
+| Range | Meaning | Your move |
+|---|---|---|
+| 2xx | success | proceed |
+| 400 | your request is malformed | fix the request: retrying is pointless |
+| 401 / 403 | bad or missing credentials / not allowed | fix auth: retrying is pointless |
+| 404 | resource doesn't exist | handle "not found" as a normal case |
+| 429 | you're rate-limited | slow down, wait, retry after the indicated delay |
+| 5xx | the server broke | retry with backoff: it's usually temporary |
+
+The crucial distinction: **4xx errors are yours, 5xx errors are theirs.** Retrying a `400` in a loop accomplishes nothing; *not* retrying a transient `503` turns a hiccup into an outage.
+
+<Check
+  question="Your nightly job gets a 429 response from a model API. What is the correct behavior?"
+  options={[
+    "Crash immediately: the API is broken",
+    "Retry instantly in a tight loop until it works",
+    "Wait (respecting any Retry-After header), then retry with increasing backoff and a retry limit",
+    "Ignore the response and move on as if it succeeded"
+  ]}
+  answer={2}
+  explanation="429 means 'too fast, not forbidden'. Backing off and retrying with a cap is exactly what the server is asking for. Tight-loop retries make the rate limiting worse, and can get you banned."
+  hint="429 = Too Many Requests. The server is telling you something specific."
+/>
+
+## Idempotency: the double-send problem
+
+Networks are ambiguous: if your request times out, you don't know whether the server processed it. So clients retry, which means servers can receive the same request twice. If that request was *"charge €50"*, the difference between a safe system and an incident is **idempotency**: designing the operation so doing it twice equals doing it once, usually via a unique idempotency key the server deduplicates on.
+
+```python
+httpx.post(url, json=payload, headers={"Idempotency-Key": "order-4821-charge"})
+```
+
+This idea returns with force in the automation modules: an AI agent that retries a non-idempotent action is a machine for creating duplicate side effects.
+
+<Check
+  question="A payment request times out and you can't tell if it was processed. The operation uses an idempotency key. What happens if you retry?"
+  options={[
+    "The customer may be charged twice: retrying is unsafe",
+    "The server recognizes the key and ensures the charge happens at most once",
+    "The retry always fails with a 400 error",
+    "The key makes the request faster"
+  ]}
+  answer={1}
+  explanation="That's the whole point of the key: the server deduplicates requests carrying the same key, so a retry after an ambiguous timeout is safe. Without it, retrying money-moving operations is gambling."
+  hint="Idempotent = doing it n times has the same effect as once."
+/>
+
+## Auth in one paragraph
+
+Most APIs authenticate with a **bearer token** (`Authorization: Bearer sk-…`) or API key header. Rules that never change: keys live in environment variables or a secret store, never in code or Git; every key should have the narrowest possible permissions; assume any key that ever touched a public repo is compromised and rotate it.
+
+<GoDeeper>
+  <LinkCard href="https://www.python-httpx.org/" title="HTTPX documentation" source="python-httpx.org" why="The modern Python HTTP client used in this course: sync and async with the same API." />
+  <LinkCard href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" title="HTTP response status codes" source="MDN" why="The full status-code reference worth skimming once and bookmarking forever." />
+</GoDeeper>
+
+## Production pattern: one disciplined client
+
+Do not scatter raw HTTP calls throughout an application. Put each external service behind a small client that owns authentication, timeouts, retries, response validation, and error translation. The rest of the application should receive domain results such as `WeatherReading` or `CustomerNotFound`, not a provider-specific response object.
+
+Retry only failures that are plausibly transient: connection errors, timeouts, `429`, and selected `5xx` responses. Use exponential backoff with jitter and a strict attempt limit. Jitter matters when hundreds of workers fail together; without it, they all retry together and create another traffic spike. Set separate connect, read, write, and pool timeouts when the client supports them. A ten-second total timeout can otherwise hide whether DNS, connection establishment, or response generation is slow.
+
+Also decide how a multi-page API ends. Good clients follow pagination cursors, bound the maximum pages, and checkpoint progress. They validate content type before parsing, because a proxy can return an HTML error page with `200 OK`.
+
+## Guided build: harden an API ingestion step
+
+Wrap one public JSON API in a typed Python function and demonstrate these cases with automated tests:
+
+- a valid response is parsed into your domain type;
+- invalid input fails before a network call;
+- `404` becomes an explicit “not found” result;
+- `429` and `503` retry with a cap;
+- malformed JSON and a missing required field are quarantined;
+- a timeout records a useful error without losing previously processed items;
+- two deliveries with the same source ID create one stored record.
+
+Record attempt count, status code, elapsed time, and source request ID. Do not log credentials or full sensitive payloads. The deliverable is not merely a successful request; it is evidence that the client behaves predictably when the network does not.

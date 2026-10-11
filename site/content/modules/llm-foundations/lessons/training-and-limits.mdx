@@ -1,0 +1,83 @@
+A raw next-token predictor trained on the internet is not a helpful assistant: it's an internet *simulator*. Ask it a question and it might continue with three more questions, because that's what forum pages look like. The journey from simulator to assistant, and the limits that survive that journey, complete your mental model.
+
+## Stage 1: Pretraining
+
+Trillions of tokens of text; one objective: predict the next token; months of GPU time; enormous cost. Out comes the **base model**: vast compressed knowledge and skill, no manners, no goals. It doesn't answer questions: it *continues text*.
+
+## Stage 2: Post-training
+
+Two comparatively cheap steps turn the simulator into an assistant:
+
+- **Supervised fine-tuning (SFT):** continue training on curated example conversations (helpful, formatted, refusing appropriately): teaching the *format and persona* of assistance.
+- **Preference optimization (RLHF and successors):** humans (and increasingly AI raters) rank candidate responses; the model is optimized toward preferred ones: sharpening tone, honesty, safety, and judgment.
+
+Post-training is a relatively small but influential stage. Pretraining develops broad capabilities and knowledge, while post-training shapes how the model follows instructions and expresses what it learned. Preference optimization can also encourage agreement with a user's framing, a behavior known as sycophancy. External verification is therefore more reliable than asking the model to confirm its own answer.
+
+<Check
+  question="A base (pretrained-only) model, given 'What is the capital of France?', responds with three more geography questions. Why?"
+  options={[
+    "It doesn't know the capital of France",
+    "It's imitating its training distribution (quiz pages and question lists) because nothing taught it to be an answerer rather than a text-continuer",
+    "Its context window is full",
+    "The temperature is too low"
+  ]}
+  answer={1}
+  explanation="The knowledge is in there; the assistant behavior isn't. Post-training (SFT + preference optimization) is what converts 'plausible continuation of this text' into 'helpful response to this user'."
+  hint="What does a list of questions on the internet usually continue with?"
+/>
+
+## Why models hallucinate: mechanically, not morally
+
+A **hallucination** is fluent, confident, false output. It isn't lying or malfunction; it's the architecture doing exactly its job:
+
+1. The model *must* emit a distribution: "no answer" isn't a native option.
+2. Training rewarded *plausible* continuations; truth was only ever correlated with plausibility.
+3. For well-represented facts the correlation is strong. For rare entities, precise numbers, citations, and anything after the training cutoff, plausible-but-false wins: the model generates what a correct answer *would look like*: authoritative title, journal name, page numbers, all synthesized.
+
+Four standard mitigations structure much of this course. **Retrieval** grounds answers in supplied documents (Module 9). **Verification** checks claims against systems of record (Modules 13 and 14). **Abstention paths** define insufficient evidence as a valid outcome (Module 9). **Calibrated UX** distinguishes generated content from verified facts. These measures manage model limitations at the system level rather than changing the underlying model.
+
+<Check
+  question="A model cites 'Müller et al. (2019), Journal of Applied Hydrology, pp. 344–361', which doesn't exist. What's the mechanical explanation?"
+  options={[
+    "The paper was deleted from the internet after training",
+    "Asked for a citation, the model generates the most plausible-looking citation-shaped text; nothing in decoding checks existence",
+    "A prankster poisoned the training data with this exact fake",
+    "The temperature was set exactly to 1.0"
+  ]}
+  answer={1}
+  explanation="The model produces text with the statistical shape of a real citation: plausible authors, journal, pages. Generation is pattern completion, not lookup; verification must live outside the model."
+  hint="Does any step of next-token generation consult a bibliography?"
+/>
+
+## The map you now own
+
+Five terms, constantly conflated in the wild, now cleanly separated:
+
+| Intervention | What changes | When |
+|---|---|---|
+| **Pretraining** | everything: knowledge and skill | done once by providers, $$$ |
+| **Post-training** | behavior, format, values | done by providers (mostly) |
+| **Prompting** | the context, per request | your default tool: Module 8 |
+| **RAG** | knowledge available in context, per request | changing/private facts: Module 9 |
+| **Fine-tuning** | weights, for format/style/domain | last resort: Module 17 |
+
+Interview-grade rule of thumb: **behavior problem → prompt; knowledge problem → RAG; format/style at scale → fine-tune.**
+
+<GoDeeper>
+  <VideoEmbed id="7xTGNNLPyMI" title="Deep dive into LLMs like ChatGPT" creator="Andrej Karpathy" />
+  <LinkCard href="https://huggingface.co/learn/llm-course/chapter1/1" title="Hugging Face LLM Course" source="huggingface.co" why="Covers the full pretraining → SFT → preference-tuning pipeline with code." />
+</GoDeeper>
+
+## Capability, knowledge, and behavior are different levers
+
+Pretraining builds broad representations and next-token capability. Post-training shapes how those capabilities are expressed: following instructions, preferring useful responses, refusing some requests, and using tools. Retrieval supplies current external evidence. Fine-tuning changes behavior or task performance from examples. None of these mechanisms turns generation into a database lookup or proves that a claim is true.
+
+Model limitations are conditional, not captured by one benchmark number. Performance changes with language, domain, context position, prompt shape, tool availability, and distribution shift. Public benchmark scores can be affected by data contamination or repeated optimization against the test. For engineering decisions, a smaller representative private eval is usually more predictive than a broad leaderboard.
+
+Long context also creates a false sense of safety. Information may fit in the window yet be overlooked, especially in noisy middle positions. More tokens can reduce answer quality while increasing cost. Retrieval, context selection, and explicit abstention remain necessary.
+
+## Guided build: create a behavior map
+
+Choose two models with different size or cost profiles and evaluate 25 prompts across factual recall, instruction following, structured extraction, long-context evidence use, refusal, and an out-of-domain case. Record model/version, complete configuration, latency, token use, and result.
+
+For every failure, classify the most plausible lever: clearer specification, deterministic validation, retrieval, tool use, fine-tuning, a different model, or refusing the use case. End with a decision table that shows why “use a smarter model” is only one option and often not the cheapest or safest one.

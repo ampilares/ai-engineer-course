@@ -1,0 +1,78 @@
+Evals tell you how the system performs on known inputs before shipping. **Observability** tells you what's happening with real users right now, and gives you the raw material (traces) to debug the failures you didn't anticipate. Offline evals + online monitoring form one loop, and production failures feed the eval set. That loop is the whole methodology.
+
+## Traces: the debugging superpower
+
+A **trace** is the complete record of one request through your system: every step, in order, with inputs, outputs, and timings:
+
+```text
+trace 8f3a · user question 14:02:31 · total 6.4s · $0.011
+ ├─ retrieval: query → 5 chunks (ids, scores)          320ms
+ ├─ prompt build: 2,840 tokens (template v14)           2ms
+ ├─ model call: claude-sonnet, temp 0.2 → 480 tokens  5.9s
+ ├─ validation: schema OK, 2 citations                  1ms
+ └─ response → user; feedback: 👎
+```
+
+A negative user rating becomes diagnosable when you can read the trace from top to bottom. Determine whether retrieval supplied the wrong chunks or generation produced a poor answer from good chunks. Without a trace, the complaint lacks enough context for a targeted fix. With a trace, it can become a classified failure and a new evaluation case. Capture traces from the beginning, with appropriate privacy controls, instead of waiting for the first unexplained incident.
+
+Two hygiene rules: **redact secrets and sensitive personal data** before storage (traces are a data liability: Module 15 returns to this), and **version-stamp everything** (prompt version, model ID, retrieval config) so a trace answers "what exactly produced this?"
+
+<Check
+  question="A user reports a wrong answer. The trace shows retrieval returned the correct policy chunks, but the model's answer contradicts them. Where do you act, and what else do you do?"
+  options={[
+    "Fix retrieval: it's always retrieval",
+    "The failure is in generation (grounding/prompt/model), and the case goes into the eval set so this failure class is guarded forever",
+    "Delete the trace and apologize to the user",
+    "Increase top-k to retrieve more chunks"
+  ]}
+  answer={1}
+  explanation="The trace localizes the failure: context was right, faithfulness failed. Fix the grounding prompt or model choice, and the failure museum (eval set) gets a new exhibit. Localize → fix → immortalize is the loop."
+  hint="Which stage did its job correctly, according to the trace?"
+/>
+
+## Metrics and alerts: the dashboard that matters
+
+Four families, per feature:
+
+- **Quality proxies:** Track validation failures, abstention, citation coverage, user feedback, and human correction rates in review queues. Corrections are especially valuable when they are sampled, reviewed, and added to a versioned evaluation dataset.
+- **Latency**: p50 and **p95/p99** (means hide the pain users remember), split by stage.
+- **Cost**: tokens and € per request and per day, with **budget alerts** (the difference between "unusual Tuesday" and "surprise invoice").
+- **Reliability**: error rates by type: timeouts, rate limits, refusals, truncations.
+
+Alert on *changes*, not just absolutes: correction rate doubling week-over-week is your earliest **drift** signal: inputs shifting under the model (new document format, new customer segment, provider model update). Drift is Module 5's promise arriving on schedule; monitoring is how you catch it before your users do.
+
+<Check
+  question="Mean latency is a healthy 2.1s, but complaints about slowness keep coming. The metric you're missing is…"
+  options={[
+    "p95/p99 latency: a fine average coexists with 1-in-20 requests taking 15s, and those are the requests users remember",
+    "Total request count",
+    "GPU temperature",
+    "Average token price"
+  ]}
+  answer={0}
+  explanation="Tail latency is the user experience for the unlucky minority, and means bury it. SLOs are set on percentiles for exactly this reason."
+  hint="What does an average hide about a distribution?"
+/>
+
+<Callout type="note">
+**Module project: the eval harness.** For your Module 9 or 8 system: build a 40+ case dataset (real traffic + failure museum + adversarial), two tiers of graders plus one calibrated LLM judge (report your human-agreement number), tracing on every request, and a regression gate in CI. Then prove the loop: introduce a deliberate regression and show the gate catching it.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://langfuse.com/docs" title="Langfuse" source="langfuse.com" why="Open-source, self-hostable LLM tracing and eval platform: fits this course's free-stack constraint." />
+  <LinkCard href="https://hamel.dev/blog/posts/evals/" title="Your AI Product Needs Evals" source="Hamel Husain" why="Re-read after building: the error-analysis workflow section will land differently now." />
+</GoDeeper>
+
+## Instrument for diagnosis and privacy
+
+Use one correlation ID across the user request, retrieval, model calls, tools, queue transitions, approvals, and final outcome. Each span should record operation name, start/end, status, model/config version, token counts, retry count, and safe identifiers. Apply redaction before telemetry leaves the process, restrict trace access, and set retention by data sensitivity. Observability is not permission to create a second uncontrolled copy of every prompt.
+
+Monitor service health, model-system quality, safety, and business outcomes together. A quality drop may come from a source parser, traffic mix, stale index, or review backlog rather than the model. Segment and correlate. Set alerts on actionable symptoms with owners and runbooks; noisy alerts teach teams to ignore the system.
+
+Feedback is biased: users rate unusual failures more than routine success, and thumbs-up is not a gold label. Join feedback with sampled audits and downstream outcomes. Keep training/eval inclusion as a reviewed pipeline with consent and provenance.
+
+## Guided build: diagnose from a trace
+
+Instrument one complete project and inject at least six failures: slow provider, retrieval miss, schema error, tool denial, duplicate event, and reviewer backlog. Build a dashboard for volume, success, review rate, quality sample, p95 latency, cost per success, and error category.
+
+For each injected failure, show the trace path and the alert or query that finds it. Define an SLO and a burn-rate or sustained-threshold alert with an owner and first response. The dashboard passes when it helps identify the failing stage without reading raw sensitive prompts.

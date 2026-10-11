@@ -1,0 +1,506 @@
+[
+  {
+    "id": "ev-q01",
+    "type": "single",
+    "prompt": "Why can't classical assert-based tests fully cover an LLM-powered feature?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Model outputs are probabilistic and often open-ended: many phrasings are correct, so exact-match assertions are the wrong instrument for quality"
+      },
+      {
+        "id": "b",
+        "text": "Tests cannot make network calls"
+      },
+      {
+        "id": "c",
+        "text": "LLM outputs are always JSON"
+      },
+      {
+        "id": "d",
+        "text": "They can; nothing changes"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The testing discipline survives but the mechanics evolve: datasets + graders + aggregate scoring replace single expected strings. (Code checks still cover the checkable parts.)"
+  },
+  {
+    "id": "ev-q02",
+    "type": "single",
+    "prompt": "A prompt tweak fixes the example you were debugging. The essential step before shipping is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…running the full regression eval: prompt changes shift behavior globally, and fix-one-break-five is the default failure mode"
+      },
+      {
+        "id": "b",
+        "text": "…trying two more examples by hand"
+      },
+      {
+        "id": "c",
+        "text": "…shipping immediately; one fixed example proves improvement"
+      },
+      {
+        "id": "d",
+        "text": "…raising temperature to confirm robustness"
+      }
+    ],
+    "answer": "a",
+    "explanation": "'Looks better on my example' is how systems rot. The regression set is the only thing that sees the whole distribution."
+  },
+  {
+    "id": "ev-q03",
+    "type": "single",
+    "prompt": "The most valuable ongoing source of eval dataset examples is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…production failures and human corrections: each one becomes a permanent regression case"
+      },
+      {
+        "id": "b",
+        "text": "…synthetically generated praise"
+      },
+      {
+        "id": "c",
+        "text": "…examples the system already handles perfectly"
+      },
+      {
+        "id": "d",
+        "text": "…another company's benchmark"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The failure museum compounds: every fixed bug is guarded forever. Real traffic beats imagination; failures beat successes."
+  },
+  {
+    "id": "ev-q04",
+    "type": "single",
+    "prompt": "After weeks of tuning against the same 50 eval examples, scores are excellent but users still complain. This is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…overfitting to the eval set: the same disease as tuning on the test set; refresh from traffic and keep a held-out slice"
+      },
+      {
+        "id": "b",
+        "text": "…proof users are wrong"
+      },
+      {
+        "id": "c",
+        "text": "…a model deprecation issue"
+      },
+      {
+        "id": "d",
+        "text": "…impossible"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Every peek optimizes for the peeked-at set. Module 5's split discipline applies to prompts and pipelines exactly as it did to models."
+  },
+  {
+    "id": "ev-q05",
+    "type": "single",
+    "prompt": "The correct order for choosing graders is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…exhaust cheap code checks (schema, length, citations, forbidden content), use reference comparison where gold answers exist, and reserve LLM judges for genuinely open-ended criteria"
+      },
+      {
+        "id": "b",
+        "text": "…LLM judges for everything; they're most sophisticated"
+      },
+      {
+        "id": "c",
+        "text": "…human review of every output forever"
+      },
+      {
+        "id": "d",
+        "text": "…whichever grader gives the highest scores"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Cheapest-sufficient-instrument first. A surprising share of 'quality' is deterministically checkable, and free checks run on every commit."
+  },
+  {
+    "id": "ev-q06",
+    "type": "single",
+    "prompt": "Before trusting an LLM judge, you must…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…measure its agreement against human grading on a labeled sample, and fix the rubric/judge prompt until agreement is high (~85–90%+)"
+      },
+      {
+        "id": "b",
+        "text": "…verify it uses the largest available model"
+      },
+      {
+        "id": "c",
+        "text": "…nothing; judges are inherently reliable"
+      },
+      {
+        "id": "d",
+        "text": "…ensure it grades on a 1–100 scale for precision"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A judge is a probabilistic system with known biases (length, position, self-family preference). Human agreement is its accuracy metric; without calibration it automates your blind spots."
+  },
+  {
+    "id": "ev-q07",
+    "type": "single",
+    "prompt": "A user reports a wrong answer. The trace shows correct chunks retrieved but an answer contradicting them. The fix belongs in…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…generation (grounding prompt/model), and the case joins the eval set permanently"
+      },
+      {
+        "id": "b",
+        "text": "…retrieval: increase top-k"
+      },
+      {
+        "id": "c",
+        "text": "…the user's expectations"
+      },
+      {
+        "id": "d",
+        "text": "…the database schema"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Traces localize: context right, faithfulness wrong ⇒ generation-side fix. Localize → fix → immortalize as a regression case."
+  },
+  {
+    "id": "ev-q08",
+    "type": "single",
+    "prompt": "Why do latency SLOs use p95/p99 rather than the mean?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Averages hide the tail: a healthy mean coexists with 1-in-20 requests being painfully slow, and those define the experience users remember"
+      },
+      {
+        "id": "b",
+        "text": "Percentiles are easier to compute"
+      },
+      {
+        "id": "c",
+        "text": "Means are illegal in SLOs"
+      },
+      {
+        "id": "d",
+        "text": "p99 is always lower than the mean"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Tail latency is the unlucky user's reality. Distributions, not points: the same statistical honesty as everywhere else in this course."
+  },
+  {
+    "id": "ev-q09",
+    "type": "single",
+    "prompt": "The human-correction rate in your review queue doubles over two weeks with no deploys. The most likely story is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…drift: the input distribution shifted (new formats, segments, or an upstream/provider change): investigate recent traces against older ones"
+      },
+      {
+        "id": "b",
+        "text": "…reviewers became lazier"
+      },
+      {
+        "id": "c",
+        "text": "…nothing; correction rates are random"
+      },
+      {
+        "id": "d",
+        "text": "…the database is full"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Quality proxies moving without deploys = the world moving under the model. Change-based alerts on correction/abstention rates are your earliest drift detectors."
+  },
+  {
+    "id": "ev-q10",
+    "type": "multi",
+    "prompt": "What belongs in every stored trace? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Each stage's inputs/outputs and timings"
+      },
+      {
+        "id": "b",
+        "text": "Version stamps: prompt version, model ID, config"
+      },
+      {
+        "id": "c",
+        "text": "Token counts and cost"
+      },
+      {
+        "id": "d",
+        "text": "Unredacted API keys and full customer PII for completeness"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "A trace must answer 'what exactly produced this?': stages, versions, costs. Secrets and unnecessary personal data are redacted: traces are a liability surface too."
+  },
+  {
+    "id": "ev-q11",
+    "type": "single",
+    "prompt": "'Can the cheaper model handle our classification step?' The professional way to answer is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…run both models on the eval set and compare scores, cost, and latency: minutes of compute replaces weeks of opinion"
+      },
+      {
+        "id": "b",
+        "text": "…ask on social media"
+      },
+      {
+        "id": "c",
+        "text": "…always use the biggest model to be safe"
+      },
+      {
+        "id": "d",
+        "text": "…try three examples in a playground"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Evals are the decision engine for model tiering. This is why teams with evals iterate boldly and cheaply."
+  },
+  {
+    "id": "ev-q12",
+    "type": "single",
+    "prompt": "Why gate releases on critical criteria rather than a single average quality score?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Averages can rise while rare critical behaviors (faithfulness, abstention) regress: the gate must watch the failures that actually hurt"
+      },
+      {
+        "id": "b",
+        "text": "Averages are too hard to compute"
+      },
+      {
+        "id": "c",
+        "text": "Critical criteria never change"
+      },
+      {
+        "id": "d",
+        "text": "Gates are only for classical software"
+      }
+    ],
+    "answer": "a",
+    "explanation": "One rising mean can hide a hallucination regression on 5% of cases. Score criteria separately; block on the consequential ones."
+  },
+  {
+    "id": "ev-x01",
+    "type": "single",
+    "prompt": "In pairwise A/B judging, why must the order of the two candidates be randomized per comparison?",
+    "options": [
+      {
+        "id": "a",
+        "text": "LLM judges show position bias (favoring one slot); randomization prevents the bias from systematically inflating one system"
+      },
+      {
+        "id": "b",
+        "text": "Alphabetical order is unfair to system Z"
+      },
+      {
+        "id": "c",
+        "text": "It makes judging faster"
+      },
+      {
+        "id": "d",
+        "text": "Order doesn't matter to models"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Known judge biases (position, length, self-family preference) get engineering mitigations: randomize order, grade criteria separately, calibrate against humans."
+  },
+  {
+    "id": "ev-x02",
+    "type": "single",
+    "prompt": "The economic argument for exhausting code-check graders before LLM judges is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…code checks are free, deterministic, and run on every commit: spending judge tokens on what a regex could verify wastes money and adds noise"
+      },
+      {
+        "id": "b",
+        "text": "…LLM judges are illegal in CI"
+      },
+      {
+        "id": "c",
+        "text": "…code checks are more prestigious"
+      },
+      {
+        "id": "d",
+        "text": "…there is no argument; always use judges"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Cheapest sufficient instrument, always: schema validity, citation presence, forbidden content, and length are deterministic questions with deterministic answers."
+  },
+  {
+    "id": "ev-x03",
+    "type": "single",
+    "prompt": "A sensible release-gate policy for evals is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…block on regressions in critical criteria (faithfulness, safety, abstention); allow judgment calls on minor aggregate movements, with the failure list reviewed either way"
+      },
+      {
+        "id": "b",
+        "text": "…block on any metric moving at all"
+      },
+      {
+        "id": "c",
+        "text": "…never block; evals are advisory"
+      },
+      {
+        "id": "d",
+        "text": "…block only on Fridays"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Gates need teeth where harm lives and flexibility where noise lives. Criteria-level gating (not one average) is what makes that possible."
+  },
+  {
+    "id": "ev-x04",
+    "type": "single",
+    "prompt": "Traces must be redacted before storage because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…they capture full prompts and outputs (including personal data and secrets) making the observability store itself a breach surface and retention liability"
+      },
+      {
+        "id": "b",
+        "text": "…raw traces are too large to store"
+      },
+      {
+        "id": "c",
+        "text": "…redaction improves search speed"
+      },
+      {
+        "id": "d",
+        "text": "…they mustn't be; full fidelity always wins"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Observability and privacy collide in traces. Redact secrets and unneeded PII at capture; you cannot leak what you didn't keep (Module 15)."
+  },
+  {
+    "id": "ev-x05",
+    "type": "single",
+    "prompt": "Offline evals and canary deployments are complementary because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…evals catch anticipated failure classes pre-release; the canary catches the unanticipated in production with a small blast radius: neither substitutes for the other"
+      },
+      {
+        "id": "b",
+        "text": "…they are identical techniques"
+      },
+      {
+        "id": "c",
+        "text": "…canaries make evals unnecessary"
+      },
+      {
+        "id": "d",
+        "text": "…evals make canaries unnecessary"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Two nets at different heights: known-unknowns offline, unknown-unknowns online-but-bounded. Mature teams run both on every meaningful change."
+  },
+  {
+    "id": "ev-x06",
+    "type": "single",
+    "prompt": "Why version eval datasets like code?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Scores are only comparable against the same dataset version: an 87% on today's set versus 85% on last month's set is not an improvement claim, and audits need to reconstruct exactly what was measured"
+      },
+      {
+        "id": "b",
+        "text": "Git compresses JSON well"
+      },
+      {
+        "id": "c",
+        "text": "Datasets are too small to matter"
+      },
+      {
+        "id": "d",
+        "text": "To prevent anyone from adding cases"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The dataset is half the measurement instrument. Version it, and note which version every reported score came from, or comparisons are apples to oranges."
+  },
+  {
+    "id": "ev-x07",
+    "type": "single",
+    "prompt": "Human corrections from production review queues are the richest quality signal because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…they are continuous, labeled, real-traffic ground truth: every correction is a solved failure case ready to become an eval example"
+      },
+      {
+        "id": "b",
+        "text": "…they're cheaper than logging"
+      },
+      {
+        "id": "c",
+        "text": "…they arrive pre-anonymized"
+      },
+      {
+        "id": "d",
+        "text": "…humans are always right"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The review queue is an eval-data factory. Systems that harvest it improve continuously; systems that discard it re-learn failures the hard way."
+  },
+  {
+    "id": "ev-x08",
+    "type": "single",
+    "prompt": "A judge scores answers 'helpful: 8.7/10' on average. What's the methodological weakness?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Fine-grained scalar scales are noisy and drift-prone for LLM judges; binary or 3-point criteria-specific judgments calibrate better against humans and produce actionable failures"
+      },
+      {
+        "id": "b",
+        "text": "8.7 is too low to report"
+      },
+      {
+        "id": "c",
+        "text": "Helpfulness cannot be judged at all"
+      },
+      {
+        "id": "d",
+        "text": "The average should be a median"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Ask judges narrow, checkable questions such as 'does the answer cite a source for the refund claim?' instead of requesting a broad subjective score. Precise questions produce more interpretable measurements."
+  }
+]

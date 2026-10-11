@@ -1,0 +1,121 @@
+An AI engineer's job is to turn a *probabilistic* model into a *dependable* system. That sentence contains the whole course.
+
+A language model will sometimes be brilliant and sometimes be confidently wrong, that's not a bug you can fix, it's the nature of the tool. What makes an AI product trustworthy is everything **around** the model: the data pipeline feeding it, the schema validating its output, the tests catching regressions, the retry logic surviving outages, the approval step guarding the dangerous button.
+
+All of that is ordinary software engineering. Which is why this course spends its first weeks with no AI in sight.
+
+## The anatomy of a real AI system
+
+Consider a system that reads incoming invoices and enters them into accounting software:
+
+1. **Ingest**: a webhook or poller receives the invoice file
+2. **Extract**: a model turns the PDF into structured fields *(the only AI step)*
+3. **Validate**: code checks the fields: does the total match line items? Is the vendor known?
+4. **Route**: valid entries proceed; doubtful ones go to a human
+5. **Act**: an API call writes to the accounting system
+6. **Observe**: logs, metrics, and alerts tell you when any step degrades
+
+Five of the six steps are deterministic engineering. If step 1 drops files or step 5 double-posts payments, the world's best model in step 2 is irrelevant.
+
+<Check
+  question="An invoice-processing AI keeps 'hallucinating' totals that don't match the line items, and wrong invoices reach the accounting system. What's the most effective first fix?"
+  options={[
+    "Switch to a bigger, smarter model",
+    "Add a validation step that checks totals against line items and routes mismatches to a human",
+    "Write a sterner prompt telling the model not to make mistakes",
+    "Lower the temperature to zero"
+  ]}
+  answer={1}
+  explanation="A deterministic check catches every mismatch regardless of why the model erred. Better models and prompts may reduce the error rate, but only validation guarantees wrong totals can't silently pass through."
+  hint="Which option works even if the model never improves?"
+/>
+
+## Python: the lingua franca
+
+Python dominates AI work because every model API, ML library, and data tool speaks it. You don't need to be a Python wizard: you need a focused subset, written carefully:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Invoice:
+    vendor: str
+    total_cents: int          # money as integers, never floats
+    currency: str = "EUR"
+
+def validate(inv: Invoice) -> list[str]:
+    """Return a list of problems; empty means valid."""
+    problems = []
+    if inv.total_cents <= 0:
+        problems.append("total must be positive")
+    if len(inv.currency) != 3:
+        problems.append(f"bad currency: {inv.currency!r}")
+    return problems
+```
+
+Two habits in that snippet matter more than any syntax:
+
+- **Type hints** (`inv: Invoice`, `-> list[str]`) let tools catch mistakes before runtime and tell every future reader (including a model assisting you) exactly what flows where.
+- **Returning problems instead of crashing** turns validation into data you can route on: count it, log it, send it to a human.
+
+<Callout type="tip">
+Throughout this course, AI assistants are allowed for learning and building, with one rule: you must be able to explain every line you keep. Borrowed code you can't explain is a liability you've signed for.
+</Callout>
+
+## Errors are the main event
+
+Beginner code handles the happy path. Engineer code handles the other paths, because in production they're not rare:
+
+- The API you call will time out, rate-limit you, and occasionally return garbage with a `200 OK`.
+- The file will be empty, malformed, or encoded strangely.
+- The same message will arrive twice (networks retry!): will you charge the customer twice?
+
+<Check
+  question="Your script calls an external API in a loop. The network briefly drops, an exception goes uncaught, and 3 hours of processing die at item 4,812 of 5,000. What design principle was violated?"
+  options={[
+    "The loop should have been faster so it finished before the outage",
+    "Expected failures should be caught and handled per item, so one failure doesn't destroy all progress",
+    "The script should never use loops for large jobs",
+    "Exceptions should be globally silenced"
+  ]}
+  answer={1}
+  explanation="Network failures are expected, not exceptional. Catch them per item, retry with a limit, record failures, and continue, and save progress incrementally so a crash costs seconds, not hours. Silencing all exceptions (option 4) just hides different disasters."
+  hint="The outage was guaranteed to happen eventually. What should have been true when it did?"
+/>
+
+## What you'll build in this module
+
+The module project is a **reliable data worker**: fetch records from a public API, validate them, store them in SQLite, expose one query endpoint, and test the failure paths. No AI anywhere, and by the end of the course you'll recognize it as the skeleton every AI system hangs on.
+
+<GoDeeper>
+  <LinkCard href="https://docs.python.org/3/tutorial/" title="The official Python tutorial" source="python.org" why="The canonical reference for any syntax gap this lesson assumes." />
+  <LinkCard href="https://missing.csail.mit.edu/" title="The Missing Semester" source="MIT CSAIL" why="Shell, Git, and editor skills that make everything else in this course faster." />
+</GoDeeper>
+
+## Worked example: define the reliable boundary
+
+Suppose a support team wants an AI system to read refund requests and issue refunds automatically. A demo might send the email to a model and call the payments API with whatever amount comes back. An engineered version first writes down the boundaries:
+
+| Boundary | Deterministic control |
+|---|---|
+| Email enters the system | Store the original payload and assign a stable request ID |
+| Model proposes a decision | Validate the decision against a typed schema |
+| Policy is consulted | Retrieve the current policy and record the cited section |
+| Refund is authorized | Check amount, order owner, refund history, and approval threshold in code |
+| Money moves | Require an idempotency key and human approval above the safe limit |
+| Outcome is reviewed | Log the decision, evidence, model/config version, latency, and cost |
+
+The model is useful because customer language is variable. It is not the authority on whether money should move. That distinction, **judgment proposes, software disposes**, will recur throughout the course.
+
+## Guided build: draw before you code
+
+Choose one workflow you understand: triaging a support ticket, extracting an invoice, routing a sales lead, or summarizing a meeting. Produce a one-page system sketch containing:
+
+1. the trigger and final business outcome;
+2. every deterministic step;
+3. the one step, if any, where model judgment is useful;
+4. data stored at each boundary;
+5. at least four failure paths and how the system responds;
+6. the actions that require a human decision.
+
+Your sketch is complete when another person can point to where duplicates are stopped, malformed output is rejected, progress survives a crash, and a consequential action is approved. Keep it: you will turn the same sketch into working software over the next modules.

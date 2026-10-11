@@ -1,0 +1,88 @@
+Here's a fraud detector with 99% accuracy: `return "not fraud"`. If 1% of transactions are fraudulent, always saying "no" is right 99% of the time, and catches nothing. **Accuracy collapses under class imbalance**, and most valuable problems are imbalanced: fraud, churn, defects, rare diseases, security incidents.
+
+## The confusion matrix: four ways to be right or wrong
+
+Every binary prediction lands in one of four cells:
+
+| | predicted positive | predicted negative |
+|---|---|---|
+| **actually positive** | true positive (TP) | false negative (FN): *missed it* |
+| **actually negative** | false positive (FP): *false alarm* | true negative (TN) |
+
+From these, the two metrics that matter:
+
+- **Precision** = TP / (TP + FP): *of my alarms, how many were real?* Low precision = alert fatigue; humans stop trusting the system.
+- **Recall** = TP / (TP + FN): *of the real cases, how many did I catch?* Low recall = the bad thing slips through.
+- **F1**: the harmonic mean of the two, useful when you must report one number; it punishes lopsidedness.
+
+## The threshold is a business decision
+
+Most classifiers output a score; *you* choose the cutoff. Slide it and watch the trade-off: precision and recall pull in opposite directions:
+
+<SplitAndThreshold />
+
+Notice something important as you drag: **accuracy barely moves while precision and recall swing wildly.** That's accuracy hiding the decision that actually matters.
+
+Where should the threshold sit? Wherever the *costs* say. Cancer screening: a false negative can be fatal, a false positive is a follow-up test ⇒ favor recall. Auto-blocking customer payments: a false positive is an angry customer, a false negative is one missed fraud ⇒ favor precision (and route the gray zone to a human: a pattern you'll reuse in every AI system).
+
+<Check
+  question="A screening test for a serious disease: which error is usually worse, and which metric do you therefore prioritize?"
+  options={[
+    "False positives are worse: prioritize precision",
+    "False negatives are worse: prioritize recall, accepting more follow-up tests on healthy patients",
+    "Both are equally bad: always use accuracy",
+    "Neither matters if the dataset is large"
+  ]}
+  answer={1}
+  explanation="A missed disease (FN) can be fatal; a false alarm (FP) costs a confirmatory test. Screening therefore tunes for high recall and accepts reduced precision: the follow-up test restores it."
+  hint="Compare the cost of missing a case vs. the cost of a false alarm."
+/>
+
+<Check
+  question="Your fraud model's alerts are 8% real fraud (precision 0.08). The fraud team reviews 500 alerts daily and is burning out. You raise the decision threshold. What happens?"
+  options={[
+    "Precision rises and recall falls: fewer, better alerts, but more fraud slips through",
+    "Both precision and recall rise",
+    "Accuracy drops to zero",
+    "Nothing changes until the model is retrained"
+  ]}
+  answer={0}
+  explanation="A higher threshold means alerting only on stronger evidence: a larger share of alerts are real (precision ↑) but weaker true cases fall below the bar (recall ↓). Whether that trade is good is a business question about review capacity vs. fraud losses."
+  hint="You just made the model pickier about raising its hand."
+/>
+
+## Beyond binary: a survival kit
+
+- **Regression** (predicting numbers): MAE (mean absolute error: robust, interpretable in units) and RMSE (punishes large misses harder).
+- **Ranking** (search, recommendations, retrieval): does the right item appear in the top k? You'll meet *recall@k* and *MRR* again in the RAG module, where they measure whether retrieval found the right document.
+- **Calibration**: when the model says "80% likely," is it right about 80% of the time? Crucial whenever scores drive decisions or get shown to humans.
+
+<Callout type="tip">
+One metric can improve while the user experience worsens: recall rising as precision quietly craters into alert fatigue, for example. Always look at the pair, and at whom each error lands on. This instinct is half of Module 14.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall" title="Accuracy, precision, recall" source="Google ML Crash Course" why="Interactive reinforcement of exactly this lesson." />
+  <LinkCard href="https://scikit-learn.org/stable/modules/model_evaluation.html" title="Model evaluation guide" source="scikit-learn" why="The reference for every metric mentioned here, with code." />
+</GoDeeper>
+
+## Turn metrics into expected cost
+
+Precision and recall become useful when connected to volume and consequences. If 10,000 cases arrive weekly, a threshold with 80% precision and 50% recall does not merely produce two percentages, it determines how many people review false alarms and how many harmful cases remain unseen. Build the confusion matrix in counts, attach a cost or value to each cell, and include the capacity of the team consuming alerts.
+
+Thresholds should be selected on validation data and then frozen for the held-out test. For ranking workflows with a fixed review budget, measure precision at the review capacity or lift over random selection. For probabilities used in pricing or prioritization, inspect **calibration**: among cases assigned 0.7, roughly 70% should occur. A model can rank well and still be badly calibrated.
+
+Always segment metrics. An acceptable overall F1 can hide severe failure for a rare language, region, device, or customer class. Report support, the number of examples, beside every segment metric so tiny samples are not overinterpreted.
+
+## Guided build: select an operating point
+
+Using predictions from your baseline model, produce:
+
+- a confusion matrix in counts at three thresholds;
+- precision, recall, F1, and predicted-positive volume for each;
+- an expected weekly cost/value calculation;
+- a calibration plot or probability-bin table;
+- results for at least three meaningful segments;
+- a written threshold decision tied to business capacity and risk.
+
+Your deliverable is complete when the chosen threshold is a defensible operating policy, not the point that makes one metric look best.

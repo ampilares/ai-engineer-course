@@ -1,0 +1,72 @@
+Your AI system *will* have bad days: a provider outage, a silent quality regression, a prompt change that broke edge cases, a cost spike. Maturity isn't preventing all incidents: it's detecting them fast, recovering cleanly, and learning so each one can't recur. This lesson turns "everything's on fire" into a procedure.
+
+## The incident loop
+
+**Detect → mitigate → diagnose → resolve → learn.** The order matters: mitigate *before* you fully understand.
+
+- **Detect**: monitoring and alerts (Module 14) catch it before users report it: error-rate spikes, latency breaches, cost anomalies, correction-rate jumps. A metric moving is your pager.
+- **Mitigate first**: stop the bleeding before diagnosing. The fastest mitigation is almost always **rollback**: revert to the last known-good version (config or code) in seconds. A working old version beats a broken new one you're still debugging. Also in the kit: disable the affected feature (graceful degradation), flip to a fallback model, or throttle.
+- **Diagnose:** Use traces from Module 14 to find the root cause after containment has stopped active harm. Versioned prompts, models, datasets, and configuration turn "what changed?" into an evidence-based comparison.
+- **Resolve**: fix forward with the fix validated by your eval suite, re-deploy behind a canary.
+- **Learn:** Write a blameless incident review covering what happened, why the controls allowed it, and how detection and response should improve. Turn the failure into a permanent evaluation case so the same regression is detected before a future release.
+
+<Check
+  question="A prompt change deployed an hour ago is causing wrong outputs in production. What do you do first?"
+  options={[
+    "Start debugging the prompt live in production to understand the root cause",
+    "Roll back to the previous known-good version immediately to stop user impact, then diagnose the reverted change offline",
+    "Wait to see if it resolves itself",
+    "Push a quick untested fix directly to production"
+  ]}
+  answer={1}
+  explanation="Mitigate before diagnose. Rollback stops the harm in seconds; root-cause analysis then happens calmly on a system that's no longer damaging users. Debugging live and pushing untested fixes both extend the incident."
+  hint="What stops user impact fastest: understanding the bug, or reverting to what worked?"
+/>
+
+<Check
+  question="After resolving an incident, why add the failure to your eval suite?"
+  options={[
+    "To make the eval suite larger for its own sake",
+    "So this exact failure class is automatically caught before any future release: the failure museum turns each incident into permanent regression protection",
+    "To assign blame to whoever caused it",
+    "Eval suites shouldn't contain real failures"
+  ]}
+  answer={1}
+  explanation="Learning without a regression test is a resolution that can silently return. Every incident that becomes an eval case is a bug that can never recur unnoticed: the compounding improvement loop from Module 14."
+  hint="What makes a fix permanent rather than temporary?"
+/>
+
+## Prerequisites you built all course
+
+Fast, safe incident response isn't heroics: it's the payoff of habits from earlier modules, assembled:
+
+- **Versioned everything** (Module 3): rollback and "what changed?" require it.
+- **One-command deploy + rollback** (this module): mitigation speed is a technical capability you build *before* the incident.
+- **Traces and monitoring** (Module 14): detection and diagnosis.
+- **Eval suite** (Module 14): validates the fix and immortalizes the failure.
+- **Graceful degradation + fallbacks** (this module): mitigation options beyond rollback.
+
+Write the **runbook** before you need it: how to roll back, how to disable each feature, who to notify, where the dashboards are, how to restore from backup. An incident at 2am is the wrong time to invent the procedure.
+
+<Callout type="note">
+**Module project: deployed service with a runbook.** Deploy your Module 13 workflow using a VPS, container platform, or managed service. Keep prompts and model choices in versioned configuration. Add timeouts, classified retries, a suitable fallback, a dashboard for latency, cost, quality, and errors, at least one actionable alert, and a tested rollback command. Write a runbook covering rollback, feature disablement, and restoration from backup. Then inject a failure and rehearse the complete incident loop.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://sre.google/sre-book/postmortem-culture/" title="Postmortem Culture" source="Google SRE Book" why="How to run blameless postmortems that actually improve the system: the 'learn' step done right." />
+  <LinkCard href="https://sre.google/workbook/table-of-contents/" title="The SRE Workbook" source="Google" why="Practical, hands-on reliability engineering that maps directly onto AI systems." />
+</GoDeeper>
+
+## AI incidents span more than code
+
+A regression may originate in model routing, provider behavior, prompt/config, tool schema, source data, parser, embedding index, authorization, or traffic mix. Your change inventory and traces must identify each version. Rollback may mean restoring a prompt, disabling a tool, switching a model alias, republishing an index, stopping ingestion, or routing work to humans.
+
+Preserve evidence while minimizing sensitive exposure: correlation IDs, versions, affected population, safe samples, decisions, and side-effect receipts. Severity depends on consequence and blast radius, not whether the HTTP service stayed up. A fast wrong answer can be a more serious outage than a visible error.
+
+After containment and recovery, write a blameless analysis of conditions and controls. Action items should change the system, test, alert, isolation, limit, runbook, ownership, not merely ask people to be more careful. Add the failure to the regression set and verify the prevention mechanism.
+
+## Guided exercise: run an incident game day
+
+Choose one scenario: cross-tenant retrieval, silent extraction regression, runaway tool loop, stale policy index, or duplicate external action. Assign incident lead, operations, communications, and subject-matter roles. Inject incomplete information and time pressure.
+
+Measure time to detect, classify, contain, recover, and verify. Produce a timeline, impact estimate, rollback evidence, stakeholder update, and post-incident review with owned deadlines. Re-run the scenario after fixes and demonstrate a faster or automatically prevented outcome.

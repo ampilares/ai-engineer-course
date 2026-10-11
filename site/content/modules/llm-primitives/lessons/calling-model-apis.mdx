@@ -1,0 +1,87 @@
+Everything from Module 3 (timeouts, retries, status codes, secrets) applies verbatim to model APIs. This lesson adds what's *specific* to them: the message structure, the failure modes, and the habits that separate a demo from a service.
+
+## The anatomy of a chat API call
+
+Every major provider converges on the same shape:
+
+```python
+response = client.messages.create(
+    model="claude-sonnet-5",
+    max_tokens=1024,
+    system="You are a precise assistant for a logistics company. "
+           "Answer only from the provided context.",
+    messages=[
+        {"role": "user", "content": "Which warehouse handles zone 4?"},
+    ],
+    temperature=0.2,
+)
+text = response.content[0].text
+```
+
+The pieces that matter:
+
+- **`system`**: the standing instructions: role, rules, constraints. Highest authority, set by *you*, not the user. Keep it stable across requests (caching will thank you).
+- **`messages`**: the conversation as alternating `user`/`assistant` turns. Crucial mental shift: **the API is stateless**. There is no session on the server; "memory" is you resending the history every call, spending tokens each time.
+- **`max_tokens`**: a hard output cap. Too low and responses get cut off mid-sentence; treat a response that hit the cap as an error case to handle, not a curiosity.
+
+<Check
+  question="A user says 'my name is Ana'; three requests later the model doesn't know her name. Why?"
+  options={[
+    "The model chose to forget for privacy reasons",
+    "Chat APIs are stateless: unless your code resends the earlier turns in `messages`, they never existed for the model",
+    "The temperature was too high",
+    "Names require a special API parameter"
+  ]}
+  answer={1}
+  explanation="'Conversation' is an illusion assembled client-side: every request must carry whatever history matters, and every resent token is billed again. Deciding what history to keep is your job, and Module 9's, when history outgrows the window."
+  hint="Where would that fact have to live between two independent HTTP requests?"
+/>
+
+## Model-API-specific failure modes
+
+Beyond the standard HTTP failures, plan for these:
+
+- **429 / rate limits & overloaded errors**: providers throttle by requests *and* tokens per minute. Backoff-and-retry is mandatory plumbing.
+- **The cut-off response**: output hit `max_tokens`. Detect via the API's stop reason; don't parse half a JSON object.
+- **The refusal**: safety training declines a legitimate request ("I can't help with that") in a way your parser won't expect. Handle it as a routable outcome, not a crash.
+- **Model deprecations**: providers retire model versions on a schedule. Pin exact model IDs in config (not code), so swapping is a deploy, not a hunt.
+
+<Callout type="tip">
+Wrap the provider SDK in **one thin module of your own** exposing exactly what your app needs (`complete(prompt, schema) → result`). Every later concern (retries, logging, cost tracking, model swaps, caching) gets one home instead of thirty call sites. This is provider portability in practice.
+</Callout>
+
+## Streaming, briefly
+
+APIs can stream tokens as they're generated. Stream when a human is watching (perceived latency drops dramatically); don't bother when a machine consumes the output: you can't validate half a JSON document anyway, and the total time is the same.
+
+<Check
+  question="Which pipeline is correct for a batch document-processing service calling a model API?"
+  options={[
+    "Send request → use response text directly",
+    "Send with timeout → check stop reason for truncation → handle refusals → validate output → retry transient failures with backoff → record tokens and cost",
+    "Send requests in an infinite retry loop until output looks right",
+    "Stream every response to make batch processing faster"
+  ]}
+  answer={1}
+  explanation="Model calls are network calls to a probabilistic service: every classical failure mode plus truncation and refusals. Streaming helps humans-in-the-loop, not batch machines."
+  hint="Combine Module 3's HTTP discipline with this lesson's model-specific failures."
+/>
+
+<GoDeeper>
+  <LinkCard href="https://docs.anthropic.com/en/api/getting-started" title="Anthropic API documentation" source="docs.anthropic.com" why="A canonical, well-written example of the message-based API shape used in this lesson." />
+  <LinkCard href="https://github.com/ollama/ollama" title="Ollama" source="GitHub" why="Run small open models locally with the same API shape: free experimentation for every lab in this phase." />
+</GoDeeper>
+
+## Design the model boundary as a dependency
+
+Your wrapper should accept a task-oriented request and return a typed result plus metadata: provider request ID, model/version, token counts, stop reason, latency, and retry count. Normalize failures into categories your workflow understands, transient unavailable, rate limited, invalid request, refused, truncated, schema invalid, and policy blocked. Do not erase the original provider code; retain it for diagnosis without leaking sensitive text into routine logs.
+
+Set limits at several layers: per-request timeout, bounded retries, concurrency limit, rate and token budget, and a total workflow deadline. A retry can consume the remaining deadline or duplicate cost, so record attempts individually. Use a circuit breaker or graceful fallback when a provider is failing broadly instead of making every user wait through identical retries.
+
+Provider portability means controlling your interface, not pretending every model behaves identically. A model switch still requires evaluation because tool syntax, schema adherence, safety behavior, context limits, and pricing differ.
+
+## Guided build: a production-shaped adapter
+
+Implement one adapter with a fake client for tests. Demonstrate successful text and structured calls, timeout then success, retry exhaustion, rate limiting, refusal, truncation, and invalid output. Add a concurrency limit and a total deadline. Capture metadata without logging the prompt body.
+
+Then connect a second provider or local model behind the same application interface. Run the same small eval set against both and document behavioral differences. The adapter is complete when callers do not need provider-specific branches and failures remain observable.

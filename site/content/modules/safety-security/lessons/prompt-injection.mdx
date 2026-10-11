@@ -1,0 +1,81 @@
+In Module 3 you learned SQL injection: data concatenated into commands can be executed as commands, and parameterization creates a structural boundary. LLM prompts do not provide an equivalent guaranteed boundary between instructions and untrusted data. Roles, delimiters, and clear prompts improve ordinary instruction following, but any text the model processes can still influence its output. That is prompt injection, and it requires system-level controls rather than prompt wording alone.
+
+## Watch it work and watch it fail
+
+Run the simulation (entirely scripted: nothing real is called):
+
+<PromptInjectionDemo />
+
+The anatomy generalizes. An attacker plants instructions in content your system will process: an email, a résumé, a webpage, a PDF, a support ticket:
+
+- *Direct injection:* the user themselves types "ignore your instructions and…"
+- **Indirect injection** (the dangerous one): the payload hides in *third-party content* the model reads on a trusted user's behalf: white text in a document, an HTML comment on a webpage, a field in an uploaded file. Your user is innocent; the document is the attacker.
+
+## Why you can't filter your way out
+
+The instinctive defenses fail structurally:
+
+- *"Detect malicious instructions"*: injections can be paraphrased, encoded, translated, or split across chunks; a classifier catches yesterday's phrasings. You're in an arms race with unbounded attacker creativity.
+- *"Tell the model to ignore embedded instructions"*: helps at the margin; fails against exactly the adversary who tried twice. **A prompt is not a security boundary.**
+- Delimiting data sections (Module 8) is necessary hygiene, but it is not sufficient.
+
+The professional posture: **assume injection succeeds sometimes, and design so that a hijacked model can't do serious harm.** Security lives in what the model *can do*, not in what it's *told*.
+
+<Check
+  question="Why did the 'least privilege' toggle in the simulation stop the attack even though the model still obeyed the injected instruction?"
+  options={[
+    "It made the model recognize the attack",
+    "The capability simply wasn't there: no send_email tool existed for this task, so obedience to the injection had nothing to execute; no detection was needed",
+    "It encrypted the document",
+    "It lowered the temperature"
+  ]}
+  answer={1}
+  explanation="Capability removal works unconditionally: against every phrasing, encoding, and future variant. That's what makes it a real boundary where filtering is a hope."
+  hint="The model was still fooled. What was missing?"
+/>
+
+## The lethal trifecta
+
+Memorize this triangle. An AI system becomes *seriously* dangerous when it combines all three:
+
+1. **Access to private data** (inbox, files, database)
+2. **Exposure to untrusted content** (documents, web, incoming email)
+3. **Ability to communicate externally** (send email, call APIs, post)
+
+Injection enters through (2), harvests through (1), exfiltrates through (3). Break any leg and the classic data-theft attack collapses. Many real products need only two of the three: the summarizer doesn't need send-capability; the drafting assistant can require human send-approval, which converts leg (3) into a gated action.
+
+<Check
+  question="A browsing assistant can read the user's cloud files, fetch arbitrary webpages, and POST to arbitrary URLs. What's the minimal structural change that defuses the classic exfiltration attack?"
+  options={[
+    "A sternly worded system prompt about ignoring webpage instructions",
+    "Break a trifecta leg: e.g., restrict outbound requests to an allowlist or gate them behind human approval: reading files and webpages can remain",
+    "Scanning webpages for the words 'ignore previous instructions'",
+    "Using a larger model with better judgment"
+  ]}
+  answer={1}
+  explanation="Private data + untrusted content + free egress = exfiltration machine awaiting a payload. Constraining egress (allowlist/approval) breaks the triangle structurally; prompts and filters merely raise the difficulty."
+  hint="Which of the three legs is cheapest to constrain here?"
+/>
+
+<Callout type="warning">
+Injection also composes with everything you've built: a poisoned document in your RAG corpus injects every future retrieval; a hijacked agent uses *its* tools with *its* permissions. Treat retrieved chunks and tool results as untrusted input, because that's what they are.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://simonwillison.net/series/prompt-injection/" title="Prompt injection series" source="Simon Willison" why="The clearest ongoing chronicle of the attack class and why mitigations keep failing: includes the lethal trifecta." />
+  <LinkCard href="https://genai.owasp.org/llm-top-10/" title="OWASP Top 10 for LLM Applications" source="OWASP" why="The standard taxonomy: injection is LLM01, and the rest of the list previews the next lesson." />
+</GoDeeper>
+
+## Map trust before testing prompts
+
+Classify every token by origin: developer instruction, authenticated user input, retrieved document, web content, tool result, memory, image/OCR, or generated intermediate text. Only application-controlled policy has authority. Everything else may contain adversarial instructions, whether maliciously planted or accidentally quoted. Indirect injection arrives through data the user never typed, and multimodal inputs can hide text from casual review.
+
+Describe the consequence path, not just the jailbreak. Injection becomes serious when the model can access sensitive data, communicate externally, or take consequential action. Record which source can influence which model decision and which capabilities are reachable from that decision. The same malicious string has different risk in a read-only summarizer and an email-sending agent with a confidential inbox.
+
+Red-team tests must assert outcomes: Was secret data exposed? Was an unauthorized tool called? Did cited evidence become corrupted? Merely observing that the model repeated hostile text does not measure impact.
+
+## Guided lab: build an attack corpus
+
+Create 30 attacks across direct instructions, retrieved documents, tool outputs, encoded or obfuscated text, conflicting authority claims, data exfiltration requests, and multi-step social engineering. Include benign strings that resemble attacks to measure false positives.
+
+Run them against a read-only assistant and a tool-enabled workflow. Record attack success by consequence, not by wording. For each successful path, identify the missing control outside the model. Keep this corpus as a regression suite for later defenses and model changes.

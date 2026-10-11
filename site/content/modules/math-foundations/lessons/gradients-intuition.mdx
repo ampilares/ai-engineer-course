@@ -1,0 +1,70 @@
+The last of the four ideas answers the question that makes learning possible at all: *a model is wrong, which way should each of its billions of numbers move to make it less wrong?* The answer is the **gradient**, and the intuition fits in one image: standing on a hillside in fog.
+
+## Slope, in one dimension
+
+For a function (say, loss as a function of one weight) the **derivative** at a point is the local slope: how much the output changes per tiny nudge of the input. Positive slope → increasing the weight increases the loss → move the weight *down*. Negative slope → move *up*. The slope's size says how much the move matters.
+
+That's the entire decision rule of machine learning: **nudge every knob against its slope.**
+
+## Gradients: slopes in every direction at once
+
+A model has billions of weights, so its loss is a landscape in billions of dimensions. The **gradient** is the collection of all those slopes (one per weight) pointing in the direction of steepest *ascent*. Training steps *against* it. You've walked this landscape already; feel it again knowing what the machinery is:
+
+<GradientDescentPlayground />
+
+Everything you observe generalizes to a billion dimensions: the **learning rate** scales each step (too small crawls, too large overshoots and diverges); valleys can have flat stretches and local dips; and each step uses only *local* slope: no map of the whole landscape exists.
+
+<Check
+  question="The derivative of the loss with respect to one weight is +3.2. To reduce the loss, that weight should…"
+  options={[
+    "…increase: follow the derivative",
+    "…decrease: the positive slope says increasing the weight raises the loss, so step against it",
+    "…stay fixed: derivatives don't guide updates",
+    "…be set to zero immediately"
+  ]}
+  answer={1}
+  explanation="Positive slope = uphill in the increasing direction. Descent means stepping opposite the gradient, scaled by the learning rate: w ← w − lr × 3.2."
+  hint="The gradient points uphill. Which way is down?"
+/>
+
+## Why this scales to billions of knobs
+
+Two facts turn the fog-walk into modern AI:
+
+1. **Calculus computes all the slopes exactly**: no trial-and-error wiggling of each weight. For layered functions, the *chain rule* passes blame backward through the layers; organized efficiently, that's **backpropagation** (Module 6), which delivers every weight's slope for about the cost of one extra forward pass.
+2. **Gradient-based optimization works well empirically.** It does not guarantee the globally lowest loss. Overparameterized networks often contain many parameter settings with similarly low training loss, while initialization, normalization, optimizer choice, and learning-rate schedules make useful solutions easier to reach. Mini-batch noise can help exploration, but training can still stall or diverge, which is why engineers inspect curves, compare runs, and validate checkpoints.
+
+<Check
+  question="Gradient descent uses only local slope, never a map of the whole loss landscape. Why does it still train useful models?"
+  options={[
+    "It secretly evaluates every possible weight setting",
+    "Modern networks often have many useful low-loss solutions; initialization, optimizer settings, and mini-batch updates can reach one without proving it is globally optimal",
+    "Modern models have convex landscapes with one valley",
+    "It doesn't; training is luck"
+  ]}
+  answer={1}
+  explanation="Training seeks a parameter setting that performs well on validation data, not a proof of global optimality. Modern architectures and optimization practices often find useful solutions, but curves and repeated runs are still needed to detect failure."
+  hint="Does the model need the BEST valley, or a good one?"
+/>
+
+## The four ideas, assembled
+
+You now hold the complete conceptual toolkit for everything ahead:
+
+| Idea | What it gives AI | Where you'll use it |
+|---|---|---|
+| **Vectors** | meaning as geometry; similarity as angle | embeddings (M7), retrieval (M9), attention (M7) |
+| **Probability** | calibrated uncertainty; base-rate honesty | sampling (M7), metrics (M5), evals (M14), A/B tests (M12) |
+| **Softmax & logs** | scores → probabilities; stable likelihoods | temperature (M7), loss (M6), logprobs everywhere |
+| **Gradients** | which way is downhill, for every knob at once | training (M6), fine-tuning (M17) |
+
+The rest of the course uses these four intuitions repeatedly. Some optional experiments require additional algebra, calculus, or statistics, and the linked resources provide a path when you want that depth. For the core route, focus on explaining what each quantity means and how it changes an engineering decision.
+
+<GoDeeper>
+  <VideoEmbed id="IHZwWFHWa-w" title="Gradient descent, how neural networks learn" creator="3Blue1Brown" />
+  <LinkCard href="https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives" title="Multivariable derivatives" source="Khan Academy" why="If you want the formal calculus under this lesson's intuition, free and well-paced." />
+</GoDeeper>
+
+## Practice: explain an optimization trace
+
+Run the gradient playground with one learning rate that converges, one that moves too slowly, and one that overshoots. Capture the starting point, learning rate, final loss, and number of steps for each run. Write a short diagnosis for each trace using the terms gradient, learning rate, convergence, and divergence.

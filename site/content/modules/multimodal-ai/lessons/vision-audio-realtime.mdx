@@ -1,0 +1,55 @@
+Images and speech introduce ambiguity the interface must expose: an object may be occluded, a speaker interrupted, a name misheard, or the camera pointed at the wrong thing. Realtime interaction adds deadlines and state transitions that a batch text call does not have.
+
+## Vision tasks need spatial evidence
+
+Distinguish classification, detection, segmentation, OCR, visual question answering, and generation. “Understand this image” is not a testable task. For inspection, require object/region coordinates and image-quality checks. For comparisons, align capture conditions where possible; lighting and camera angle can dominate the signal.
+
+Do not infer sensitive or high-impact attributes from appearance without a justified, reviewed use case. Even benign vision systems can fail systematically by skin tone, device, environment, disability, or geography. Evaluate the intended capture conditions and provide a non-visual fallback.
+
+## Speech is a pipeline
+
+A conversational audio system may include voice-activity detection, noise suppression, speech-to-text, turn detection, language understanding, tool calls, text generation, and text-to-speech. Evaluate each stage and the complete task. Domain terms and names often dominate transcription error; custom vocabulary or confirmation can reduce consequential mistakes.
+
+Voice activity and turn detection decide when the user is finished. Too aggressive and the system interrupts; too slow and it feels unresponsive. Support **barge-in**: when the user starts speaking, stop playback, cancel or supersede pending generation where safe, and preserve a coherent state.
+
+<Check
+  question="A voice assistant often submits a booking before the user finishes correcting the date. Which boundary needs redesign?"
+  options={[
+    "Turn detection and confirmation before the consequential tool call",
+    "Image resolution",
+    "Embedding dimensionality",
+    "Database index count"
+  ]}
+  answer={0}
+  explanation="The system is treating an incomplete turn as final and acting without confirmation. Realtime state and approval are the primary controls."
+  hint="When did the system decide the user was finished?"
+/>
+
+## Realtime state and latency budgets
+
+Track whether the system is listening, transcribing, thinking, acting, or speaking. Make these states perceivable. Allocate latency across endpointing, transcription, model/tool work, and first audio response. Stream partial output only when it is safe; a tool argument or unverified claim should not be spoken as final while still changing.
+
+Handle cancellation explicitly. If the user changes the request after a read operation, discard the obsolete result. If a write may already have succeeded, reconcile status before retrying or promising cancellation. Conversation summaries must not overwrite durable transaction state.
+
+<Check
+  question="A user says 'stop' while the assistant is speaking an unverified answer. What should happen first?"
+  options={[
+    "Stop output playback and cancel/supersede safe pending work while preserving durable side-effect state",
+    "Finish the entire response regardless",
+    "Delete the account",
+    "Increase output token limit"
+  ]}
+  answer={0}
+  explanation="Barge-in requires immediate output control plus careful cancellation semantics; completed or ambiguous writes must still be reconciled."
+  hint="Separate stopping speech from undoing external actions."
+/>
+
+## Guided build: one interruptible interaction
+
+Build either a camera-assisted inspection flow or a speech interaction. For vision, include capture guidance, quality rejection, region evidence, and manual fallback. For speech, include state display, turn detection, transcript correction, confirmation for a write, barge-in, and cancellation.
+
+Test at least 25 scenarios across devices or environments, including low quality, domain names, interruption, background noise/occlusion, permission denial, slow tool, and ambiguous side-effect status. Report task completion, stage error, correction/retry rate, time to first useful feedback, total latency, and outcomes by condition. Save consent and retention decisions for media.
+
+<Callout type="warning">
+Synthetic voice and image outputs can be mistaken for real evidence. Label generated media, preserve provenance where available, and do not design interfaces that imply the system directly witnessed an event it only inferred.
+</Callout>

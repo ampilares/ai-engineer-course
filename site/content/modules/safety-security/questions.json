@@ -1,0 +1,506 @@
+[
+  {
+    "id": "ss-q01",
+    "type": "single",
+    "prompt": "Why can't prompt injection be solved the way SQL injection is (structural separation of code and data)?",
+    "options": [
+      {
+        "id": "a",
+        "text": "To an LLM, instructions and data are the same thing: tokens in context; there is no structural channel that keeps them apart"
+      },
+      {
+        "id": "b",
+        "text": "Because LLMs don't process text"
+      },
+      {
+        "id": "c",
+        "text": "Because injection only affects databases"
+      },
+      {
+        "id": "d",
+        "text": "It can: parameterized prompts fully solve it"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Parameterized queries work because SQL has separate structure and data channels. A context window has one channel; any text the model reads can attempt to steer it."
+  },
+  {
+    "id": "ss-q02",
+    "type": "single",
+    "prompt": "Indirect prompt injection is especially dangerous because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the malicious instructions hide in third-party content the model reads on a trusted user's behalf: the user is innocent, the document is the attacker"
+      },
+      {
+        "id": "b",
+        "text": "…it requires physical access to the server"
+      },
+      {
+        "id": "c",
+        "text": "…it only works on open-source models"
+      },
+      {
+        "id": "d",
+        "text": "…it needs the user's password"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The payload rides in emails, webpages, PDFs, or retrieved chunks. Your legitimate user triggers it unknowingly, which is why retrieved content and tool results are untrusted input."
+  },
+  {
+    "id": "ss-q03",
+    "type": "single",
+    "prompt": "Why is 'train a classifier to detect malicious instructions' an insufficient primary defense?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Injections can be paraphrased, encoded, translated, or split across chunks: a classifier chases yesterday's phrasings in an unwinnable arms race"
+      },
+      {
+        "id": "b",
+        "text": "Classifiers are too expensive to run"
+      },
+      {
+        "id": "c",
+        "text": "It works perfectly and is sufficient"
+      },
+      {
+        "id": "d",
+        "text": "Detection is illegal"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Filtering raises attacker cost but never reaches 100%. Real boundaries constrain what a (sometimes-fooled) model can DO, not what it's told."
+  },
+  {
+    "id": "ss-q04",
+    "type": "single",
+    "prompt": "Least privilege stops many injection attacks without detecting them because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…a capability that doesn't exist can't be abused, whatever the model was tricked into wanting: the defense is unconditional across all phrasings and future variants"
+      },
+      {
+        "id": "b",
+        "text": "…it makes the model ignore instructions"
+      },
+      {
+        "id": "c",
+        "text": "…it encrypts the untrusted content"
+      },
+      {
+        "id": "d",
+        "text": "…it slows the model down"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Absence of capability is a real boundary; obedience to the injection has nothing to execute. This is why it works where filtering only hopes."
+  },
+  {
+    "id": "ss-q05",
+    "type": "single",
+    "prompt": "The 'lethal trifecta' that makes an AI system seriously dangerous is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "Access to private data + exposure to untrusted content + ability to communicate/act externally"
+      },
+      {
+        "id": "b",
+        "text": "Large model + long context + high temperature"
+      },
+      {
+        "id": "c",
+        "text": "Slow responses + high cost + poor UX"
+      },
+      {
+        "id": "d",
+        "text": "Public data + trusted content + read-only tools"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Injection enters via untrusted content, harvests private data, and exfiltrates via external egress. Break any leg (often by gating or allowlisting egress) and the classic attack collapses."
+  },
+  {
+    "id": "ss-q06",
+    "type": "single",
+    "prompt": "Executing model-generated code with eval() (or interpolating model output into SQL) is dangerous because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…model output is untrusted input to the next system; combined with injection, a poisoned input becomes arbitrary code/query execution"
+      },
+      {
+        "id": "b",
+        "text": "…eval() is deprecated syntax"
+      },
+      {
+        "id": "c",
+        "text": "…it only fails when the user is malicious"
+      },
+      {
+        "id": "d",
+        "text": "…model output is always safe to execute"
+      }
+    ],
+    "answer": "a",
+    "explanation": "'Model output → dangerous sink' is the insecure-output-handling failure. Treat model output with the same suspicion as user input: validate, sandbox, or don't execute."
+  },
+  {
+    "id": "ss-q07",
+    "type": "single",
+    "prompt": "The core mindset of defense in depth is…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…assume each layer sometimes fails, and stack independent layers so no single failure is catastrophic"
+      },
+      {
+        "id": "b",
+        "text": "…make one layer (the injection filter) perfect"
+      },
+      {
+        "id": "c",
+        "text": "…rely on the model's good judgment"
+      },
+      {
+        "id": "d",
+        "text": "…add layers only after an incident"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Independent controls multiply: input boundaries, least privilege, approval gates, output validation, and monitoring each catch what the others miss."
+  },
+  {
+    "id": "ss-q08",
+    "type": "single",
+    "prompt": "A ~92%-effective injection classifier is proposed as sufficient to ship an agent with database-write tools. Correct response:",
+    "options": [
+      {
+        "id": "a",
+        "text": "Ship only with independent layers beneath it (least privilege on writes, approval gates, output validation, rate limits) so the residual ~8% can't cause serious harm"
+      },
+      {
+        "id": "b",
+        "text": "Ship it; 92% is a passing grade"
+      },
+      {
+        "id": "c",
+        "text": "Remove the classifier and trust the model"
+      },
+      {
+        "id": "d",
+        "text": "Raise it to 95% and ship"
+      }
+    ],
+    "answer": "a",
+    "explanation": "No single probabilistic control is enough for consequential capabilities. The layers below assume the filter fails, because it will."
+  },
+  {
+    "id": "ss-q09",
+    "type": "single",
+    "prompt": "Per-user document access in RAG must be enforced by…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…filtering at retrieval time in code, so unauthorized chunks never enter the context"
+      },
+      {
+        "id": "b",
+        "text": "…instructing the model to only discuss the user's own data"
+      },
+      {
+        "id": "c",
+        "text": "…a disclaimer in the UI"
+      },
+      {
+        "id": "d",
+        "text": "…a larger model that respects boundaries"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Anything placed in context can surface in output; a prompt is not a security control. Access control is code that runs before the prompt is built: critical in multi-tenant systems."
+  },
+  {
+    "id": "ss-q10",
+    "type": "single",
+    "prompt": "Sending each customer's entire CRM record in every prompt violates which principle, and why does it matter?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Data minimization: surplus sensitive fields multiply breach impact across provider transfer and logs, and exceed the lawful-basis/purpose limits of most privacy regimes"
+      },
+      {
+        "id": "b",
+        "text": "It doesn't matter; more context is always better"
+      },
+      {
+        "id": "c",
+        "text": "It only affects latency"
+      },
+      {
+        "id": "d",
+        "text": "Data maximization: always send everything"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Send only what the task needs. Every extra field is copied into transfers and traces, enlarging the blast radius of any leak, and minimization is a legal expectation, not just hygiene."
+  },
+  {
+    "id": "ss-q11",
+    "type": "single",
+    "prompt": "A regulator asks why the system made a specific decision last quarter. What makes an accountable answer possible?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Versioned prompts/models/data plus decision logs that let you reconstruct the exact inputs, sources, config, and responsible owner"
+      },
+      {
+        "id": "b",
+        "text": "Explaining that the model is a black box"
+      },
+      {
+        "id": "c",
+        "text": "Re-running today's system and assuming parity"
+      },
+      {
+        "id": "d",
+        "text": "Citing the provider's terms of service"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Governance requires reconstruction and a named human owner. 'The AI decided' is not accountable; a reproducible logged record is."
+  },
+  {
+    "id": "ss-q12",
+    "type": "multi",
+    "prompt": "A lightweight AI threat model should include which steps? Select all that apply.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Enumerate assets: sensitive data, tools, and irreversible actions"
+      },
+      {
+        "id": "b",
+        "text": "Enumerate entry points where untrusted content enters (inputs, RAG corpus, tool results, uploads)"
+      },
+      {
+        "id": "c",
+        "text": "Trace attack paths to the highest-blast-radius reachable action, then red-team them"
+      },
+      {
+        "id": "d",
+        "text": "Assume the system is safe because it uses a reputable model"
+      }
+    ],
+    "answer": [
+      "a",
+      "b",
+      "c"
+    ],
+    "explanation": "Assets, entry points, attack paths, and actual red-teaming (with findings added to the eval suite). Model reputation is not a threat model."
+  },
+  {
+    "id": "ss-x01",
+    "type": "single",
+    "prompt": "Tool results (API responses, file contents, web pages fetched by an agent) must be treated as untrusted because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…they carry third-party content into the context: a fetched webpage or poisoned database field is an indirect injection vector exactly like an uploaded document"
+      },
+      {
+        "id": "b",
+        "text": "…APIs are usually broken"
+      },
+      {
+        "id": "c",
+        "text": "…tools run on slower servers"
+      },
+      {
+        "id": "d",
+        "text": "…they aren't; tools are inside the trust boundary"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The injection surface is 'any text the model reads', not 'any text the user types'. Retrieved chunks, tool outputs, and documents all qualify."
+  },
+  {
+    "id": "ss-x02",
+    "type": "single",
+    "prompt": "Approval fatigue (humans rubber-stamping gates) is best mitigated by…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…gating fewer, higher-stakes actions with rich context per request: reserving human attention for decisions that matter instead of diluting it across everything"
+      },
+      {
+        "id": "b",
+        "text": "…adding more approval steps"
+      },
+      {
+        "id": "c",
+        "text": "…removing approvals entirely"
+      },
+      {
+        "id": "d",
+        "text": "…punishing fast approvers"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Attention is a budget. A gate on everything is a gate on nothing; calibrated scope plus decision-ready context keeps the human check real."
+  },
+  {
+    "id": "ss-x03",
+    "type": "single",
+    "prompt": "Data minimization applies to traces and logs by…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…redacting secrets and unneeded personal data at capture and setting retention limits: the observability store is part of the attack surface"
+      },
+      {
+        "id": "b",
+        "text": "…logging everything forever for completeness"
+      },
+      {
+        "id": "c",
+        "text": "…disabling logging entirely"
+      },
+      {
+        "id": "d",
+        "text": "…encrypting logs and never rotating keys"
+      }
+    ],
+    "answer": "a",
+    "explanation": "You cannot leak what you didn't keep. Minimization is a design constraint on every copy (prompts, traces, backups) not just the primary database."
+  },
+  {
+    "id": "ss-x04",
+    "type": "single",
+    "prompt": "Model output flowing into a SQL query, shell command, or HTML page is dangerous because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…output is untrusted input to the next system: injection through the model becomes SQL injection, command injection, or XSS at the sink; parameterize, sandbox, or sanitize there"
+      },
+      {
+        "id": "b",
+        "text": "…models format SQL badly"
+      },
+      {
+        "id": "c",
+        "text": "…it's slow"
+      },
+      {
+        "id": "d",
+        "text": "…it isn't; model output is safe by construction"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The sink defines the risk. Every classical injection defense applies at the boundary where model text meets an interpreter."
+  },
+  {
+    "id": "ss-x05",
+    "type": "single",
+    "prompt": "Before sending regulated data to a model API, you must verify the provider's…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the provider's data-handling terms for retention, training use, residency, and available zero-retention or enterprise controls"
+      },
+      {
+        "id": "b",
+        "text": "…logo quality"
+      },
+      {
+        "id": "c",
+        "text": "…model parameter count"
+      },
+      {
+        "id": "d",
+        "text": "…nothing; APIs are all equivalent"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Where data flows is a compliance question answered by the DPA and terms. For hard residency constraints, Module 17's self-hosting is the alternative."
+  },
+  {
+    "id": "ss-x06",
+    "type": "single",
+    "prompt": "Ranking risks by 'blast radius' means prioritizing…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…the worst reachable consequence (irreversible actions, mass data exposure) over the most likely small one: the send-all-contacts email outranks a typo in a summary"
+      },
+      {
+        "id": "b",
+        "text": "…the most frequent bug"
+      },
+      {
+        "id": "c",
+        "text": "…whatever was in the news"
+      },
+      {
+        "id": "d",
+        "text": "…alphabetical order"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Threat models sort by consequence × reachability. The highest-blast-radius action gets the strongest walls (privilege, gates) first."
+  },
+  {
+    "id": "ss-x07",
+    "type": "single",
+    "prompt": "Red-team findings become durable protection when…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…each successful attack is added to the eval suite as a permanent regression case: defeated once means detected forever"
+      },
+      {
+        "id": "b",
+        "text": "…they're documented in a slide deck"
+      },
+      {
+        "id": "c",
+        "text": "…the red team is congratulated"
+      },
+      {
+        "id": "d",
+        "text": "…the report is marked confidential"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The failure-museum loop applies to security: attacks that once worked become automated tests that gate every future release."
+  },
+  {
+    "id": "ss-x08",
+    "type": "single",
+    "prompt": "Delimiting untrusted text (e.g., <document>…</document>) is necessary but insufficient because…",
+    "options": [
+      {
+        "id": "a",
+        "text": "…it's hygiene that helps the model separate data from instructions, but a determined injection can still steer the model: real boundaries constrain capabilities, not text"
+      },
+      {
+        "id": "b",
+        "text": "…XML tags cost too many tokens"
+      },
+      {
+        "id": "c",
+        "text": "…models can't see tags"
+      },
+      {
+        "id": "d",
+        "text": "…it is fully sufficient on its own"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Layer one of defense in depth, never the whole defense. Least privilege and gated actions hold when the delimiter doesn't."
+  }
+]

@@ -1,0 +1,82 @@
+This is the finish line: a production capstone that proves you can turn a probabilistic model into a system someone could actually depend on, and defend every decision in it. It's where all eighteen modules converge into one artifact.
+
+## What the capstone must be
+
+Not a demo. A **working system** that solves a real (or realistically scoped) problem end to end, exhibiting the whole discipline:
+
+- **A genuine problem** with a defined user and a measurable goal: ideally the process you baselined in Module 13.
+- **Real engineering**: typed, tested, reproducible; data in and out of storage; the failure paths handled (Module 3).
+- **Justified AI**: a model used only where ambiguity earns it, wrapped in schemas, validation, and confidence routing (Modules 8, 10); simpler alternatives considered and, where they won, chosen.
+- **An eval suite**: a representative dataset with graders, run as a gate, reporting honest numbers including failures (Module 14).
+- **Safety**: a threat model, least privilege, human approval on consequential actions, data minimization, and red-team findings turned into eval cases (Module 15).
+- **Operations**: deployed with monitoring, a cost/latency budget and SLOs, a runbook, and rollback (Module 16).
+- **A business case**: the manual baseline vs. the measured pilot, all costs counted, ROI stated honestly (Module 13).
+
+You don't need all six domains at large scale: you need each *present and coherent*. A small system that is genuinely evaluated, secured, deployed, and measured beats an ambitious one that's a demo in a trench coat.
+
+<Check
+  question="Two capstones. A: an impressive multi-agent research demo, no eval set, no deployment, no cost analysis. B: a modest invoice-triage workflow: one gated model step, a 40-case eval suite with honest numbers, deployed with monitoring, a threat model, and a measured before/after. Which better demonstrates AI engineering?"
+  options={[
+    "A: it's more technically ambitious and uses agents",
+    "B: it exhibits the full discipline (evaluated, secured, deployed, measured); ambition without evaluation, safety, and operations is exactly the demo-not-system trap this course exists to break",
+    "They're equivalent",
+    "Neither qualifies"
+  ]}
+  answer={1}
+  explanation="The entire course argues that the engineering AROUND the model is the job. B proves that judgment end to end; A proves only that a demo can be built. Coherent and complete beats ambitious and hollow."
+  hint="What does this course claim is the actual job: the model, or everything around it?"
+/>
+
+## Defending your work
+
+Real AI engineering means being able to answer hard questions about your system. Rehearse these (the oral-defense prompts) until your answers are specific and evidence-backed:
+
+- Which component causes the largest share of errors, and *how do you know*? (Your eval breakdown answers this.)
+- What happens if the model, vector store, or a downstream API is unavailable?
+- Which action has the highest blast radius, and who authorizes it?
+- Why is this an LLM problem rather than a database query or a rules engine?
+- Which metric could improve while the user experience gets *worse*?
+- How would you cut cost by 50% without breaching the quality bar?
+- What new data would most improve the system?
+
+If any answer is a shrug, that's not a defense failure: it's your next week of work, precisely located.
+
+<Check
+  question="In your defense you're asked 'which component causes most of your errors?' The strongest possible answer is…"
+  options={[
+    "'The model: they're unpredictable, so it's hard to say.'",
+    "'Retrieval: my stage-separated eval shows recall@5 at 68%, and 71% of failures trace to relevant chunks never being retrieved; here's the breakdown.'",
+    "'There aren't really any errors in my system.'",
+    "'Whichever one the user complained about most recently.'"
+  ]}
+  answer={1}
+  explanation="A specific, measured, stage-localized answer backed by your eval and traces is the signature of an AI engineer. Vagueness, denial, and anecdote all signal the discipline is missing."
+  hint="What did your evaluation and tracing work make you able to say precisely?"
+/>
+
+## Submit and graduate
+
+When your capstone is complete and you can defend its decisions, submit the **[capstone attestation](/capstone)** with the checklist, project title, and summary. Passing all eighteen module exams and submitting the attestation earns a verifiable certificate. You may also choose to add your name to the [graduates page](/graduates).
+
+<Callout type="note">
+**Module and course project: the production capstone.** Follow the full brief and rubric in the attestation. Choose one domain, build an end-to-end system across all six areas above, run the evaluations, complete threat modeling and red-team tests, deploy with monitoring and a runbook, write the ROI case, and prepare an evidence-based defense. This artifact should demonstrate your readiness to work as an AI engineer.
+</Callout>
+
+<GoDeeper>
+  <LinkCard href="https://www.anthropic.com/engineering/building-effective-agents" title="Building Effective Agents" source="Anthropic" why="Re-read before designing the capstone's architecture: pick the simplest shape that fits." />
+  <LinkCard href="https://hamel.dev/blog/posts/evals/" title="Your AI Product Needs Evals" source="Hamel Husain" why="The eval discipline your capstone must demonstrate, from a practitioner." />
+</GoDeeper>
+
+## Scope for evidence, not feature count
+
+Choose one user, one workflow, one primary outcome, and one consequential risk. A narrow end-to-end pilot is stronger than a platform with six unfinished features. Freeze a walking skeleton early: representative input enters, a versioned decision occurs, the guarded outcome is recorded, and a trace explains what happened. Add sophistication only when an eval failure justifies it.
+
+Plan milestones around risk retirement: data access and baseline, system contract, first end-to-end path, evaluation dataset, security controls, pilot, reliability exercise, and final decision. Keep a decision log for rejected architectures and failed experiments; they demonstrate judgment when grounded in evidence.
+
+Your defense should state the strongest limitation before reviewers discover it. Show a failure trace, an eval regression caught before release, a cost/quality trade-off, and the human control for residual risk. Separate what the pilot measured from what a broader rollout would still need to prove.
+
+## Guided build: final capstone checklist
+
+Before submission, verify the repository contains reproducible setup, architecture and data-flow diagrams, typed contracts, tests and evals, versioned prompts/configs, threat model, privacy/data register, traces and dashboard, cost/latency envelope, deployment and rollback, incident runbook, pilot evidence, and model/system card.
+
+Run the project from a clean environment and rehearse the demo under one injected failure. The final recommendation must be one of stop, redesign, continue the pilot, or scale, supported by the rubric evidence. Graduation demonstrates that you can make and defend that decision, not that every AI prototype deserves production.

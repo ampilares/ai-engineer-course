@@ -1,0 +1,31 @@
+{
+  "slug": "business-automation",
+  "number": 13,
+  "title": "Business Workflow Automation",
+  "phase": "automation",
+  "summary": "Put AI inside real operating processes: triggers, queues, idempotency, n8n-style orchestration, and measured ROI.",
+  "outcomes": [
+    "Map a business process and find where AI adds measurable value",
+    "Wire triggers, webhooks, queues, and durable state into reliable workflows",
+    "Apply retries, idempotency, and human approval in automation",
+    "Baseline the manual process and prove ROI with numbers"
+  ],
+  "examCount": 10,
+  "lessons": [
+    {
+      "slug": "process-first",
+      "title": "Process first: where AI actually pays",
+      "minutes": 26
+    },
+    {
+      "slug": "reliable-automation",
+      "title": "Triggers, queues, and reliable execution",
+      "minutes": 28
+    },
+    {
+      "slug": "roi-and-rollout",
+      "title": "Pilots, baselines, and ROI",
+      "minutes": 26
+    }
+  ]
+}

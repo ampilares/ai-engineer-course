@@ -1,0 +1,19 @@
+{
+  "slug": "getting-hired",
+  "number": 18,
+  "title": "Getting Hired as an AI Engineer",
+  "phase": "career",
+  "summary": "Turn the course into a career: a portfolio that proves competence, interviews you can win, and a strong first 90 days on the job.",
+  "outcomes": [
+    "Package course projects into a portfolio that survives technical scrutiny",
+    "Handle the AI-engineer interview: system design, evals thinking, and live judgment calls",
+    "Choose between employment, freelancing, and internal transitions strategically",
+    "Execute a first 90 days that converts a job offer into a durable career"
+  ],
+  "examCount": 8,
+  "lessons": [
+    { "slug": "portfolio-that-proves", "title": "A portfolio that proves, not claims", "minutes": 14 },
+    { "slug": "the-interview", "title": "The AI engineer interview", "minutes": 15 },
+    { "slug": "first-90-days", "title": "Paths in, and your first 90 days", "minutes": 13 }
+  ]
+}
