@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
-import { useLessonInteractions } from "../lesson/LessonInteractions";
+import { useRef, useState } from "react";
+import { useInteraction } from "../lesson/LessonInteractions";
 import { WidgetFrame } from "./WidgetFrame";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -51,8 +51,7 @@ export function SqlPractice({
   starter?: string;
   ordered?: boolean;
 }) {
-  const id = useId();
-  const ctx = useLessonInteractions();
+  const { complete } = useInteraction();
   const [query, setQuery] = useState(starter);
   const [status, setStatus] = useState<"idle" | "loading" | "ready" | "passed" | "failed">("idle");
   const [result, setResult] = useState<{ columns: string[]; values: any[][] } | null>(null);
@@ -60,11 +59,6 @@ export function SqlPractice({
   const [showSolution, setShowSolution] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const sqlRef = useRef<any>(null);
-
-  useEffect(() => {
-    ctx?.register(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
 
   async function ensureRuntime() {
     setStatus("loading");
@@ -100,7 +94,7 @@ export function SqlPractice({
       const want = normalize(refRes);
       if (got && want && JSON.stringify(got.rows) === JSON.stringify(want.rows)) {
         setStatus("passed");
-        ctx?.setCorrect(id, true);
+        complete();
       } else {
         setStatus("failed");
         setAttempts((a) => a + 1);

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
-import { useLessonInteractions } from "../lesson/LessonInteractions";
+import { useRef, useState } from "react";
+import { useInteraction } from "../lesson/LessonInteractions";
 import { WidgetFrame } from "./WidgetFrame";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -49,8 +49,7 @@ export function PythonPractice({
   test: string;
   solution: string;
 }) {
-  const id = useId();
-  const ctx = useLessonInteractions();
+  const { complete } = useInteraction();
   const [code, setCode] = useState(starter);
   const [output, setOutput] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ready" | "running" | "passed" | "failed">("idle");
@@ -58,11 +57,6 @@ export function PythonPractice({
   const [showSolution, setShowSolution] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const pyodideRef = useRef<any>(null);
-
-  useEffect(() => {
-    ctx?.register(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
 
   async function ensureRuntime() {
     setStatus("loading");
@@ -91,7 +85,7 @@ export function PythonPractice({
         await pyodide.runPythonAsync(test, { globals: ns });
         setOutput(lines.join("\n"));
         setStatus("passed");
-        ctx?.setCorrect(id, true);
+        complete();
       } catch (e) {
         setOutput(lines.join("\n"));
         setStatus("failed");

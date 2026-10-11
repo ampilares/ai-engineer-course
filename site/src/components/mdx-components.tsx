@@ -1,5 +1,5 @@
 import type { MDXComponents } from "mdx/types";
-import { Check } from "./lesson/Check";
+import { Check, NumericCheck, Order, Reveal, Sort } from "./lesson/Interactions";
 import { VideoEmbed } from "./embeds/VideoEmbed";
 import { GoDeeper, LinkCard } from "./embeds/LinkCard";
 import { TokenizerExplorer } from "./widgets/TokenizerExplorer";
@@ -35,6 +35,10 @@ function Callout({ type = "note", children }: { type?: "note" | "warning" | "tip
 
 export const mdxComponents: MDXComponents = {
   Check,
+  Sort,
+  Order,
+  NumericCheck,
+  Reveal,
   VideoEmbed,
   LinkCard,
   GoDeeper,

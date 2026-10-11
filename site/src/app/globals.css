@@ -83,12 +83,16 @@ html {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
+h1, h2, h3, h4 { line-height: 1.2; text-wrap: balance; }
+
 body {
   @apply bg-paper text-ink antialiased;
   font-size: 17px;
   line-height: 1.7;
 }
 
+/* Component classes live in a layer so Tailwind utilities can override them. */
+@layer components {
 .card {
   @apply bg-card border border-line rounded-2xl;
 }
@@ -166,4 +170,75 @@ body {
 
 input[type="range"] {
   accent-color: var(--color-accent);
+}
+
+/* ------------------------------------------------------------------ */
+/* Lesson player                                                       */
+/* ------------------------------------------------------------------ */
+
+.lesson-step {
+  scroll-margin-top: 5rem;
+  animation: step-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.lesson-step .prose-custom { max-width: none; }
+.lesson-step .prose-custom > :first-child,
+.lesson-step .prose-custom > :first-child > :first-child { margin-top: 0; }
+.lesson-step .prose-custom > :last-child { margin-bottom: 0; }
+.lesson-step .prose-custom h3 { @apply text-[21px] font-extrabold tracking-tight mt-2 mb-3; }
+.lesson-step .prose-custom p { @apply text-[17px] leading-[1.75]; }
+.lesson-step .prose-custom table { @apply block overflow-x-auto; }
+.lesson-footer a { @apply text-accent underline underline-offset-2; }
+
+@keyframes step-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.continue-btn {
+  @apply px-7 py-3 text-[15px] min-w-[140px] shrink-0;
+}
+
+.celebrate { animation: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Interactions                                                        */
+/* ------------------------------------------------------------------ */
+
+.interaction {
+  @apply bg-card border-2 border-line rounded-[20px] p-4 sm:p-6 my-6;
+  box-shadow: 0 10px 30px rgba(38, 32, 25, 0.06);
+}
+.option {
+  @apply w-full flex items-center gap-3 text-left rounded-[14px] border-2 bg-card px-3.5 py-3 text-[15.5px] leading-snug transition-all cursor-pointer disabled:cursor-default;
+  min-height: 52px;
+}
+.option:not(:disabled):active { transform: scale(0.985); }
+.option-key {
+  @apply w-7 h-7 rounded-lg border-2 border-line-strong grid place-items-center text-[12px] font-extrabold shrink-0 text-ink-soft transition-colors;
+}
+.chip {
+  @apply inline-flex items-center rounded-full border-2 border-line-strong bg-card px-3.5 py-2 text-[14.5px] font-medium leading-snug text-left transition-all cursor-pointer disabled:cursor-default;
+}
+.bucket {
+  @apply rounded-2xl border-2 border-line bg-paper-soft p-3 transition-colors min-h-[76px] sm:min-h-[92px];
+}
+.order-row {
+  @apply flex items-center gap-3 rounded-[14px] border-2 border-line bg-card px-3 py-2.5 transition-colors;
+}
+.arrow-btn {
+  @apply w-9 h-9 rounded-lg border-2 border-line-strong grid place-items-center font-bold text-ink-soft hover:border-accent hover:text-accent transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed;
+}
+.feedback { animation: step-in 0.3s ease-out both; }
+.shake { animation: shake 0.4s ease-in-out; }
+@keyframes shake {
+  0%, 100% { translate: 0 0; }
+  20%, 60% { translate: -5px 0; }
+  40%, 80% { translate: 5px 0; }
+}
+.menu-in { animation: step-in 0.25s ease-out both; }
+
 }
