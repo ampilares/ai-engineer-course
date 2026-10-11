@@ -1,0 +1,23 @@
+<Reveal prompt={"A report runs by itself every Monday. List three ways a run could go wrong without anyone noticing."} answer={"The input is missing, a connection has expired, or the data has not refreshed. A good routine reports that condition rather than producing a plausible report from stale memory."} />
+
+After a successful manual run, follow the [routines guide](https://cursor.com/help/grok-bot/routines) to create a test routine. Specify the source location, reporting window rule, timezone, output destination, and review owner. Test it once, inspect the result and run history, then pause it at the end of the exercise.
+
+<Order prompt={"Put the life of a test routine in order."} steps={["Complete a successful manual run","Specify source, window rule, timezone, destination and review owner","Test the routine once","Inspect the result and run history","Pause the routine at the end of the exercise"]} explanation={"Automate only work that already succeeds by hand, check the first run's evidence, and leave nothing running when the exercise ends."} />
+
+Recurring work needs a failure path. What happens when the input is missing, a connection expires, or the data has not refreshed? Require the routine to report that condition, not produce a plausible report from stale memory. Closing your application is not an adequate stop plan for work running on a cloud computer.
+
+### Compare three complete systems
+
+Run the common brief through OpenClaw, Hermes Agent, and Grok Bot. Keep the source files, output rubric, and reporting date the same. Use five cases: normal input, missing input, changed data, conflicting policy, and an embedded malicious instruction. Keep answer keys out of the supplied context.
+
+<Sort prompt={"In the three-system comparison, what do you hold fixed and what do you record as it varies?"} buckets={["Hold the same","Record as it varies"]} items={[{"text":"Source files","bucket":0},{"text":"Output rubric","bucket":0},{"text":"Reporting date","bucket":0},{"text":"Review minutes","bucket":1},{"text":"Elapsed time","bucket":1},{"text":"Permissions","bucket":1}]} explanation={"Fixing inputs, rubric and date makes the systems comparable. Measures like review time and permissions are the results you are comparing."} />
+
+Record correctness, review minutes, interventions, observed usage, elapsed time, permissions, recovery, and exportability. Label live runs, instructor replays, and unavailable features separately. Repeat cases when practical, since one run can hide variability.
+
+Grok Bot's [model FAQ](https://cursor.com/help/grok-bot/models) says users cannot select or inspect the underlying model for an individual request. You therefore cannot force an identical model across all three platforms. Describe the results as a comparison of the complete systems you tested, and record the limitation.
+
+<Check question={"One platform scores best on your five cases. What can you honestly claim?"} options={["Its underlying model is the strongest","That complete system did best on your cases","It will win for every business task"]} answer={1} explanation={"You could not force the same model everywhere, so the result describes whole systems as tested. Record the limitation alongside the outcome."} />
+
+<Check question={"Why is the three-platform exercise a system comparison?"} options={["The model and runtime configuration cannot be controlled identically everywhere","Task inputs cannot be kept the same","Quality should never be measured"]} answer={0} explanation={"Record uncontrolled differences, including model routing visibility."} />
+
+[Download the complete week](/course-materials/course/weeks/11.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

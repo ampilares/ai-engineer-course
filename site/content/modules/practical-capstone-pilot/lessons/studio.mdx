@@ -1,0 +1,33 @@
+<Reveal prompt={"Your pilot shows the system does not pay off. Could that recommendation still earn full credit? Decide, then reveal."} answer={"Yes. A pilot that recommends stopping can earn full credit if it uses a working system and sound evidence. Positive ROI is not required; honest measurement and a defensible decision are."} />
+
+### Engineering route
+
+1. Run the bounded pilot with instrumentation and a visible unresolved-work queue.
+2. Review traces for at least one success, one corrected result, and one failed or deliberately injected failure.
+3. Fix the highest-priority defect and preserve its regression case.
+4. Compare before and after on the same development cases, recording versions and any confounding changes.
+5. Rehearse rollback or stopping new work, then verify the state of already-started actions.
+
+<Check question={"Which mix of traces does the engineering route ask you to review?"} options={["Only the three fastest runs","Only the failures","A success, a corrected result and a failure","Every trace from the development set"]} answer={2} explanation={"Comparing a success, a corrected case and a failure shows how the system behaves across outcomes. Looking only at one kind hides the contrast that explains defects."} />
+
+### Business-owner route
+
+1. Observe users completing the actual review task. Ask where they felt uncertain or needed to leave the workflow.
+2. Record review and correction time, not only generated-output time.
+3. Check whether users relied on unsupported claims or ignored unresolved items.
+4. Agree a targeted improvement with the implementation owner and retest with staff.
+5. Update the adoption recommendation and cost sensitivity using the observed workload.
+
+<Sort prompt={"Which route does each pilot-review task belong to?"} buckets={["Engineering route","Business-owner route"]} items={[{"text":"Fix the top defect and keep its regression case","bucket":0},{"text":"Ask users where they felt uncertain","bucket":1},{"text":"Rehearse rollback or stopping new work","bucket":0},{"text":"Check whether users ignored unresolved items","bucket":1},{"text":"Update cost sensitivity using observed workload","bucket":1}]} explanation={"Engineers fix and verify the system; business owners watch how people actually use it and what it costs. Both feed the updated decision record."} />
+
+### Required submission
+
+Submit the pilot case log, before/after results, feedback notes, one diagnosed failure, the fix and regression evidence, and an updated decision record. A pilot that recommends stopping can earn full credit if it uses a working system and sound evidence. Positive ROI is not a grading requirement; honest measurement and a defensible decision are.
+
+Before moving to handover, ensure that unresolved cases have owners, the pilot has stayed within its authorised scope, and the final evaluation claims are independent of the development examples used to tune the system.
+
+<Reveal prompt={"Name the three things to confirm before moving on to handover."} answer={"Unresolved cases have owners, the pilot stayed within its authorised scope, and final evaluation claims are independent of the development examples used for tuning."} />
+
+<Check question={"What makes pilot and manual timing comparable?"} options={["Measuring generation time against full manual effort","Selecting only easy pilot cases","The same completion definition including review and correction"]} answer={2} explanation={"The populations and task boundaries must be comparable."} />
+
+[Download the complete week](/course-materials/course/weeks/15.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

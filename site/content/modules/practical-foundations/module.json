@@ -1,0 +1,30 @@
+{
+  "slug": "practical-foundations",
+  "title": "AI Foundations and Useful Work",
+  "phase": "foundations",
+  "summary": "Choose a worthwhile task and measure the process before changing it.",
+  "outcomes": [
+    "Distinguish models, assistants, workflows, and agents",
+    "Select a bounded use case",
+    "Record a manual quality and time baseline"
+  ],
+  "number": 1,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Understand the system you are using",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Work through an opportunity and a baseline",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio, reflection, and evidence",
+      "minutes": 30
+    }
+  ]
+}

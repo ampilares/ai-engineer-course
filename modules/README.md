@@ -1,23 +1,25 @@
-# Module index
+# Module guides
 
-These files cover the fifteen-module core curriculum. The interactive platform adds Python and math on-ramps before this sequence and a career module after it, for eighteen platform modules in total. As a result, core Module 1 is platform Module 3.
+The active core is the [16-week practical course](../course/README.md), replacing the earlier fifteen core module guides. Week and site-module numbering now match from 1 to 16. Start with [Week 1](../course/weeks/01.md).
 
-Work in order unless the [entry diagnostic](../ASSESSMENTS.md#entry-diagnostic) places you later.
+The files below remain optional engineering references. Their historical numbering, prerequisites, schedules, and assessments do not define the October 2026 core. Recheck external examples before use.
 
-1. [Engineering foundations](01-engineering-foundations.md)
-2. [Data engineering for AI systems](02-data-engineering.md)
-3. [Data, math, and classical ML](03-ml-foundations.md)
-4. [Deep learning](04-deep-learning.md)
-5. [How large language models work](05-llm-foundations.md)
-6. [LLM application primitives](06-llm-application-primitives.md)
-7. [Retrieval-augmented generation](07-rag.md)
-8. [Tools, workflows, agents, and MCP](08-agents-and-tools.md)
-9. [Multimodal AI systems](09-multimodal-ai.md)
-10. [AI product engineering and UX](10-ai-product-engineering.md)
-11. [Business workflow automation](11-business-automation.md)
-12. [Evaluation, testing, and observability](12-evaluation.md)
-13. [Safety, security, privacy, and governance](13-safety-security.md)
-14. [Production engineering and LLMOps](14-production-llmops.md)
-15. [Expert topics and capstone](15-expert-topics.md)
+| Reference | Useful for |
+|---|---|
+| [Engineering foundations](01-engineering-foundations.md) | Git, APIs, SQL, tests |
+| [Data engineering](02-data-engineering.md) | Ingestion and data quality |
+| [Classical ML](03-ml-foundations.md) | Structured prediction extension |
+| [Deep learning](04-deep-learning.md) | Model-internals extension |
+| [LLM foundations](05-llm-foundations.md) | Tokenisation and inference depth |
+| [LLM application primitives](06-llm-application-primitives.md) | Interface design |
+| [RAG](07-rag.md) | Advanced retrieval |
+| [Agents and tools](08-agents-and-tools.md) | Tool integration depth |
+| [Multimodal AI](09-multimodal-ai.md) | Media and voice extensions |
+| [AI product engineering](10-ai-product-engineering.md) | Product design and feedback |
+| [Business automation](11-business-automation.md) | Workflow integration |
+| [Evaluation](12-evaluation.md) | Additional evaluation methods |
+| [Safety and security](13-safety-security.md) | Threat modelling depth |
+| [Production operations](14-production-llmops.md) | Deployment and operations |
+| [Expert topics](15-expert-topics.md) | Advanced experiments |
 
-Each guide maps to an interactive platform module with a number two greater than the core number. For example, core Module 7 maps to platform Module 9, Retrieval-Augmented Generation. Plan for roughly two hours of concepts and checks plus six to eight hours of implementation, evaluation, and explanation per study week. Each module ends with observable acceptance criteria. Do not advance merely because resources were watched; advance when the artifact passes those criteria and another person can reproduce the evidence.
+Use the new [assessment guide](../ASSESSMENTS.md) and [capstone brief](../CAPSTONE.md) for completion requirements.

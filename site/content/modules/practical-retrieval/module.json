@@ -1,0 +1,30 @@
+{
+  "slug": "practical-retrieval",
+  "title": "Private Knowledge and Retrieval",
+  "phase": "rag",
+  "summary": "Answer from the right version of authorised documents and abstain without evidence.",
+  "outcomes": [
+    "Filter access before retrieval",
+    "Evaluate retrieval separately from generation",
+    "Handle stale and conflicting sources"
+  ],
+  "number": 6,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Build a retrieval pipeline with explicit boundaries",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Evaluate retrieval and answers separately",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio, freshness tests, and evidence",
+      "minutes": 30
+    }
+  ]
+}

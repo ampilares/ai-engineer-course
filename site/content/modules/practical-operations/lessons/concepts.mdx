@@ -1,0 +1,31 @@
+<Check question={"Every request to your AI service returns HTTP 200. Does that tell you the weekly brief was actually right?"} options={["Yes, a 200 means the whole task succeeded","No, it only shows the server answered","Yes, as long as latency was low"]} answer={1} explanation={"A status code shows the server responded, not that the business task succeeded. That is why a pilot needs signals such as task success and unsupported-answer rate."} />
+
+This week prepares the system for a limited pilot. A useful deployment has an owner, a budget, observable failure, and a way back to the manual process. A successful installation is only one part of readiness.
+
+Separate development, test, and pilot environments. Keep their credentials and data distinct. Record the deployed code, prompt, model identifier when visible, retrieval snapshot, tool configuration, and permission policy. A change to a provider's model routing may affect behaviour even when your own code is unchanged.
+
+<Check question={"Your code and prompt are unchanged, yet the pilot starts behaving differently this week. What is a plausible cause?"} options={["Nothing can change if your own code is unchanged","The HTTP status codes were misread","The provider changed its model routing","The retrieval snapshot became more accurate by itself"]} answer={2} explanation={"A provider's model routing can shift behaviour without any change on your side. Recording the model identifier and configuration helps you spot this."} />
+
+Choose a small set of signals: task success, unsupported-answer rate, intervention rate, oldest waiting item, end-to-end latency, and cost per completed case. Define what each measures and how often someone checks it. A server returning HTTP 200 does not establish that the business task succeeded.
+
+A service-level indicator is a measured property. An objective is a target for that property over a stated window. For example, "at least 95% of eligible report requests produce a checked draft within ten minutes during the pilot" names a population, outcome, duration, and window. It is a proposed classroom target, not a universal requirement. [Google's SRE chapter](https://sre.google/sre-book/service-level-objectives/) provides the underlying distinction.
+
+<Check question={"In the objective about report requests, which phrase names the population being measured?"} options={["Eligible report requests","Within ten minutes","At least 95%","During the pilot"]} answer={0} explanation={"A good objective says who or what is counted, the outcome, the duration and the window. Eligible report requests is the population; the others are the target, duration and window."} />
+
+Set stop conditions before rollout: an unauthorised action, a privacy boundary failure, spend beyond the agreed cap, or repeated missed deadlines. Stopping new work is different from cancelling work already in progress. Record how to inspect pending actions, revoke tool access, preserve evidence, and return users to a manual queue.
+
+<Sort prompt={"Is each item a monitoring signal to watch, or a stop condition that halts new work?"} buckets={["Monitoring signal","Stop condition"]} items={[{"text":"Intervention rate","bucket":0},{"text":"An unauthorised action occurs","bucket":1},{"text":"Oldest waiting item","bucket":0},{"text":"Spend goes beyond the agreed cap","bucket":1},{"text":"Cost per completed case","bucket":0},{"text":"A privacy boundary failure","bucket":1}]} explanation={"Signals are measured regularly to see how the pilot is going. Stop conditions are agreed in advance so nobody has to debate whether to pause when something serious happens."} />
+
+### Deployment checklist as an operating exercise
+
+Confirm secrets are outside the repository, logs are appropriate, backups can be restored, and dependencies are recorded. Rehearse recovery with fictional data. A backup that has never been restored is unverified. Ask a second person to follow the runbook without your help; their questions reveal missing operational knowledge.
+
+### Explore the concept
+
+This illustrative simulator uses its own teaching examples. It is not a live platform run or a measurement of the Harbour case.
+
+<CostLatencyCalculator />
+
+<Check question={"What is the difference between an indicator and an objective?"} options={["They are interchangeable names for a server log","An indicator is measured; an objective is a target over a stated window","An objective records only costs"]} answer={1} explanation={"The metric and the desired operating level must be distinguishable."} />
+
+[Download the complete week](/course-materials/course/weeks/13.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

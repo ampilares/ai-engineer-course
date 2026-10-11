@@ -2,63 +2,45 @@ export const metadata = { title: "Resources" };
 
 const SECTIONS: { title: string; items: { name: string; href: string; why: string }[] }[] = [
   {
-    title: "Foundations & Python",
+    title: "Course materials",
     items: [
-      { name: "Automate the Boring Stuff with Python", href: "https://automatetheboringstuff.com/", why: "Free book that turns Python basics into useful programs." },
-      { name: "Kaggle Learn: Python", href: "https://www.kaggle.com/learn/python", why: "Interactive notebook drills for extra reps." },
-      { name: "The Missing Semester", href: "https://missing.csail.mit.edu/", why: "Shell, Git, and editor fluency from MIT." },
-      { name: "SQLite Tutorial", href: "https://www.sqlitetutorial.net/", why: "Hands-on SQL against the engine this course uses." },
+      { name: "Complete course guide", href: "/course-materials/COURSE.md", why: "The 16-week sequence, outcomes, and engineering and owner routes." },
+      { name: "Harbour Services case pack", href: "/course-materials/course/case-study/README.md", why: "Fictional task inputs, deliberate failure cases, and worked answers." },
+      { name: "Agent input package", href: "/course-materials/course/case-study/agent-inputs/README.md", why: "Use these files with an agent; keep evaluator answers outside its context." },
+      { name: "Reference lab instructions", href: "/course-materials/course/labs/README.md", why: "Run the offline reporting, retrieval, approval, and evaluation examples." },
+      { name: "Open the review prototype", href: "/course-materials/course/labs/review-prototype.html", why: "Practise draft review and approval in a local simulation with no AI or network calls." },
+      { name: "Assessment and capstone", href: "/course-materials/ASSESSMENTS.md", why: "Practical grading and progression gates, separate from site knowledge quizzes." },
+      { name: "Primary-source research register", href: "/course-materials/course/research.md", why: "Documentation checked on 11 October 2026, with capability and research limitations." },
     ],
   },
   {
-    title: "Math & Machine Learning",
+    title: "Tools, interfaces, and workflows",
     items: [
-      { name: "3Blue1Brown: Essence of Linear Algebra", href: "https://www.3blue1brown.com/topics/linear-algebra", why: "The visual intuition behind vectors and matrices." },
-      { name: "Seeing Theory", href: "https://seeing-theory.brown.edu/", why: "Beautiful interactive probability and statistics." },
-      { name: "Google ML Crash Course", href: "https://developers.google.com/machine-learning/crash-course", why: "Free, exercise-driven classical ML." },
-      { name: "fast.ai: Practical Deep Learning", href: "https://course.fast.ai/", why: "The best free hands-on deep learning course." },
-      { name: "scikit-learn User Guide", href: "https://scikit-learn.org/stable/user_guide.html", why: "A reference that doubles as an ML textbook." },
+      { name: "Building effective agents", href: "https://www.anthropic.com/engineering/building-effective-agents", why: "Distinguish fixed workflows from agent-selected actions." },
+      { name: "Codex learning resources", href: "https://developers.openai.com/learn/codex", why: "Working with a coding agent and reviewing its output." },
+      { name: "Structured outputs", href: "https://developers.openai.com/api/docs/guides/structured-outputs", why: "JSON-schema interfaces and response failure handling." },
+      { name: "Model Context Protocol", href: "https://modelcontextprotocol.io/docs/getting-started/intro", why: "Hosts, clients, servers, and tool integration." },
+      { name: "n8n human review", href: "https://docs.n8n.io/advanced-ai/human-in-the-loop-tools/", why: "Reviewing agent tool calls within an automation." },
     ],
   },
   {
-    title: "LLMs & Transformers",
+    title: "Agent platforms",
     items: [
-      { name: "3Blue1Brown: Neural Networks & Transformers", href: "https://www.3blue1brown.com/topics/neural-networks", why: "The visual series behind Modules 6–7." },
-      { name: "Karpathy: Neural Networks Zero to Hero", href: "https://karpathy.ai/zero-to-hero.html", why: "Build tokenizers, backprop, and GPT from scratch: the expert route." },
-      { name: "The Illustrated Transformer", href: "https://jalammar.github.io/illustrated-transformer/", why: "The classic visual walkthrough of attention." },
-      { name: "Hugging Face LLM Course", href: "https://huggingface.co/learn/llm-course/chapter1/1", why: "Free transformers/NLP course with runnable code." },
-      { name: "Stanford CS336: Language Modeling from Scratch", href: "https://cs336.stanford.edu/", why: "Implementation-heavy expert route for Module 7." },
+      { name: "OpenClaw getting started", href: "https://docs.openclaw.ai/start/getting-started", why: "Current setup requirements and gateway operation." },
+      { name: "OpenClaw security audit", href: "https://docs.openclaw.ai/cli/security", why: "Inspect the configured access and security posture." },
+      { name: "Hermes Agent quickstart", href: "https://hermes-agent.nousresearch.com/docs/getting-started/quickstart", why: "Set up the agent application and its provider." },
+      { name: "Hermes memory", href: "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory", why: "Check what persists across sessions and how to correct it." },
+      { name: "Cursor Grok Bot", href: "https://cursor.com/docs/grok-bot", why: "The Grok Bot product studied in Week 11." },
+      { name: "Grok Bot security", href: "https://cursor.com/docs/grok-bot/security", why: "Understand account-wide shared files, computer, and signed-in sessions." },
+      { name: "Grok Bot model routing", href: "https://cursor.com/help/grok-bot/models", why: "Limits on model selection and visibility when comparing systems." },
     ],
   },
   {
-    title: "Building with LLMs",
+    title: "Evaluation and operation",
     items: [
-      { name: "Anthropic: Building Effective Agents", href: "https://www.anthropic.com/engineering/building-effective-agents", why: "The workflow-vs-agent taxonomy Module 10 teaches." },
-      { name: "Prompt Engineering Guide", href: "https://www.promptingguide.ai/", why: "Provider-neutral survey with research references." },
-      { name: "Model Context Protocol", href: "https://modelcontextprotocol.io/", why: "The tool-integration standard: build one small server." },
-      { name: "Pydantic docs", href: "https://docs.pydantic.dev/latest/", why: "The validation library at the center of structured outputs." },
-      { name: "Ollama", href: "https://github.com/ollama/ollama", why: "Run open models locally for free lab work." },
-    ],
-  },
-  {
-    title: "Evaluation, Safety & Production",
-    items: [
-      { name: "Hamel Husain: Your AI Product Needs Evals", href: "https://hamel.dev/blog/posts/evals/", why: "The essay that made eval discipline standard practice." },
-      { name: "Ragas", href: "https://docs.ragas.io/", why: "Open-source RAG evaluation framework." },
-      { name: "Langfuse", href: "https://langfuse.com/docs", why: "Self-hostable LLM tracing and cost tracking." },
-      { name: "OWASP Top 10 for LLM Applications", href: "https://genai.owasp.org/llm-top-10/", why: "The standard AI-security taxonomy behind Module 15." },
-      { name: "Simon Willison: Prompt injection series", href: "https://simonwillison.net/series/prompt-injection/", why: "The clearest chronicle of the attack class." },
-      { name: "Google SRE Book", href: "https://sre.google/sre-book/table-of-contents/", why: "SLOs, error budgets, and postmortems: Module 16's backbone." },
-      { name: "n8n docs & courses", href: "https://docs.n8n.io/", why: "The self-hostable workflow tool for Module 13 labs." },
-    ],
-  },
-  {
-    title: "Staying Current",
-    items: [
-      { name: "Anthropic Engineering blog", href: "https://www.anthropic.com/engineering", why: "Primary-source applied technique." },
-      { name: "Simon Willison's blog", href: "https://simonwillison.net/", why: "Hype-resistant running commentary on applied LLMs." },
-      { name: "Artificial Analysis", href: "https://artificialanalysis.ai/", why: "Independent cross-provider price/latency/quality benchmarks." },
-      { name: "The Pragmatic Engineer", href: "https://newsletter.pragmaticengineer.com/", why: "How engineering careers and hiring actually work." },
+      { name: "Evaluation best practices", href: "https://developers.openai.com/api/docs/guides/evaluation-best-practices", why: "Plan representative cases and calibrate graders." },
+      { name: "OWASP prompt injection", href: "https://genai.owasp.org/llmrisk/llm01-prompt-injection/", why: "Understand instruction attacks and application boundaries." },
+      { name: "Google SRE objectives", href: "https://sre.google/sre-book/service-level-objectives/", why: "Define useful service indicators, objectives, and measurement windows." },
     ],
   },
 ];
@@ -68,8 +50,8 @@ export default function ResourcesPage() {
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-3xl font-bold tracking-tight mb-2">Resources</h1>
       <p className="muted mb-8 max-w-2xl">
-        The best free external material, curated per phase. Everything here is optional: lessons are
-        self-contained, but these are the places to go deeper. All links open in a new tab.
+        Course files and primary references for the practical curriculum. Markdown files can be
+        saved locally. External services may require accounts or paid usage. Links open in a new tab.
       </p>
       <div className="space-y-10">
         {SECTIONS.map((s) => (

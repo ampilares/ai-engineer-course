@@ -1,0 +1,33 @@
+<Reveal prompt={"You are about to test a request-intake prototype. Which four kinds of request would you try first?"} answer={"A complete request, one with an empty field, a mixed request and a refund request. Together they test normal handling, missing data, ambiguity and a case needing human authority."} />
+
+### Engineering route
+
+1. Choose a small reporting improvement or a defect in your own authorised project. State three acceptance cases.
+2. Reproduce the current behaviour and ask the coding assistant to inspect the relevant files.
+3. Review its plan, implement the change, and inspect the diff.
+4. Run a regression test, normal-case test, and failure-case test.
+5. Revert or disable the change in a disposable copy, then restore it. Record what the reversal does and does not undo.
+
+<Sort prompt={"Match each test to its type."} buckets={["Regression","Normal case","Failure case"]} items={[{"text":"Fails on the old broken behaviour and passes after the fix","bucket":0},{"text":"A typical week of valid AUD sales gives the expected total","bucket":1},{"text":"An empty file produces a clear error, not a zero total","bucket":2},{"text":"A malformed date is rejected rather than guessed","bucket":2}]} explanation={"A regression test proves the fix, a normal case shows ordinary work still succeeds, and failure cases show bad input is handled safely."} />
+
+### Business-owner route
+
+1. Specify a request-intake or report-review prototype using [the task brief template](/course-materials/course/templates/task-brief.md).
+2. Use the supplied [local review prototype](/course-materials/course/labs/review-prototype.html), or ask your approved coding tool to modify a copy. It must run without connecting to a real customer account.
+3. Test a complete request, an empty field, a mixed request, and a refund request.
+4. Inspect whether the interface distinguishes drafts from completed actions. Record any misleading label.
+5. Ask another person to use it and record one misunderstanding, then revise the specification or interface.
+
+<Check question={"Why must the prototype run without connecting to a real customer account?"} options={["It loads faster that way","Mistakes cannot reach real customers or records","Real accounts do not allow forms"]} answer={1} explanation={"Keeping the exercise local means generated drafts are the only outputs, so testing errors have no external effects."} />
+
+### Evidence and reflection
+
+Submit the task brief, before/after behaviour, reviewed diff or prototype, test output, and a rollback note. Explain one AI suggestion you rejected. Pass the Week 4 gate when you can independently verify the artifact and make a substantive correction without relying on the assistant's assurance.
+
+<Reveal prompt={"Think of one AI suggestion you rejected this week. Could you justify the rejection without saying the AI said so?"} answer={"A good justification cites evidence: a failing test, a contradicted requirement, an unnecessary dependency or an unrelated rewrite. That shows you verified the work independently."} />
+
+The reference lab already handles conflicting duplicates. For the supplied project, make the optional improvement concrete by adding a grouped review summary by reason, preserving individual source rows, and testing its counts. Do not claim to have fixed a defect that was not present; record whether your work is a new feature, a reproduction exercise, or a real fix.
+
+<Check question={"Why can generated tests agree with incorrect generated code?"} options={["Both may encode the same mistaken requirement","Tests cannot check AI-generated code","Any passing test proves the requirement was correct"]} answer={0} explanation={"Expected results must come from an independent interpretation of the requirement."} />
+
+[Download the complete week](/course-materials/course/weeks/04.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

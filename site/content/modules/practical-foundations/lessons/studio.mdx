@@ -1,0 +1,33 @@
+<Reveal prompt={"An assistant gives the correct net total but explains it with the wrong exclusions. Would you accept its answer?"} answer={"Accept the number only after your own check, and mark the reasoning unsupported. A right answer for the wrong reason will fail when next week's data differs."} />
+
+### Engineering route
+
+1. Run `node course/labs/reference.mjs report` from the repository root and read the input CSV separately.
+2. Ask your approved assistant to calculate the same report using only the task inputs. Keep its original answer.
+3. Compare its counts, exclusions, and totals with your manual check. If it gives the correct net amount for the wrong reason, mark the reasoning unsupported.
+4. Write a one-page architecture decision allocating calculation, language interpretation, review, and final action to different components.
+5. Repeat with ten examples from your chosen engineering process, or clearly label the Harbour pack as a simulation.
+
+### Business-owner route
+
+1. Draw the current process as receive, inspect, decide, act, and record. Name the person responsible for each step.
+2. Time ten representative cases, or use the fictional baseline to practise the calculation.
+3. List five possible improvements and rank them using the five questions above.
+4. Choose one improvement. Write its allowed inputs, expected output, exclusions, review owner, and budget.
+5. Ask a colleague to describe a failure you have missed. Add it to the project's future evaluation set.
+
+<Order prompt={"Put one Harbour support case through the current process, in order."} steps={["A ticket arrives in the shared inbox","Staff check the details and required fields","Staff choose a category and whether review is needed","A draft reply is saved for review","The outcome and minutes taken are logged"]} explanation={"These are receive, inspect, decide, act and record. Naming a responsible person for each stage shows where review and authority sit."} />
+
+### Check your understanding
+
+If a report is generated instantly but takes 15 minutes to correct, it has not beaten a 12-minute manual process on active staff time. If an agent remembers a preference, that alone does not establish that its model was retrained. If a task can be completed by a deterministic calculation, a fluent explanation does not make a model the necessary execution engine.
+
+<Check question={"Which comparison would be unfair?"} options={["A fully reviewed manual reply versus an AI draft nobody checked","Ten manual cases versus ten AI-assisted cases from the same mix","Both timed from ticket received to reviewed reply"]} answer={0} explanation={"Both sides must reach the same definition of complete. An unchecked draft has skipped work the manual process included."} />
+
+Submit the baseline table, selected opportunity, rejected alternative, and task boundary. Pass this week's practical review when another person can determine whether a result is complete without asking what you meant. Use [the evidence template](/course-materials/course/templates/evidence-log.md) to record assumptions separately from measurements.
+
+<Reveal prompt={"Write your task boundary in one sentence. Could a stranger judge a result complete without asking what you meant?"} answer={"A strong boundary names the input, the output, what is excluded, and who reviews it. For example: given one week's files, draft the report with checked totals and evidence for Maya; no refunds or messages."} />
+
+<Check question={"A saved report-format preference establishes which fact?"} options={["The product may have persisted context outside the current conversation","The base model's weights have been retrained","The preference is now correct for every task"]} answer={0} explanation={"Persistent product memory and model training are different mechanisms."} />
+
+[Download the complete week](/course-materials/course/weeks/01.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

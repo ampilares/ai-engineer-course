@@ -1,41 +1,127 @@
 {
-  "title": "Practical AI Engineer",
+  "title": "Practical AI Engineering and Business Automation",
   "passPct": 70,
   "maxAttempts": 3,
   "bands": [
-    { "name": "Distinction", "min": 90 },
-    { "name": "Merit", "min": 80 },
-    { "name": "Pass", "min": 70 }
+    {
+      "name": "Distinction",
+      "min": 90
+    },
+    {
+      "name": "Merit",
+      "min": 80
+    },
+    {
+      "name": "Pass",
+      "min": 70
+    }
   ],
   "phases": [
-    { "id": "onramp", "title": "On-Ramp" },
-    { "id": "foundations", "title": "Software & Data Foundations" },
-    { "id": "ml", "title": "ML & Deep Learning" },
-    { "id": "llm", "title": "LLM Foundations & APIs" },
-    { "id": "rag", "title": "Retrieval, Agents & Multimodal" },
-    { "id": "automation", "title": "AI Product & Automation" },
-    { "id": "production", "title": "Production Engineering" },
-    { "id": "expert", "title": "Expert Topics & Capstone" },
-    { "id": "career", "title": "Career" }
+    {
+      "id": "foundations",
+      "title": "Practical Foundations"
+    },
+    {
+      "id": "llm",
+      "title": "Model Interfaces"
+    },
+    {
+      "id": "rag",
+      "title": "Knowledge and Retrieval"
+    },
+    {
+      "id": "automation",
+      "title": "Workflows and Agent Platforms"
+    },
+    {
+      "id": "production",
+      "title": "Evaluation and Operations"
+    },
+    {
+      "id": "expert",
+      "title": "Capstone"
+    }
   ],
   "modules": [
-    { "slug": "python-foundations", "phase": "onramp", "weight": 0.5 },
-    { "slug": "math-foundations", "phase": "onramp", "weight": 0.5 },
-    { "slug": "engineering-foundations", "phase": "foundations", "weight": 0.7 },
-    { "slug": "data-engineering", "phase": "foundations", "weight": 0.8 },
-    { "slug": "ml-foundations", "phase": "ml", "weight": 0.7 },
-    { "slug": "deep-learning", "phase": "ml", "weight": 0.7 },
-    { "slug": "llm-foundations", "phase": "llm", "weight": 1.0 },
-    { "slug": "llm-primitives", "phase": "llm", "weight": 1.0 },
-    { "slug": "rag", "phase": "rag", "weight": 1.0 },
-    { "slug": "agents-and-tools", "phase": "rag", "weight": 1.0 },
-    { "slug": "multimodal-ai", "phase": "rag", "weight": 0.9 },
-    { "slug": "ai-product-engineering", "phase": "automation", "weight": 1.0 },
-    { "slug": "business-automation", "phase": "automation", "weight": 1.0 },
-    { "slug": "evaluation", "phase": "production", "weight": 1.0 },
-    { "slug": "safety-security", "phase": "production", "weight": 1.0 },
-    { "slug": "production-llmops", "phase": "production", "weight": 1.0 },
-    { "slug": "expert-topics", "phase": "expert", "weight": 0.9 },
-    { "slug": "getting-hired", "phase": "career", "weight": 0.5 }
+    {
+      "slug": "practical-foundations",
+      "phase": "foundations",
+      "weight": 1
+    },
+    {
+      "slug": "practical-context",
+      "phase": "foundations",
+      "weight": 1
+    },
+    {
+      "slug": "practical-data",
+      "phase": "foundations",
+      "weight": 1
+    },
+    {
+      "slug": "practical-coding",
+      "phase": "foundations",
+      "weight": 1
+    },
+    {
+      "slug": "practical-apis",
+      "phase": "llm",
+      "weight": 1
+    },
+    {
+      "slug": "practical-retrieval",
+      "phase": "rag",
+      "weight": 1
+    },
+    {
+      "slug": "practical-workflows",
+      "phase": "automation",
+      "weight": 1
+    },
+    {
+      "slug": "practical-agents",
+      "phase": "automation",
+      "weight": 1
+    },
+    {
+      "slug": "practical-openclaw",
+      "phase": "automation",
+      "weight": 1
+    },
+    {
+      "slug": "practical-hermes",
+      "phase": "automation",
+      "weight": 1
+    },
+    {
+      "slug": "practical-grokbot",
+      "phase": "automation",
+      "weight": 1
+    },
+    {
+      "slug": "practical-evaluation",
+      "phase": "production",
+      "weight": 1
+    },
+    {
+      "slug": "practical-operations",
+      "phase": "production",
+      "weight": 1
+    },
+    {
+      "slug": "practical-capstone-build",
+      "phase": "expert",
+      "weight": 1
+    },
+    {
+      "slug": "practical-capstone-pilot",
+      "phase": "expert",
+      "weight": 1
+    },
+    {
+      "slug": "practical-capstone-handover",
+      "phase": "expert",
+      "weight": 1
+    }
   ]
 }

@@ -1,0 +1,10 @@
+Fictional invoice transcription, supplied for an extraction exercise
+Document ID: INV-014
+Supplier: Harbour Parts
+Invoice date: 2026-10-03
+Customer reference: C04
+Line 1: Service visit, AUD 180.00
+Line 2: Replacement filter, AUD 40.00
+Total visible in image: AUD 22?.00
+Payment due: not visible
+Operator note: The question mark is an unreadable character. It is not a zero.

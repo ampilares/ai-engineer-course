@@ -1,0 +1,30 @@
+{
+  "slug": "practical-evaluation",
+  "title": "Evaluation, Security, and Governance",
+  "phase": "production",
+  "summary": "Use independent cases and failure evidence to make a release decision.",
+  "outcomes": [
+    "Build development and held-out cases",
+    "Calibrate graders against human judgement",
+    "Test access and action boundaries"
+  ],
+  "number": 12,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Build an evaluation that can disagree with you",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Test the system's authority, not just its answers",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio and release evidence",
+      "minutes": 30
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+<Reveal prompt={"In a five-minute demo, how much time would you give to things going wrong? Make a guess before revealing."} answer={"About two minutes: one on a failure and its handling, one on a blocked action and recovery. Showing limits is part of the evidence, not a distraction from it."} />
+
+Plan a five-minute demonstration. Spend about one minute on the problem and baseline, one minute on normal operation, one minute on a failure and its handling, one minute on a blocked action and recovery, and one minute on results and the recommendation. Prepare the evidence beforehand, but disclose whether a run is live or recorded.
+
+<Order prompt={"Put the five one-minute demo segments in the recommended order."} steps={["Problem and baseline","Normal operation","A failure and its handling","A blocked action and recovery","Results and the recommendation"]} explanation={"The audience needs the baseline to judge normal operation, and needs to see limits before they can trust the recommendation that closes the demo."} />
+
+Choose a failure relevant to the project. A missing document should produce an unresolved question rather than an invented answer. A revoked permission should prevent retrieval. A changed action payload should require renewed approval. An interrupted workflow should resume or enter reconciliation according to its documented limits.
+
+<Check question={"During your demo, someone changes the payload of an action that was already approved. What should happen?"} options={["It sends, because approval was given","It needs renewed approval","It retries until it succeeds"]} answer={1} explanation={"Approval belongs to an exact payload. A changed payload is effectively a new action, so it must go back for approval."} />
+
+Have a second person follow the runbook. They should identify pending work, pause new execution, inspect the last version, restore the approved configuration, and know whom to contact. Record where your documentation was insufficient and correct it before final submission.
+
+### Defend the design
+
+Be ready to explain why you selected the model or platform, why an agent was or was not useful, which facts must be retrieved, how tool authority is enforced, how you measured human effort, and which alternative you rejected. Explain one thing the AI suggested that you changed. You do not need to memorise every library API; you do need to understand your system's behaviour and limits.
+
+<Reveal prompt={"Why might a reviewer ask you to explain one thing the AI suggested that you changed?"} answer={"It shows you understand your system's behaviour and limits, rather than accepting generated work unexamined. You do not need every library API memorised, but you must own the design decisions."} />
+
+If a reviewer asks for a new requirement, distinguish a small supported variation from a change outside the evaluated scope. Do not improvise a production claim during the demonstration. Record the new case and decide what must be tested before accepting it.
+
+<Check question={"Which is a useful adoption decision?"} options={["The AI works for everything","Choose the most fashionable platform","Adopt for one named team with stated review, budget and reassessment conditions"]} answer={2} explanation={"Scope and operating conditions make the decision actionable."} />
+
+[Download the complete week](/course-materials/course/weeks/16.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

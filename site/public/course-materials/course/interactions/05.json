@@ -1,0 +1,146 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "Your app gets an HTTP success back from a model API. Can it safely use the answer straight away?",
+        "options": [
+          "Yes, success means the model answered correctly",
+          "Not yet, because completion and content still need checking",
+          "Only if the response arrived quickly"
+        ],
+        "answer": 1,
+        "explanation": "HTTP success only says the transport worked. The response may still be incomplete, a refusal, or well-formed but wrong, so each layer needs its own check."
+      },
+      {
+        "after": "For ticket triage, define four fields:",
+        "type": "sort",
+        "prompt": "Does each piece of triage output follow the field rules?",
+        "buckets": ["Follows the rules", "Breaks the rules"],
+        "items": [
+          { "text": "needs_review is the string 'yes'", "bucket": 1 },
+          { "text": "category is scheduling", "bucket": 0 },
+          { "text": "category is urgent", "bucket": 1 },
+          { "text": "needs_review is the Boolean true", "bucket": 0 },
+          { "text": "reason quotes what the customer asked for", "bucket": 0 },
+          { "text": "reason claims a past refund the ticket never mentions", "bucket": 1 }
+        ],
+        "explanation": "Categories come from a fixed list, the review flag must be a real Boolean, and the reason must cite the request rather than invent facts."
+      },
+      {
+        "after": "Schema validation checks shape, types,",
+        "type": "sort",
+        "prompt": "Which kind of check would catch each problem?",
+        "buckets": ["Schema", "Business", "Semantic"],
+        "items": [
+          { "text": "The reason field is missing entirely", "bucket": 0 },
+          { "text": "Category is shipping, which is not an allowed value", "bucket": 0 },
+          { "text": "An unknown category was not sent to review", "bucket": 1 },
+          { "text": "A refund is recorded as already approved", "bucket": 1 },
+          { "text": "The reason misreads what the customer wanted", "bucket": 2 },
+          { "text": "A reviewer says this ticket needed review but the flag says no", "bucket": 2 }
+        ],
+        "explanation": "Schema checks shape and allowed values, business checks enforce relationships and rules, and semantic evaluation asks whether the decision is actually right."
+      },
+      {
+        "after": "All four fields have the right types.",
+        "type": "reveal",
+        "prompt": "T09 passed every type check. What rule could have stopped this decision before it reached staff?",
+        "answer": "A business rule for mixed intent: when a ticket asks about more than one thing, such as an invoice and a visit change, set needs_review to true. The reference policy sends mixed intent to review, whatever the parser says."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "A model call fails. What is the smartest first move?",
+        "options": [
+          "Retry immediately until it works",
+          "Switch to a larger model",
+          "Work out what kind of failure it is",
+          "Save the full raw request permanently"
+        ],
+        "answer": 2,
+        "explanation": "Different failures need different responses. Retrying a malformed request or a wrong credential unchanged just wastes time without fixing anything."
+      },
+      {
+        "after": "Classify failures before retrying.",
+        "type": "check",
+        "question": "A call that creates a booking times out, and you cannot tell whether it went through. What is the risk of simply resending?",
+        "options": [
+          "It may create a duplicate booking",
+          "The schema will stop matching",
+          "The model will forget the ticket"
+        ],
+        "answer": 0,
+        "explanation": "A side-effecting action may already have happened. Without idempotency or reconciliation on the receiving side, a retry can repeat it."
+      },
+      {
+        "after": "Record request ID, case ID, prompt version",
+        "type": "sort",
+        "prompt": "You are designing the log for each model call. Record it, or keep it out?",
+        "buckets": ["Record it", "Keep it out"],
+        "items": [
+          { "text": "Request ID", "bucket": 0 },
+          { "text": "Prompt version", "bucket": 0 },
+          { "text": "Token usage, when exposed", "bucket": 0 },
+          { "text": "The API key used for the call", "bucket": 1 },
+          { "text": "Unneeded personal details from the ticket", "bucket": 1 },
+          { "text": "Why the item went to review", "bucket": 0 }
+        ],
+        "explanation": "Logs should let you trace and explain each call. Credentials and unnecessary personal content create risk without helping diagnosis."
+      },
+      {
+        "after": "Cost per attempted call can make a poor",
+        "type": "numeric",
+        "question": "Using illustrative prices, a call uses 1,000 input tokens at AUD 0.002 per thousand and 500 output tokens at AUD 0.008 per thousand. What is its estimated cost?",
+        "answer": 0.006,
+        "tolerance": 0.0001,
+        "unit": "AUD",
+        "explanation": "Input is 1 × 0.002 = 0.002 and output is 0.5 × 0.008 = 0.004, giving 0.006. Input and output are priced separately, so estimate each and add them."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "order",
+        "prompt": "Before you read on: in what order would you test a structured triage step?",
+        "steps": [
+          "Inspect the schema and the validator",
+          "Validate a known good example response",
+          "Break a copy and confirm it is rejected with a reason",
+          "Send one fictional ticket to a live model",
+          "Evaluate at least twenty cases and record the results"
+        ],
+        "explanation": "Start offline so you know the checks work, prove that bad output is rejected, then spend live calls, and finally measure across a set rather than a few examples."
+      },
+      {
+        "after": "Missing customer information is not a licence",
+        "type": "check",
+        "question": "A ticket arrives with no customer ID. The model returns a neatly formatted ID anyway. What should happen?",
+        "options": [
+          "Accept it, because the format is valid",
+          "Ask the model to rate its confidence",
+          "Treat it as invented and route it for review"
+        ],
+        "answer": 2,
+        "explanation": "A well-shaped value is not evidence it is true. Missing information should produce a visible review or error outcome, never a made-up ID."
+      },
+      {
+        "after": "Submit the schema, input/output examples",
+        "type": "sort",
+        "prompt": "In your write-up, which validations run automatically and which need a person?",
+        "buckets": ["Automatic", "Needs a human"],
+        "items": [
+          { "text": "Category is one of the four allowed values", "bucket": 0 },
+          { "text": "needs_review is a Boolean", "bucket": 0 },
+          { "text": "Unknown categories are routed to review", "bucket": 0 },
+          { "text": "Resolving an item flagged for review", "bucket": 1 },
+          { "text": "Judging whether a reason fairly reflects the request", "bucket": 1 }
+        ],
+        "explanation": "Shape and rule checks are mechanical, so code can enforce them. Deciding what an ambiguous request really means still needs a responsible person."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,29 @@
+<Check question={"A colleague suggests giving the model every company document and letting it work out answers. What is the biggest problem?"} options={["It would cost slightly more per question","It may read passages the user cannot access, or outdated versions","Models cannot read documents at all"]} answer={1} explanation={"A retrieval pipeline decides which documents a user may see, which versions apply, and which passages are selected. Skipping those decisions leaks private or stale material."} />
+
+A knowledge assistant needs the right evidence, not just a fluent answer. This week separates document selection, search, and answer generation so that each can be tested. Use the dated and permission-labelled Harbour policy passages.
+
+Retrieval-augmented generation supplies selected source passages to a model at answer time. The pipeline has several decisions: which documents exist, who can access them, which versions apply, how passages are represented, which ones are selected, and what the answer is allowed to claim.
+
+<Order prompt={"Put the pipeline decisions in the order the lesson lists them."} steps={["Which documents exist","Who can access them","Which versions apply","How passages are represented","Which passages are selected","What the answer may claim"]} explanation={"Each decision narrows what reaches the model, so a wrong choice early on cannot be fixed by a clever answer at the end."} />
+
+Start with a simple keyword baseline. It is cheap, inspectable, and often strong when users ask about exact product names or policy terms. Embeddings represent content as vectors so search can find related language even without the same words. Similarity is a retrieval signal, not a probability that a passage is correct. Hybrid search combines approaches; introduce it only if it addresses observed misses.
+
+<Check question={"Users mostly ask about exact policy terms like 'service-manager approval'. Which search approach should you try first?"} options={["A keyword baseline","A hybrid system from day one","No search, just the model's own knowledge"]} answer={0} explanation={"Keyword search is cheap, inspectable and often strong for exact terms. Add embeddings or hybrid search only when they fix misses you have actually observed."} />
+
+A chunk needs enough context to preserve the rule. Splitting "above AUD 250" away from "also needs the operations lead" makes both fragments less useful. Attach document ID, version, effective dates, status, and access labels to every derived passage. Index updates and deletions must propagate to those derivatives.
+
+Filter permissions before presenting candidates to the generator. Hiding a citation after the model has read a private passage does not undo the disclosure. In this lab the application supplies the role. Allowing the model to request the manager role would turn access control into a suggestion.
+
+<Reveal prompt={"Why not let the model ask for the manager role when it needs more information?"} answer={"Access control would become a suggestion the model could talk its way past. In the lab the application supplies the role, so the model only ever sees passages that role is allowed to read."} />
+
+The [retrieval paper by Lewis and colleagues](https://arxiv.org/abs/2005.11401) is foundational research on combining retrieval with generation. The metadata, access checks, and effective-date rules here are additional application responsibilities, not automatic properties of RAG.
+
+### Explore the concept
+
+This illustrative simulator uses its own teaching examples. It is not a live platform run or a measurement of the Harbour case.
+
+<ChunkAndRetrieve />
+
+<Check question={"When should document access filtering happen?"} options={["Before unauthorised passages reach the generator","After the answer is written","Only when the user asks for citations"]} answer={0} explanation={"Removing a citation after generation does not undo exposure of private context."} />
+
+[Download the complete week](/course-materials/course/weeks/06.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

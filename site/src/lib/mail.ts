@@ -1,9 +1,9 @@
 import "server-only";
+import nodemailer from "nodemailer";
 
 /**
- * Email delivery. If SMTP_* env vars are set, send via nodemailer (dynamic import,
- * optional dependency). Otherwise operate in "dev mail" mode: the caller shows the
- * magic link directly on screen.
+ * Send sign-in emails through SMTP. Local development can display links;
+ * production requires email delivery and never exposes sign-in tokens.
  */
 export function mailConfigured(): boolean {
   return !!process.env.SMTP_HOST;
@@ -11,14 +11,12 @@ export function mailConfigured(): boolean {
 
 export async function sendMail(to: string, subject: string, text: string, html: string): Promise<void> {
   if (!mailConfigured()) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("SMTP must be configured in production");
+    }
     console.log(`[dev-mail] To: ${to}\nSubject: ${subject}\n${text}`);
     return;
   }
-  // Opaque module name so the bundler doesn't try to statically resolve the
-  // optional nodemailer dependency; only loaded when SMTP is configured.
-  const mod = "nodemailer";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const nodemailer: any = await import(mod);
   const transport = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT || "587", 10),

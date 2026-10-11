@@ -1,0 +1,25 @@
+<Check question={"Two reviewers read the same capstone report. One says it passed, the other says it failed. What is most likely missing?"} options={["A more advanced model","A longer final report","More platforms in the demo","Precise, agreed acceptance statements"]} answer={3} explanation={"When success is defined in clear statements before evaluation, two reviewers can reach the same decision. Vague goals leave each reviewer to invent their own test."} />
+
+The capstone is one useful system built from the work you have already completed. This week closes the gaps between separate labs and a reproducible end-to-end process. Avoid adding a new platform simply to make the final demo look more advanced.
+
+Write a one-page contract with the process owner. It must identify users, inputs, outputs, allowed actions, data boundaries, review responsibility, and the decision the system improves. Include a non-goal that prevents the project from expanding during the pilot.
+
+For Harbour, the contract might be: "Prepare a weekly brief from authorised operating records, validate totals, cite effective policy, and queue unresolved items for Maya. Do not contact customers, approve refunds, or modify the ledger." A support-triage project can use the same structure with a different output.
+
+<Sort prompt={"Under the example Harbour contract, is each action in scope or excluded?"} buckets={["In scope","Excluded"]} items={[{"text":"Validate report totals","bucket":0},{"text":"Contact a customer","bucket":1},{"text":"Cite the effective policy","bucket":0},{"text":"Modify the ledger","bucket":1},{"text":"Queue unresolved items for Maya","bucket":0},{"text":"Approve a refund","bucket":1}]} explanation={"The system prepares and checks a draft, then hands open questions to a person. Anything that acts on customers, money or records stays with humans."} />
+
+Define measurable criteria before the final evaluation. Specify ordinary task success, mandatory boundary checks, maximum intervention workload, latency, cost, and recovery. Choose thresholds that make sense for the task. A classroom minimum of thirty evaluation cases is a floor for finding problems, not a statistical guarantee.
+
+Freeze at least twenty development cases and ten held-out cases. Store hashes or a version identifier for the case files. Keep held-out material out of prompts, retrieval indexes, skills, and examples. Public course cases are suitable for rehearsal; use independently authored variants for an assessed capstone.
+
+<Check question={"Which place is acceptable for held-out cases while you are still developing?"} options={["A few-shot example in the prompt","Stored separately, outside the agent's materials","The retrieval index, so answers improve","A skill file the agent can read"]} answer={1} explanation={"Held-out material must stay out of prompts, retrieval indexes, skills and examples. Otherwise the final test measures memory of the answers, not the system."} />
+
+### Worked acceptance contract
+
+The weekly brief must reconcile every input row, use authorised effective policies, and expose all unresolved data. It must never execute a customer-facing action. A report counts as successful only after the reviewer completes the checking protocol. A blocked export test is mandatory regardless of the average quality score. These statements let two reviewers reach the same decision.
+
+<Reveal prompt={"Why store hashes or a version identifier for your frozen case files?"} answer={"It lets anyone confirm the cases used in the final evaluation are exactly the ones frozen earlier, not quietly edited after results were seen."} />
+
+<Check question={"What is a vertical slice?"} options={["A set of disconnected component demos","Only the final user-interface screen","One input carried through every required stage to a reviewable outcome"]} answer={2} explanation={"The slice proves integration across the process."} />
+
+[Download the complete week](/course-materials/course/weeks/14.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

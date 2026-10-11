@@ -1,0 +1,134 @@
+[
+  {
+    "id": "pa-w03-q01",
+    "type": "single",
+    "prompt": "How should S010's missing amount be handled?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Keep it unknown and route the record to review"
+      },
+      {
+        "id": "b",
+        "text": "Replace it with zero"
+      },
+      {
+        "id": "c",
+        "text": "Infer it from the preceding sale"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Neither zero nor a neighbouring value is evidence for a missing amount."
+  },
+  {
+    "id": "pa-w03-q02",
+    "type": "single",
+    "prompt": "Two rows share an ID but have different amounts. What does the course contract require?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Keep whichever amount is larger"
+      },
+      {
+        "id": "b",
+        "text": "Review the conflict without silently choosing a value"
+      },
+      {
+        "id": "c",
+        "text": "Treat both as separate sales"
+      }
+    ],
+    "answer": "b",
+    "explanation": "A conflicting business event needs reconciliation; exact-copy deduplication is a different case."
+  },
+  {
+    "id": "pa-w03-q03",
+    "type": "single",
+    "prompt": "INV-014 line items total 220 but the printed total is unreadable. What should be stored?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Observed total of 220 with no qualification"
+      },
+      {
+        "id": "b",
+        "text": "A zero total to keep the schema complete"
+      },
+      {
+        "id": "c",
+        "text": "Unknown observed total and separate calculated subtotal of 220"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Observation and calculation must remain distinguishable."
+  },
+  {
+    "id": "pa-w03-q04",
+    "type": "single",
+    "prompt": "The transcript names no owner for an investigation. What is the correct action record?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Owner unresolved, with the source timestamp"
+      },
+      {
+        "id": "b",
+        "text": "Assign the nearest named speaker automatically"
+      },
+      {
+        "id": "c",
+        "text": "Drop the action from the list"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The uncertainty must remain visible until someone actually accepts ownership."
+  },
+  {
+    "id": "pa-w03-q05",
+    "type": "single",
+    "prompt": "Why exclude S011 from the AUD subtotal?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It is the last row"
+      },
+      {
+        "id": "b",
+        "text": "Its currency is USD and no conversion rule is authorised"
+      },
+      {
+        "id": "c",
+        "text": "Every small sale should be excluded"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Combining currencies without a specified conversion would create an unsupported total."
+  },
+  {
+    "id": "pa-w03-q06",
+    "type": "numeric",
+    "prompt": "What is Harbour's accepted gross sales total for 1-7 October?",
+    "answer": 6500,
+    "unit": "AUD",
+    "tolerance": 0.01,
+    "explanation": "The seven accepted sales total AUD 6,500."
+  },
+  {
+    "id": "pa-w03-q07",
+    "type": "numeric",
+    "prompt": "Gross accepted sales are 6,500 and refunds have magnitude 200. What is net accepted value?",
+    "answer": 6300,
+    "unit": "AUD",
+    "tolerance": 0.01,
+    "explanation": "6,500 minus 200 equals 6,300."
+  },
+  {
+    "id": "pa-w03-q08",
+    "type": "numeric",
+    "prompt": "How many accepted transaction events remain after the fixture's exclusions, quarantine and exact-copy deduplication?",
+    "answer": 8,
+    "unit": "events",
+    "tolerance": 0.01,
+    "explanation": "Seven sales and one refund remain."
+  }
+]

@@ -1,0 +1,143 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "Twelve cases go in. Nine pass first time, two need help, one is stuck. A slide says 100% success on completed cases. Fair?",
+        "options": [
+          "Yes, the nine completed cases all passed",
+          "No, it hides the cases that needed help",
+          "Yes, if the stuck case is retried later"
+        ],
+        "answer": 1,
+        "explanation": "Reporting 9/9 quietly drops the three hardest cases. Honest reporting keeps all twelve in the denominator and explains what the human corrections changed."
+      },
+      {
+        "after": "For each case record input reference",
+        "type": "sort",
+        "prompt": "Should each moment be logged as active staff minutes or as waiting time?",
+        "buckets": ["Active staff minutes", "Waiting time"],
+        "items": [
+          { "text": "Reviewer checks the draft against sources", "bucket": 0 },
+          { "text": "Draft sits in a queue with no reviewer assigned", "bucket": 1 },
+          { "text": "Staff correct a wrong total", "bucket": 0 },
+          { "text": "Case waits overnight for the next shift", "bucket": 1 },
+          { "text": "Reviewer records the correction type", "bucket": 0 }
+        ],
+        "explanation": "A fast run can still give poor service if it waits a day for review. Logging the two timings separately shows where end-to-end delay really comes from."
+      },
+      {
+        "after": "Twelve cases enter the system.",
+        "type": "numeric",
+        "question": "In the worked pilot, what percentage of the twelve cases needed human correction to complete? Round to one decimal place.",
+        "answer": 16.7,
+        "tolerance": 0.1,
+        "unit": "%",
+        "explanation": "Two of twelve cases completed after correction: 2 / 12 × 100 ≈ 16.7%. This correction workload belongs in the report alongside first-pass and final success."
+      },
+      {
+        "after": "If all twelve cases came from the fictional pack",
+        "type": "check",
+        "question": "Your pilot moves from fictional cases to real users. What must you now record?",
+        "options": [
+          "Nothing new, the process is the same",
+          "Only the users' satisfaction scores",
+          "Their consent and authorised data use"
+        ],
+        "answer": 2,
+        "explanation": "Real users bring real data and real people. Consent and authorised data use must be recorded through the organisation's normal process."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "You spot a bad output during the pilot. Before changing anything, what is most worth keeping?",
+        "options": [
+          "A case that reproduces the failure",
+          "Nothing, just fix it quickly",
+          "A screenshot of your best output",
+          "The longest log file"
+        ],
+        "answer": 0,
+        "explanation": "A reproduction case lets you confirm the fix actually works and becomes a regression test. Without it, you cannot tell whether the failure is gone or just hiding."
+      },
+      {
+        "after": "Classify the failure by stage",
+        "type": "sort",
+        "prompt": "Which stage does each Harbour failure most likely belong to?",
+        "buckets": ["Input quality", "Retrieval", "Tool execution"],
+        "items": [
+          { "text": "A sales row has a missing amount", "bucket": 0 },
+          { "text": "A draft policy reaches the generator", "bucket": 1 },
+          { "text": "The same external action happens twice", "bucket": 2 },
+          { "text": "A transaction uses an unrecognised currency", "bucket": 0 },
+          { "text": "Nobody can tell if a timed-out action ran", "bucket": 2 }
+        ],
+        "explanation": "Naming the stage points you to the right fix. A duplicate action is an idempotency issue and a wrong source is a filter issue, so rewriting the prompt would help neither."
+      },
+      {
+        "after": "Choose the most consequential failure",
+        "type": "order",
+        "prompt": "Arrange the improvement loop in the order this lesson describes.",
+        "steps": [
+          "Classify the failure by stage",
+          "Choose the most consequential failure",
+          "Preserve a reproduction case",
+          "State a hypothesis",
+          "Make a targeted change",
+          "Rerun the affected regression set"
+        ],
+        "explanation": "Diagnosis comes before change, and a single targeted change makes it clear what caused any improvement. The rerun confirms the fix without breaking other cases."
+      },
+      {
+        "after": "The report includes the draft automatic-refund proposal.",
+        "type": "reveal",
+        "prompt": "Why should the new regression case contain a highly relevant draft, rather than any old draft?",
+        "answer": "The draft slipped through because it looked relevant. A highly relevant draft is the hardest test of the status filter, so passing it shows status, not just relevance, now decides what reaches the generator."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "Your pilot shows the system does not pay off. Could that recommendation still earn full credit? Decide, then reveal.",
+        "answer": "Yes. A pilot that recommends stopping can earn full credit if it uses a working system and sound evidence. Positive ROI is not required; honest measurement and a defensible decision are."
+      },
+      {
+        "after": "Run the bounded pilot with instrumentation",
+        "type": "check",
+        "question": "Which mix of traces does the engineering route ask you to review?",
+        "options": [
+          "Only the three fastest runs",
+          "Only the failures",
+          "A success, a corrected result and a failure",
+          "Every trace from the development set"
+        ],
+        "answer": 2,
+        "explanation": "Comparing a success, a corrected case and a failure shows how the system behaves across outcomes. Looking only at one kind hides the contrast that explains defects."
+      },
+      {
+        "after": "Observe users completing the actual review task.",
+        "type": "sort",
+        "prompt": "Which route does each pilot-review task belong to?",
+        "buckets": ["Engineering route", "Business-owner route"],
+        "items": [
+          { "text": "Fix the top defect and keep its regression case", "bucket": 0 },
+          { "text": "Ask users where they felt uncertain", "bucket": 1 },
+          { "text": "Rehearse rollback or stopping new work", "bucket": 0 },
+          { "text": "Check whether users ignored unresolved items", "bucket": 1 },
+          { "text": "Update cost sensitivity using observed workload", "bucket": 1 }
+        ],
+        "explanation": "Engineers fix and verify the system; business owners watch how people actually use it and what it costs. Both feed the updated decision record."
+      },
+      {
+        "after": "Before moving to handover, ensure",
+        "type": "reveal",
+        "prompt": "Name the three things to confirm before moving on to handover.",
+        "answer": "Unresolved cases have owners, the pilot stayed within its authorised scope, and final evaluation claims are independent of the development examples used for tuning."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,33 @@
+<Check question={"Could no deployment ever be the right recommendation after comparing three platforms?"} options={["No, you should always pick the top scorer","Only if every platform failed to install","Yes, if no option fits the business task"]} answer={2} explanation={"The business route allows recommending a platform, a simpler workflow or no deployment. The choice follows the task, not a general product ranking."} />
+
+### Engineering route
+
+1. Configure one Bot with fictional inputs and a narrow operating brief.
+2. Inspect artifact correctness and the available action history.
+3. Create, test, and pause one routine. Verify the pause in the routine controls.
+4. Run the five common cases across the three systems or clearly labelled instructor records.
+5. Document where tool permissions, model visibility, logs, or exports differ. Do not fill missing measurements with estimates disguised as observations.
+
+<Reveal prompt={"Step 5: one platform gave you no log measurement. Why not fill the gap with a reasonable estimate?"} answer={"An estimate disguised as an observation corrupts the comparison. The gap is itself evidence about that platform, so label it as missing."} />
+
+### Business-owner route
+
+1. Define who receives and reviews the report, and what the Bot must do when a source is missing.
+2. Run the brief and verify every proposed action is still a draft.
+3. Review the routine configuration and stop procedure with the instructor.
+4. Complete [the platform scorecard](/course-materials/course/templates/platform-scorecard.md), including setup and maintenance effort.
+5. Recommend a platform, a simpler workflow, or no deployment. Tie the choice to the business task rather than a general product ranking.
+
+<Check question={"The routine runs on a cloud computer. Which is an adequate stop plan?"} options={["Closing the application on your laptop","A reviewed stop procedure using the routine controls","Renaming the Bot so it is easy to find"]} answer={1} explanation={"Cloud work can keep running after your app closes. The business route reviews the routine configuration and stop procedure so stopping is deliberate and checkable."} />
+
+### Worked recommendation
+
+Suppose one platform finishes faster but requires an administrator capability your subscription lacks. Another takes longer to set up but lets you enforce the required boundary. The measured winner for your organisation may be the second option, or a fixed workflow. A high average quality score cannot compensate for a mandatory permission failure.
+
+<Sort prompt={"Which factors can be traded off, and which rule a platform out if they fail?"} buckets={["Can be traded off","Mandatory"]} items={[{"text":"How fast it finishes","bucket":0},{"text":"Setup effort","bucket":0},{"text":"Average quality score","bucket":0},{"text":"Enforcing the required permission boundary","bucket":1},{"text":"Being able to stop the work","bucket":1}]} explanation={"A high average cannot compensate for a mandatory permission failure. The Week 11 gate asks you to demonstrate access boundaries and stopping work."} />
+
+Submit the reviewed artifact, tested and paused routine, five-case results for each platform, and a one-page recommendation. Pass the Week 11 gate when you can explain and demonstrate access boundaries and stopping work. Label any untested claim explicitly.
+
+<Check question={"A routine has no current input. What should it do?"} options={["Reuse old memory as though it were current data","Report missing evidence and leave the work unresolved","Invent a plausible report to meet the schedule"]} answer={1} explanation={"Scheduled execution does not justify unsupported claims."} />
+
+[Download the complete week](/course-materials/course/weeks/11.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

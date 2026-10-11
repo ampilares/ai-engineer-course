@@ -1,0 +1,30 @@
+{
+  "slug": "practical-context",
+  "title": "Prompting, Context, and Research",
+  "phase": "foundations",
+  "summary": "Turn vague requests into verifiable briefs and check the evidence behind answers.",
+  "outcomes": [
+    "Write a task and evidence contract",
+    "Separate instructions from source material",
+    "Compare prompts on saved cases"
+  ],
+  "number": 2,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Write a task and evidence contract",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Verify research and compare prompts",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio, worked corrections, and evidence",
+      "minutes": 30
+    }
+  ]
+}

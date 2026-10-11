@@ -1,0 +1,21 @@
+<Check question={"A model call fails. What is the smartest first move?"} options={["Retry immediately until it works","Switch to a larger model","Work out what kind of failure it is","Save the full raw request permanently"]} answer={2} explanation={"Different failures need different responses. Retrying a malformed request or a wrong credential unchanged just wastes time without fixing anything."} />
+
+Classify failures before retrying. A temporary rate limit may justify a bounded delay. A wrong credential, disallowed action, invalid business field, or missing source needs a different response. Retrying a malformed request unchanged consumes time without addressing the problem. Retrying a side-effecting action after an ambiguous timeout can create duplicates unless the receiving system supports idempotency or reconciliation.
+
+<Check question={"A call that creates a booking times out, and you cannot tell whether it went through. What is the risk of simply resending?"} options={["It may create a duplicate booking","The schema will stop matching","The model will forget the ticket"]} answer={0} explanation={"A side-effecting action may already have happened. Without idempotency or reconciliation on the receiving side, a retry can repeat it."} />
+
+Record request ID, case ID, prompt version, visible model version, status, duration, token usage when exposed, and a review reason. Keep credentials and unnecessary personal content out of logs. Prefer a small structured failure record to dumping every raw request into permanent storage.
+
+<Sort prompt={"You are designing the log for each model call. Record it, or keep it out?"} buckets={["Record it","Keep it out"]} items={[{"text":"Request ID","bucket":0},{"text":"Prompt version","bucket":0},{"text":"Token usage, when exposed","bucket":0},{"text":"The API key used for the call","bucket":1},{"text":"Unneeded personal details from the ticket","bucket":1},{"text":"Why the item went to review","bucket":0}]} explanation={"Logs should let you trace and explain each call. Credentials and unnecessary personal content create risk without helping diagnosis."} />
+
+Cost per attempted call can make a poor system look inexpensive. If ten attempts cost AUD 0.40 but only eight complete successfully, model cost per success is AUD 0.05, before review and infrastructure. When pricing is token-based, estimate input tokens multiplied by the input rate plus output tokens multiplied by the output rate, using the provider's current units and separately accounting for cached tokens or tools where applicable. Verify the bill rather than assuming a chat subscription includes API use.
+
+<NumericCheck question={"Using illustrative prices, a call uses 1,000 input tokens at AUD 0.002 per thousand and 500 output tokens at AUD 0.008 per thousand. What is its estimated cost?"} answer={0.006} tolerance={0.0001} unit={"AUD"} explanation={"Input is 1 × 0.002 = 0.002 and output is 0.5 × 0.008 = 0.004, giving 0.006. Input and output are priced separately, so estimate each and add them."} />
+
+### Failure exercise
+
+Use six cases: correct structured output, invalid category, missing ID, ID mismatch, refusal, and truncated output. A service should return a visible review or error outcome for each unusable case. Do not silently replace the failure with an empty successful record. A user needs to know which items have not been processed.
+
+<Check question={"A model returns an ID belonging to another input. What should the application do?"} options={["Reject it through input-bound business validation","Accept it if the category is valid","Rename the original input to match"]} answer={0} explanation={"The output must remain associated with the submitted business event."} />
+
+[Download the complete week](/course-materials/course/weeks/05.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

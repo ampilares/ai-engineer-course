@@ -1,0 +1,30 @@
+{
+  "slug": "practical-data",
+  "title": "Data, Documents, and Media",
+  "phase": "foundations",
+  "summary": "Check calculations and preserve source evidence when working with files and recordings.",
+  "outcomes": [
+    "Reconcile a transaction dataset",
+    "Extract fields without inventing missing values",
+    "Preserve document and transcript evidence"
+  ],
+  "number": 3,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Establish a data contract before analysis",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Preserve evidence across document and media tasks",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio and reconciliation",
+      "minutes": 30
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+<Check question={"If monthly case volume halves, what do you expect to happen to net monthly value?"} options={["It halves exactly","It stays the same","It falls by more than half"]} answer={2} explanation={"Tool and maintenance costs stay put while released capacity shrinks. In the example, 200 cases gives AUD 800 net but 100 cases gives only AUD 250."} />
+
+Use the [fictional baseline](/course-materials/course/case-study/baseline.json) to practise, then replace it with authorised measurements for a real decision. Manual staff time averages 12 minutes and pilot staff time averages 6.5, including review. At 200 cases per month and AUD 60 per hour, the released capacity value is:
+
+<NumericCheck question={"Using the same fictional inputs and fixed costs, what is net monthly capacity value at 150 cases?"} answer={525} tolerance={0} unit={"AUD"} explanation={"150 × 5.5 / 60 × 60 = 825 capacity value, then 825 − 120 − 180 = 525. Fixed costs take a bigger share as volume drops."} />
+
+```text
+200 × (12 − 6.5) / 60 × 60 = AUD 1,100 per month
+1,100 − 120 tools − 180 maintenance = AUD 800 net capacity value
+1,200 implementation / 800 = 1.5 months theoretical payback
+```
+
+Released capacity is not automatically cash savings. Staff may use the time on other work, or the organisation may not have enough demand to benefit. Revenue improvement needs separate evidence. Do not count review time both in pilot staff minutes and again as an operating expense.
+
+<Check question={"Pilot staff minutes already include review. Someone also adds review as a separate monthly expense. What goes wrong?"} options={["Review is counted twice, understating the value","Nothing, review deserves extra weight","The payback period becomes undefined"]} answer={0} explanation={"The 6.5 minutes already include checking. Charging review again double-counts the same effort and distorts the business case."} />
+
+At 100 cases, net capacity value is AUD 250 with the same fixed costs. At 50 cases, it is negative AUD 25; a positive payback period is undefined. Test low, expected, and high volumes and explain which costs actually vary. This calculation is an original teaching example, not a forecast for a real organisation.
+
+<Sort prompt={"In this teaching example, how does each figure behave as monthly case volume changes?"} buckets={["Varies with volume","Fixed monthly","One-off"]} items={[{"text":"Released capacity value","bucket":0},{"text":"Tools at AUD 120","bucket":1},{"text":"Maintenance at AUD 180","bucket":1},{"text":"Implementation at AUD 1,200","bucket":2},{"text":"Total staff minutes saved","bucket":0}]} explanation={"Only the time saved scales with cases, while tools and maintenance are treated as fixed. That is why low volumes can turn the net value negative."} />
+
+Adoption is a process change. Show staff what the system does, what it cannot do, what needs checking, and how to report a problem. Do not ask users to trust an unexplained score. Give them source evidence and a correction path. Track whether people actually use the output and whether it changes a decision.
+
+<Check question={"What turns a backup into verified recovery evidence?"} options={["A file named backup","An operator's assumption that it should work","A successful restore rehearsal with checked results"]} answer={2} explanation={"Recovery requires proof that the saved state can be used."} />
+
+[Download the complete week](/course-materials/course/weeks/13.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

@@ -10,8 +10,10 @@
     "test": "node scripts/validate-content.mjs && node scripts/compile-mdx.mjs && node scripts/test-grading.mjs"
   },
   "dependencies": {
+    "@types/nodemailer": "^8.0.2",
     "next": "^15.3.4",
     "next-mdx-remote": "^5.0.0",
+    "nodemailer": "^10.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

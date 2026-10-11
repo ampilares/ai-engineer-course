@@ -1,0 +1,31 @@
+<Reveal prompt={"Could a pilot that ends with a decision to stop count as a success? Think about it before revealing."} answer={"Yes. A restricted pilot or a decision to stop can be a successful result when evidence supports it. The failure would be calling a candidate ready when no one owns its failures."} />
+
+### Engineering route
+
+1. Deploy your candidate to a controlled environment or provide a reproducible local pilot package.
+2. Record versions and configuration, then run a smoke test and the relevant regression cases.
+3. Add monitoring for unresolved work, failures, duration, and cost. Test an alert by causing a controlled failure.
+4. Restore from a known snapshot or roll back one change. Verify the queue and external-action state afterwards.
+5. Give the runbook to another operator and record the time and questions required to recover.
+
+<Order prompt={"Put the engineering readiness steps in a sensible order."} steps={["Deploy to a controlled environment or local pilot package","Record versions and run smoke and regression tests","Add monitoring and test an alert with a controlled failure","Restore a snapshot or roll back one change","Hand the runbook to another operator and time their recovery"]} explanation={"You need a recorded, tested deployment before monitoring means anything, and recovery must work before another operator can rehearse it."} />
+
+### Business-owner route
+
+1. Complete the [pilot charter](/course-materials/course/templates/pilot-charter.md) with scope, users, owner, review duty, budget, and stop conditions.
+2. Calculate value at three volumes using measured or explicitly fictional inputs.
+3. Train one user with a normal case and a misleading result. Observe whether they check the intended evidence.
+4. Test the manual fallback and the process for reporting errors.
+5. Agree when the pilot will be reviewed and who may decide to expand it.
+
+<Reveal prompt={"Why train a new user with a misleading result, not just a normal case?"} answer={"A normal case only shows the happy path. A misleading result tests whether the user actually checks the intended evidence instead of trusting the output."} />
+
+### Deliverable
+
+Submit the operating contract, tested runbook, cost model, training note, and pilot charter. Do not describe the candidate as ready if no one owns its failures. A restricted pilot or a decision to stop can be a successful result when supported by evidence.
+
+<Sort prompt={"Which route does each readiness task belong to?"} buckets={["Engineering route","Business-owner route"]} items={[{"text":"Test an alert by causing a controlled failure","bucket":0},{"text":"Agree who may decide to expand the pilot","bucket":1},{"text":"Verify queue and external-action state after rollback","bucket":0},{"text":"Test the process for reporting errors","bucket":1},{"text":"Record versions and configuration","bucket":0}]} explanation={"Engineers prove the system can be observed and recovered; business owners prove people, budget and decisions are ready. Both are needed before a pilot."} />
+
+<Check question={"Released staff capacity should be reported as what?"} options={["Capacity value, separately from demonstrated cash savings","Guaranteed cash saved regardless of staffing","Additional revenue without evidence"]} answer={0} explanation={"Time made available does not automatically reduce spending or create revenue."} />
+
+[Download the complete week](/course-materials/course/weeks/13.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

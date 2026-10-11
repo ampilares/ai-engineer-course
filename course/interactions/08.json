@@ -1,0 +1,173 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "You are giving a brand-new agent its first tools. Which starting point is wiser?",
+        "options": [
+          "Every tool the business already has",
+          "Two narrow tools and a fixed action budget",
+          "One flexible tool that can do anything"
+        ],
+        "answer": 1,
+        "explanation": "More tools mean more choices and more ways to fail. Starting small keeps the agent's behaviour easy to inspect and its authority easy to control."
+      },
+      {
+        "after": "An agent receives a task and observations,",
+        "type": "order",
+        "prompt": "Put one turn of the agent loop in order.",
+        "steps": [
+          "Receive the task and observations",
+          "Model chooses an action",
+          "Runtime validates the tool, arguments, permissions and budget",
+          "Runtime executes the call and records it",
+          "Model observes the result",
+          "Decide whether to continue or stop"
+        ],
+        "explanation": "The model only proposes actions. The runtime sits between the choice and the execution, which is where authority is actually enforced."
+      },
+      {
+        "after": "A tool contract needs an input schema,",
+        "type": "sort",
+        "prompt": "Is each tool design narrow and controllable, or hard to control?",
+        "buckets": [
+          "Narrow and controllable",
+          "Hard to control"
+        ],
+        "items": [
+          {
+            "text": "read_ticket taking a ticket ID",
+            "bucket": 0
+          },
+          {
+            "text": "prepare_draft with a few fixed fields",
+            "bucket": 0
+          },
+          {
+            "text": "manage_customer accepting any action text",
+            "bucket": 1
+          },
+          {
+            "text": "One tool that both reads and writes records",
+            "bucket": 1
+          },
+          {
+            "text": "search_policy taking a search query",
+            "bucket": 0
+          }
+        ],
+        "explanation": "Narrow tools with distinct reads and writes let you set permissions per tool. A catch-all tool hides what it will actually do until it runs."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "An agent remembers a refund rule it learned months ago. Should it rely on that memory today?",
+        "options": [
+          "Yes, stored memory is always reliable",
+          "Only if the user asks about refunds",
+          "No, it should re-check the current policy"
+        ],
+        "answer": 2,
+        "explanation": "Business rules such as amounts, statuses and permissions change. Memory suits stable preferences, while current sources decide the rules."
+      },
+      {
+        "after": "Context is the information available",
+        "type": "sort",
+        "prompt": "Is each item context, task state, or memory?",
+        "buckets": [
+          "Context",
+          "Task state",
+          "Memory"
+        ],
+        "items": [
+          {
+            "text": "The ticket text included in this request",
+            "bucket": 0
+          },
+          {
+            "text": "Which items in this batch still need review",
+            "bucket": 1
+          },
+          {
+            "text": "A preference saved in an earlier session",
+            "bucket": 2
+          },
+          {
+            "text": "The policy passage supplied for this question",
+            "bucket": 0
+          },
+          {
+            "text": "Which steps of the process are complete",
+            "bucket": 1
+          }
+        ],
+        "explanation": "Context lives for one request, task state tracks the current process, and memory carries selected facts across sessions. The business system of record is separate from all of them."
+      },
+      {
+        "after": "Skills also need review. A saved procedure",
+        "type": "check",
+        "question": "A shared skill has worked well for lots of people. Does that make its supporting code safe to run?",
+        "options": [
+          "No, usefulness says nothing about safety, so inspect it",
+          "Yes, popularity shows it has been checked",
+          "Yes, provided it has a version number"
+        ],
+        "answer": 0,
+        "explanation": "A useful procedure can still include a broad shell command or an unnecessary credential. Version it, inspect changes, and rerun evaluation cases after edits."
+      },
+      {
+        "after": "T08 asks the assistant to export customer",
+        "type": "reveal",
+        "prompt": "The T08 ticket tells the assistant to export files. Why is that not an instruction the agent should follow?",
+        "answer": "It is text inside a ticket, which is source content to be processed, not a request from the authorised operator. Instructions found in data are treated as data."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "Before building an agent, ask: does this task really need one? When would a fixed workflow be the better choice?",
+        "answer": "When the steps are known and the same every time, a fixed workflow like Week 7's is simpler to control and test. An agent earns its place only when choosing the next action from observations genuinely helps."
+      },
+      {
+        "after": "Submit a tool contract, permissions map,",
+        "type": "sort",
+        "prompt": "For the Harbour weekly-brief agent, should the runtime allow each request or stop it?",
+        "buckets": [
+          "Allow",
+          "Stop or deny"
+        ],
+        "items": [
+          {
+            "text": "Search policy for the weekly brief",
+            "bucket": 0
+          },
+          {
+            "text": "Calculate the report totals",
+            "bucket": 0
+          },
+          {
+            "text": "Export customer files as T08 asks",
+            "bucket": 1
+          },
+          {
+            "text": "Send a message to a customer",
+            "bucket": 1
+          },
+          {
+            "text": "Keep searching for a document that does not exist",
+            "bucket": 1
+          },
+          {
+            "text": "Switch itself to the manager role",
+            "bucket": 1
+          }
+        ],
+        "explanation": "Only the two approved read tools are in scope. Customer messaging, exports and role changes are unavailable, and repeated failure should end in an unresolved question."
+      }
+    ]
+  ]
+}

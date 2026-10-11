@@ -1,72 +1,48 @@
 # Setup
 
-## Minimum computer setup
+Start with a browser, an approved general assistant if available, and this repository. No account or API key is needed to read the material or run the offline JavaScript labs.
 
-- Python 3.11 or newer
-- Git and a GitHub account
-- VS Code or another editor
-- Docker Desktop or Docker Engine (recommended from Module 11; optional earlier)
-- 8 GB RAM; 16 GB is more comfortable for local models
+## Engineering route
 
-Windows learners can use PowerShell. WSL is optional, not required.
+Use an editor, Git, and Node.js 24.12 or a newer compatible release with `node:sqlite`. Reference labs use built-in modules and need no package installation. Node.js 24.12.0 was used for verification. This is not a statement that the same version meets OpenClaw's current requirements.
 
-## Python environment
+From the repository root:
 
-Learn to create one isolated environment per project. A typical course project uses:
+```sh
+node --version
+node course/labs/reference.mjs report
+node --test course/labs/reference.test.mjs
+node course/labs/reference.mjs evaluate course/case-study/recorded-predictions.json
+```
 
-- `httpx` for HTTP;
-- `pydantic` for schemas and validation;
-- `pytest` for tests;
-- `pandas` or `polars` for tabular work;
-- `scikit-learn` for classical ML;
-- `torch`, `transformers`, and `datasets` for model work;
-- `fastapi` and `uvicorn` for services;
-- a provider SDK or an OpenAI-compatible HTTP client for hosted/local models.
+Expect AUD 6,300 net from eight accepted events, passing tests, and 18/20 correct authored predictions. The tested runtime's SQLite experimental warning is expected. See [lab instructions](course/labs/README.md).
 
-Pin dependencies and never commit secrets. Keep API keys in environment variables or a secret manager and provide a `.env.example` containing names only.
+The optional MCP server uses Python and the [official MCP SDK](https://github.com/modelcontextprotocol/python-sdk). Use a supported Python version, install `mcp` in an isolated environment, and record its version. Configure a compatible client to launch `course/labs/mcp_server.py` with that environment's Python executable over stdio. The server has a fixed analyst role; it is not an authentication service.
 
-## Free accounts and services
+## Business-owner route
 
-Create accounts only when their module needs them:
+Open [the review prototype](course/labs/review-prototype.html) in a browser. It is a local rule-based demonstration: no AI call, messaging, or persistence after reload. Practise preparing, correcting, approving, rejecting, and recording a draft. Check it against [the case pack](course/case-study/README.md).
 
-- GitHub for source control and CI;
-- Kaggle or Google Colab for free notebooks/accelerators;
-- Hugging Face for models, datasets, Spaces, and free courses;
-- n8n Academy; run n8n locally when possible;
-- one optional model provider account for API labs.
+Use an approved spreadsheet or calculator for the data and value exercises. For n8n and agent-platform labs, use test accounts or prepared environments with an implementation partner.
 
-Every API lab must also support one of these substitutions:
+## Optional live work
 
-1. a local model through [Ollama](https://docs.ollama.com/) or another OpenAI-compatible server;
-2. a provider free tier;
-3. recorded/fake responses for testing the surrounding application.
+Choose one general assistant and one implementation route. Add accounts as each lab requires them. Record product version or retrieval date, plan, visible model, access, budget, and stop procedure. Subscription access and API billing can differ.
 
-## Suggested repository structure for learner projects
+The optional [live extraction sample](course/labs/live-extract.mjs) sends one fictional ticket to the OpenAI Responses API. Privately configure `OPENAI_API_KEY` and `OPENAI_MODEL` in an environment or approved secret store. Choose a model supporting the linked structured-output interface.
 
-    project/
-      README.md
-      pyproject.toml
-      .env.example
-      src/
-      tests/
-      evals/
-        dataset.jsonl
-        results/
-      docs/
-        architecture.md
-        decisions.md
-        threat-model.md
-        runbook.md
+```sh
+node course/labs/live-extract.mjs T09
+```
 
-## Ready check
+This can incur usage charges. Record actual usage and semantic correctness. Authored fixture predictions are offline examples, not outputs from this call.
 
-Before Module 1, confirm that you can:
+Follow current official instructions linked in the [OpenClaw](course/weeks/09.md), [Hermes](course/weeks/10.md), and [Grok Bot](course/weeks/11.md) chapters. Use dedicated environments and fictional files. Stop schedules and revoke test integrations after the lab.
 
-- clone a repository and create a branch;
-- run a Python file and a notebook;
-- install a package into an isolated environment;
-- run a test;
-- send an HTTP request to a public API;
-- identify where secrets belong and verify they are ignored by Git.
+## Data and access
 
-Do not delay the course to perfect the environment. Use Colab/Kaggle for model labs and return to local setup when building services.
+Use `course/case-study/agent-inputs/` for direct file uploads. Keep review answers, labelled cases, recorded predictions, assessments, and private policy fixtures outside agent context. The retrieval reference reads the complete corpus specifically to demonstrate application-enforced filtering.
+
+Real workplace exercises require authorised data and accounts. Define the owner and allowed outputs before connecting integrations. A prompt cannot remove permissions the underlying account already possesses.
+
+The [site README](site/README.md) covers the learning platform. These labs run independently of its database and email configuration. Updating local curriculum files does not deploy them or migrate learner records.

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pa-w14-q01",
+    "type": "single",
+    "prompt": "What is a vertical slice?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A set of disconnected component demos"
+      },
+      {
+        "id": "b",
+        "text": "Only the final user-interface screen"
+      },
+      {
+        "id": "c",
+        "text": "One input carried through every required stage to a reviewable outcome"
+      }
+    ],
+    "answer": "c",
+    "explanation": "The slice proves integration across the process."
+  },
+  {
+    "id": "pa-w14-q02",
+    "type": "single",
+    "prompt": "When should final acceptance criteria be fixed?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Before inspecting final evaluation results"
+      },
+      {
+        "id": "b",
+        "text": "After selecting only successful runs"
+      },
+      {
+        "id": "c",
+        "text": "Only during the final presentation"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Predefined criteria reduce moving the goalposts after seeing results."
+  },
+  {
+    "id": "pa-w14-q03",
+    "type": "single",
+    "prompt": "Which is an appropriate non-goal for Harbour's reporting capstone?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Checking report totals"
+      },
+      {
+        "id": "b",
+        "text": "Executing customer refunds"
+      },
+      {
+        "id": "c",
+        "text": "Identifying unresolved inputs"
+      }
+    ],
+    "answer": "b",
+    "explanation": "The capstone prepares drafts and preserves a human action boundary."
+  },
+  {
+    "id": "pa-w14-q04",
+    "type": "single",
+    "prompt": "What should a reproducible setup include?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Credentials embedded in screenshots"
+      },
+      {
+        "id": "b",
+        "text": "Only the builder's chat history"
+      },
+      {
+        "id": "c",
+        "text": "Versioned configuration and a secure way to supply credentials"
+      }
+    ],
+    "answer": "c",
+    "explanation": "A second person needs the process and configuration without exposure of secrets."
+  },
+  {
+    "id": "pa-w14-q05",
+    "type": "single",
+    "prompt": "When is an agent justified over a fixed workflow?",
+    "options": [
+      {
+        "id": "a",
+        "text": "When its choice of next action adds demonstrated value"
+      },
+      {
+        "id": "b",
+        "text": "Whenever the final artifact has multiple sections"
+      },
+      {
+        "id": "c",
+        "text": "Only because the capstone should sound advanced"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The architecture should earn its added complexity."
+  },
+  {
+    "id": "pa-w14-q06",
+    "type": "single",
+    "prompt": "A case ID disappears between two components. Why does that matter?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It only affects visual formatting"
+      },
+      {
+        "id": "b",
+        "text": "The operator cannot reliably trace the business event end to end"
+      },
+      {
+        "id": "c",
+        "text": "It proves the model forgot its training"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Stable identifiers support diagnosis, reconciliation and review."
+  },
+  {
+    "id": "pa-w14-q07",
+    "type": "numeric",
+    "prompt": "The classroom capstone minimum is 20 development plus 10 held-out cases. How many cases is that?",
+    "answer": 30,
+    "unit": "cases",
+    "tolerance": 0.01,
+    "explanation": "20 + 10 = 30; this is not a guarantee of production safety."
+  },
+  {
+    "id": "pa-w14-q08",
+    "type": "numeric",
+    "prompt": "A pipeline has intake, validation, processing, review and recording. A demo reaches only the first three. How many required stages remain?",
+    "answer": 2,
+    "unit": "stages",
+    "tolerance": 0.01,
+    "explanation": "Review and recording are still missing from the end-to-end slice."
+  }
+]

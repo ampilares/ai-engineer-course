@@ -1,0 +1,11 @@
+{
+  "type":"object",
+  "properties":{
+    "id":{"type":"string"},
+    "category":{"type":"string","enum":["billing","scheduling","technical","unknown"]},
+    "needs_review":{"type":"boolean"},
+    "reason":{"type":"string"}
+  },
+  "required":["id","category","needs_review","reason"],
+  "additionalProperties":false
+}

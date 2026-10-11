@@ -7,12 +7,12 @@ import { attestAction } from "./actions";
 export const metadata = { title: "Capstone attestation" };
 
 const CHECKLIST = [
-  "My capstone is a working system that runs end to end (not a notebook demo).",
-  "It includes an evaluation set with measured results, including failure cases.",
-  "Consequential actions require human approval or are otherwise guarded.",
-  "I threat-modeled it: prompt injection, data exposure, and tool misuse are addressed.",
-  "It is deployed (or deployable) with monitoring, cost/latency notes, and a rollback path.",
-  "I can explain every design decision and at least one rejected alternative.",
+  "My capstone is a working application, workflow, or configured assistant with reproducible setup.",
+  "It includes at least 20 development and 10 held-out cases, with results and failure evidence.",
+  "I demonstrated enforced action boundaries, review, and no unauthorised actions in the required tests.",
+  "I tested misleading inputs, restricted access, and tool misuse, and documented remaining limits.",
+  "It has an owner, cost and quality evidence, a tested runbook, and a working manual fallback.",
+  "I can explain the implementation and distinguish measured results from simulations.",
 ];
 
 export default async function CapstonePage() {
@@ -27,10 +27,10 @@ export default async function CapstonePage() {
     <div className="mx-auto max-w-2xl px-4 py-10">
       <h1 className="text-3xl font-bold tracking-tight mb-2">Capstone attestation</h1>
       <p className="muted mb-6">
-        The final requirement for graduation. Build the production capstone described in{" "}
-        <Link href="/course/expert-topics" className="text-accent underline">Module 15</Link>, then
-        attest to it here on your honor. This is self-certified: it appears on your certificate, and
-        your name stands behind it.
+        Complete the capstone beginning in{" "}
+        <Link href="/course/practical-capstone-build" className="text-accent underline">Week 14</Link>,
+        then record your declaration here. This self-attestation contributes to the site completion
+        record. It does not replace independent assessment of the practical course rubric.
       </p>
       {existing && (
         <div className="card p-4 mb-6 border-ok/50 text-sm">

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pa-w12-q01",
+    "type": "single",
+    "prompt": "You inspect a held-out failure and tune to it. How should that case be treated afterwards?",
+    "options": [
+      {
+        "id": "a",
+        "text": "As development/regression evidence, with fresh cases for renewed independent assessment"
+      },
+      {
+        "id": "b",
+        "text": "As permanently untouched held-out evidence"
+      },
+      {
+        "id": "c",
+        "text": "As a case to delete without mention"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Using a case to optimise the system removes its independence."
+  },
+  {
+    "id": "pa-w12-q02",
+    "type": "single",
+    "prompt": "A system scores 90% but sends one unauthorised message. What is the release decision under the course gate?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Pass because the average exceeds 70%"
+      },
+      {
+        "id": "b",
+        "text": "Hold until the mandatory boundary is corrected and retested"
+      },
+      {
+        "id": "c",
+        "text": "Round the error away"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Mandatory action boundaries cannot be offset by average quality."
+  },
+  {
+    "id": "pa-w12-q03",
+    "type": "single",
+    "prompt": "How should a model-based grader be validated?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Assume the largest model is always correct"
+      },
+      {
+        "id": "b",
+        "text": "Compare only its output length"
+      },
+      {
+        "id": "c",
+        "text": "Compare its decisions with human-labelled examples"
+      }
+    ],
+    "answer": "c",
+    "explanation": "A grader can have systematic biases and must be checked for the task."
+  },
+  {
+    "id": "pa-w12-q04",
+    "type": "single",
+    "prompt": "Which belongs in the attempted-case denominator?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A timed-out case unless a predefined protocol excludes it"
+      },
+      {
+        "id": "b",
+        "text": "Only cases with a fluent final answer"
+      },
+      {
+        "id": "c",
+        "text": "Only cases that users liked"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Excluding failures after seeing results biases the reported rate."
+  },
+  {
+    "id": "pa-w12-q05",
+    "type": "single",
+    "prompt": "Removing a document from the source system may still leave what risk?",
+    "options": [
+      {
+        "id": "a",
+        "text": "All derived copies are automatically deleted"
+      },
+      {
+        "id": "b",
+        "text": "Its content may remain in indexes, memory, exports or logs"
+      },
+      {
+        "id": "c",
+        "text": "The model's context can never contain it again"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Deletion and revocation need a defined scope across derivatives."
+  },
+  {
+    "id": "pa-w12-q06",
+    "type": "single",
+    "prompt": "Why are the public course held-out cases unsuitable as a secure exam bank?",
+    "options": [
+      {
+        "id": "a",
+        "text": "They cannot test any behaviour"
+      },
+      {
+        "id": "b",
+        "text": "A JSON file cannot contain labels"
+      },
+      {
+        "id": "c",
+        "text": "Learners and tools can access their contents"
+      }
+    ],
+    "answer": "c",
+    "explanation": "They teach split discipline, while formal assessment needs independent variants."
+  },
+  {
+    "id": "pa-w12-q07",
+    "type": "numeric",
+    "prompt": "A candidate completes 27 of 30 cases correctly. What is the measured success percentage?",
+    "answer": 90,
+    "unit": "%",
+    "tolerance": 0.01,
+    "explanation": "27 / 30 × 100 = 90%, with critical failures reported separately."
+  },
+  {
+    "id": "pa-w12-q08",
+    "type": "numeric",
+    "prompt": "Six of thirty cases require human review. What is the review rate?",
+    "answer": 20,
+    "unit": "%",
+    "tolerance": 0.01,
+    "explanation": "6 / 30 × 100 = 20%."
+  }
+]

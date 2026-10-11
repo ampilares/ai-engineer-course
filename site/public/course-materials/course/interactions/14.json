@@ -1,0 +1,148 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "Two reviewers read the same capstone report. One says it passed, the other says it failed. What is most likely missing?",
+        "options": [
+          "A more advanced model",
+          "A longer final report",
+          "More platforms in the demo",
+          "Precise, agreed acceptance statements"
+        ],
+        "answer": 3,
+        "explanation": "When success is defined in clear statements before evaluation, two reviewers can reach the same decision. Vague goals leave each reviewer to invent their own test."
+      },
+      {
+        "after": "For Harbour, the contract might be",
+        "type": "sort",
+        "prompt": "Under the example Harbour contract, is each action in scope or excluded?",
+        "buckets": ["In scope", "Excluded"],
+        "items": [
+          { "text": "Validate report totals", "bucket": 0 },
+          { "text": "Contact a customer", "bucket": 1 },
+          { "text": "Cite the effective policy", "bucket": 0 },
+          { "text": "Modify the ledger", "bucket": 1 },
+          { "text": "Queue unresolved items for Maya", "bucket": 0 },
+          { "text": "Approve a refund", "bucket": 1 }
+        ],
+        "explanation": "The system prepares and checks a draft, then hands open questions to a person. Anything that acts on customers, money or records stays with humans."
+      },
+      {
+        "after": "Freeze at least twenty development cases",
+        "type": "check",
+        "question": "Which place is acceptable for held-out cases while you are still developing?",
+        "options": [
+          "A few-shot example in the prompt",
+          "Stored separately, outside the agent's materials",
+          "The retrieval index, so answers improve",
+          "A skill file the agent can read"
+        ],
+        "answer": 1,
+        "explanation": "Held-out material must stay out of prompts, retrieval indexes, skills and examples. Otherwise the final test measures memory of the answers, not the system."
+      },
+      {
+        "after": "The weekly brief must reconcile every input row",
+        "type": "reveal",
+        "prompt": "Why store hashes or a version identifier for your frozen case files?",
+        "answer": "It lets anyone confirm the cases used in the final evaluation are exactly the ones frozen earlier, not quietly edited after results were seen."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "A tool call times out mid-run. How would your operator know whether the external action actually happened? Think about what you would need recorded.",
+        "answer": "Each boundary needs a recorded schema, identity, error behaviour and owner. Without that, a timeout leaves the operator guessing whether the action ran, which this lesson treats as a design question to answer up front."
+      },
+      {
+        "after": "A vertical slice carries one input",
+        "type": "order",
+        "prompt": "Put the stages one input passes through in the vertical slice in order.",
+        "steps": [
+          "Intake",
+          "Validation",
+          "AI processing",
+          "Verification",
+          "Review",
+          "Output recording"
+        ],
+        "explanation": "Inputs are checked before the model sees them, and model output is verified before a person reviews it. Recording comes last so the final artifact reflects the review decision."
+      },
+      {
+        "after": "Use the smallest architecture that meets the contract.",
+        "type": "check",
+        "question": "Your capstone works well as a fixed workflow and needs no document lookup. What should you do about retrieval?",
+        "options": [
+          "Leave it out",
+          "Add it to show the full toolkit",
+          "Add it but switch it off"
+        ],
+        "answer": 0,
+        "explanation": "The smallest architecture that meets the contract is easier to assess. Adding retrieval just to demonstrate terminology adds an owner, an update path and new failure points for no benefit."
+      },
+      {
+        "after": "Trace one case by ID through the system.",
+        "type": "sort",
+        "prompt": "For the integration trace and setup, should each item be recorded or kept out?",
+        "buckets": ["Record it", "Keep it out"],
+        "items": [
+          { "text": "Prompt version used for the case", "bucket": 0 },
+          { "text": "Sensitive raw content copied into every stage", "bucket": 1 },
+          { "text": "Validation outcome", "bucket": 0 },
+          { "text": "A secret value in an example output", "bucket": 1 },
+          { "text": "Duration and cost", "bucket": 0 }
+        ],
+        "explanation": "A trace needs versions, outcomes and costs to explain what happened. Raw sensitive content and secrets add exposure without helping anyone debug."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "You have no live AI credentials yet. Can you still show a meaningful capstone this week? Predict, then reveal.",
+        "answer": "Yes. Demonstrate the surrounding system with fixtures and label the AI-quality measurement as pending. Just never present a deterministic replay as a live agent result."
+      },
+      {
+        "after": "Complete the vertical slice and test it",
+        "type": "check",
+        "question": "Which set of three development cases does the engineering route ask you to test first?",
+        "options": [
+          "Short, medium and long inputs",
+          "Normal, ambiguous and unavailable dependency",
+          "Three normal cases from the held-out file"
+        ],
+        "answer": 1,
+        "explanation": "A normal case shows the happy path, an ambiguous one tests judgement, and a missing dependency tests error handling. Held-out cases stay untouched until the final evaluation."
+      },
+      {
+        "after": "Complete the configured workflow or assistant",
+        "type": "check",
+        "question": "A business owner finds the acceptance criteria cannot be met with the current scope. What does the route suggest?",
+        "options": [
+          "Lower the thresholds after seeing results",
+          "Sign off anyway and fix it during the pilot",
+          "Add another platform to boost quality",
+          "Narrow the pilot scope until criteria are achievable"
+        ],
+        "answer": 3,
+        "explanation": "The route says to sign off the bounded scope or narrow it. Shrinking scope keeps the criteria honest instead of moving the goalposts."
+      },
+      {
+        "after": "Submit the working candidate, scope contract",
+        "type": "sort",
+        "prompt": "Match each situation to the checkpoint decision it best supports.",
+        "buckets": ["Ready for pilot", "Ready with restrictions", "Hold"],
+        "items": [
+          { "text": "All criteria met on the agreed scope", "bucket": 0 },
+          { "text": "Works, but only for one team with extra review", "bucket": 1 },
+          { "text": "Blocked export test fails", "bucket": 2 },
+          { "text": "Reviewer cannot locate unresolved work", "bucket": 2 },
+          { "text": "Good results, but limited to internal drafts only", "bucket": 1 }
+        ],
+        "explanation": "Restrictions suit a system that is safe within narrower limits. A hold names a specific issue that must be fixed before any pilot starts."
+      }
+    ]
+  ]
+}

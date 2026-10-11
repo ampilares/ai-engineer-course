@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pa-w05-q01",
+    "type": "single",
+    "prompt": "A category is valid JSON but wrong for the ticket. Which check catches that?",
+    "options": [
+      {
+        "id": "a",
+        "text": "JSON parsing alone"
+      },
+      {
+        "id": "b",
+        "text": "Checking that HTTP returned 200"
+      },
+      {
+        "id": "c",
+        "text": "Semantic evaluation against the task criteria"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Transport and shape checks cannot establish the meaning is correct."
+  },
+  {
+    "id": "pa-w05-q02",
+    "type": "single",
+    "prompt": "A model returns an ID belonging to another input. What should the application do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Reject it through input-bound business validation"
+      },
+      {
+        "id": "b",
+        "text": "Accept it if the category is valid"
+      },
+      {
+        "id": "c",
+        "text": "Rename the original input to match"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The output must remain associated with the submitted business event."
+  },
+  {
+    "id": "pa-w05-q03",
+    "type": "single",
+    "prompt": "How should a refused or incomplete model response be treated?",
+    "options": [
+      {
+        "id": "a",
+        "text": "As a blank successful record"
+      },
+      {
+        "id": "b",
+        "text": "As an explicit non-success path requiring handling"
+      },
+      {
+        "id": "c",
+        "text": "As proof the customer request was resolved"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Completion status and refusal must be checked before consuming output."
+  },
+  {
+    "id": "pa-w05-q04",
+    "type": "single",
+    "prompt": "Which condition is a plausible bounded-retry case?",
+    "options": [
+      {
+        "id": "a",
+        "text": "An unchanged invalid credential"
+      },
+      {
+        "id": "b",
+        "text": "A denied business action"
+      },
+      {
+        "id": "c",
+        "text": "A temporary rate limit on a read or safe model call"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Transient errors may recover; permission and request defects need a different response."
+  },
+  {
+    "id": "pa-w05-q05",
+    "type": "single",
+    "prompt": "What do offline recorded responses establish?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Whether surrounding interface and failure handling behave as tested"
+      },
+      {
+        "id": "b",
+        "text": "The accuracy of the current live model"
+      },
+      {
+        "id": "c",
+        "text": "The price of a hosted agent run"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Mocks exercise software behaviour, not live model quality or billing."
+  },
+  {
+    "id": "pa-w05-q06",
+    "type": "single",
+    "prompt": "Why not approve work solely from a model's self-reported confidence?",
+    "options": [
+      {
+        "id": "a",
+        "text": "All confidence values are always zero"
+      },
+      {
+        "id": "b",
+        "text": "The number has not been calibrated against labelled outcomes"
+      },
+      {
+        "id": "c",
+        "text": "A longer answer necessarily means higher confidence"
+      }
+    ],
+    "answer": "b",
+    "explanation": "A useful threshold needs evidence relating scores to actual errors."
+  },
+  {
+    "id": "pa-w05-q07",
+    "type": "numeric",
+    "prompt": "Ten model attempts cost AUD 0.40 and eight succeed. What is model cost per success?",
+    "answer": 0.05,
+    "unit": "AUD",
+    "tolerance": 0.001,
+    "explanation": "0.40 / 8 = 0.05, before review and infrastructure."
+  },
+  {
+    "id": "pa-w05-q08",
+    "type": "numeric",
+    "prompt": "A batch has 20 attempts and 3 incomplete responses. How many completed responses remain before semantic checks?",
+    "answer": 17,
+    "unit": "responses",
+    "tolerance": 0.01,
+    "explanation": "20 minus 3 is 17; completion alone does not establish correctness."
+  }
+]

@@ -1,0 +1,33 @@
+<Check question={"An assistant answers confidently and mentions your 40-page attachment. Does that prove it read every page?"} options={["Yes, a confident answer means it saw everything","Yes, if the answer mentions the attachment by name","No, it may have used only part of the material"]} answer={2} explanation={"A context window limits what a model can use in one request, and products may summarise or retrieve only some material. Ask for a specific source ID and check the passage yourself."} />
+
+This week you will choose one task, describe acceptable work, and record a baseline. Engineers should budget 8-10 hours; business owners 5-7 hours. Begin with the [Harbour Services case](/course-materials/course/case-study/README.md), then repeat the exercise on an authorised process you know.
+
+An AI model transforms inputs into outputs using patterns learned during training. Inference is using that trained model on a new input. A conversation does not ordinarily retrain the underlying model. A product may save preferences, retrieve documents, or provide tools around it; those are additional parts of the system.
+
+An assistant is the interface through which you ask for work. A workflow follows a defined sequence, such as reading a request, checking required fields, classifying it, and placing a draft in a review queue. An agent selects its next action from available tools based on what it observes. A language model can participate in either a workflow or an agent. Calling every automated process an agent obscures who controls the next step.
+
+<Check question={"Which of these systems is choosing its own next step?"} options={["One that picks between searching tickets or opening a policy, based on findings","One that always reads, checks fields, classifies, then queues a draft","A chat window where you type a question and get a reply"]} answer={0} explanation={"An agent selects its next action from available tools based on what it observes. A fixed sequence is a workflow, even if a model does one of the steps."} />
+
+Consider Harbour's weekly report. Adding transaction amounts is a calculation. Deciding whether a mixed customer request belongs in billing or scheduling requires interpreting language. Deciding who may issue a refund is an authority question. Give calculation to code, use a model to suggest a classification, and enforce refund authority in application permissions. Asking a more capable model to do all three does not remove the need for these distinctions.
+
+<Sort prompt={"Where should each part of Harbour's reporting work live?"} buckets={["Code","Model suggestion","Permissions"]} items={[{"text":"Summing the week's transaction amounts","bucket":0},{"text":"Spotting that one ticket mixes a visit change and an invoice query","bucket":1},{"text":"Allowing a refund to be issued","bucket":2},{"text":"Counting how many rows were excluded","bucket":0},{"text":"Proposing a category for a vaguely worded request","bucket":1},{"text":"Stopping drafts from being sent to customers","bucket":2}]} explanation={"Fully specified arithmetic belongs in code, interpreting language suits a model, and authority must be enforced by the application. A more capable model does not remove these distinctions."} />
+
+Language models process tokens, which are pieces of text rather than necessarily complete words. A context window limits what the model can use during one request. Long conversations and attachments consume that capacity; a product may retrieve or summarise some material rather than include it all. A convincing answer is not evidence that every source was read. Ask for a specific source ID and verify the relevant passage yourself.
+
+The workflow/agent distinction is supported by [Anthropic's engineering guidance](https://www.anthropic.com/engineering/building-effective-agents). Our placement of arithmetic, classification, and authorisation is a design for this course's fictional business, to be tested against its requirements.
+
+### A useful decision procedure
+
+Start with the required output and the consequence of getting it wrong. If a formula or lookup fully specifies the answer, use that first. If the task predicts a numerical outcome from labelled historical data, investigate a predictive model and a simple baseline. If language interpretation is needed, try one bounded model call. Introduce an agent only when selecting the next tool is itself useful. Compare the additional setup and review work with the simpler process.
+
+<Order prompt={"Put the decision procedure in order, from first question to last resort."} steps={["Name the required output and the cost of getting it wrong","Use a formula or lookup if it fully specifies the answer","For numerical predictions from labelled history, test a predictive model against a simple baseline","If language must be interpreted, try one bounded model call","Add an agent only when choosing the next tool is itself useful"]} explanation={"Each step adds setup and review work, so you only move on when the simpler option cannot do the job."} />
+
+### Explore the concept
+
+This illustrative simulator uses its own teaching examples. It is not a live platform run or a measurement of the Harbour case.
+
+<TokenizerExplorer />
+
+<Check question={"Which component should decide whether a Harbour refund is authorised?"} options={["The language model's confidence score","An application permission and approval control","The wording of the customer request"]} answer={1} explanation={"Authority is enforced by the application and responsible human, not inferred from customer text or model confidence."} />
+
+[Download the complete week](/course-materials/course/weeks/01.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

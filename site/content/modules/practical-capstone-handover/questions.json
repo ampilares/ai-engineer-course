@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pa-w16-q01",
+    "type": "single",
+    "prompt": "What must accompany a headline metric?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Only a large percentage"
+      },
+      {
+        "id": "b",
+        "text": "Definition, numerator, denominator, window, source and limitations"
+      },
+      {
+        "id": "c",
+        "text": "Only a positive user quote"
+      }
+    ],
+    "answer": "b",
+    "explanation": "A reviewer needs enough context to interpret and reproduce the claim."
+  },
+  {
+    "id": "pa-w16-q02",
+    "type": "single",
+    "prompt": "Which is a useful adoption decision?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The AI works for everything"
+      },
+      {
+        "id": "b",
+        "text": "Choose the most fashionable platform"
+      },
+      {
+        "id": "c",
+        "text": "Adopt for one named team with stated review, budget and reassessment conditions"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Scope and operating conditions make the decision actionable."
+  },
+  {
+    "id": "pa-w16-q03",
+    "type": "single",
+    "prompt": "What does the website's self-attestation establish?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The learner's declaration alongside conceptual quiz completion"
+      },
+      {
+        "id": "b",
+        "text": "Independent grading of every practical artifact"
+      },
+      {
+        "id": "c",
+        "text": "A production safety certification"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The site does not implement the full practical review rubric."
+  },
+  {
+    "id": "pa-w16-q04",
+    "type": "single",
+    "prompt": "Which behaviours belong in the final demonstration?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Only the most impressive successful output"
+      },
+      {
+        "id": "b",
+        "text": "Success, failure, blocked action and recovery"
+      },
+      {
+        "id": "c",
+        "text": "Only an architecture slide"
+      }
+    ],
+    "answer": "b",
+    "explanation": "The demonstration must expose the operating limits as well as the normal path."
+  },
+  {
+    "id": "pa-w16-q05",
+    "type": "single",
+    "prompt": "How should an untested new requirement during the demo be handled?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Claim it already works in production"
+      },
+      {
+        "id": "b",
+        "text": "Disable controls to attempt it immediately"
+      },
+      {
+        "id": "c",
+        "text": "Record it as a scope change and identify necessary evaluation"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Demonstration pressure does not expand the evaluated scope."
+  },
+  {
+    "id": "pa-w16-q06",
+    "type": "single",
+    "prompt": "What is strong evidence of handover?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Another person follows the runbook and the gaps are corrected"
+      },
+      {
+        "id": "b",
+        "text": "The builder narrates every hidden step"
+      },
+      {
+        "id": "c",
+        "text": "A folder with unexplained files"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Operational knowledge must survive outside the builder's memory."
+  },
+  {
+    "id": "pa-w16-q07",
+    "type": "numeric",
+    "prompt": "Weekly work 30%, platform comparison 15%, capstone 45%, demonstration 10% sum to what?",
+    "answer": 100,
+    "unit": "%",
+    "tolerance": 0.01,
+    "explanation": "30 + 15 + 45 + 10 = 100%."
+  },
+  {
+    "id": "pa-w16-q08",
+    "type": "numeric",
+    "prompt": "What is the practical course's minimum overall percentage, in addition to mandatory gates?",
+    "answer": 70,
+    "unit": "%",
+    "tolerance": 0.01,
+    "explanation": "At least 70% is required, and all mandatory gates must also pass."
+  }
+]

@@ -1,0 +1,23 @@
+<Reveal prompt={"An official product page says a feature exists. What else would you need before telling your team they can use it?"} answer={"Whether it is enabled on your account, plus the page's date and scope. For claims about your own workload, run an experiment rather than relying on the vendor's description."} />
+
+A citation has two jobs: locate a source and support the particular claim. A working link only satisfies the first. Open the source, find the passage, check its date and scope, and decide whether it establishes the statement. An official product page may describe a capability but not establish that it is enabled on your account.
+
+<Order prompt={"Put the steps for checking a citation in order."} steps={["Open the source","Find the relevant passage","Check its date and scope","Decide whether it establishes the claim"]} explanation={"A working link only locates a source. The later steps check whether it actually supports the particular statement."} />
+
+For each research finding, keep a small record: question; claim; exact source URL; relevant section; checked date; applicability; uncertainty. Prefer the product's own documentation for syntax and settings. Use experiments for claims about your workload. A vendor's benchmark is not a measurement of your staff's process.
+
+<Sort prompt={"Where would you look to settle each question?"} buckets={["Product documentation","Your own experiment"]} items={[{"text":"The exact syntax of a configuration setting","bucket":0},{"text":"Whether the tool speeds up your staff's tickets","bucket":1},{"text":"The name of an option in the settings","bucket":0},{"text":"How often it errs on your ten saved cases","bucket":1},{"text":"Whether a vendor benchmark holds for your process","bucket":1}]} explanation={"Official documentation is best for syntax and settings. Claims about your workload need your own measurements, because a vendor benchmark is not your process."} />
+
+### Worked comparison
+
+Version A says, "Summarise these tickets." Version B defines categories, requires a source ID, and sends mixed requests to review. Run both on the same saved inputs. Count a case as correct only if the category and review decision both meet the reference criteria. Record invalid structure separately from an incorrect but well-formed decision.
+
+Suppose A succeeds on 6 of 10 cases and B on 8 of 10, but B misses a refund requiring approval. Report 60% and 80% on these ten examples, identify the critical miss, and keep the review boundary. Do not describe the two-case difference as proof that B is universally better. Repeat problematic cases, inspect failures, and reserve fresh examples for final evaluation.
+
+<Check question={"Version B scores higher but misses a refund that needed approval. What should you do?"} options={["Adopt B and remove human review, since it scored higher","Discard both versions and start again","Report both scores, flag the critical miss and keep the review boundary"]} answer={2} explanation={"A higher score on ten cases is not proof of general superiority, and one serious miss matters more than the average. Inspect the failure and keep review in place."} />
+
+Change one major variable at a time where possible. Otherwise a better result after changing the model, sources, and prompt cannot be attributed to the prompt alone. Record all three versions even if the product does not expose an immutable model identifier.
+
+<Check question={"Which brief is most testable?"} options={["Extract four named fields and mark absent values unresolved","Make the output excellent","Use your best judgement without an output format"]} answer={0} explanation={"Named fields and unknown-value behaviour give the reviewer observable criteria."} />
+
+[Download the complete week](/course-materials/course/weeks/02.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

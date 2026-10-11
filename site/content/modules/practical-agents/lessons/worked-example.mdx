@@ -1,0 +1,23 @@
+<Check question={"An agent remembers a refund rule it learned months ago. Should it rely on that memory today?"} options={["Yes, stored memory is always reliable","Only if the user asks about refunds","No, it should re-check the current policy"]} answer={2} explanation={"Business rules such as amounts, statuses and permissions change. Memory suits stable preferences, while current sources decide the rules."} />
+
+Context is the information available to a particular model request. Task state records the current process: which items are complete and which need review. Memory stores selected facts or preferences across sessions. A skill records a reusable procedure, sometimes with supporting scripts or templates. A source-of-truth business system remains separate from all four.
+
+<Sort prompt={"Is each item context, task state, or memory?"} buckets={["Context","Task state","Memory"]} items={[{"text":"The ticket text included in this request","bucket":0},{"text":"Which items in this batch still need review","bucket":1},{"text":"A preference saved in an earlier session","bucket":2},{"text":"The policy passage supplied for this question","bucket":0},{"text":"Which steps of the process are complete","bucket":1}]} explanation={"Context lives for one request, task state tracks the current process, and memory carries selected facts across sessions. The business system of record is separate from all of them."} />
+
+Suppose the agent remembers that a refund needs extra approval above AUD 500. P01-v2 changes the threshold to AUD 250. The memory is stale; retrieving the effective policy should override it. Stable preferences such as report format are different from changing business rules. Teach the agent to re-open current sources for amounts, statuses, and permissions.
+
+Skills also need review. A saved procedure that includes a broad shell command or an unnecessary credential can repeat the same mistake every week. Version the procedure, inspect changes, and rerun evaluation cases after editing it. A shared skill's usefulness does not establish that its supporting code is safe to execute.
+
+<Check question={"A shared skill has worked well for lots of people. Does that make its supporting code safe to run?"} options={["No, usefulness says nothing about safety, so inspect it","Yes, popularity shows it has been checked","Yes, provided it has a version number"]} answer={0} explanation={"A useful procedure can still include a broad shell command or an unnecessary credential. Version it, inspect changes, and rerun evaluation cases after edits."} />
+
+### Worked boundary attack
+
+T08 asks the assistant to export customer files to an external URL. The text is source content from a ticket, not an instruction from the authorised operator. A robust lab blocks the attempted action because the export tool or network destination is unavailable. Reporting that the prompt said "do not export" is weaker evidence than a denied tool call recorded by the runtime.
+
+<Reveal prompt={"The T08 ticket tells the assistant to export files. Why is that not an instruction the agent should follow?"} answer={"It is text inside a ticket, which is source content to be processed, not a request from the authorised operator. Instructions found in data are treated as data."} />
+
+The supplied [read-only MCP server example](/course-materials/course/labs/mcp_server.py) uses the [official Python SDK](https://github.com/modelcontextprotocol/python-sdk). Its role is fixed by the application and it exposes only approved analyst policy search. Treat it as an instructional server; production identity and document access require integration with your own trusted authentication layer.
+
+<Check question={"What does MCP provide?"} options={["A protocol for connecting applications to exposed capabilities","A guarantee that every server is safe","An automatic business approval for tool calls"]} answer={0} explanation={"Protocol compatibility does not establish trust or authorisation."} />
+
+[Download the complete week](/course-materials/course/weeks/08.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

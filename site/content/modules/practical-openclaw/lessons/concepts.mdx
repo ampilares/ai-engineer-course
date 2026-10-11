@@ -1,0 +1,28 @@
+<Reveal prompt={"Picture a chat app, an assistant hub, an AI model and a web search tool. How many different places might one of your requests travel through?"} answer={"Possibly several. The gateway might run on your own machine, yet send the prompt to a hosted model, while a search tool sends a query to another service. That is why you draw where each piece runs before enabling tools."} />
+
+This week you will operate a dedicated assistant, inspect its authority, and recover it after a restart. Use only fictional inputs and a test messaging destination. Record the installed version and provider configuration; do not assume the documentation's current defaults match an older installation.
+
+OpenClaw connects interaction channels to an agent through a gateway. The gateway, the model provider, and the tools can run in different places. Draw these locations before enabling tools. A locally running gateway may send a prompt to a hosted model; a search tool may send a query to another service.
+
+Follow the official [getting-started guide](https://docs.openclaw.ai/start/getting-started) for your operating system and its current runtime requirements. In a dedicated lab environment, complete guided onboarding with an approved provider. Use the control interface for the first conversation before adding a messaging channel. The documented commands below inspect and open an installed gateway:
+
+```bash
+openclaw gateway status
+openclaw dashboard
+```
+
+Check whether onboarding left the gateway in the foreground or installed a persistent service. A foreground run stops with its terminal; an installed service can continue after the dashboard closes. The [gateway CLI reference](https://docs.openclaw.ai/cli/gateway) documents status, lifecycle, and service operations. Choose a lifecycle deliberately and record the exact stop command for the installation you used.
+
+<Check question={"You started the gateway as a foreground run in a terminal. What happens when you close that terminal?"} options={["It keeps running as a background service","It moves itself to the model provider","It stops along with the terminal"]} answer={2} explanation={"A foreground run stops with its terminal, whereas an installed service can keep going after the dashboard closes. Knowing which one you have tells you the exact stop command to record."} hint={"Think about what foreground means for a process."} />
+
+Create a dedicated workspace containing only the agent inputs from Harbour. Exclude answer keys, evaluator labels, private policy passages, personal files, and credentials. Begin with read-only access and a reply in the test conversation as the output. If later work requires writing a report, add only a bounded output capability after proving the read-only configuration.
+
+<Sort prompt={"You are filling the agent's lab workspace. Tap each item into the right bucket."} buckets={["Put in the workspace","Keep out"]} items={[{"text":"The Harbour agent inputs for the task","bucket":0},{"text":"Answer keys","bucket":1},{"text":"Evaluator labels","bucket":1},{"text":"Private policy passages","bucket":1},{"text":"Your personal files and credentials","bucket":1}]} explanation={"The workspace holds only the agent inputs from Harbour. Anything else the agent can read becomes part of its reach, so answer keys, private passages, personal files and credentials stay outside."} />
+
+Consult [tool permissions](https://docs.openclaw.ai/gateway/security/tool-permissions) for the installed version. The guide distinguishes tool allow/deny rules from workspace access. Blocking a named write tool while leaving unrestricted shell access available does not establish a read-only boundary. Check all alternate ways the agent might access the same resource.
+
+<Check question={"The tool permissions guide treats two things as separate. Which pair?"} options={["Tool allow/deny rules and workspace access","The dashboard and the terminal","The model provider and the messaging channel","Onboarding and the security audit"]} answer={0} explanation={"Allowing or denying named tools is a different control from what the workspace exposes. A boundary only holds when you have checked every alternate way the agent could reach the same resource."} />
+
+<Check question={"A self-hosted OpenClaw gateway uses a hosted model. Which statement is correct?"} options={["Prompts may still leave the host for model inference","All data processing is necessarily local","The hosting choice makes provider terms irrelevant"]} answer={0} explanation={"Gateway hosting and model processing location are separate decisions."} />
+
+[Download the complete week](/course-materials/course/weeks/09.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

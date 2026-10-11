@@ -1,0 +1,146 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "Picture a chat app, an assistant hub, an AI model and a web search tool. How many different places might one of your requests travel through?",
+        "answer": "Possibly several. The gateway might run on your own machine, yet send the prompt to a hosted model, while a search tool sends a query to another service. That is why you draw where each piece runs before enabling tools."
+      },
+      {
+        "after": "Check whether onboarding left the gateway",
+        "type": "check",
+        "question": "You started the gateway as a foreground run in a terminal. What happens when you close that terminal?",
+        "options": [
+          "It keeps running as a background service",
+          "It moves itself to the model provider",
+          "It stops along with the terminal"
+        ],
+        "answer": 2,
+        "explanation": "A foreground run stops with its terminal, whereas an installed service can keep going after the dashboard closes. Knowing which one you have tells you the exact stop command to record.",
+        "hint": "Think about what foreground means for a process."
+      },
+      {
+        "after": "Create a dedicated workspace containing only",
+        "type": "sort",
+        "prompt": "You are filling the agent's lab workspace. Tap each item into the right bucket.",
+        "buckets": ["Put in the workspace", "Keep out"],
+        "items": [
+          { "text": "The Harbour agent inputs for the task", "bucket": 0 },
+          { "text": "Answer keys", "bucket": 1 },
+          { "text": "Evaluator labels", "bucket": 1 },
+          { "text": "Private policy passages", "bucket": 1 },
+          { "text": "Your personal files and credentials", "bucket": 1 }
+        ],
+        "explanation": "The workspace holds only the agent inputs from Harbour. Anything else the agent can read becomes part of its reach, so answer keys, private passages, personal files and credentials stay outside."
+      },
+      {
+        "after": "Consult [tool permissions](https://docs.openclaw.ai/gateway",
+        "type": "check",
+        "question": "The tool permissions guide treats two things as separate. Which pair?",
+        "options": [
+          "Tool allow/deny rules and workspace access",
+          "The dashboard and the terminal",
+          "The model provider and the messaging channel",
+          "Onboarding and the security audit"
+        ],
+        "answer": 0,
+        "explanation": "Allowing or denying named tools is a different control from what the workspace exposes. A boundary only holds when you have checked every alternate way the agent could reach the same resource."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "Your assistant's process is healthy and answers instantly. Does that tell you its weekly report is right?",
+        "options": [
+          "Yes, a healthy process means a correct report",
+          "Only if the replies arrive quickly",
+          "No, process health and task quality are separate"
+        ],
+        "answer": 2,
+        "explanation": "Gateway health only says the system is running. A perfectly healthy process can still pick the wrong sources or miscalculate, so you check the report itself."
+      },
+      {
+        "after": "Use the documented setup for one supported channel",
+        "type": "order",
+        "prompt": "Put these steps for bringing a messaging channel online in a sensible order.",
+        "steps": [
+          "Verify a first chat in the control interface",
+          "Connect one dedicated test channel",
+          "Configure authorised senders and where the bot may respond",
+          "Send the first piece of work"
+        ],
+        "explanation": "You prove the basics in the control interface first, then add one test channel, and lock down who can talk to the bot before it accepts any work."
+      },
+      {
+        "after": "The dashboard loads, but messages do not arrive.",
+        "type": "sort",
+        "prompt": "Each symptom points to a different layer. Sort them so you know where to look first.",
+        "buckets": ["Channel and routing", "Permission boundary", "Sources and calculation"],
+        "items": [
+          { "text": "Your test chat shows no sign the bot saw your message", "bucket": 0 },
+          { "text": "Channel authentication broke after a credential change", "bucket": 0 },
+          { "text": "The bot replies that a tool was denied", "bucket": 1 },
+          { "text": "The report includes a row from outside the period", "bucket": 2 },
+          { "text": "The total in the reply is wrong", "bucket": 2 }
+        ],
+        "explanation": "Delivery, permissions and calculation are different layers. Diagnosing the right layer beats reinstalling everything, which only hides the cause."
+      },
+      {
+        "after": "Restart after a completed report, then ask",
+        "type": "reveal",
+        "prompt": "After a restart you ask for a fresh report on changed input. What two things would you inspect to trust the answer?",
+        "answer": "Which state persisted across the restart, and which sources were actually reopened. A familiar answer recalled from an earlier session is not a new calculation."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "Before you build anything: if this assistant stopped delivering Maya's report next Tuesday, who would notice, and who would fix it?",
+        "answer": "If you cannot name them, the setup is not ready. The business-owner route ends by deciding who maintains the assistant and who responds when reports stop arriving."
+      },
+      {
+        "after": "Install or provision a dedicated OpenClaw lab",
+        "type": "sort",
+        "prompt": "Step 4 asks you to verify the total independently. Which sales.csv rows count towards the net accepted total?",
+        "buckets": ["Counts", "Left out or quarantined"],
+        "items": [
+          { "text": "S004, a refund of -200 AUD on 3 October", "bucket": 0 },
+          { "text": "S007, 1000 AUD on 6 October", "bucket": 0 },
+          { "text": "S009, dated 8 October", "bucket": 1 },
+          { "text": "S010, amount missing", "bucket": 1 },
+          { "text": "S011, recorded in USD", "bucket": 1 },
+          { "text": "The second, identical copy of S008", "bucket": 1 }
+        ],
+        "explanation": "Only complete AUD rows inside 1-7 October count, refunds included as negatives, and an exact duplicate counts once. That leaves AUD 6,300 with S010 and S011 as unresolved rows."
+      },
+      {
+        "after": "Obtain the prepared lab's hosting, provider",
+        "type": "check",
+        "question": "During the restart demonstration, what should the business owner write down?",
+        "options": [
+          "The defaults the documentation describes",
+          "What actually happened during the demonstration",
+          "What the assistant promised it would do",
+          "Nothing, the instructor records it"
+        ],
+        "answer": 1,
+        "explanation": "The route asks you to record actual results, not claimed defaults. Your installation may differ from the current documentation, and a promise is not evidence."
+      },
+      {
+        "after": "Submit the configuration inventory, a redacted",
+        "type": "check",
+        "question": "Account access fell through, so you watched the instructor's recorded run. How do you label your assessment?",
+        "options": [
+          "As observed rather than hands-on",
+          "As a hands-on pass",
+          "As not applicable"
+        ],
+        "answer": 0,
+        "explanation": "Honest labelling keeps the evidence trustworthy. Watching a recorded run is still useful, but it is observation, not something you performed."
+      }
+    ]
+  ]
+}

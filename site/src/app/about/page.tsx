@@ -7,25 +7,31 @@ export default function AboutPage() {
     <div className="mx-auto max-w-2xl px-4 py-10 prose-custom">
       <h1>About this course</h1>
       <p>
-        Practical AI Engineer is a free, interactive course that takes you from beginner to working
-        AI engineer: Python and engineering foundations, machine learning, how LLMs actually work,
-        building LLM applications, retrieval, agents, business automation, evaluation, security, and
-        production operations.
+        Practical AI Engineering and Business Automation is a 16-week course for engineers and
+        business owners. Learn to choose useful tasks, verify outputs, build reviewed workflows,
+        evaluate agents, and hand over a working system.
       </p>
       <p>
-        It follows a few stubborn principles: <strong>build before framework</strong>,{" "}
-        <strong>evals before optimization</strong>, <strong>workflow before agent</strong>, and{" "}
-        <strong>human authority for consequential actions</strong>. Every lesson teaches by making
-        you <em>do</em> the thing: adjust the temperature, move the threshold, step the agent loop, because that is how the concepts stick.
+        The October 2026 edition contains 48 lessons with worked examples, a shared fictional
+        business case, and separate engineering and owner exercises. Engineers should plan 8-10
+        hours per week; owners 5-7. Preparation is available for learners who need it.
       </p>
       <p>
-        Each module ends in a graded exam; pass all eighteen, ship a capstone, and you join the{" "}
-        <Link href="/graduates">graduates board</Link> with a verifiable certificate.
+        Dedicated weeks cover OpenClaw, Hermes Agent, and Cursor&apos;s Grok Bot. Compare the same
+        task across platforms, inspect access and memory, and test how to stop and recover work.
+        Official sources and their research limits are listed in the{" "}
+        <Link href="/resources">resources</Link>.
       </p>
       <p>
-        The curriculum is open source, and lessons link out to the best free external material
-        (3Blue1Brown, Karpathy, Hugging Face, and more) for going deeper: properly attributed and
-        never copied.
+        Each module has an open-book knowledge exam. Passing all sixteen and submitting a capstone
+        self-attestation can earn a site completion certificate. The practical portfolio, platform
+        comparison, capstone, and handover rubric requires a separate reviewer; it is not
+        automatically graded by this site.
+      </p>
+      <p>
+        Course materials are free. External accounts, model usage, and hosting may cost money.
+        Offline exercises support learning without API credentials, and authentic recorded
+        demonstrations can support learners without access to every platform.
       </p>
     </div>
   );

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pa-w07-q01",
+    "type": "single",
+    "prompt": "A worker crashes after an external action but before marking completion. What is the central risk?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The original input automatically disappears"
+      },
+      {
+        "id": "b",
+        "text": "Retrying may duplicate the effect"
+      },
+      {
+        "id": "c",
+        "text": "The action is guaranteed to roll back"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Local state and external effects do not share one automatic transaction."
+  },
+  {
+    "id": "pa-w07-q02",
+    "type": "single",
+    "prompt": "What should an approval identify?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Any action the agent later considers useful"
+      },
+      {
+        "id": "b",
+        "text": "Only a generic request to continue"
+      },
+      {
+        "id": "c",
+        "text": "The exact proposed payload, target, version and validity period"
+      }
+    ],
+    "answer": "c",
+    "explanation": "A reviewer must know what will happen; changed actions need a new decision."
+  },
+  {
+    "id": "pa-w07-q03",
+    "type": "single",
+    "prompt": "Why is a local done flag alone insufficient for a remote action?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A crash can occur between the effect and the flag update"
+      },
+      {
+        "id": "b",
+        "text": "A Boolean cannot be stored in a database"
+      },
+      {
+        "id": "c",
+        "text": "Remote actions never time out"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The ambiguity window exists even when each local operation is correct."
+  },
+  {
+    "id": "pa-w07-q04",
+    "type": "single",
+    "prompt": "A recipient has no idempotency or receipt lookup, and a send times out. What is the appropriate next step?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Retry immediately with a new event ID"
+      },
+      {
+        "id": "b",
+        "text": "Reconcile the uncertain outcome before retrying"
+      },
+      {
+        "id": "c",
+        "text": "Mark success because no error details exist"
+      }
+    ],
+    "answer": "b",
+    "explanation": "An unknown outcome needs reconciliation to avoid duplicates."
+  },
+  {
+    "id": "pa-w07-q05",
+    "type": "single",
+    "prompt": "How should repeated delivery of one business event be identified?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Assign a new customer request ID on each retry"
+      },
+      {
+        "id": "b",
+        "text": "Ignore IDs and compare current timestamps"
+      },
+      {
+        "id": "c",
+        "text": "Reuse a stable event ID while recording distinct attempts"
+      }
+    ],
+    "answer": "c",
+    "explanation": "A stable business key separates an event from its execution attempts."
+  },
+  {
+    "id": "pa-w07-q06",
+    "type": "single",
+    "prompt": "What makes a review queue operationally useful?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Visible reasons, a responsible owner, and an overdue-work procedure"
+      },
+      {
+        "id": "b",
+        "text": "Only a count of completed items"
+      },
+      {
+        "id": "c",
+        "text": "A hidden file of errors"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Someone must be able to discover and resolve waiting work."
+  },
+  {
+    "id": "pa-w07-q07",
+    "type": "numeric",
+    "prompt": "The fake provider commits one action, the worker crashes, and two identical keyed retries occur. How many effects should remain?",
+    "answer": 1,
+    "unit": "effect",
+    "tolerance": 0.01,
+    "explanation": "The simulated provider deduplicates the same key and payload."
+  },
+  {
+    "id": "pa-w07-q08",
+    "type": "numeric",
+    "prompt": "Three proposed actions are rejected before execution. How many provider effects should those actions create?",
+    "answer": 0,
+    "unit": "effects",
+    "tolerance": 0.01,
+    "explanation": "Rejected actions must not execute."
+  }
+]

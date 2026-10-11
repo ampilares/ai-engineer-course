@@ -1,0 +1,158 @@
+[
+  {
+    "id": "pa-w10-q01",
+    "type": "single",
+    "prompt": "An agent says it remembered a preference. What verifies persistence?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Repeat the same question in the same context only"
+      },
+      {
+        "id": "b",
+        "text": "Inspect the stored write and test a fresh session"
+      },
+      {
+        "id": "c",
+        "text": "Assume the confirmation means a write occurred"
+      }
+    ],
+    "answer": "b",
+    "explanation": "A statement about saving is not evidence that storage changed."
+  },
+  {
+    "id": "pa-w10-q02",
+    "type": "single",
+    "prompt": "What should a report skill save?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Last week's total as the answer to future reports"
+      },
+      {
+        "id": "b",
+        "text": "Unrestricted credentials for convenience"
+      },
+      {
+        "id": "c",
+        "text": "The procedure for obtaining and checking a result"
+      }
+    ],
+    "answer": "c",
+    "explanation": "A reusable procedure must work on changed inputs."
+  },
+  {
+    "id": "pa-w10-q03",
+    "type": "single",
+    "prompt": "Where should a changed refund threshold be maintained?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The authoritative policy source"
+      },
+      {
+        "id": "b",
+        "text": "Only a remembered preference"
+      },
+      {
+        "id": "c",
+        "text": "A screenshot of a previous chat"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Volatile business rules must be rechecked against their maintained source."
+  },
+  {
+    "id": "pa-w10-q04",
+    "type": "single",
+    "prompt": "What does editing a skill establish about model weights?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The base model has necessarily been fine-tuned"
+      },
+      {
+        "id": "b",
+        "text": "Nothing by itself; a procedure change is separate from model training"
+      },
+      {
+        "id": "c",
+        "text": "The model can never make that error again"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Skills and model parameters are different mechanisms."
+  },
+  {
+    "id": "pa-w10-q05",
+    "type": "single",
+    "prompt": "Why inspect a skill's supporting scripts?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Every shared script is automatically approved"
+      },
+      {
+        "id": "b",
+        "text": "Only the skill's name affects behaviour"
+      },
+      {
+        "id": "c",
+        "text": "They may execute actions beyond the written description"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Supporting code is part of the executable capability and needs review."
+  },
+  {
+    "id": "pa-w10-q06",
+    "type": "single",
+    "prompt": "How should claimed improvement be assessed?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Compare defined cases and human effort before and after"
+      },
+      {
+        "id": "b",
+        "text": "Count how many files the agent saved"
+      },
+      {
+        "id": "c",
+        "text": "Use only its self-description"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Useful improvement must appear in observed outcomes."
+  },
+  {
+    "id": "pa-w10-q07",
+    "type": "single",
+    "prompt": "A minimal setup includes terminal access. What follows?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It is automatically harmless"
+      },
+      {
+        "id": "b",
+        "text": "Its execution authority still needs explicit restriction"
+      },
+      {
+        "id": "c",
+        "text": "It cannot read local files"
+      }
+    ],
+    "answer": "b",
+    "explanation": "A small tool list can still include a powerful capability."
+  },
+  {
+    "id": "pa-w10-q08",
+    "type": "numeric",
+    "prompt": "A skill needs three human reminders before revision and one afterwards on the same task. What is the observed reduction?",
+    "answer": 2,
+    "unit": "reminders",
+    "tolerance": 0.01,
+    "explanation": "Three minus one is two fewer reminders on that measured task."
+  }
+]

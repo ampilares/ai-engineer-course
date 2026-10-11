@@ -1,0 +1,30 @@
+{
+  "slug": "practical-capstone-handover",
+  "title": "Capstone: Demonstrate and Hand Over",
+  "phase": "expert",
+  "summary": "Demonstrate success, failure, blocked action, and recovery, then defend the adoption decision.",
+  "outcomes": [
+    "Present a reproducible evidence pack",
+    "Transfer operational ownership",
+    "Choose adopt, revise, or stop from evidence"
+  ],
+  "number": 16,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Assemble a traceable evidence pack",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Demonstrate success, failure, blocked action, and recovery",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Final studio, assessment, and next steps",
+      "minutes": 30
+    }
+  ]
+}

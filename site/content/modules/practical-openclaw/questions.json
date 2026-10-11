@@ -1,0 +1,170 @@
+[
+  {
+    "id": "pa-w09-q01",
+    "type": "single",
+    "prompt": "A self-hosted OpenClaw gateway uses a hosted model. Which statement is correct?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Prompts may still leave the host for model inference"
+      },
+      {
+        "id": "b",
+        "text": "All data processing is necessarily local"
+      },
+      {
+        "id": "c",
+        "text": "The hosting choice makes provider terms irrelevant"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Gateway hosting and model processing location are separate decisions."
+  },
+  {
+    "id": "pa-w09-q02",
+    "type": "single",
+    "prompt": "The dashboard loads but the channel receives no messages. Where should diagnosis begin?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Changing the report's wording"
+      },
+      {
+        "id": "b",
+        "text": "Channel authentication, sender policy and routing"
+      },
+      {
+        "id": "c",
+        "text": "Replacing the transaction calculator"
+      }
+    ],
+    "answer": "b",
+    "explanation": "A functioning dashboard does not establish channel connectivity."
+  },
+  {
+    "id": "pa-w09-q03",
+    "type": "single",
+    "prompt": "What is an appropriate initial workspace?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The learner's whole home directory"
+      },
+      {
+        "id": "b",
+        "text": "A shared folder containing credentials and answer keys"
+      },
+      {
+        "id": "c",
+        "text": "A dedicated folder with approved fictional inputs only"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Minimal approved inputs make the lab's access boundary reviewable."
+  },
+  {
+    "id": "pa-w09-q04",
+    "type": "single",
+    "prompt": "A write tool is denied but unrestricted shell execution remains available. Is read-only access established?",
+    "options": [
+      {
+        "id": "a",
+        "text": "No; another capability may still perform writes"
+      },
+      {
+        "id": "b",
+        "text": "Yes; the named write tool is blocked"
+      },
+      {
+        "id": "c",
+        "text": "Yes if the assistant says it understands"
+      }
+    ],
+    "answer": "a",
+    "explanation": "All paths to the resource must be considered."
+  },
+  {
+    "id": "pa-w09-q05",
+    "type": "single",
+    "prompt": "What does a clean security audit prove?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Every generated answer is correct"
+      },
+      {
+        "id": "b",
+        "text": "The checks it performed found no reported issue under that configuration"
+      },
+      {
+        "id": "c",
+        "text": "Future plugins cannot introduce risk"
+      }
+    ],
+    "answer": "b",
+    "explanation": "An audit is scoped configuration evidence, not a universal guarantee."
+  },
+  {
+    "id": "pa-w09-q06",
+    "type": "single",
+    "prompt": "After restart the assistant repeats the old report despite changed data. What should be investigated?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Whether the old answer was well written"
+      },
+      {
+        "id": "b",
+        "text": "Only the messaging channel's colour settings"
+      },
+      {
+        "id": "c",
+        "text": "Whether it reopened sources or reused stale state"
+      }
+    ],
+    "answer": "c",
+    "explanation": "New work needs current evidence and calculation."
+  },
+  {
+    "id": "pa-w09-q07",
+    "type": "single",
+    "prompt": "What should a learner record if a required control is unavailable?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The limitation and its effect on the deployment decision"
+      },
+      {
+        "id": "b",
+        "text": "A pass based on a prompt rule"
+      },
+      {
+        "id": "c",
+        "text": "A guessed default from another version"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Unavailable controls cannot be represented as enforced."
+  },
+  {
+    "id": "pa-w09-q08",
+    "type": "single",
+    "prompt": "What belongs in lab teardown?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Close the dashboard and assume all work stops"
+      },
+      {
+        "id": "b",
+        "text": "Stop schedules/services and revoke test integrations as appropriate"
+      },
+      {
+        "id": "c",
+        "text": "Keep every credential for future demonstrations"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Persistent services and integrations require explicit lifecycle handling."
+  }
+]

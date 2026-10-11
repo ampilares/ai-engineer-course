@@ -1,0 +1,140 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "Your slide says the system saves five hours. Which missing detail could completely change what that claim means?",
+        "options": [
+          "The font used on the slide",
+          "The review effort and case volume behind it",
+          "The colour of the dashboard"
+        ],
+        "answer": 1,
+        "explanation": "Hours saved mean little if review work grew or the volume was tiny. A claim is only usable when the reviewer can see what it was measured against."
+      },
+      {
+        "after": "Organise the submission so a reviewer",
+        "type": "check",
+        "question": "A reviewer cannot tell which files you wrote and which the system produced. Which evidence-pack rule was missed?",
+        "options": [
+          "Start with the problem and intended users",
+          "Link to the cost model",
+          "Include the runbook",
+          "Keep source files and generated outputs distinguishable"
+        ],
+        "answer": 3,
+        "explanation": "If inputs and outputs are mixed, a reviewer cannot check a claim against its evidence. Clear separation lets them move from claim to proof."
+      },
+      {
+        "after": "The course's practical rubric weights weekly work",
+        "type": "numeric",
+        "question": "A learner earns 80% of the capstone component. How many percentage points does that add to their overall practical result?",
+        "answer": 36,
+        "tolerance": 0,
+        "unit": "points",
+        "explanation": "The capstone is weighted at 45%, so 0.8 × 45 = 36 points. It is the largest single component of the practical rubric."
+      },
+      {
+        "after": "\"Adopt for internal draft preparation for one team",
+        "type": "sort",
+        "prompt": "Which kind of decision does each statement describe?",
+        "buckets": ["Adopt", "Revise", "Stop"],
+        "items": [
+          { "text": "One team, mandatory review, monthly cost cap", "bucket": 0 },
+          { "text": "Names the blocking issue and its owner", "bucket": 1 },
+          { "text": "Explains why further implementation is not justified", "bucket": 2 },
+          { "text": "Reassess after fifty more cases or a model change", "bucket": 0 },
+          { "text": "States the new evidence required", "bucket": 1 }
+        ],
+        "explanation": "Each decision type has its own content. An adopt sets limits and review triggers, a revise says what must change, and a stop explains why to end."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "In a five-minute demo, how much time would you give to things going wrong? Make a guess before revealing.",
+        "answer": "About two minutes: one on a failure and its handling, one on a blocked action and recovery. Showing limits is part of the evidence, not a distraction from it."
+      },
+      {
+        "after": "Plan a five-minute demonstration.",
+        "type": "order",
+        "prompt": "Put the five one-minute demo segments in the recommended order.",
+        "steps": [
+          "Problem and baseline",
+          "Normal operation",
+          "A failure and its handling",
+          "A blocked action and recovery",
+          "Results and the recommendation"
+        ],
+        "explanation": "The audience needs the baseline to judge normal operation, and needs to see limits before they can trust the recommendation that closes the demo."
+      },
+      {
+        "after": "Choose a failure relevant to the project.",
+        "type": "check",
+        "question": "During your demo, someone changes the payload of an action that was already approved. What should happen?",
+        "options": [
+          "It sends, because approval was given",
+          "It needs renewed approval",
+          "It retries until it succeeds"
+        ],
+        "answer": 1,
+        "explanation": "Approval belongs to an exact payload. A changed payload is effectively a new action, so it must go back for approval."
+      },
+      {
+        "after": "Be ready to explain why you selected",
+        "type": "reveal",
+        "prompt": "Why might a reviewer ask you to explain one thing the AI suggested that you changed?",
+        "answer": "It shows you understand your system's behaviour and limits, rather than accepting generated work unexamined. You do not need every library API memorised, but you must own the design decisions."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "The course is over and you want to keep improving. What makes a good next experiment? Think, then reveal.",
+        "answer": "Investigate one measured limitation. Pick a single experiment, compare it with the strongest simple baseline, and keep the same discipline of evidence, boundaries and operational ownership."
+      },
+      {
+        "after": "Reproduce the final candidate from its documented setup",
+        "type": "sort",
+        "prompt": "Which route does each final task belong to?",
+        "buckets": ["Engineering route", "Business-owner route"],
+        "items": [
+          { "text": "Reproduce the candidate from its version record", "bucket": 0 },
+          { "text": "Show how staff reject an action and stop the workflow", "bucket": 1 },
+          { "text": "Hand over the repository and maintenance ownership", "bucket": 0 },
+          { "text": "Present the volume-sensitive business case", "bucket": 1 },
+          { "text": "Explain the next improvement and its evidence", "bucket": 0 }
+        ],
+        "explanation": "Engineers prove the system can be rebuilt and maintained; business owners prove staff and budget holders can run and govern it."
+      },
+      {
+        "after": "Verify the workflow, staff procedure, review",
+        "type": "check",
+        "question": "Which three roles does the business-owner route ask you to name for future changes?",
+        "options": [
+          "Operational owner, budget owner and reviewer",
+          "Builder, tester and designer",
+          "Model provider, platform vendor and user"
+        ],
+        "answer": 0,
+        "explanation": "Someone must run it, someone must pay for it, and someone must check changes. Naming them keeps the system governed after the builder steps away."
+      },
+      {
+        "after": "Submit every item in [the capstone checklist]",
+        "type": "check",
+        "question": "You are a self-directed learner and no independent peer reviews your evidence. How should you label your practical assessment?",
+        "options": [
+          "Independently graded",
+          "Production certified",
+          "Self-reviewed",
+          "Pending forever"
+        ],
+        "answer": 2,
+        "explanation": "Without an independent peer, the honest label is self-reviewed. Claiming more would overstate what the evidence shows."
+      }
+    ]
+  ]
+}

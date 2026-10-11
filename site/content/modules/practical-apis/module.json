@@ -1,0 +1,30 @@
+{
+  "slug": "practical-apis",
+  "title": "Model APIs and Structured Outputs",
+  "phase": "llm",
+  "summary": "Build validated interfaces and handle incomplete, refused, and incorrect responses.",
+  "outcomes": [
+    "Separate schema and business validation",
+    "Handle failure without blind retries",
+    "Measure cost per successful item"
+  ],
+  "number": 5,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Define the contract and validate twice",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Handle failures and account for the whole operation",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio, example calls, and evidence",
+      "minutes": 30
+    }
+  ]
+}

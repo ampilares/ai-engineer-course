@@ -1,0 +1,144 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "An assistant answers confidently and mentions your 40-page attachment. Does that prove it read every page?",
+        "options": [
+          "Yes, a confident answer means it saw everything",
+          "Yes, if the answer mentions the attachment by name",
+          "No, it may have used only part of the material"
+        ],
+        "answer": 2,
+        "explanation": "A context window limits what a model can use in one request, and products may summarise or retrieve only some material. Ask for a specific source ID and check the passage yourself."
+      },
+      {
+        "after": "An assistant is the interface through which",
+        "type": "check",
+        "question": "Which of these systems is choosing its own next step?",
+        "options": [
+          "One that picks between searching tickets or opening a policy, based on findings",
+          "One that always reads, checks fields, classifies, then queues a draft",
+          "A chat window where you type a question and get a reply"
+        ],
+        "answer": 0,
+        "explanation": "An agent selects its next action from available tools based on what it observes. A fixed sequence is a workflow, even if a model does one of the steps."
+      },
+      {
+        "after": "Consider Harbour's weekly report. Adding",
+        "type": "sort",
+        "prompt": "Where should each part of Harbour's reporting work live?",
+        "buckets": ["Code", "Model suggestion", "Permissions"],
+        "items": [
+          {"text": "Summing the week's transaction amounts", "bucket": 0},
+          {"text": "Spotting that one ticket mixes a visit change and an invoice query", "bucket": 1},
+          {"text": "Allowing a refund to be issued", "bucket": 2},
+          {"text": "Counting how many rows were excluded", "bucket": 0},
+          {"text": "Proposing a category for a vaguely worded request", "bucket": 1},
+          {"text": "Stopping drafts from being sent to customers", "bucket": 2}
+        ],
+        "explanation": "Fully specified arithmetic belongs in code, interpreting language suits a model, and authority must be enforced by the application. A more capable model does not remove these distinctions."
+      },
+      {
+        "after": "Start with the required output and the",
+        "type": "order",
+        "prompt": "Put the decision procedure in order, from first question to last resort.",
+        "steps": [
+          "Name the required output and the cost of getting it wrong",
+          "Use a formula or lookup if it fully specifies the answer",
+          "For numerical predictions from labelled history, test a predictive model against a simple baseline",
+          "If language must be interpreted, try one bounded model call",
+          "Add an agent only when choosing the next tool is itself useful"
+        ],
+        "explanation": "Each step adds setup and review work, so you only move on when the simpler option cannot do the job."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "An owner says, \"I want AI to run support.\" What would you need pinned down before you could tell whether it worked?",
+        "answer": "An input (one ticket), an output (a proposed category and review flag), an authority boundary (save a draft, never send) and a finish condition. Without these there is nothing concrete to evaluate."
+      },
+      {
+        "after": "The ten fictional Harbour timings total 120",
+        "type": "check",
+        "question": "One easy ticket took three minutes with AI help. What is the safest conclusion?",
+        "options": [
+          "AI saves about nine minutes on every ticket",
+          "Very little, because one easy case does not represent next week's mix",
+          "Staff can now handle four times as many tickets"
+        ],
+        "answer": 1,
+        "explanation": "A real baseline needs representative cases, a defined start and end, and a record of rework. A single easy case cannot support a savings claim."
+      },
+      {
+        "after": "Rank opportunities using five questions: Is",
+        "type": "sort",
+        "prompt": "Using the five questions, sort these ideas for a first project.",
+        "buckets": ["Promising first candidate", "Rethink first"],
+        "items": [
+          {"text": "Drafting a weekly report from bounded files a manager already reviews", "bucket": 0},
+          {"text": "A rare, high-consequence decision with an impressive demo", "bucket": 1},
+          {"text": "Suggesting categories for frequent tickets, with drafts reviewed", "bucket": 0},
+          {"text": "A task where nobody can tell whether the output is right", "bucket": 1},
+          {"text": "A task needing data the team is not authorised to use", "bucket": 1}
+        ],
+        "explanation": "Good first candidates are frequent, have observable output, use authorised information, let mistakes be caught early, and have an owner for exceptions."
+      },
+      {
+        "after": "Choose weekly report preparation for Harbour",
+        "type": "check",
+        "question": "What does success mean for Harbour's report project?",
+        "options": [
+          "Every ticket in the week is resolved automatically",
+          "Refunds are executed faster than before",
+          "The model writes the report without Maya seeing it",
+          "A draft with the right period, accepted totals, open data problems and evidence"
+        ],
+        "answer": 3,
+        "explanation": "Success is defined by checkable contents of the draft. Refund execution stays outside the project, and Maya's review remains part of the process."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "An assistant gives the correct net total but explains it with the wrong exclusions. Would you accept its answer?",
+        "answer": "Accept the number only after your own check, and mark the reasoning unsupported. A right answer for the wrong reason will fail when next week's data differs."
+      },
+      {
+        "after": "Draw the current process as receive, inspect",
+        "type": "order",
+        "prompt": "Put one Harbour support case through the current process, in order.",
+        "steps": [
+          "A ticket arrives in the shared inbox",
+          "Staff check the details and required fields",
+          "Staff choose a category and whether review is needed",
+          "A draft reply is saved for review",
+          "The outcome and minutes taken are logged"
+        ],
+        "explanation": "These are receive, inspect, decide, act and record. Naming a responsible person for each stage shows where review and authority sit."
+      },
+      {
+        "after": "If a report is generated instantly but takes",
+        "type": "check",
+        "question": "Which comparison would be unfair?",
+        "options": [
+          "A fully reviewed manual reply versus an AI draft nobody checked",
+          "Ten manual cases versus ten AI-assisted cases from the same mix",
+          "Both timed from ticket received to reviewed reply"
+        ],
+        "answer": 0,
+        "explanation": "Both sides must reach the same definition of complete. An unchecked draft has skipped work the manual process included."
+      },
+      {
+        "after": "Submit the baseline table, selected",
+        "type": "reveal",
+        "prompt": "Write your task boundary in one sentence. Could a stranger judge a result complete without asking what you meant?",
+        "answer": "A strong boundary names the input, the output, what is excluded, and who reviews it. For example: given one week's files, draft the report with checked totals and evidence for Maya; no refunds or messages."
+      }
+    ]
+  ]
+}

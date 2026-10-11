@@ -1,0 +1,30 @@
+{
+  "slug": "practical-capstone-build",
+  "title": "Capstone: Implement",
+  "phase": "expert",
+  "summary": "Complete one narrow end-to-end system and freeze acceptance criteria.",
+  "outcomes": [
+    "Agree a scope and interface contract",
+    "Create a reproducible pilot candidate",
+    "Freeze evaluation inputs and thresholds"
+  ],
+  "number": 14,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Freeze scope and acceptance criteria",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Complete the vertical slice",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio and implementation review",
+      "minutes": 30
+    }
+  ]
+}

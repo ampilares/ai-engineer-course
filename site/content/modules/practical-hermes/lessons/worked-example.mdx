@@ -1,0 +1,25 @@
+<Check question={"You taught an assistant the weekly report. This week's data changed, yet it returns exactly last week's total. Good sign or warning sign?"} options={["Good sign, it is being consistent","Neither, totals never change week to week","Warning sign, it may be repeating instead of recalculating","Good sign, the skill has been saved"]} answer={2} explanation={"A reusable procedure recalculates from the sources. An unchanged total on changed data suggests stale context, a cached artifact or the skill itself supplied the answer."} />
+
+Run the Harbour weekly report once with a clear brief. Review the result. Correct a real error, such as including S009 outside the period or assuming S010's missing amount is zero. Only after a successful run should you capture the procedure.
+
+The [skills documentation](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills) describes reusable skill files and supporting resources. Use the original [Harbour report skill](/course-materials/course/templates/harbour-report-skill.md) as a starting specification. Inspect any generated procedure before enabling it. Check that it refers to the input contract and verification steps rather than embedding last week's output.
+
+### A procedure worth saving
+
+The skill should validate the reporting period, inspect the data contract, calculate accepted totals, retrieve current authorised policy, produce a draft, and stop for review. It should not memorise "the answer is 6,300." Its output requirements should include missing data and exceptions. Its permissions should be narrower than a general-purpose computer operator's when possible.
+
+<Order prompt={"Put the steps of a report procedure worth saving in order."} steps={["Validate the reporting period","Inspect the data contract","Calculate accepted totals","Retrieve current authorised policy","Produce a draft","Stop for review"]} explanation={"Each step depends on the one before: you cannot total rows before checking the period and contract, and the procedure ends by handing a draft to a human rather than acting."} />
+
+Now change the task. In a copied CSV, correct S010 to a known AUD amount, or change the reporting period. Start a new session and rerun the procedure. A reusable procedure updates the result from the sources. If it repeats the previous amount, investigate whether stale context, a cached artifact, or the skill itself supplied the answer.
+
+<NumericCheck question={"The original net accepted total is AUD 6,300. In a copied CSV you set S010 to AUD 400. What should the new total be?"} answer={6700} tolerance={0} unit={"AUD"} explanation={"S010 is dated 7 October, so once its amount is known and in AUD it counts: 6,300 + 400 = 6,700. A procedure that still says 6,300 is not reading the sources."} />
+
+### Evaluate a claimed improvement
+
+Run at least five cases before and after the skill change. Measure task correctness, source reopening, review time, and human corrections. A reduction from three reminders to one is useful evidence on that sample, but it does not establish that the agent will improve indefinitely. Keep the old skill version so you can compare or restore it.
+
+<Check question={"Across your five cases, human corrections dropped after the skill change. What is a fair claim?"} options={["The agent will now keep improving indefinitely","The model has learned permanently","It is useful evidence on that sample of cases"]} answer={2} explanation={"A measured improvement on five cases supports a claim about those cases. Keeping the old skill version lets you compare again or restore it if new cases disagree."} />
+
+<Check question={"What should a report skill save?"} options={["Last week's total as the answer to future reports","Unrestricted credentials for convenience","The procedure for obtaining and checking a result"]} answer={2} explanation={"A reusable procedure must work on changed inputs."} />
+
+[Download the complete week](/course-materials/course/weeks/10.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

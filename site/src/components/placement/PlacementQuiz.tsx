@@ -13,25 +13,25 @@ type Q = {
 };
 
 const STAGES: { module: string; slug: string; label: string }[] = [
-  { module: "Module 1 · Python from Zero", slug: "python-foundations", label: "Start at the very beginning: the course assumes nothing and gets you coding in the browser immediately." },
-  { module: "Module 2 · The Math You Actually Need", slug: "math-foundations", label: "You can code: build the four mathematical intuitions everything else uses." },
-  { module: "Module 3 · Engineering Foundations", slug: "engineering-foundations", label: "Solid basics: start with APIs, SQL, testing, and Git, the plumbing of every AI system." },
-  { module: "Module 5 · Data, Math & Classical ML", slug: "ml-foundations", label: "You're a working developer: start where prediction, metrics, and honest evaluation begin." },
-  { module: "Module 7 · How LLMs Work", slug: "llm-foundations", label: "You have ML fundamentals: go straight to the internals of language models." },
-  { module: "Module 8 · LLM Application Primitives", slug: "llm-primitives", label: "You know the internals: start building: prompts as specs, schemas, and cost control. (Skim earlier modules anytime.)" },
+  { module: "Week 1 · AI Foundations", slug: "practical-foundations", label: "Start with task selection, verification, and a manual baseline." },
+  { module: "Week 2 · Context and Research", slug: "practical-context", label: "Practise source checking and testable task briefs." },
+  { module: "Week 4 · AI-Assisted Engineering", slug: "practical-coding", label: "Review a small change and verify its behaviour. Complete earlier practical evidence too." },
+  { module: "Week 5 · Model Interfaces", slug: "practical-apis", label: "Build validated model interfaces and handle failures." },
+  { module: "Week 6 · Retrieval", slug: "practical-retrieval", label: "Work with authorised, effective sources and measure retrieval quality." },
+  { module: "Week 8 · Agents and Tools", slug: "practical-agents", label: "Start reviewing tool boundaries and bounded agent execution. Earlier gates still apply." },
 ];
 
 const QUESTIONS: Q[] = [
-  { stage: 1, prompt: "What does this produce? [x * 2 for x in [1, 2, 3] if x > 1]", options: ["[4, 6]", "[2, 4, 6]", "An error", "I'm not sure"], correct: 0 },
-  { stage: 1, prompt: "A dict lookup d['missing_key'] on an absent key…", options: ["…raises KeyError (use .get() for a safe None)", "…returns an empty string", "…creates the key", "I'm not sure"], correct: 0 },
-  { stage: 2, prompt: "Two embedding vectors have cosine similarity 0.95. They are…", options: ["…pointing nearly the same direction: semantically similar", "…nearly identical in length", "…95% likely to be duplicates", "I'm not sure"], correct: 0 },
-  { stage: 2, prompt: "Softmax turns a model's raw scores into…", options: ["…a probability distribution that sums to 1", "…binary yes/no decisions", "…gradients", "I'm not sure"], correct: 0 },
-  { stage: 3, prompt: "An API call returns HTTP 429. You should…", options: ["…back off and retry with a limit", "…fix your request body", "…retry instantly in a loop", "I'm not sure"], correct: 0 },
-  { stage: 3, prompt: "Which SQL clause filters on an aggregated value like AVG(x)?", options: ["HAVING (after GROUP BY)", "WHERE", "ORDER BY", "I'm not sure"], correct: 0 },
-  { stage: 4, prompt: "A model scores 99% on training data, 74% on validation. It is…", options: ["…overfitting: memorizing instead of generalizing", "…underfitting", "…perfectly fine; ship it", "I'm not sure"], correct: 0 },
-  { stage: 4, prompt: "For a 1%-positive fraud problem, accuracy is a poor metric because…", options: ["…always predicting 'no fraud' scores 99% while catching nothing: you need precision/recall", "…accuracy only works on images", "…it's too hard to compute", "I'm not sure"], correct: 0 },
-  { stage: 5, prompt: "Temperature in LLM sampling controls…", options: ["…how sharply probability concentrates on top tokens (low = deterministic, high = diverse)", "…the model's knowledge cutoff", "…the context window size", "I'm not sure"], correct: 0 },
-  { stage: 5, prompt: "Your assistant must answer from company docs that change weekly. The right primary tool is…", options: ["…retrieval (RAG) over the current documents", "…fine-tuning on last year's PDF", "…a bigger model", "I'm not sure"], correct: 0 },
+  { stage: 1, prompt: "A report draft takes one minute and needs fifteen minutes of correction. What staff time counts?", options: ["One minute", "Sixteen minutes", "Only correction time"], correct: 1 },
+  { stage: 1, prompt: "Where should refund authority be enforced?", options: ["In the customer's wording", "By model confidence", "In application permissions and review controls"], correct: 2 },
+  { stage: 2, prompt: "A citation exists but does not support the claim. The claim is...", options: ["Unsupported", "Verified", "Probably safe to accept"], correct: 0 },
+  { stage: 2, prompt: "Two identical copies share a transaction ID. How many events count?", options: ["Two", "One", "Zero"], correct: 1 },
+  { stage: 3, prompt: "What makes a regression check useful?", options: ["It agrees with the generated code", "It only checks that output exists", "It fails on the defect and passes on the required behaviour"], correct: 2 },
+  { stage: 3, prompt: "Does reverting code necessarily undo a message already sent?", options: ["Yes", "No", "Only if the message was AI-written"], correct: 1 },
+  { stage: 4, prompt: "Schema-valid JSON proves...", options: ["Every business claim is correct", "The checked structure is valid", "The action is authorised"], correct: 1 },
+  { stage: 4, prompt: "An incomplete model response should...", options: ["Enter an explicit failure or review path", "Be treated as complete", "Trigger unlimited retries"], correct: 0 },
+  { stage: 5, prompt: "When should document access be filtered?", options: ["After showing the answer", "Only if the user complains", "Before restricted content reaches the model"], correct: 2 },
+  { stage: 5, prompt: "The recipient commits an action, then the worker crashes. What supports a safe retry?", options: ["A new action ID", "A stable key and recipient-enforced deduplication for the same payload", "A promise in the prompt"], correct: 1 },
 ];
 
 export function PlacementQuiz() {

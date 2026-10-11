@@ -1,0 +1,170 @@
+[
+  {
+    "id": "pa-w04-q01",
+    "type": "single",
+    "prompt": "Which test best checks a duplicate-conflict requirement?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Assert the report function returns an object"
+      },
+      {
+        "id": "b",
+        "text": "Insert conflicting amounts for one ID and verify review with no included value"
+      },
+      {
+        "id": "c",
+        "text": "Check the source file contains the word duplicate"
+      }
+    ],
+    "answer": "b",
+    "explanation": "The test must exercise the business behaviour that could regress."
+  },
+  {
+    "id": "pa-w04-q02",
+    "type": "single",
+    "prompt": "An assistant says tests passed. What verifies the claim?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The assistant's explanation of the test file"
+      },
+      {
+        "id": "b",
+        "text": "A clean-looking diff"
+      },
+      {
+        "id": "c",
+        "text": "The actual command and resulting output"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Reading or describing tests is not executing them."
+  },
+  {
+    "id": "pa-w04-q03",
+    "type": "single",
+    "prompt": "Why can generated tests agree with incorrect generated code?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Both may encode the same mistaken requirement"
+      },
+      {
+        "id": "b",
+        "text": "Tests cannot check AI-generated code"
+      },
+      {
+        "id": "c",
+        "text": "Any passing test proves the requirement was correct"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Expected results must come from an independent interpretation of the requirement."
+  },
+  {
+    "id": "pa-w04-q04",
+    "type": "single",
+    "prompt": "What makes a coding task reviewable?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Combining the fix with a full repository rewrite"
+      },
+      {
+        "id": "b",
+        "text": "A small change with explicit acceptance and failure cases"
+      },
+      {
+        "id": "c",
+        "text": "Leaving the finish condition to the coding tool"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Focused scope helps reviewers connect the diff to the requirement."
+  },
+  {
+    "id": "pa-w04-q05",
+    "type": "single",
+    "prompt": "What does reverting code fail to undo automatically?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A local comment change"
+      },
+      {
+        "id": "b",
+        "text": "A new uncommitted variable name"
+      },
+      {
+        "id": "c",
+        "text": "An external message already sent"
+      }
+    ],
+    "answer": "c",
+    "explanation": "External effects can outlive the code version that triggered them."
+  },
+  {
+    "id": "pa-w04-q06",
+    "type": "single",
+    "prompt": "The supplied reference already handles conflicting duplicates. What is an honest project description?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Add and test a grouped review summary as a new feature"
+      },
+      {
+        "id": "b",
+        "text": "Claim to have fixed the existing correct behaviour"
+      },
+      {
+        "id": "c",
+        "text": "Delete the working tests to create a failure"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Describe the actual contribution rather than inventing a defect."
+  },
+  {
+    "id": "pa-w04-q07",
+    "type": "single",
+    "prompt": "What should an internal-tool prototype distinguish?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Only its visual colour scheme"
+      },
+      {
+        "id": "b",
+        "text": "A prepared draft from a completed external action"
+      },
+      {
+        "id": "c",
+        "text": "An empty input from an unknown customer by guessing"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Users need accurate state labels to understand what has happened."
+  },
+  {
+    "id": "pa-w04-q08",
+    "type": "single",
+    "prompt": "What is required at the Week 4 practical gate?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A screenshot of generated code only"
+      },
+      {
+        "id": "b",
+        "text": "A model's assurance of readiness"
+      },
+      {
+        "id": "c",
+        "text": "Independent verification and a substantive correction"
+      }
+    ],
+    "answer": "c",
+    "explanation": "The learner must demonstrate understanding beyond accepting generated output."
+  }
+]

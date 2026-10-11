@@ -1,0 +1,123 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "A coding assistant suggests installing a package you have never heard of to fix a bug. What should happen first?",
+        "options": [
+          "Install it; the assistant knows best",
+          "Discuss its purpose and confirm where it comes from",
+          "Never use any dependency again"
+        ],
+        "answer": 1,
+        "explanation": "Assistants can suggest invented package names. Check purpose and provenance before adding anything to the project."
+      },
+      {
+        "after": "Provide the repository entry point, relevant",
+        "type": "sort",
+        "prompt": "What belongs in a bounded coding task brief?",
+        "buckets": ["Include", "Leave out"],
+        "items": [
+          {"text": "The test command", "bucket": 0},
+          {"text": "The relevant files", "bucket": 0},
+          {"text": "Clear finish criteria", "bucket": 0},
+          {"text": "Reformat every file in the repository while you are there", "bucket": 1},
+          {"text": "Improve whatever else looks untidy", "bucket": 1}
+        ],
+        "explanation": "A focused diff is easier to assess than a broad rewrite mixed with unrelated formatting. Clear boundaries keep the change reviewable."
+      },
+      {
+        "after": "The boundaries are deliberately narrow. If",
+        "type": "order",
+        "prompt": "Put the steps from this week's task brief in order.",
+        "steps": [
+          "Read the reference implementation and its tests",
+          "Explain the current behaviour",
+          "Add a conflict case in a separate fixture copy",
+          "Change the code to reject the conflicting event",
+          "Run the relevant tests and show the diff"
+        ],
+        "explanation": "Understanding comes before changing, and the change is proven by actually running tests rather than describing them."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "An agent stops double billing by discarding every repeated ID, including the first row. Is that a good fix?",
+        "options": [
+          "Yes, nothing is double counted now",
+          "Yes, as long as the tests are green",
+          "No, it throws away the legitimate transaction"
+        ],
+        "answer": 2,
+        "explanation": "Preventing double counting is not enough if real events vanish. An exact duplicate should leave exactly one event."
+      },
+      {
+        "after": "Review in layers. First check the",
+        "type": "order",
+        "prompt": "Put the review layers in order.",
+        "steps": [
+          "Does the change solve the intended problem?",
+          "Inputs and edge cases",
+          "Failure handling, data access and side effects",
+          "Maintainability: naming, duplication and findability"
+        ],
+        "explanation": "Starting with the specification avoids polishing code that solves the wrong problem."
+      },
+      {
+        "after": "An agent fixes duplicate billing by",
+        "type": "sort",
+        "prompt": "What should the report do with each repeated ID?",
+        "buckets": ["Count one event", "Send to review, no amount"],
+        "items": [
+          {"text": "Two identical S008 rows at 500.00 AUD each", "bucket": 0},
+          {"text": "One ID with amounts of 500.00 and 550.00", "bucket": 1},
+          {"text": "The same row exported twice, every field matching", "bucket": 0},
+          {"text": "One ID listed with two different customer IDs", "bucket": 1}
+        ],
+        "explanation": "Exact copies describe one event. Conflicting versions cannot be resolved by picking one, so they go to review and need their own test."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "You are about to test a request-intake prototype. Which four kinds of request would you try first?",
+        "answer": "A complete request, one with an empty field, a mixed request and a refund request. Together they test normal handling, missing data, ambiguity and a case needing human authority."
+      },
+      {
+        "after": "Choose a small reporting improvement or a",
+        "type": "sort",
+        "prompt": "Match each test to its type.",
+        "buckets": ["Regression", "Normal case", "Failure case"],
+        "items": [
+          {"text": "Fails on the old broken behaviour and passes after the fix", "bucket": 0},
+          {"text": "A typical week of valid AUD sales gives the expected total", "bucket": 1},
+          {"text": "An empty file produces a clear error, not a zero total", "bucket": 2},
+          {"text": "A malformed date is rejected rather than guessed", "bucket": 2}
+        ],
+        "explanation": "A regression test proves the fix, a normal case shows ordinary work still succeeds, and failure cases show bad input is handled safely."
+      },
+      {
+        "after": "Specify a request-intake or report-review",
+        "type": "check",
+        "question": "Why must the prototype run without connecting to a real customer account?",
+        "options": [
+          "It loads faster that way",
+          "Mistakes cannot reach real customers or records",
+          "Real accounts do not allow forms"
+        ],
+        "answer": 1,
+        "explanation": "Keeping the exercise local means generated drafts are the only outputs, so testing errors have no external effects."
+      },
+      {
+        "after": "Submit the task brief, before/after",
+        "type": "reveal",
+        "prompt": "Think of one AI suggestion you rejected this week. Could you justify the rejection without saying the AI said so?",
+        "answer": "A good justification cites evidence: a failing test, a contradicted requirement, an unnecessary dependency or an unrelated rewrite. That shows you verified the work independently."
+      }
+    ]
+  ]
+}

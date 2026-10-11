@@ -1,0 +1,30 @@
+{
+  "slug": "practical-capstone-pilot",
+  "title": "Capstone: Pilot and Improve",
+  "phase": "expert",
+  "summary": "Observe real or clearly simulated use, fix failures, and compare with the baseline.",
+  "outcomes": [
+    "Run a bounded pilot",
+    "Classify and fix the most consequential failure",
+    "Report results with honest denominators"
+  ],
+  "number": 15,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Run a pilot that produces usable evidence",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Diagnose failures before changing the system",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio and pilot review",
+      "minutes": 30
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+<Check question={"An agent stops double billing by discarding every repeated ID, including the first row. Is that a good fix?"} options={["Yes, nothing is double counted now","Yes, as long as the tests are green","No, it throws away the legitimate transaction"]} answer={2} explanation={"Preventing double counting is not enough if real events vanish. An exact duplicate should leave exactly one event."} />
+
+Review in layers. First check the specification: does the change solve the intended problem? Then check inputs and edge cases. Then examine failure handling, data access, and side effects. Finally inspect maintainability: naming, duplication, and whether future readers can find the rule.
+
+<Order prompt={"Put the review layers in order."} steps={["Does the change solve the intended problem?","Inputs and edge cases","Failure handling, data access and side effects","Maintainability: naming, duplication and findability"]} explanation={"Starting with the specification avoids polishing code that solves the wrong problem."} />
+
+A meaningful regression test fails on the old broken behaviour and passes after the fix. Asserting that a function returns something is weak evidence. A test that inserts two rows with the same ID and different amounts, then verifies both are excluded and a conflict is visible, tests the business requirement.
+
+Do not trust a generated test merely because it agrees with generated code. Derive expected results from the requirement. If the assistant implements an incorrect rule and writes a test expecting that rule, green tests can reinforce the mistake. Use a manually checked counterexample and ask a reviewer to challenge it.
+
+### Worked review
+
+An agent fixes duplicate billing by discarding every repeated ID, including the first event. That prevents double counting but loses the legitimate transaction. The correct result for an exact duplicate is one event. For two conflicting versions, the appropriate result in this course is review, with no amount included until resolved. These are different cases and need different tests.
+
+<Sort prompt={"What should the report do with each repeated ID?"} buckets={["Count one event","Send to review, no amount"]} items={[{"text":"Two identical S008 rows at 500.00 AUD each","bucket":0},{"text":"One ID with amounts of 500.00 and 550.00","bucket":1},{"text":"The same row exported twice, every field matching","bucket":0},{"text":"One ID listed with two different customer IDs","bucket":1}]} explanation={"Exact copies describe one event. Conflicting versions cannot be resolved by picking one, so they go to review and need their own test."} />
+
+Record the current commit or file snapshot before changing behaviour. Reversal may be a Git revert, a deployment rollback, or disabling a new workflow. Reverting code does not necessarily undo messages already sent or records already changed. Keep this exercise local and use generated drafts as its only outputs.
+
+<Check question={"An assistant says tests passed. What verifies the claim?"} options={["The assistant's explanation of the test file","A clean-looking diff","The actual command and resulting output"]} answer={2} explanation={"Reading or describing tests is not executing them."} />
+
+[Download the complete week](/course-materials/course/weeks/04.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

@@ -1,0 +1,10 @@
+{
+  "label":"Synthetic timing example, not measured workplace impact",
+  "manual_minutes":[12,10,14,11,13,10,15,12,11,12],
+  "pilot_staff_minutes":[6,5,8,6,7,5,9,6,6,7],
+  "monthly_cases":200,
+  "loaded_hourly_cost_aud":60,
+  "monthly_tools_aud":120,
+  "monthly_maintenance_aud":180,
+  "implementation_aud":1200
+}

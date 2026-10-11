@@ -1,0 +1,153 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "An assistant can hold information in the current chat, a saved memory, or a written procedure. Which one vanishes when you start a new chat?",
+        "options": [
+          "Saved memory entries",
+          "The live conversation",
+          "Skill files and their supporting files"
+        ],
+        "answer": 1,
+        "explanation": "The live conversation is temporary task context. Memory persists across sessions only when an actual write happened, and skills are saved procedures."
+      },
+      {
+        "after": "Hermes Agent is the Nous Research application",
+        "type": "check",
+        "question": "A colleague says Hermes Agent must run a Hermes model. Is that right?",
+        "options": [
+          "Yes, the names match for that reason",
+          "Only when it runs offline",
+          "No, it is an application that can use different model providers"
+        ],
+        "answer": 2,
+        "explanation": "Hermes Agent is the Nous Research application used in this module. It should not be confused with the Hermes model family, and you configure an approved provider during setup."
+      },
+      {
+        "after": "Memory stores selected information across sessions.",
+        "type": "sort",
+        "prompt": "Where does each piece of information belong?",
+        "buckets": ["Memory", "Skill", "Live conversation"],
+        "items": [
+          { "text": "Reports always list unresolved questions explicitly", "bucket": 0 },
+          { "text": "Preferred section order for reports", "bucket": 0 },
+          { "text": "A step-by-step report procedure with a checking script", "bucket": 1 },
+          { "text": "Validate the reporting period before calculating", "bucket": 1 },
+          { "text": "The CSV you pasted for today's question", "bucket": 2 },
+          { "text": "A clarification you gave earlier in this chat", "bucket": 2 }
+        ],
+        "explanation": "Stable preferences suit memory, procedures suit skills, and one-off task details live only in the conversation. Mixing them up leads to stale or missing context."
+      },
+      {
+        "after": "Pick a stable preference for the exercise",
+        "type": "check",
+        "question": "Which of these is a sensible thing to store as a permanent memory?",
+        "options": [
+          "A fixed section order for reports",
+          "The current refund threshold",
+          "Last week's net total"
+        ],
+        "answer": 0,
+        "explanation": "A stable preference stays true. A refund threshold can change and should be retrieved from the effective policy, and last week's total is out of date next week."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "You taught an assistant the weekly report. This week's data changed, yet it returns exactly last week's total. Good sign or warning sign?",
+        "options": [
+          "Good sign, it is being consistent",
+          "Neither, totals never change week to week",
+          "Warning sign, it may be repeating instead of recalculating",
+          "Good sign, the skill has been saved"
+        ],
+        "answer": 2,
+        "explanation": "A reusable procedure recalculates from the sources. An unchanged total on changed data suggests stale context, a cached artifact or the skill itself supplied the answer."
+      },
+      {
+        "after": "The skill should validate the reporting period",
+        "type": "order",
+        "prompt": "Put the steps of a report procedure worth saving in order.",
+        "steps": [
+          "Validate the reporting period",
+          "Inspect the data contract",
+          "Calculate accepted totals",
+          "Retrieve current authorised policy",
+          "Produce a draft",
+          "Stop for review"
+        ],
+        "explanation": "Each step depends on the one before: you cannot total rows before checking the period and contract, and the procedure ends by handing a draft to a human rather than acting."
+      },
+      {
+        "after": "Now change the task. In a copied CSV",
+        "type": "numeric",
+        "question": "The original net accepted total is AUD 6,300. In a copied CSV you set S010 to AUD 400. What should the new total be?",
+        "answer": 6700,
+        "tolerance": 0,
+        "unit": "AUD",
+        "explanation": "S010 is dated 7 October, so once its amount is known and in AUD it counts: 6,300 + 400 = 6,700. A procedure that still says 6,300 is not reading the sources."
+      },
+      {
+        "after": "Run at least five cases before and after",
+        "type": "check",
+        "question": "Across your five cases, human corrections dropped after the skill change. What is a fair claim?",
+        "options": [
+          "The agent will now keep improving indefinitely",
+          "The model has learned permanently",
+          "It is useful evidence on that sample of cases"
+        ],
+        "answer": 2,
+        "explanation": "A measured improvement on five cases supports a claim about those cases. Keeping the old skill version lets you compare again or restore it if new cases disagree."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "Imagine someone quietly rewrote your office's standard procedure overnight. What would you want in place to spot it and undo it?",
+        "answer": "Someone who approves changes, a change history, and a known-good version to go back to. The business route asks you to decide exactly these things for the report skill."
+      },
+      {
+        "after": "Set up a dedicated Hermes environment",
+        "type": "check",
+        "question": "In step 5 you remove a stale preference. Where should you confirm the correction took effect?",
+        "options": [
+          "In another fresh session",
+          "In the same session, straight away",
+          "By asking the agent whether it is fixed"
+        ],
+        "answer": 0,
+        "explanation": "The current session still holds the old context, and the agent's own say-so is not evidence. A fresh session shows what was actually stored."
+      },
+      {
+        "after": "Saving a preferred heading order is a memory",
+        "type": "sort",
+        "prompt": "Which kind of change is each of these?",
+        "buckets": ["Memory", "Skill change", "Authoritative policy"],
+        "items": [
+          { "text": "Saving a preferred heading order", "bucket": 0 },
+          { "text": "Remembering that reports show unresolved questions", "bucket": 0 },
+          { "text": "Editing how the report workflow handles missing amounts", "bucket": 1 },
+          { "text": "Adding a verification step to the procedure", "bucket": 1 },
+          { "text": "Updating a refund rule", "bucket": 2 }
+        ],
+        "explanation": "Preferences, procedures and business rules live in different places. None of these changes the model's learned weights by itself."
+      },
+      {
+        "after": "Submit the skill, its change history",
+        "type": "check",
+        "question": "A memory entry holds a detail the agent no longer needs. Besides removing the entry, what should you check?",
+        "options": [
+          "The model's learned weights",
+          "Other copies, such as logs and exported files",
+          "Nothing else, deletion is complete"
+        ],
+        "answer": 1,
+        "explanation": "Persistent memory creates retention obligations. The same material can survive in logs and exports, so removal is only complete when those copies are handled too."
+      }
+    ]
+  ]
+}

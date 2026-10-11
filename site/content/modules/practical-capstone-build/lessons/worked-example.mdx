@@ -1,0 +1,23 @@
+<Reveal prompt={"A tool call times out mid-run. How would your operator know whether the external action actually happened? Think about what you would need recorded."} answer={"Each boundary needs a recorded schema, identity, error behaviour and owner. Without that, a timeout leaves the operator guessing whether the action ran, which this lesson treats as a design question to answer up front."} />
+
+A vertical slice carries one input through every required step: intake, validation, AI processing, verification, review, and output recording. It is better evidence than several impressive components that cannot be used together.
+
+<Order prompt={"Put the stages one input passes through in the vertical slice in order."} steps={["Intake","Validation","AI processing","Verification","Review","Output recording"]} explanation={"Inputs are checked before the model sees them, and model output is verified before a person reviews it. Recording comes last so the final artifact reflects the review decision."} />
+
+For each boundary, record the schema, identity, error behaviour, and owner. Does an invalid input become a visible review item? Does an interrupted run preserve enough state to resume? Does an approved action remain bound to its exact payload? Can the operator tell whether an external action happened before a timeout?
+
+Use the smallest architecture that meets the contract. A fixed workflow with one model call may be easier to assess than an agent with many tools. If you choose an agent, explain what useful decision it makes and why a fixed sequence is insufficient. If you choose retrieval, identify the source owner and update path. If the project needs neither, do not add it merely to demonstrate terminology.
+
+<Check question={"Your capstone works well as a fixed workflow and needs no document lookup. What should you do about retrieval?"} options={["Leave it out","Add it to show the full toolkit","Add it but switch it off"]} answer={0} explanation={"The smallest architecture that meets the contract is easier to assess. Adding retrieval just to demonstrate terminology adds an owner, an update path and new failure points for no benefit."} />
+
+### Integration review
+
+Trace one case by ID through the system. Collect its source version, prompt version, model response status, validation outcome, reviewer decision, final artifact, duration, and cost. Avoid copying sensitive raw content into every stage. A missing case ID between two components is a debugging and audit problem worth fixing before the pilot.
+
+<Sort prompt={"For the integration trace and setup, should each item be recorded or kept out?"} buckets={["Record it","Keep it out"]} items={[{"text":"Prompt version used for the case","bucket":0},{"text":"Sensitive raw content copied into every stage","bucket":1},{"text":"Validation outcome","bucket":0},{"text":"A secret value in an example output","bucket":1},{"text":"Duration and cost","bucket":0}]} explanation={"A trace needs versions, outcomes and costs to explain what happened. Raw sensitive content and secrets add exposure without helping anyone debug."} />
+
+Write a repeatable setup command or workflow-import procedure. A secret value must be supplied through the environment or approved credential store; it should not be present in the repository, screenshot, or example output. List required accounts and capabilities without implying that every learner has them.
+
+<Check question={"When should final acceptance criteria be fixed?"} options={["Before inspecting final evaluation results","After selecting only successful runs","Only during the final presentation"]} answer={0} explanation={"Predefined criteria reduce moving the goalposts after seeing results."} />
+
+[Download the complete week](/course-materials/course/weeks/14.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

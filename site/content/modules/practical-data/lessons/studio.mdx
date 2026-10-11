@@ -1,0 +1,33 @@
+<Check question={"You want to test your rules on messy data, such as a malformed date. Where should the bad rows go?"} options={["Into a copy of the dataset, leaving the original untouched","Directly into the original file","Nowhere; test only on clean data"]} answer={0} explanation={"Preserving the original keeps a trustworthy reference. Deliberately messy copies show how each kind of problem reaches an outcome."} />
+
+### Engineering route
+
+1. Run the reference report and inspect each excluded or quarantined record.
+2. Write an independent calculation using your preferred language or SQL. Use the source contract, not a copied result.
+3. Add a conflicting duplicate, a malformed date, a refund with a positive amount, and an empty currency to a copy of the dataset.
+4. Show how each input reaches an accepted, excluded, or review outcome. Never modify the original fixture.
+5. Extract INV-014 into a schema with separate observed and calculated fields. Include evidence locations and review reasons.
+
+<Check question={"Why write your own calculation from the source contract rather than copying the reference result?"} options={["Copying is slower","An independent calculation can expose mistakes a copy would repeat","The reference tool gives random answers"]} answer={1} explanation={"Agreement between two independent methods is evidence; a copied number only agrees with itself."} />
+
+### Business-owner route
+
+1. Open the CSV in a spreadsheet and preserve a raw-data sheet. Import identifiers as text and dates using the supplied ISO format.
+2. In a prepared table, mark duplicate, outside-period, missing-amount, and wrong-currency rows before calculating totals.
+3. Calculate sales and refunds with separate formulas, then derive the net. Check the eight accepted events manually.
+4. Ask the assistant for a report, then verify every numerical claim against the prepared table.
+5. Create a meeting action list with task, owner, deadline, evidence timestamp, and unresolved questions.
+
+<Order prompt={"Put the spreadsheet workflow in order."} steps={["Keep the raw data on its own sheet","Import IDs as text and dates in ISO format","Mark duplicate, outside-period, missing-amount and wrong-currency rows","Calculate sales and refunds with separate formulas","Derive the net from those formulas","Check each figure in the assistant's report against the prepared table"]} explanation={"Problems are flagged before any totals are calculated, and formulas on prepared data make every number traceable."} />
+
+### Review and answers
+
+The date correction appears at [00:31], the unassigned investigation at [00:49], and Maya's report review at [01:04]. A correct action list keeps the investigation visible without pretending a person accepted it. The invoice's due date remains unknown.
+
+Submit raw inputs, transformation rules, the reconciliation, an evidence-preserving extraction, and a short report. Your reviewer should be able to reproduce the net total and locate each action in the source. Record whether you used an actual multimodal model or the provided text transcription; these are different experiments.
+
+<Reveal prompt={"Your reviewer receives only your files. What must they be able to do without asking you anything?"} answer={"Reproduce the net total from the raw inputs and your rules, and locate each action in the source by its timestamp. They should also know whether you used a multimodal model or the text transcript."} />
+
+<Check question={"INV-014 line items total 220 but the printed total is unreadable. What should be stored?"} options={["Observed total of 220 with no qualification","A zero total to keep the schema complete","Unknown observed total and separate calculated subtotal of 220"]} answer={2} explanation={"Observation and calculation must remain distinguishable."} />
+
+[Download the complete week](/course-materials/course/weeks/03.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

@@ -1,0 +1,31 @@
+<Order prompt={"Before you read on: in what order would you test a structured triage step?"} steps={["Inspect the schema and the validator","Validate a known good example response","Break a copy and confirm it is rejected with a reason","Send one fictional ticket to a live model","Evaluate at least twenty cases and record the results"]} explanation={"Start offline so you know the checks work, prove that bad output is rejected, then spend live calls, and finally measure across a set rather than a few examples."} />
+
+### Engineering route
+
+1. Inspect `triage.schema.json` and the validator in the reference lab.
+2. Run `node course/labs/reference.mjs validate course/case-study/example-triage.json`.
+3. Copy the response and change a category, Boolean, or ID. Verify rejection with a useful reason.
+4. With approved API access, set `OPENAI_API_KEY` privately and `OPENAI_MODEL` to a model supporting the required schema feature, then run `node course/labs/live-extract.mjs T09`. The command sends only that fictional ticket.
+5. Evaluate at least twenty cases, keeping fixtures separate from model inputs. If live access is unavailable, report interface results separately and leave model-quality claims unmeasured.
+
+### Business-owner route
+
+1. Use the [review prototype](/course-materials/course/labs/review-prototype.html) to define category and review requirements on fictional tickets.
+2. In your approved workflow builder, configure one model step to return the four fields. Use the supplied schema where the builder accepts JSON Schema.
+3. Add field/type checks and a branch for unknown or review-required items.
+4. Run the same six failure cases, inspect what staff see, and record the next responsible person.
+5. Extend to the twenty practice cases, using a results table rather than relying on a few attractive examples.
+
+### Expected reasoning
+
+Missing customer information is not a licence to invent an ID. A Boolean-shaped answer is not proof that the classification is correct. Self-reported model confidence has no operational threshold until you establish what it predicts on labelled data.
+
+<Check question={"A ticket arrives with no customer ID. The model returns a neatly formatted ID anyway. What should happen?"} options={["Accept it, because the format is valid","Ask the model to rate its confidence","Treat it as invented and route it for review"]} answer={2} explanation={"A well-shaped value is not evidence it is true. Missing information should produce a visible review or error outcome, never a made-up ID."} />
+
+Submit the schema, input/output examples, failure behaviour, twenty-case results, and cost per completed item. Explain which validations are automatic and which require a human. A missing live-model measurement is acceptable when labelled; claiming mock accuracy as model accuracy is not.
+
+<Sort prompt={"In your write-up, which validations run automatically and which need a person?"} buckets={["Automatic","Needs a human"]} items={[{"text":"Category is one of the four allowed values","bucket":0},{"text":"needs_review is a Boolean","bucket":0},{"text":"Unknown categories are routed to review","bucket":0},{"text":"Resolving an item flagged for review","bucket":1},{"text":"Judging whether a reason fairly reflects the request","bucket":1}]} explanation={"Shape and rule checks are mechanical, so code can enforce them. Deciding what an ambiguous request really means still needs a responsible person."} />
+
+<Check question={"How should a refused or incomplete model response be treated?"} options={["As a blank successful record","As an explicit non-success path requiring handling","As proof the customer request was resolved"]} answer={1} explanation={"Completion status and refusal must be checked before consuming output."} />
+
+[Download the complete week](/course-materials/course/weeks/05.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

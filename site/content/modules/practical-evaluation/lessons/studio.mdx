@@ -1,0 +1,33 @@
+<Check question={"Why write acceptance criteria before you look at the final results?"} options={["So the results cannot quietly move the bar","Because it is quicker to write them first","Because the evaluator requires a file to exist"]} answer={0} explanation={"Criteria set after seeing outputs tend to bend towards whatever happened. Deciding first keeps the release decision honest."} />
+
+### Engineering route
+
+1. Run the reference evaluator on a saved prediction file. Inspect missing, duplicate, and extra IDs as well as incorrect labels.
+2. Freeze your capstone's development/held-out split and versions.
+3. Run boundary tests for access, tool scope, approvals, cancellation, stale sources, and log exposure.
+4. Inspect a trace for the most consequential failure, change one component, and repeat affected regression cases.
+5. Produce a release record stating pass, hold, or restricted pilot, with evidence for every mandatory condition.
+
+<Sort prompt={"Step 1 asks you to inspect evaluator output. What kind of problem is each finding?"} buckets={["ID problem","Incorrect label"]} items={[{"text":"A case in the set has no prediction","bucket":0},{"text":"The same case ID is predicted twice","bucket":0},{"text":"A prediction for an ID not in the case set","bucket":0},{"text":"The right ID with the wrong decision","bucket":1}]} explanation={"Missing, duplicate and extra IDs break the denominator before accuracy is even measured, so check them alongside wrong labels."} />
+
+### Business-owner route
+
+1. Write acceptance criteria before inspecting the final outputs. Identify failures that always require a hold.
+2. Independently grade a sample of results and compare with the system's automatic checks.
+3. Review who can access data, which vendors process it, which permissions are needed, and how access is removed.
+4. Name an owner for incident response, retention, complaints, and changes to the workflow.
+5. Decide whether the system is acceptable for a bounded pilot and document the restrictions.
+
+<Reveal prompt={"Name one failure that should force a hold no matter how high the success rate is."} answer={"For example: a message sent to an unauthorised recipient, a caller changing their own role, a manager-only document retrieved, or an action triggered after cancellation. Boundary failures are reported separately, never averaged away."} />
+
+### Expected evidence
+
+Submit the cases, rubric, version record, results with denominators, two reviewed traces, boundary-test evidence, and a release decision. Classroom thresholds are not guarantees of production safety. Larger or higher-consequence deployments require an evaluation designed for the actual stakes and operating conditions.
+
+Use [the release record](/course-materials/course/templates/release-record.md). If legal, regulatory, or contractual requirements affect the pilot, identify the appropriate organisational reviewer and record their decision rather than inventing a generic compliance claim.
+
+<Check question={"Contractual requirements affect your pilot. What should the release record contain?"} options={["A generic statement that the system is compliant","Nothing, contracts are outside the release record","The appropriate organisational reviewer and their decision"]} answer={2} explanation={"You identify who in the organisation must review it and record their decision. Inventing a generic compliance claim would misstate what was checked."} />
+
+<Check question={"How should a model-based grader be validated?"} options={["Assume the largest model is always correct","Compare only its output length","Compare its decisions with human-labelled examples"]} answer={2} explanation={"A grader can have systematic biases and must be checked for the task."} />
+
+[Download the complete week](/course-materials/course/weeks/12.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

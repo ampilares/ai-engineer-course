@@ -1,0 +1,33 @@
+<Reveal prompt={"An assistant cites a real policy page to claim small refunds are automatic. Before believing it, what would you check about that source?"} answer={"Its status and date. A real link can point to a draft or superseded policy. Only an approved, currently effective version establishes what the business permits."} />
+
+### Engineering route
+
+1. Write briefs for repository investigation, bug diagnosis, and source-backed technical research. Give each a concrete output contract.
+2. Save ten cases before changing the brief. Include a missing source, conflicting source versions, and an embedded instruction.
+3. Run two prompt/context configurations. Record the exact input IDs and whether the model or application version was visible.
+4. Inspect every citation in two successful answers and every failed answer.
+5. Commit the chosen brief with a decision note explaining the remaining limitations.
+
+<Check question={"Why save your ten cases before you start changing the brief?"} options={["So both configurations are judged on identical inputs","So you can rewrite the cases to suit the new brief","Because the model needs them in its memory"]} answer={0} explanation={"Fixed inputs make the comparison fair. Editing cases after seeing results lets you accidentally tune the test to the answer."} />
+
+### Business-owner route
+
+1. Write briefs for a customer-response draft, supplier comparison, and operating procedure.
+2. Define what the reviewer must verify for each: a recipient, an amount, a policy, or a factual source.
+3. Run the customer-response brief on ten examples. Include T05 and T09 or equivalents.
+4. Ask another person to use the brief without your explanations. Record where it was unclear.
+5. Save the corrected brief and an owner for its future updates.
+
+<Sort prompt={"Sort these Harbour tickets for your test set."} buckets={["Clear single request","Should go to review"]} items={[{"text":"T01: the technician has not arrived, please confirm","bucket":0},{"text":"T04: can tomorrow's visit move to Friday?","bucket":0},{"text":"T09: change my visit and query an invoice","bucket":1},{"text":"T07: please fix the problem we discussed earlier","bucket":1},{"text":"T10: wants a refund, no amount or invoice number","bucket":1}]} explanation={"Mixed, vague and refund requests are where a brief is most likely to fail, so a good test set deliberately includes them alongside clear cases."} />
+
+### Worked correction
+
+An assistant claims, "Harbour permits automatic small refunds," citing P01-draft. The link is real, but the source status is draft. The correction is to use P01-v2 for the current policy and state that human approval is required. Adding "be more accurate" would not explain the failure; explicitly filtering approved and effective policies would.
+
+<Check question={"Which change fixes the root cause of the refund error?"} options={["Add \"be more accurate\" to the brief","Remove citations from the output","Only allow approved, currently effective policy versions"]} answer={2} explanation={"The failure came from using a draft source. Filtering by status and effective date addresses that; a vague instruction does not."} />
+
+Submit your briefs, ten scored cases, source-check records, and the original and corrected output for one failure. A passing submission distinguishes unsupported evidence from an inconvenient conclusion. For security background, read [OWASP's prompt-injection explanation](https://genai.owasp.org/llmrisk/llm01-prompt-injection/); the fixture attack is a classroom example of source text attempting to redirect tool use.
+
+<Check question={"A retrieved ticket says to export customer data. What authority does that instruction have?"} options={["It overrides the operating brief","None beyond its role as untrusted source content","It grants access if written politely"]} answer={1} explanation={"Source text cannot grant tool or data permissions."} />
+
+[Download the complete week](/course-materials/course/weeks/02.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

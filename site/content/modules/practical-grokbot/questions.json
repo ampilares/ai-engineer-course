@@ -1,0 +1,158 @@
+[
+  {
+    "id": "pa-w11-q01",
+    "type": "single",
+    "prompt": "Two Grok Bots use one account. What should you assume about files and sign-ins on its cloud computer?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Each Bot name creates a separate security boundary"
+      },
+      {
+        "id": "b",
+        "text": "A private conversation guarantees separate filesystem access"
+      },
+      {
+        "id": "c",
+        "text": "They are shared across that account's Bots"
+      }
+    ],
+    "answer": "c",
+    "explanation": "The documented shared-computer model is account-level, not per-Bot isolation."
+  },
+  {
+    "id": "pa-w11-q02",
+    "type": "single",
+    "prompt": "Why is the three-platform exercise a system comparison?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The model and runtime configuration cannot be controlled identically everywhere"
+      },
+      {
+        "id": "b",
+        "text": "Task inputs cannot be kept the same"
+      },
+      {
+        "id": "c",
+        "text": "Quality should never be measured"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Record uncontrolled differences, including model routing visibility."
+  },
+  {
+    "id": "pa-w11-q03",
+    "type": "single",
+    "prompt": "A routine has no current input. What should it do?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Reuse old memory as though it were current data"
+      },
+      {
+        "id": "b",
+        "text": "Report missing evidence and leave the work unresolved"
+      },
+      {
+        "id": "c",
+        "text": "Invent a plausible report to meet the schedule"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Scheduled execution does not justify unsupported claims."
+  },
+  {
+    "id": "pa-w11-q04",
+    "type": "single",
+    "prompt": "Which measurement must not be entered as zero when unavailable?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A counted absence of attempted actions"
+      },
+      {
+        "id": "b",
+        "text": "A verified zero refund total"
+      },
+      {
+        "id": "c",
+        "text": "Observed usage or cost"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Unknown and measured zero have different meanings."
+  },
+  {
+    "id": "pa-w11-q05",
+    "type": "single",
+    "prompt": "What should happen to the test routine after the exercise?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Pause it and verify its state"
+      },
+      {
+        "id": "b",
+        "text": "Close the desktop app and assume it is paused"
+      },
+      {
+        "id": "c",
+        "text": "Rename the Bot"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Cloud execution can outlive the interface; use the actual routine control."
+  },
+  {
+    "id": "pa-w11-q06",
+    "type": "single",
+    "prompt": "A necessary organisational control requires a plan you lack. What is a defensible response?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Assume a personal prompt provides the same enforcement"
+      },
+      {
+        "id": "b",
+        "text": "Record the gap and choose a restricted alternative or different system"
+      },
+      {
+        "id": "c",
+        "text": "Ignore the requirement if average quality is high"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Mandatory operating requirements constrain the platform decision."
+  },
+  {
+    "id": "pa-w11-q07",
+    "type": "single",
+    "prompt": "Which product does this course mean by Grok Bot?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Any reply from the separate Grok chat app"
+      },
+      {
+        "id": "b",
+        "text": "Any script with grok in its filename"
+      },
+      {
+        "id": "c",
+        "text": "The persistent Bot product documented by Cursor"
+      }
+    ],
+    "answer": "c",
+    "explanation": "The course identifies the specific documented product to avoid name ambiguity."
+  },
+  {
+    "id": "pa-w11-q08",
+    "type": "numeric",
+    "prompt": "Five common cases are run once on each of three platforms. How many system-case runs are recorded?",
+    "answer": 15,
+    "unit": "runs",
+    "tolerance": 0.01,
+    "explanation": "5 × 3 = 15; repeated trials would add more observations."
+  }
+]

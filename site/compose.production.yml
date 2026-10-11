@@ -1,0 +1,21 @@
+services:
+  app:
+    build: .
+    image: practical-ai-engineer:production
+    restart: unless-stopped
+    env_file: .env.production
+    environment:
+      BASE_URL: https://course.allenpilares.com
+      DATA_DIR: /data
+    ports:
+      - "127.0.0.1:3025:3000"
+    volumes:
+      - app-data:/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+volumes:
+  app-data:

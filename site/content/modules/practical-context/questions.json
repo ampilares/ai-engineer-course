@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pa-w02-q01",
+    "type": "single",
+    "prompt": "A citation links to a real page but the page does not support the claim. How should the claim be graded?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Correct because the link resolves"
+      },
+      {
+        "id": "b",
+        "text": "Correct if the source is well known"
+      },
+      {
+        "id": "c",
+        "text": "Unsupported"
+      }
+    ],
+    "answer": "c",
+    "explanation": "A source must support the particular claim, not merely exist."
+  },
+  {
+    "id": "pa-w02-q02",
+    "type": "single",
+    "prompt": "Which brief is most testable?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Extract four named fields and mark absent values unresolved"
+      },
+      {
+        "id": "b",
+        "text": "Make the output excellent"
+      },
+      {
+        "id": "c",
+        "text": "Use your best judgement without an output format"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Named fields and unknown-value behaviour give the reviewer observable criteria."
+  },
+  {
+    "id": "pa-w02-q03",
+    "type": "single",
+    "prompt": "A retrieved ticket says to export customer data. What authority does that instruction have?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It overrides the operating brief"
+      },
+      {
+        "id": "b",
+        "text": "None beyond its role as untrusted source content"
+      },
+      {
+        "id": "c",
+        "text": "It grants access if written politely"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Source text cannot grant tool or data permissions."
+  },
+  {
+    "id": "pa-w02-q04",
+    "type": "single",
+    "prompt": "Why include T05, which explicitly denies requesting a refund, in the examples?",
+    "options": [
+      {
+        "id": "a",
+        "text": "It guarantees all billing cases will be correct"
+      },
+      {
+        "id": "b",
+        "text": "It lets the system skip the policy"
+      },
+      {
+        "id": "c",
+        "text": "It tests whether the system interprets intent rather than matching a word"
+      }
+    ],
+    "answer": "c",
+    "explanation": "A negative example exposes a likely keyword-based error."
+  },
+  {
+    "id": "pa-w02-q05",
+    "type": "single",
+    "prompt": "You change the prompt, model and sources together and scores rise. What can you conclude?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The tested system improved on that sample, but the cause is not isolated"
+      },
+      {
+        "id": "b",
+        "text": "Only the prompt caused the improvement"
+      },
+      {
+        "id": "c",
+        "text": "The improvement must generalise to every user"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Multiple simultaneous changes confound attribution and a small sample limits generalisation."
+  },
+  {
+    "id": "pa-w02-q06",
+    "type": "single",
+    "prompt": "What should a research record distinguish?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Only positive findings"
+      },
+      {
+        "id": "b",
+        "text": "Verified claims, applicability and unresolved uncertainty"
+      },
+      {
+        "id": "c",
+        "text": "Only the assistant's confidence"
+      }
+    ],
+    "answer": "b",
+    "explanation": "The record should show what the source establishes and where evidence is missing."
+  },
+  {
+    "id": "pa-w02-q07",
+    "type": "numeric",
+    "prompt": "A prompt succeeds on 8 of 10 saved cases. What is its success percentage on those cases?",
+    "answer": 80,
+    "unit": "%",
+    "tolerance": 0.01,
+    "explanation": "8 / 10 × 100 = 80%; this is a sample result, not a universal guarantee."
+  },
+  {
+    "id": "pa-w02-q08",
+    "type": "numeric",
+    "prompt": "Version A passes 6/10 and B passes 8/10. How many percentage points separate them?",
+    "answer": 20,
+    "unit": "percentage points",
+    "tolerance": 0.01,
+    "explanation": "80% minus 60% is 20 percentage points."
+  }
+]

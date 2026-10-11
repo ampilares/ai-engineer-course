@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pa-w06-q01",
+    "type": "single",
+    "prompt": "When should document access filtering happen?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Before unauthorised passages reach the generator"
+      },
+      {
+        "id": "b",
+        "text": "After the answer is written"
+      },
+      {
+        "id": "c",
+        "text": "Only when the user asks for citations"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Removing a citation after generation does not undo exposure of private context."
+  },
+  {
+    "id": "pa-w06-q02",
+    "type": "single",
+    "prompt": "Which policy answers the current refund question as of 8 October?",
+    "options": [
+      {
+        "id": "a",
+        "text": "P01-draft"
+      },
+      {
+        "id": "b",
+        "text": "P01-v2"
+      },
+      {
+        "id": "c",
+        "text": "Whichever file was most recently mentioned in chat"
+      }
+    ],
+    "answer": "b",
+    "explanation": "P01-v2 is approved and effective; a draft is not authority."
+  },
+  {
+    "id": "pa-w06-q03",
+    "type": "single",
+    "prompt": "Which version answers the historical threshold question on 3 October?",
+    "options": [
+      {
+        "id": "a",
+        "text": "P01-v2 because it is newer"
+      },
+      {
+        "id": "b",
+        "text": "P01-draft because it contains the proposed change"
+      },
+      {
+        "id": "c",
+        "text": "P01-v1 under the historical effective-date rules"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Historical questions require the applicable historical version when access and retention allow it."
+  },
+  {
+    "id": "pa-w06-q04",
+    "type": "single",
+    "prompt": "Search never returns the supporting passage. What should be investigated first?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Ingestion, filtering, chunking and retrieval"
+      },
+      {
+        "id": "b",
+        "text": "The answer's writing style"
+      },
+      {
+        "id": "c",
+        "text": "Only the model's output length"
+      }
+    ],
+    "answer": "a",
+    "explanation": "A generation prompt cannot use evidence it never receives."
+  },
+  {
+    "id": "pa-w06-q05",
+    "type": "single",
+    "prompt": "An analyst asks about manager-only negotiations. What is an appropriate answer?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Quote the private passage without a citation"
+      },
+      {
+        "id": "b",
+        "text": "Insufficient authorised evidence without revealing restricted contents"
+      },
+      {
+        "id": "c",
+        "text": "Let the model choose the manager role"
+      }
+    ],
+    "answer": "b",
+    "explanation": "The trusted application controls access, and absence of authorised evidence should remain explicit."
+  },
+  {
+    "id": "pa-w06-q06",
+    "type": "single",
+    "prompt": "What does embedding similarity establish?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A calibrated probability that the passage is true"
+      },
+      {
+        "id": "b",
+        "text": "Permission to use the passage"
+      },
+      {
+        "id": "c",
+        "text": "A retrieval signal for related representation"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Similarity is not truth, freshness, or authorisation."
+  },
+  {
+    "id": "pa-w06-q07",
+    "type": "numeric",
+    "prompt": "What is the current additional refund-approval threshold, above which the operations lead is also required?",
+    "answer": 250,
+    "unit": "AUD",
+    "tolerance": 0.01,
+    "explanation": "P01-v2 requires additional approval above AUD 250; every refund still needs the service manager."
+  },
+  {
+    "id": "pa-w06-q08",
+    "type": "numeric",
+    "prompt": "A question has four labelled relevant passages and the returned results include three. What is recall on those labels?",
+    "answer": 75,
+    "unit": "%",
+    "tolerance": 0.01,
+    "explanation": "Three of four relevant passages is 75%."
+  }
+]

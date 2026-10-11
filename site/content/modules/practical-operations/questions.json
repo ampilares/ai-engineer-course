@@ -1,0 +1,134 @@
+[
+  {
+    "id": "pa-w13-q01",
+    "type": "single",
+    "prompt": "What is the difference between an indicator and an objective?",
+    "options": [
+      {
+        "id": "a",
+        "text": "They are interchangeable names for a server log"
+      },
+      {
+        "id": "b",
+        "text": "An indicator is measured; an objective is a target over a stated window"
+      },
+      {
+        "id": "c",
+        "text": "An objective records only costs"
+      }
+    ],
+    "answer": "b",
+    "explanation": "The metric and the desired operating level must be distinguishable."
+  },
+  {
+    "id": "pa-w13-q02",
+    "type": "single",
+    "prompt": "What turns a backup into verified recovery evidence?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A file named backup"
+      },
+      {
+        "id": "b",
+        "text": "An operator's assumption that it should work"
+      },
+      {
+        "id": "c",
+        "text": "A successful restore rehearsal with checked results"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Recovery requires proof that the saved state can be used."
+  },
+  {
+    "id": "pa-w13-q03",
+    "type": "single",
+    "prompt": "Released staff capacity should be reported as what?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Capacity value, separately from demonstrated cash savings"
+      },
+      {
+        "id": "b",
+        "text": "Guaranteed cash saved regardless of staffing"
+      },
+      {
+        "id": "c",
+        "text": "Additional revenue without evidence"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Time made available does not automatically reduce spending or create revenue."
+  },
+  {
+    "id": "pa-w13-q04",
+    "type": "single",
+    "prompt": "What makes an adoption plan useful?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Only an announcement that AI is now available"
+      },
+      {
+        "id": "b",
+        "text": "Training, feedback, exception ownership and manual fallback"
+      },
+      {
+        "id": "c",
+        "text": "Removing review before measuring its workload"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Users need an operational process for uncertainty and failure."
+  },
+  {
+    "id": "pa-w13-q05",
+    "type": "single",
+    "prompt": "Stopping new triggers does not necessarily do what?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Prevent later triggers from starting"
+      },
+      {
+        "id": "b",
+        "text": "Create a visible maintenance window"
+      },
+      {
+        "id": "c",
+        "text": "Cancel or undo already-started external actions"
+      }
+    ],
+    "answer": "c",
+    "explanation": "In-flight effects require separate inspection and reconciliation."
+  },
+  {
+    "id": "pa-w13-q06",
+    "type": "numeric",
+    "prompt": "At 200 cases, 5.5 staff minutes saved per case and AUD 60/hour, what is monthly capacity value?",
+    "answer": 1100,
+    "unit": "AUD",
+    "tolerance": 0.01,
+    "explanation": "200 × 5.5 / 60 × 60 = 1,100."
+  },
+  {
+    "id": "pa-w13-q07",
+    "type": "numeric",
+    "prompt": "Capacity value is AUD 1,100, tools 120 and maintenance 180. What is net monthly capacity value?",
+    "answer": 800,
+    "unit": "AUD",
+    "tolerance": 0.01,
+    "explanation": "1,100 - 120 - 180 = 800."
+  },
+  {
+    "id": "pa-w13-q08",
+    "type": "numeric",
+    "prompt": "Implementation costs AUD 1,200 and positive monthly net value is 800. What is theoretical payback?",
+    "answer": 1.5,
+    "unit": "months",
+    "tolerance": 0.01,
+    "explanation": "1,200 / 800 = 1.5 months; the inputs still need real-world validation."
+  }
+]

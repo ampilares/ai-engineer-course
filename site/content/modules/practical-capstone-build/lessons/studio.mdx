@@ -1,0 +1,33 @@
+<Reveal prompt={"You have no live AI credentials yet. Can you still show a meaningful capstone this week? Predict, then reveal."} answer={"Yes. Demonstrate the surrounding system with fixtures and label the AI-quality measurement as pending. Just never present a deterministic replay as a live agent result."} />
+
+### Engineering route
+
+1. Complete the vertical slice and test it on three development cases: normal, ambiguous, and unavailable dependency.
+2. Run automated interface, business-rule, permission, and recovery checks appropriate to your architecture.
+3. Package the setup, fixture inputs, and operational commands so another engineer can reproduce the run.
+4. Review the diff for broad permissions, unnecessary dependencies, and unrelated changes.
+5. Record remaining limitations and choose what is required before the pilot can start.
+
+<Check question={"Which set of three development cases does the engineering route ask you to test first?"} options={["Short, medium and long inputs","Normal, ambiguous and unavailable dependency","Three normal cases from the held-out file"]} answer={1} explanation={"A normal case shows the happy path, an ambiguous one tests judgement, and a missing dependency tests error handling. Held-out cases stay untouched until the final evaluation."} />
+
+### Business-owner route
+
+1. Complete the configured workflow or assistant and test the staff-facing process from intake to review.
+2. Verify the reviewer can see evidence, correct a result, reject an action, and locate unresolved work.
+3. Ask a second person to follow the operating procedure with a new case.
+4. Check the cost and support assumptions with the implementation owner.
+5. Sign off the bounded pilot scope, or narrow it until the acceptance criteria are achievable.
+
+<Check question={"A business owner finds the acceptance criteria cannot be met with the current scope. What does the route suggest?"} options={["Lower the thresholds after seeing results","Sign off anyway and fix it during the pilot","Add another platform to boost quality","Narrow the pilot scope until criteria are achievable"]} answer={3} explanation={"The route says to sign off the bounded scope or narrow it. Shrinking scope keeps the criteria honest instead of moving the goalposts."} />
+
+### Required submission
+
+Submit the working candidate, scope contract, frozen case-set record, integration trace, reproducible setup, and open-issues list. Use the [capstone requirements](/course-materials/CAPSTONE.md) as the submission checklist. The checkpoint decision is ready for pilot, ready with stated restrictions, or hold for a named issue.
+
+<Sort prompt={"Match each situation to the checkpoint decision it best supports."} buckets={["Ready for pilot","Ready with restrictions","Hold"]} items={[{"text":"All criteria met on the agreed scope","bucket":0},{"text":"Works, but only for one team with extra review","bucket":1},{"text":"Blocked export test fails","bucket":2},{"text":"Reviewer cannot locate unresolved work","bucket":2},{"text":"Good results, but limited to internal drafts only","bucket":1}]} explanation={"Restrictions suit a system that is safe within narrower limits. A hold names a specific issue that must be fixed before any pilot starts."} />
+
+If the application has no live credentials, demonstrate the surrounding system with fixtures and clearly label the AI-quality measurement as pending. Do not pass off a deterministic replay as a live agent result. A capstone using a supervised assistant can be fully valid if it is honestly scoped and its actual workflow is evaluated.
+
+<Check question={"Which is an appropriate non-goal for Harbour's reporting capstone?"} options={["Checking report totals","Executing customer refunds","Identifying unresolved inputs"]} answer={1} explanation={"The capstone prepares drafts and preserves a human action boundary."} />
+
+[Download the complete week](/course-materials/course/weeks/14.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

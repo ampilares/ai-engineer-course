@@ -1,0 +1,23 @@
+<Check question={"Is retrieving more passages always better for answer quality?"} options={["Yes, more evidence is always safer","Only when every passage is a draft","No, extra text can add noise, conflicts and cost"]} answer={2} explanation={"Extra passages can bring irrelevant material and conflicting versions into the prompt. Measure whether the right evidence appears near the top instead."} />
+
+For a question with a known supporting passage, first ask whether search retrieved it. If not, improving the answer prompt cannot repair the absent evidence. Then ask whether the generated answer accurately uses the retrieved passage and avoids unsupported additions.
+
+For a small classroom set, record expected supporting IDs, returned IDs, answer correctness, citation support, and whether abstention was appropriate. Recall at k measures how much relevant evidence appears among the first k results under your labelling scheme. More retrieved text is not always better: it can add irrelevant material, conflicting versions, and cost.
+
+<Sort prompt={"Is each failure a retrieval problem or an answer problem?"} buckets={["Retrieval stage","Answer stage"]} items={[{"text":"The supporting passage is not in the results","bucket":0},{"text":"The answer adds a claim the passage never makes","bucket":1},{"text":"An old conflicting version is returned","bucket":0},{"text":"The right passage is cited but a qualification is dropped","bucket":1},{"text":"Only irrelevant passages come back","bucket":0},{"text":"A correct passage is used but the amount is misquoted","bucket":1}]} explanation={"Testing the stages separately tells you where to fix things. No answer prompt can repair evidence that search never returned."} />
+
+### Worked case
+
+Question: "As of 8 October, may the assistant approve a refund of AUD 200?" The answer is no. P01-v2 requires service-manager approval for every refund. The additional operations-lead threshold applies above AUD 250. Retrieving P01-draft because it contains "assistant approve" would supply a tempting but unauthorised answer.
+
+<Check question={"P01-draft contains the words 'assistant approve'. Why is retrieving it dangerous here?"} options={["It is not approved policy, so it gives an unauthorised answer","It is too short to be useful","It is visible only to the analyst role"]} answer={0} explanation={"Matching words is not the same as authority. A draft can look like a perfect match while saying something the business never approved."} />
+
+Question: "What was the additional approval threshold on 3 October?" The historical answer uses P01-v1 and AUD 500. A rule that simply deletes every retired document would prevent this historical query. Retention and access policies determine whether historical material should be available; effective dating determines whether it is applicable.
+
+<Reveal prompt={"Your team wants to delete every retired document so answers stay current. What would break?"} answer={"Historical questions, such as what the threshold was on a past date, which need the version effective then. Effective dating decides which version applies; retention and access policy decide whether old material stays available."} />
+
+Question: "What supplier fee target should an analyst report?" The analyst has no authorised supporting source. The correct result is insufficient authorised evidence. The system should not reveal the existence or content of a restricted negotiation document in its explanation.
+
+<Check question={"Which policy answers the current refund question as of 8 October?"} options={["P01-draft","P01-v2","Whichever file was most recently mentioned in chat"]} answer={1} explanation={"P01-v2 is approved and effective; a draft is not authority."} />
+
+[Download the complete week](/course-materials/course/weeks/06.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

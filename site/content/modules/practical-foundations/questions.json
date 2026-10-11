@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pa-w01-q01",
+    "type": "single",
+    "prompt": "Which component should decide whether a Harbour refund is authorised?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The language model's confidence score"
+      },
+      {
+        "id": "b",
+        "text": "An application permission and approval control"
+      },
+      {
+        "id": "c",
+        "text": "The wording of the customer request"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Authority is enforced by the application and responsible human, not inferred from customer text or model confidence."
+  },
+  {
+    "id": "pa-w01-q02",
+    "type": "single",
+    "prompt": "What distinguishes an agent from a fixed workflow in this course?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The agent must use a larger language model"
+      },
+      {
+        "id": "b",
+        "text": "The agent never needs predefined tools"
+      },
+      {
+        "id": "c",
+        "text": "The agent selects its next action using observations"
+      }
+    ],
+    "answer": "c",
+    "explanation": "An agent chooses actions within a tool and permission boundary; a workflow follows defined transitions."
+  },
+  {
+    "id": "pa-w01-q03",
+    "type": "single",
+    "prompt": "A saved report-format preference establishes which fact?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The product may have persisted context outside the current conversation"
+      },
+      {
+        "id": "b",
+        "text": "The base model's weights have been retrained"
+      },
+      {
+        "id": "c",
+        "text": "The preference is now correct for every task"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Persistent product memory and model training are different mechanisms."
+  },
+  {
+    "id": "pa-w01-q04",
+    "type": "single",
+    "prompt": "Which is the best initial project scope?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Give AI responsibility for every customer outcome"
+      },
+      {
+        "id": "b",
+        "text": "Classify tickets and save drafts for review"
+      },
+      {
+        "id": "c",
+        "text": "Connect all company accounts before choosing a task"
+      }
+    ],
+    "answer": "b",
+    "explanation": "A bounded input, output and review point make success measurable."
+  },
+  {
+    "id": "pa-w01-q05",
+    "type": "single",
+    "prompt": "What belongs in a fair manual baseline?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Only the first typing step"
+      },
+      {
+        "id": "b",
+        "text": "Only the fastest successful cases"
+      },
+      {
+        "id": "c",
+        "text": "Review and correction needed to reach the agreed completion state"
+      }
+    ],
+    "answer": "c",
+    "explanation": "The baseline and pilot must use the same completion definition and representative cases."
+  },
+  {
+    "id": "pa-w01-q06",
+    "type": "single",
+    "prompt": "A correct sum is needed from eight accepted transactions. What is the simplest execution choice?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A deterministic calculation"
+      },
+      {
+        "id": "b",
+        "text": "An unrestricted browsing agent"
+      },
+      {
+        "id": "c",
+        "text": "A model-generated estimate"
+      }
+    ],
+    "answer": "a",
+    "explanation": "The calculation is fully specified and can be checked independently."
+  },
+  {
+    "id": "pa-w01-q07",
+    "type": "numeric",
+    "prompt": "Ten manual cases take 120 staff minutes in total. What is the mean per case?",
+    "answer": 12,
+    "unit": "minutes",
+    "tolerance": 0.01,
+    "explanation": "120 divided by 10 is 12 minutes."
+  },
+  {
+    "id": "pa-w01-q08",
+    "type": "numeric",
+    "prompt": "An AI draft takes 1 staff minute to request and 15 to correct. How many active staff minutes does it use?",
+    "answer": 16,
+    "unit": "minutes",
+    "tolerance": 0.01,
+    "explanation": "Request and correction effort both count: 1 + 15 = 16."
+  }
+]

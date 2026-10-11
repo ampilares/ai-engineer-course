@@ -1,0 +1,25 @@
+<Check question={"Twelve cases go in. Nine pass first time, two need help, one is stuck. A slide says 100% success on completed cases. Fair?"} options={["Yes, the nine completed cases all passed","No, it hides the cases that needed help","Yes, if the stuck case is retried later"]} answer={1} explanation={"Reporting 9/9 quietly drops the three hardest cases. Honest reporting keeps all twelve in the denominator and explains what the human corrections changed."} />
+
+This week collects evidence from bounded use. Run with a small authorised group, or label the work as a simulation. The objective is to learn whether the system improves the agreed process and to fix the most consequential observed failure.
+
+Before the first case, confirm the operating mode, participants, reporting window, budget, review duty, and stop conditions. Keep a record of every attempted case, including cancellations and incomplete runs. Save original outputs before corrections so you can distinguish model performance from final staff-assisted performance.
+
+For each case record input reference, configuration version, start/end, active staff minutes, waiting time, review outcome, correction type, final success, and cost. A run that finishes quickly but spends a day waiting for an unassigned reviewer has poor end-to-end service. Separate those two timings.
+
+<Sort prompt={"Should each moment be logged as active staff minutes or as waiting time?"} buckets={["Active staff minutes","Waiting time"]} items={[{"text":"Reviewer checks the draft against sources","bucket":0},{"text":"Draft sits in a queue with no reviewer assigned","bucket":1},{"text":"Staff correct a wrong total","bucket":0},{"text":"Case waits overnight for the next shift","bucket":1},{"text":"Reviewer records the correction type","bucket":0}]} explanation={"A fast run can still give poor service if it waits a day for review. Logging the two timings separately shows where end-to-end delay really comes from."} />
+
+Use the same completion definition as the manual baseline. If the baseline includes checking and correction, the pilot must include them too. Record changes in case mix: a pilot with only easy cases cannot establish improvement for the whole workload.
+
+### Worked pilot result
+
+Twelve cases enter the system. Nine complete correctly without correction, two complete after human correction, and one remains unresolved. Report first-pass success as 9/12, final completed success as 11/12, and unresolved work as 1/12. Do not report 9/9 by excluding the cases that needed help. Explain what the human corrections changed.
+
+<NumericCheck question={"In the worked pilot, what percentage of the twelve cases needed human correction to complete? Round to one decimal place."} answer={16.7} tolerance={0.1} unit={"%"} explanation={"Two of twelve cases completed after correction: 2 / 12 × 100 ≈ 16.7%. This correction workload belongs in the report alongside first-pass and final success."} />
+
+If all twelve cases came from the fictional pack, describe the result as a classroom simulation. It can demonstrate process behaviour but not staff adoption or real savings. If users are real, record their consent and authorised data use through the organisation's normal process.
+
+<Check question={"Your pilot moves from fictional cases to real users. What must you now record?"} options={["Nothing new, the process is the same","Only the users' satisfaction scores","Their consent and authorised data use"]} answer={2} explanation={"Real users bring real data and real people. Consent and authorised data use must be recorded through the organisation's normal process."} />
+
+<Check question={"Why preserve the original output before human correction?"} options={["To distinguish first-pass system performance from staff-assisted completion","To avoid recording the final result","To prove the original was correct"]} answer={0} explanation={"Corrections are part of the process and must not hide the original failure."} />
+
+[Download the complete week](/course-materials/course/weeks/15.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

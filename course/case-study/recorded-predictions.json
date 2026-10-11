@@ -1,0 +1,122 @@
+[
+  {
+    "id": "D01",
+    "category": "scheduling",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D02",
+    "category": "billing",
+    "needs_review": true,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D03",
+    "category": "technical",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D04",
+    "category": "scheduling",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D05",
+    "category": "billing",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D06",
+    "category": "technical",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D07",
+    "category": "unknown",
+    "needs_review": true,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D08",
+    "category": "scheduling",
+    "needs_review": true,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D09",
+    "category": "billing",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D10",
+    "category": "billing",
+    "needs_review": true,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D11",
+    "category": "billing",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D12",
+    "category": "technical",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D13",
+    "category": "scheduling",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D14",
+    "category": "billing",
+    "needs_review": true,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D15",
+    "category": "unknown",
+    "needs_review": true,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D16",
+    "category": "unknown",
+    "needs_review": true,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D17",
+    "category": "technical",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D18",
+    "category": "scheduling",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D19",
+    "category": "billing",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  },
+  {
+    "id": "D20",
+    "category": "technical",
+    "needs_review": false,
+    "reason": "Authored reference prediction for evaluator testing; not a live model result."
+  }
+]

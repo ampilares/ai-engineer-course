@@ -1,0 +1,179 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "A colleague suggests giving the model every company document and letting it work out answers. What is the biggest problem?",
+        "options": [
+          "It would cost slightly more per question",
+          "It may read passages the user cannot access, or outdated versions",
+          "Models cannot read documents at all"
+        ],
+        "answer": 1,
+        "explanation": "A retrieval pipeline decides which documents a user may see, which versions apply, and which passages are selected. Skipping those decisions leaks private or stale material."
+      },
+      {
+        "after": "Retrieval-augmented generation supplies selected",
+        "type": "order",
+        "prompt": "Put the pipeline decisions in the order the lesson lists them.",
+        "steps": [
+          "Which documents exist",
+          "Who can access them",
+          "Which versions apply",
+          "How passages are represented",
+          "Which passages are selected",
+          "What the answer may claim"
+        ],
+        "explanation": "Each decision narrows what reaches the model, so a wrong choice early on cannot be fixed by a clever answer at the end."
+      },
+      {
+        "after": "Start with a simple keyword baseline.",
+        "type": "check",
+        "question": "Users mostly ask about exact policy terms like 'service-manager approval'. Which search approach should you try first?",
+        "options": [
+          "A keyword baseline",
+          "A hybrid system from day one",
+          "No search, just the model's own knowledge"
+        ],
+        "answer": 0,
+        "explanation": "Keyword search is cheap, inspectable and often strong for exact terms. Add embeddings or hybrid search only when they fix misses you have actually observed."
+      },
+      {
+        "after": "Filter permissions before presenting",
+        "type": "reveal",
+        "prompt": "Why not let the model ask for the manager role when it needs more information?",
+        "answer": "Access control would become a suggestion the model could talk its way past. In the lab the application supplies the role, so the model only ever sees passages that role is allowed to read."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "Is retrieving more passages always better for answer quality?",
+        "options": [
+          "Yes, more evidence is always safer",
+          "Only when every passage is a draft",
+          "No, extra text can add noise, conflicts and cost"
+        ],
+        "answer": 2,
+        "explanation": "Extra passages can bring irrelevant material and conflicting versions into the prompt. Measure whether the right evidence appears near the top instead."
+      },
+      {
+        "after": "For a small classroom set, record expected",
+        "type": "sort",
+        "prompt": "Is each failure a retrieval problem or an answer problem?",
+        "buckets": [
+          "Retrieval stage",
+          "Answer stage"
+        ],
+        "items": [
+          {
+            "text": "The supporting passage is not in the results",
+            "bucket": 0
+          },
+          {
+            "text": "The answer adds a claim the passage never makes",
+            "bucket": 1
+          },
+          {
+            "text": "An old conflicting version is returned",
+            "bucket": 0
+          },
+          {
+            "text": "The right passage is cited but a qualification is dropped",
+            "bucket": 1
+          },
+          {
+            "text": "Only irrelevant passages come back",
+            "bucket": 0
+          },
+          {
+            "text": "A correct passage is used but the amount is misquoted",
+            "bucket": 1
+          }
+        ],
+        "explanation": "Testing the stages separately tells you where to fix things. No answer prompt can repair evidence that search never returned."
+      },
+      {
+        "after": "Question: \"As of 8 October, may the assistant",
+        "type": "check",
+        "question": "P01-draft contains the words 'assistant approve'. Why is retrieving it dangerous here?",
+        "options": [
+          "It is not approved policy, so it gives an unauthorised answer",
+          "It is too short to be useful",
+          "It is visible only to the analyst role"
+        ],
+        "answer": 0,
+        "explanation": "Matching words is not the same as authority. A draft can look like a perfect match while saying something the business never approved."
+      },
+      {
+        "after": "Question: \"What was the additional approval",
+        "type": "reveal",
+        "prompt": "Your team wants to delete every retired document so answers stay current. What would break?",
+        "answer": "Historical questions, such as what the threshold was on a past date, which need the version effective then. Effective dating decides which version applies; retention and access policy decide whether old material stays available."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "Why write the expected supporting documents for each test question before you look at any generated answers?",
+        "answer": "So you grade against a fixed standard. If you read the answers first, a fluent but poorly supported answer can quietly shape what you decide counts as correct."
+      },
+      {
+        "after": "Identify who owns each source and when it becomes effective.",
+        "type": "numeric",
+        "question": "Twelve of the twenty studio questions are answerable. How many test missing evidence, versions or permissions instead?",
+        "answer": 8,
+        "tolerance": 0,
+        "unit": "questions",
+        "explanation": "Three missing-evidence, three version-sensitive and two permission-sensitive questions make 8. These are the cases where a fluent answer is most likely to be wrong."
+      },
+      {
+        "after": "An answer can be factually correct by chance",
+        "type": "sort",
+        "prompt": "Does each answer pass a claim-level grounding check?",
+        "buckets": [
+          "Passes",
+          "Fails"
+        ],
+        "items": [
+          {
+            "text": "Correct amount, but it cites the draft policy",
+            "bucket": 1
+          },
+          {
+            "text": "Cites the right policy but omits the operations-lead condition",
+            "bucket": 1
+          },
+          {
+            "text": "Every amount and date matches its cited passage",
+            "bucket": 0
+          },
+          {
+            "text": "Says there is insufficient authorised evidence when none exists",
+            "bucket": 0
+          },
+          {
+            "text": "Cites a retired version for a current question",
+            "bucket": 1
+          }
+        ],
+        "explanation": "Grounding asks whether each claim is supported by an authorised, applicable source. Being right by luck or leaving out a qualification still fails."
+      },
+      {
+        "after": "Submit the question set, stage-level results",
+        "type": "check",
+        "question": "Your answers score well, but one test shows a private passage in an unauthorised user's prompt. Does the lab pass?",
+        "options": [
+          "No, that alone fails this week's lab",
+          "Yes, as long as the final answer hid it",
+          "Yes, if the citation was removed afterwards"
+        ],
+        "answer": 0,
+        "explanation": "Once the model has read the passage, the disclosure has happened. Good scores elsewhere cannot make up for an access failure."
+      }
+    ]
+  ]
+}

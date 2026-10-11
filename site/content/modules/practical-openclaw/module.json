@@ -1,0 +1,30 @@
+{
+  "slug": "practical-openclaw",
+  "title": "OpenClaw in Practice",
+  "phase": "automation",
+  "summary": "Operate a restricted assistant through a test messaging channel.",
+  "outcomes": [
+    "Configure a dedicated OpenClaw lab",
+    "Check sender and tool permissions",
+    "Demonstrate restart and teardown"
+  ],
+  "number": 9,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Establish a controlled lab",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Connect, inspect, and test the boundary",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio, acceptance, and teardown",
+      "minutes": 30
+    }
+  ]
+}

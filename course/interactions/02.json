@@ -1,0 +1,150 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "Which addition to a ticket-sorting brief would most improve consistency?",
+        "options": [
+          "The words \"be accurate and careful\"",
+          "Three labelled example tickets, including a tricky one",
+          "A request to be confident in every answer"
+        ],
+        "answer": 1,
+        "explanation": "Examples show the model the distinctions you care about. Adjectives such as accurate do not tell it where the boundaries are."
+      },
+      {
+        "after": "A useful brief states the goal, input",
+        "type": "check",
+        "question": "You supply an old, a draft and a current policy with no dates or status. What is the main risk?",
+        "options": [
+          "The model may rely on the wrong version",
+          "None, more context always helps",
+          "The model will refuse to answer"
+        ],
+        "answer": 0,
+        "explanation": "Relevant context is not maximum context. Undated versions create avoidable ambiguity about which rule applies."
+      },
+      {
+        "after": "This brief does not enforce tool permissions.",
+        "type": "sort",
+        "prompt": "Which items can a brief handle, and which must the application enforce?",
+        "buckets": ["Brief states it", "Application enforces it"],
+        "items": [
+          {"text": "The five sections the draft should contain", "bucket": 0},
+          {"text": "Blocking any message from being sent", "bucket": 1},
+          {"text": "Citing ticket and policy IDs for factual claims", "bucket": 0},
+          {"text": "Preventing changes to source records", "bucket": 1},
+          {"text": "Guaranteeing T08's export request can never run", "bucket": 1},
+          {"text": "Marking absent facts as unresolved", "bucket": 0}
+        ],
+        "explanation": "A brief communicates intent and output expectations. Hard limits on actions must be enforced outside the model, because text in context cannot be relied on to stop a tool."
+      },
+      {
+        "after": "Examples teach distinctions more effectively",
+        "type": "check",
+        "question": "Why ask for a short evidence-based explanation instead of a confidence percentage?",
+        "options": [
+          "Percentages take the model longer to produce",
+          "Explanations are always correct",
+          "An invented percentage is not a calibrated probability",
+          "Reviewers cannot read numbers"
+        ],
+        "answer": 2,
+        "explanation": "A model can produce a number that looks precise without it meaning anything measured. Evidence a reviewer can check is more useful."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "An official product page says a feature exists. What else would you need before telling your team they can use it?",
+        "answer": "Whether it is enabled on your account, plus the page's date and scope. For claims about your own workload, run an experiment rather than relying on the vendor's description."
+      },
+      {
+        "after": "A citation has two jobs: locate a source",
+        "type": "order",
+        "prompt": "Put the steps for checking a citation in order.",
+        "steps": [
+          "Open the source",
+          "Find the relevant passage",
+          "Check its date and scope",
+          "Decide whether it establishes the claim"
+        ],
+        "explanation": "A working link only locates a source. The later steps check whether it actually supports the particular statement."
+      },
+      {
+        "after": "For each research finding, keep a small",
+        "type": "sort",
+        "prompt": "Where would you look to settle each question?",
+        "buckets": ["Product documentation", "Your own experiment"],
+        "items": [
+          {"text": "The exact syntax of a configuration setting", "bucket": 0},
+          {"text": "Whether the tool speeds up your staff's tickets", "bucket": 1},
+          {"text": "The name of an option in the settings", "bucket": 0},
+          {"text": "How often it errs on your ten saved cases", "bucket": 1},
+          {"text": "Whether a vendor benchmark holds for your process", "bucket": 1}
+        ],
+        "explanation": "Official documentation is best for syntax and settings. Claims about your workload need your own measurements, because a vendor benchmark is not your process."
+      },
+      {
+        "after": "Suppose A succeeds on 6 of 10 cases and B on",
+        "type": "check",
+        "question": "Version B scores higher but misses a refund that needed approval. What should you do?",
+        "options": [
+          "Adopt B and remove human review, since it scored higher",
+          "Discard both versions and start again",
+          "Report both scores, flag the critical miss and keep the review boundary"
+        ],
+        "answer": 2,
+        "explanation": "A higher score on ten cases is not proof of general superiority, and one serious miss matters more than the average. Inspect the failure and keep review in place."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "An assistant cites a real policy page to claim small refunds are automatic. Before believing it, what would you check about that source?",
+        "answer": "Its status and date. A real link can point to a draft or superseded policy. Only an approved, currently effective version establishes what the business permits."
+      },
+      {
+        "after": "Write briefs for repository investigation",
+        "type": "check",
+        "question": "Why save your ten cases before you start changing the brief?",
+        "options": [
+          "So both configurations are judged on identical inputs",
+          "So you can rewrite the cases to suit the new brief",
+          "Because the model needs them in its memory"
+        ],
+        "answer": 0,
+        "explanation": "Fixed inputs make the comparison fair. Editing cases after seeing results lets you accidentally tune the test to the answer."
+      },
+      {
+        "after": "Write briefs for a customer-response draft",
+        "type": "sort",
+        "prompt": "Sort these Harbour tickets for your test set.",
+        "buckets": ["Clear single request", "Should go to review"],
+        "items": [
+          {"text": "T01: the technician has not arrived, please confirm", "bucket": 0},
+          {"text": "T04: can tomorrow's visit move to Friday?", "bucket": 0},
+          {"text": "T09: change my visit and query an invoice", "bucket": 1},
+          {"text": "T07: please fix the problem we discussed earlier", "bucket": 1},
+          {"text": "T10: wants a refund, no amount or invoice number", "bucket": 1}
+        ],
+        "explanation": "Mixed, vague and refund requests are where a brief is most likely to fail, so a good test set deliberately includes them alongside clear cases."
+      },
+      {
+        "after": "An assistant claims, \"Harbour permits",
+        "type": "check",
+        "question": "Which change fixes the root cause of the refund error?",
+        "options": [
+          "Add \"be more accurate\" to the brief",
+          "Remove citations from the output",
+          "Only allow approved, currently effective policy versions"
+        ],
+        "answer": 2,
+        "explanation": "The failure came from using a draft source. Filtering by status and effective date addresses that; a vague instruction does not."
+      }
+    ]
+  ]
+}

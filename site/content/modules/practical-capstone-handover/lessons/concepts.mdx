@@ -1,0 +1,23 @@
+<Check question={"Your slide says the system saves five hours. Which missing detail could completely change what that claim means?"} options={["The font used on the slide","The review effort and case volume behind it","The colour of the dashboard"]} answer={1} explanation={"Hours saved mean little if review work grew or the volume was tiny. A claim is only usable when the reviewer can see what it was measured against."} />
+
+The final week proves that someone other than the builder can understand and operate the system. The deliverable is a working process, its evidence, and an adoption decision. A polished demonstration cannot replace missing evaluation or operational control.
+
+Organise the submission so a reviewer can move from claim to evidence. Start with the problem, intended users, scope, and decision. Link to the baseline, setup, version record, evaluation inputs, results, boundary tests, runbook, cost model, and user guide. Keep source files and generated outputs distinguishable.
+
+<Check question={"A reviewer cannot tell which files you wrote and which the system produced. Which evidence-pack rule was missed?"} options={["Start with the problem and intended users","Link to the cost model","Include the runbook","Keep source files and generated outputs distinguishable"]} answer={3} explanation={"If inputs and outputs are mixed, a reviewer cannot check a claim against its evidence. Clear separation lets them move from claim to proof."} />
+
+For each headline metric, include definition, numerator, denominator, measurement window, source, and limitation. "90% accurate" is incomplete without knowing which cases and what counted as correct. "Saves five hours" is incomplete without review effort and case volume. An honest limitation makes the evidence easier to use.
+
+The course's practical rubric weights weekly work at 30%, platform comparison at 15%, capstone at 45%, and demonstration/handover at 10%. The website's automatically graded module checks measure conceptual knowledge separately. A site completion certificate and self-attestation do not establish that an independent reviewer graded the full practical portfolio.
+
+<NumericCheck question={"A learner earns 80% of the capstone component. How many percentage points does that add to their overall practical result?"} answer={36} tolerance={0} unit={"points"} explanation={"The capstone is weighted at 45%, so 0.8 × 45 = 36 points. It is the largest single component of the practical rubric."} />
+
+### Worked adoption decision
+
+"Adopt for internal draft preparation for one team, with mandatory review and a monthly cost cap. Do not enable external sending. Reassess after fifty additional cases and after any permission or model change." This is more actionable than "the AI works." A revise decision names the blocking issue, owner, and new evidence required. A stop decision names why continued implementation is not justified.
+
+<Sort prompt={"Which kind of decision does each statement describe?"} buckets={["Adopt","Revise","Stop"]} items={[{"text":"One team, mandatory review, monthly cost cap","bucket":0},{"text":"Names the blocking issue and its owner","bucket":1},{"text":"Explains why further implementation is not justified","bucket":2},{"text":"Reassess after fifty more cases or a model change","bucket":0},{"text":"States the new evidence required","bucket":1}]} explanation={"Each decision type has its own content. An adopt sets limits and review triggers, a revise says what must change, and a stop explains why to end."} />
+
+<Check question={"What must accompany a headline metric?"} options={["Only a large percentage","Definition, numerator, denominator, window, source and limitations","Only a positive user quote"]} answer={1} explanation={"A reviewer needs enough context to interpret and reproduce the claim."} />
+
+[Download the complete week](/course-materials/course/weeks/16.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

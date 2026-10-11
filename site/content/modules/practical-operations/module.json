@@ -1,0 +1,30 @@
+{
+  "slug": "practical-operations",
+  "title": "Deployment, Economics, and Adoption",
+  "phase": "production",
+  "summary": "Prepare a monitored pilot with ownership, a recovery path, and an honest business case.",
+  "outcomes": [
+    "Define operational metrics and stop conditions",
+    "Calculate value including human review",
+    "Train an operator and rehearse recovery"
+  ],
+  "number": 13,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Define the operating contract",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Calculate value and plan adoption",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio and pilot readiness",
+      "minutes": 30
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+<Check question={"A coding assistant suggests installing a package you have never heard of to fix a bug. What should happen first?"} options={["Install it; the assistant knows best","Discuss its purpose and confirm where it comes from","Never use any dependency again"]} answer={1} explanation={"Assistants can suggest invented package names. Check purpose and provenance before adding anything to the project."} />
+
+You will deliver one small software change and prove what it does. AI can accelerate reading and editing code, but the acceptance criteria, runtime permissions, and review remain engineering responsibilities. Business owners use the same process with a smaller implementation surface.
+
+Start with a reproducible problem. "Improve the report" does not identify a defect. "Reject duplicate IDs with conflicting amounts instead of counting the first row" names an observable behaviour. Write a failing example, expected result, affected boundary, and a way to test it before asking for implementation.
+
+Provide the repository entry point, relevant files, test command, constraints, and finish criteria. Ask the coding tool to inspect these files and explain the proposed change. A focused diff is easier to assess than a broad rewrite mixed with unrelated formatting.
+
+<Sort prompt={"What belongs in a bounded coding task brief?"} buckets={["Include","Leave out"]} items={[{"text":"The test command","bucket":0},{"text":"The relevant files","bucket":0},{"text":"Clear finish criteria","bucket":0},{"text":"Reformat every file in the repository while you are there","bucket":1},{"text":"Improve whatever else looks untidy","bucket":1}]} explanation={"A focused diff is easier to assess than a broad rewrite mixed with unrelated formatting. Clear boundaries keep the change reviewable."} />
+
+A useful task brief for this week's exercise is:
+
+```text
+The report must identify conflicting duplicate transaction IDs.
+Read the supplied reference implementation and its tests.
+Explain the current behaviour before proposing a change.
+Add a conflict case in a separate fixture copy.
+Reject the conflicting event; preserve both source rows in review evidence.
+Do not change the accepted treatment of exact duplicate copies.
+Run the relevant tests and show the resulting diff.
+Do not install new dependencies or contact external services for this task.
+```
+
+The boundaries are deliberately narrow. If the implementation needs a dependency, discuss its purpose and provenance instead of accepting an invented package name. If the assistant claims a test passed, inspect the command and output. Reading a test file is not running it.
+
+<Order prompt={"Put the steps from this week's task brief in order."} steps={["Read the reference implementation and its tests","Explain the current behaviour","Add a conflict case in a separate fixture copy","Change the code to reject the conflicting event","Run the relevant tests and show the diff"]} explanation={"Understanding comes before changing, and the change is proven by actually running tests rather than describing them."} />
+
+Choose a tool using [Codex's official learning resources](https://developers.openai.com/learn/codex), [Claude Code's overview](https://code.claude.com/docs/en/overview), or [Cursor's Agent documentation](https://cursor.com/docs/agent/overview). The core skills in this lesson are independent of which interface you use.
+
+<Check question={"Which test best checks a duplicate-conflict requirement?"} options={["Assert the report function returns an object","Insert conflicting amounts for one ID and verify review with no included value","Check the source file contains the word duplicate"]} answer={1} explanation={"The test must exercise the business behaviour that could regress."} />
+
+[Download the complete week](/course-materials/course/weeks/04.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

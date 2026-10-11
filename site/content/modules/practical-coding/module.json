@@ -1,0 +1,30 @@
+{
+  "slug": "practical-coding",
+  "title": "AI-Assisted Engineering",
+  "phase": "foundations",
+  "summary": "Deliver a small software change with requirements, review, tests, and rollback.",
+  "outcomes": [
+    "Give a coding agent repository context",
+    "Review a change against acceptance criteria",
+    "Demonstrate a regression test and reversal"
+  ],
+  "number": 4,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Give the coding tool a bounded job",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Review behaviour, not just the generated diff",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio and the first practical gate",
+      "minutes": 30
+    }
+  ]
+}

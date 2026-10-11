@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Harbour draft review lab</title>
+  <style>
+    :root{font-family:system-ui,sans-serif;color:#21302d;background:#f4f3ee;line-height:1.6}
+    body{margin:0}main{max-width:900px;margin:48px auto;padding:0 24px}h1{font-size:2.3rem;line-height:1.15;margin:8px 0 20px}
+    .eyebrow{font-size:.8rem;letter-spacing:.13em;text-transform:uppercase;color:#54665f}.note{border-left:3px solid #426657;padding:12px 18px;background:#e7ede8}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:32px}label{display:block;margin:14px 0 5px;font-weight:600}
+    input,textarea,select,button{font:inherit}input,textarea,select{box-sizing:border-box;width:100%;padding:10px;border:1px solid #a9b4ad;border-radius:4px;background:#fff}textarea{min-height:112px}
+    button{padding:10px 14px;border:1px solid #426657;background:#426657;color:white;border-radius:4px;cursor:pointer;margin:8px 6px 8px 0}button.secondary{background:transparent;color:#21302d}button:disabled{opacity:.45;cursor:not-allowed}
+    button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #bc742f;outline-offset:2px}
+    .status{font-weight:600;min-height:3em}li{margin:8px 0}small{display:block;color:#52615b}.checkbox{display:flex;gap:8px;align-items:center}.checkbox input{width:auto}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#e7e9e3;padding:16px}
+    @media(max-width:640px){main{margin:24px auto}.grid{grid-template-columns:1fr}h1{font-size:1.9rem}}
+  </style>
+</head>
+<body><main>
+  <div class="eyebrow">Practical AI / local classroom prototype</div>
+  <h1>Prepare, inspect, then decide.</h1>
+  <p class="note">This is a rule-based simulation with fictional data. It uses no AI, sends no network requests, and performs no external action. Decisions remain in this page's memory and reset on reload.</p>
+  <div class="grid"><section aria-labelledby="input-heading">
+    <h2 id="input-heading">1. Define the request</h2>
+    <label for="case-id">Event ID</label><input id="case-id" value="T09" maxlength="80">
+    <label for="source">Source ticket</label><textarea id="source">I need to change my visit and query an invoice.</textarea>
+    <label for="category">Proposed category</label><select id="category"><option>unknown</option><option>billing</option><option>scheduling</option><option>technical</option></select>
+    <label class="checkbox"><input id="review" type="checkbox" checked>Human review required</label>
+    <button id="prepare">Prepare local draft</button>
+    <small>Unknown intent must go to review. This screen does not infer whether your classification is correct.</small>
+  </section><section aria-labelledby="review-heading">
+    <h2 id="review-heading">2. Inspect the exact draft</h2>
+    <label for="draft">Draft for internal review</label><textarea id="draft" placeholder="Prepare a draft to begin." disabled></textarea>
+    <p id="status" class="status" role="status" aria-live="polite">No draft prepared.</p>
+    <button id="approve" disabled>Approve this draft</button><button id="reject" class="secondary" disabled>Reject</button>
+    <button id="record" disabled>Record mock action</button>
+    <small>Editing input or draft invalidates approval. Repeating a recorded event ID cannot create a second action.</small>
+  </section></div>
+  <section><h2>3. Inspect the record</h2><p>Mock effects: <strong id="count">0</strong></p><pre id="log" aria-live="polite">No decisions yet.</pre><button id="reset" class="secondary">Reset exercise</button></section>
+</main><script>
+  const el=id=>document.getElementById(id);
+  let prepared=null, approved=null;
+  const effects=new Map(), history=[];
+  function log(message){history.push(message);el('log').textContent=history.join('\n');el('count').textContent=String(effects.size)}
+  function state(message){el('status').textContent=message}
+  function invalidate(clear=false){approved=null;el('record').disabled=true;if(clear){prepared=null;el('approve').disabled=true;el('reject').disabled=true;el('draft').disabled=true;}else if(prepared){el('approve').disabled=false;}state(clear?'Input changed. Prepare a new draft.':'Draft edited. A new approval is required.')}
+  ['case-id','source','category','review'].forEach(id=>el(id).addEventListener('input',()=>invalidate(true)));
+  el('draft').addEventListener('input',()=>invalidate());
+  el('prepare').onclick=()=>{
+    const id=el('case-id').value.trim(), source=el('source').value.trim(), category=el('category').value;
+    if(!/^[A-Za-z0-9_-]{1,80}$/.test(id)||!source){state('A valid event ID and source text are required.');return}
+    if(category==='unknown'&&!el('review').checked){state('Unknown requests require review.');return}
+    prepared={id,source,category,review:el('review').checked};approved=null;
+    el('draft').value='Internal draft for '+id+': classify as '+category+'. '+(prepared.review?'Ask a human to review intent and policy.':'Reviewer to check the proposed classification.');
+    el('draft').disabled=false;el('approve').disabled=false;el('reject').disabled=false;el('record').disabled=true;
+    state('Awaiting review of this exact draft.');log(id+': draft prepared; no effect recorded.');
+  };
+  el('approve').onclick=()=>{if(!prepared||!el('draft').value.trim())return;approved={id:prepared.id,body:el('draft').value};el('record').disabled=false;state('Draft approved locally. No action has occurred.');log(prepared.id+': exact draft approved.')};
+  el('reject').onclick=()=>{approved=null;el('record').disabled=true;el('approve').disabled=true;state('Rejected. Edit the draft or prepare a new one before review.');log(prepared.id+': rejected; no effect recorded.')};
+  el('record').onclick=()=>{if(!prepared||!approved||approved.id!==prepared.id||approved.body!==el('draft').value){state('Valid approval required.');return}if(effects.has(approved.id)){state(effects.get(approved.id)===approved.body?'Duplicate suppressed: event already recorded.':'Event ID already used with different content. Reconcile before proceeding.');log(approved.id+': repeat blocked.');return}effects.set(approved.id,approved.body);state('One mock action recorded. No external message was sent.');log(approved.id+': mock effect recorded once.')};
+  el('reset').onclick=()=>location.reload();
+</script></body></html>

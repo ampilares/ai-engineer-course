@@ -1,0 +1,30 @@
+{
+  "slug": "practical-grokbot",
+  "title": "Grok Bot and Platform Comparison",
+  "phase": "automation",
+  "summary": "Delegate a cloud task and compare complete systems on identical cases.",
+  "outcomes": [
+    "Configure a bounded Bot and routine",
+    "Explain account-wide shared access",
+    "Produce a fair platform scorecard"
+  ],
+  "number": 11,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Define a Bot's job and authority",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Turn stable work into a tested routine",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio, scorecard, and the agent gate",
+      "minutes": 30
+    }
+  ]
+}

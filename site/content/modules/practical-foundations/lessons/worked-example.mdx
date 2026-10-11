@@ -1,0 +1,23 @@
+<Reveal prompt={"An owner says, \"I want AI to run support.\" What would you need pinned down before you could tell whether it worked?"} answer={"An input (one ticket), an output (a proposed category and review flag), an authority boundary (save a draft, never send) and a finish condition. Without these there is nothing concrete to evaluate."} />
+
+Suppose an owner says, "I want AI to run support." This is too broad to evaluate. A workable first version is: "Given one ticket, propose its category and whether a human must review it; save a draft without sending a response." It names an input, an output, an authority boundary, and a finish condition.
+
+The ten fictional Harbour timings total 120 staff minutes. Their average is 12 minutes per case. Do not translate this directly into a savings claim. A real baseline needs a defined start and end, representative cases, and a record of rework. A single easy ticket processed in three minutes tells you little about the next week's mix.
+
+<Check question={"One easy ticket took three minutes with AI help. What is the safest conclusion?"} options={["AI saves about nine minutes on every ticket","Very little, because one easy case does not represent next week's mix","Staff can now handle four times as many tickets"]} answer={1} explanation={"A real baseline needs representative cases, a defined start and end, and a record of rework. A single easy case cannot support a savings claim."} />
+
+Record a row for each case with case ID, task type, start/end, active staff minutes, waiting minutes, correction minutes, outcome, and reason for any exclusion. Keep interruptions distinguishable from work. Define "complete" before starting the timer: a draft without checking is not comparable with a fully reviewed manual response.
+
+Rank opportunities using five questions: Is the task frequent? Is successful output observable? Is the necessary information available and authorised? Can mistakes be caught before affecting others? Is someone responsible for exceptions? The ranking is a discussion aid, not a mathematically objective score. A rare task with serious consequences may deserve a different process despite an impressive demo.
+
+<Sort prompt={"Using the five questions, sort these ideas for a first project."} buckets={["Promising first candidate","Rethink first"]} items={[{"text":"Drafting a weekly report from bounded files a manager already reviews","bucket":0},{"text":"A rare, high-consequence decision with an impressive demo","bucket":1},{"text":"Suggesting categories for frequent tickets, with drafts reviewed","bucket":0},{"text":"A task where nobody can tell whether the output is right","bucket":1},{"text":"A task needing data the team is not authorised to use","bucket":1}]} explanation={"Good first candidates are frequent, have observable output, use authorised information, let mistakes be caught early, and have an owner for exceptions."} />
+
+### Worked choice
+
+Choose weekly report preparation for Harbour because the input files are bounded, numerical claims can be checked, and Maya already reviews the report. Leave refund execution outside the project. Success means the draft contains the correct reporting period, accepted totals, unresolved data problems, and evidence references; it does not mean every ticket is automatically resolved.
+
+<Check question={"What does success mean for Harbour's report project?"} options={["Every ticket in the week is resolved automatically","Refunds are executed faster than before","The model writes the report without Maya seeing it","A draft with the right period, accepted totals, open data problems and evidence"]} answer={3} explanation={"Success is defined by checkable contents of the draft. Refund execution stays outside the project, and Maya's review remains part of the process."} />
+
+<Check question={"What distinguishes an agent from a fixed workflow in this course?"} options={["The agent must use a larger language model","The agent never needs predefined tools","The agent selects its next action using observations"]} answer={2} explanation={"An agent chooses actions within a tool and permission boundary; a workflow follows defined transitions."} />
+
+[Download the complete week](/course-materials/course/weeks/01.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

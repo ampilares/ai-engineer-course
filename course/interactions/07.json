@@ -1,0 +1,145 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "A workflow dashboard shows only completed cases, and it looks great. What could it be hiding?",
+        "options": [
+          "Nothing, because completed work is all that matters",
+          "A second dashboard with the same data",
+          "Stuck or failed work that never finished"
+        ],
+        "answer": 2,
+        "explanation": "Every input needs a visible outcome. Showing only completions hides the cases that are waiting, stuck or failed, which are exactly the ones needing attention."
+      },
+      {
+        "after": "Use explicit states such as received,",
+        "type": "order",
+        "prompt": "Put these states in order for a case that goes smoothly through review.",
+        "steps": [
+          "received",
+          "validated",
+          "needs-review",
+          "approved",
+          "executing",
+          "completed"
+        ],
+        "explanation": "Naming each state makes it obvious where a case is waiting. Persisting the state before acknowledging the work means nothing is lost if the process stops."
+      },
+      {
+        "after": "Attach a stable business-event ID",
+        "type": "check",
+        "question": "A reviewer approves a draft reply. Someone then edits a sentence in it. What happens to the approval?",
+        "options": [
+          "The edited version needs a new decision",
+          "The approval still stands for the new text",
+          "Only the edit needs to be logged"
+        ],
+        "answer": 0,
+        "explanation": "Approval applies to an exact versioned payload. Any later change means the reviewer has not seen what will actually be sent."
+      },
+      {
+        "after": "The supplied simulator uses separate",
+        "type": "sort",
+        "prompt": "Which statements describe the course simulator, and which go beyond what it claims?",
+        "buckets": ["True of the simulator", "Not claimed"],
+        "items": [
+          { "text": "It uses separate workflow and provider databases", "bucket": 0 },
+          { "text": "It crashes on purpose after the provider's effect", "bucket": 0 },
+          { "text": "A retry reuses the same action key and payload hash", "bucket": 0 },
+          { "text": "It guarantees exactly-once delivery to any service", "bucket": 1 },
+          { "text": "It puts the remote action inside the local transaction", "bucket": 1 }
+        ],
+        "explanation": "The simulator is a controlled demonstration. A local transaction covers only the local database, never an action on someone else's system."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "A reviewer sees a box that just says 'Continue?' before a tool changes an external system. Is that enough to approve safely?",
+        "options": [
+          "Yes, the reviewer can trust the flow",
+          "Yes, as long as it appears quickly",
+          "No, they need to see the actual proposed arguments"
+        ],
+        "answer": 2,
+        "explanation": "A reviewer can only judge what they can see. Showing the exact tool arguments turns a rubber stamp into a real decision."
+      },
+      {
+        "after": "In n8n, start with a manual execution",
+        "type": "check",
+        "question": "In the lab flow, which n8n node routes review-required items down a separate path?",
+        "options": [
+          "Edit Fields",
+          "If node",
+          "The model step"
+        ],
+        "answer": 1,
+        "explanation": "Edit Fields supplies the fictional ticket and its event ID, while the If node branches items that need review away from the normal path."
+      },
+      {
+        "after": "Build the first flow as intake, validation,",
+        "type": "order",
+        "prompt": "Arrange the stages of the first lab flow.",
+        "steps": [
+          "Intake",
+          "Validation",
+          "Classification",
+          "Draft preparation",
+          "Review",
+          "Recording"
+        ],
+        "explanation": "Checking input before classifying, and reviewing before recording, keeps bad data and unreviewed drafts out of the record. There is deliberately no customer-send step yet."
+      },
+      {
+        "after": "The provider accepts action A17.",
+        "type": "sort",
+        "prompt": "After the A17 crash, is each retry choice safe or a problem?",
+        "buckets": ["Safe", "Problem"],
+        "items": [
+          { "text": "Retry with a brand-new action ID", "bucket": 1 },
+          { "text": "Retry A17 with the identical payload to an idempotent provider", "bucket": 0 },
+          { "text": "Silently accept a retry of A17 with changed content", "bucket": 1 },
+          { "text": "Reject a retry of A17 whose content has changed", "bucket": 0 }
+        ],
+        "explanation": "Reusing the same key and payload lets the provider return the existing effect. A new ID creates a duplicate, and changed content was never approved."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "Your flow fails halfway through a busy Monday. What would you want staff to be able to see?",
+        "answer": "Which items are waiting or failed, why, who owns each one, and how old the oldest unresolved item is. A failed item should stay visible with a reason, not vanish into an empty success response."
+      },
+      {
+        "after": "Use the review prototype to practise approve,",
+        "type": "sort",
+        "prompt": "Predict each test result: should the simulated provider end up with one effect or none?",
+        "buckets": ["One effect", "No effect"],
+        "items": [
+          { "text": "Approved action that runs without any crash", "bucket": 0 },
+          { "text": "Approval is denied", "bucket": 1 },
+          { "text": "Approval has expired", "bucket": 1 },
+          { "text": "Payload edited after approval and not re-approved", "bucket": 1 },
+          { "text": "The same approved event is delivered twice", "bucket": 0 }
+        ],
+        "explanation": "Only an approved, unchanged, unexpired payload should take effect, and a repeated delivery of the same event must not add a second effect."
+      },
+      {
+        "after": "Submit the flow, state diagram,",
+        "type": "check",
+        "question": "A real recipient has no idempotency support. What should your runbook avoid promising?",
+        "options": [
+          "That uncertain outcomes are checked by a person",
+          "Automatic recovery the integration cannot actually provide",
+          "That failed items stay visible with an owner"
+        ],
+        "answer": 1,
+        "explanation": "A runbook should describe limits as well as successes. Promising recovery the integration cannot deliver sets staff up to create duplicates."
+      }
+    ]
+  ]
+}

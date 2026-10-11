@@ -1,126 +1,54 @@
-# Capstone: production AI workflow
+# Capstone: one useful AI system
 
-The four-week capstone is a small, defensible production pilot, not a broad “AI platform.” Choose one workflow, one primary user, one measurable outcome, and a narrow permission boundary. The final result may recommend stopping or redesigning; an honest negative pilot can meet the standard when its evidence and engineering are strong.
+Build a bounded process with an owner, a small user group, a review path, and evidence of usefulness. Start with the Week 1 opportunity and improve it throughout the course.
 
-## Good capstone options
+## Scope and routes
 
-### Customer-support resolution copilot
+Choose support triage, engineering knowledge, proposal preparation, document intake, or operations reporting. Identify the exact action performed and actions outside its authority.
 
-Retrieve policy and product knowledge, draft a cited response, classify intent, suggest an action, and require agent approval before sending or changing an account.
+For Harbour Services: prepare a weekly brief, validate totals, cite effective policy, and queue unresolved items for Maya. Exclude customer contact, refunds, and ledger updates.
 
-### Accounts-payable document worker
+Engineers submit a working implementation and meaningful automated checks. Owners submit a functioning configured workflow or assistant, acceptance results, and an operating procedure. A supervised workflow qualifies; unrestricted autonomy is not required.
 
-Extract invoice fields, validate totals and supplier data, detect exceptions, match against structured records, and route approval. Never allow the model to authorize payment.
+## Week 14: implement
 
-### Sales research and CRM assistant
+Agree scope, interfaces, quality thresholds, reviewer responsibility, budget, and stop conditions. Complete intake, validation, AI processing, verification, review, and output recording, including an exception path.
 
-Combine approved sources, summarize account changes with citations, propose CRM updates, and require review before writing or contacting anyone.
+Freeze at least 20 development and 10 held-out cases with versions or hashes. Keep held-out content outside prompts, skills, and retrieval. Use fresh independent variants for assessed work because course answers are public.
 
-### Internal policy and onboarding assistant
+Submit the scope contract, reproducible setup, integration trace, evaluation plan, and unresolved issues. Decide ready, ready with restrictions, or hold for a named correction.
 
-Answer questions from permission-filtered documents, cite exact sources, detect missing evidence, and measure successful self-service without inventing policy.
+## Week 15: pilot
 
-### Meeting-to-execution workflow
+Run with a small authorised group or explicitly label a simulation. Record every eligible case, including timeouts and interventions. Measure staff review and correction time as well as machine runtime. Distinguish first-pass quality from corrected final quality.
 
-Process a transcript, extract decisions and owners, reconcile them with the project system, draft tasks, and request approval before creation.
+Fix the most consequential failure using development cases. Preserve original results. If final held-out cases inform another revision, they become development material; use new independent cases for the next final estimate.
 
-### Software operations triage
+Submit observations, before/after failure evidence, regression checks, final results, costs, staff-time comparison, and sample limitations. Thirty cases are a classroom minimum, not statistical assurance of production readiness.
 
-Summarize incidents or issues, retrieve runbooks, classify severity, suggest next steps, and restrict all mutating operations behind approval.
+## Week 16: demonstrate and hand over
 
-## Proposal
+Use five minutes: context/baseline (30 seconds), success (60), failure/review (60), blocked action/recovery (60), measured results (60), and ownership/adoption decision (30). Authentic recorded evidence can substitute for an unavailable live service when labelled.
 
-Before implementation, submit:
+Ask another person to start the process, handle an exception, stop new work, and restore the manual path using the runbook. Record where help was needed. Decide adopt within scope, revise, or stop from evidence.
 
-1. user, owner, and workflow boundary;
-2. current-state map with volume, cycle time, error/rework rate, and cost;
-3. target metric and minimum acceptable quality;
-4. a baseline that does not use an LLM;
-5. data sources, permissions, retention, and prohibited data;
-6. source contracts, versioning/lineage, correction, and deletion behavior;
-7. highest-risk action and human control;
-8. user-visible uncertainty, correction, accessibility, and fallback paths;
-9. estimated model calls, latency, unit cost, and review capacity;
-10. acceptance tests, pilot stop conditions, and rollback plan.
+## Required package
 
-Reject or narrow a proposal when it lacks representative data, a process owner, measurable value, or a safe pilot boundary.
+1. Problem, process map, baseline, owner, and acceptance contract.
+2. Working application, workflow export, or configured assistant with reproducible setup.
+3. Versioned prompts, code/configuration, source inventory, and reviewed skills where used.
+4. Development and held-out cases with expected behaviour and provenance.
+5. Evaluation/pilot results with denominators, corrections, raw evidence, duration, and cost.
+6. Permissions/data-flow record, review rules, and boundary-test evidence.
+7. Runbook for monitoring, stopping, recovery, updates, and manual fallback.
+8. Business case, user guide, demonstration, and adoption decision.
 
-## Required architecture
+Use the [task brief](course/templates/task-brief.md), [release record](course/templates/release-record.md), [pilot charter](course/templates/pilot-charter.md), and [runbook](course/templates/runbook.md). Remove secrets and unnecessary personal information from submissions.
 
-- deterministic orchestration for known steps;
-- schemas and validation at every model boundary;
-- source contracts, quality gates, provenance, and reproducible data/index versions;
-- retrieval or tools only where they add evidence/capability;
-- durable state for long-running work;
-- timeouts, bounded retries, idempotency, and dead-letter/manual recovery;
-- least-privilege credentials and tenant/user access filtering;
-- approval for external communication, deletion, finance, account changes, or other high-impact actions;
-- evidence-linked output, clear abstention, user correction, cancellation, and human escalation;
-- versioned prompts, models, schemas, and eval data;
-- traces, metrics, and alerts with sensitive-data controls.
+## Rubric
 
-## Evaluation package
+The capstone score, worth 45% of the course, has five 20-point dimensions: functional correctness, evaluation quality, enforced boundaries, reliability/recovery, and credible value. Anchors per dimension: 0 absent; 8 materially incomplete; 14 meets scope with minor gaps; 20 convincing and independently reproducible.
 
-Create at least 75 representative cases, including common, difficult, malformed, adversarial, “should abstain/escalate,” and protected-segment/operating-condition examples. Report:
+The handover score, worth 10%, assigns 25 points each to success demonstration, honest failure explanation, blocked-action/recovery demonstration, and independent operator handover. Explain intermediate marks and avoid double credit for the same criterion.
 
-- task success and critical-error rate;
-- field-level or step-level accuracy where applicable;
-- retrieval recall/precision and citation correctness where applicable;
-- approval/escalation rate and false automation rate;
-- p50/p95 latency, tokens, and cost per completed task;
-- results by important segment, not only the average;
-- data/media quality, provenance, and deletion/permission tests where applicable;
-- product completion, correction, abandonment, adoption, and reviewer workload;
-- comparison with the manual and non-LLM baselines;
-- top failure categories and the next experiment.
-
-Do not use an LLM judge alone for consequential claims. Calibrate automated graders against human-reviewed samples.
-
-## Business case
-
-Use transparent assumptions:
-
-    monthly_value =
-      (tasks_per_month × minutes_saved_per_task ÷ 60 × loaded_hourly_cost)
-      + avoided_rework
-      + incremental_value
-      - model_and_infrastructure_cost
-      - review_and_maintenance_cost
-
-Also report adoption, quality, and risk. “Time saved” is not realized value if staff must redo outputs or the workflow is not used.
-
-## Deliverables
-
-- source code/workflow export and reproducible setup;
-- architecture and data-flow diagram;
-- process map and baseline measurements;
-- source/data contract, dataset or index manifest, quality report, and lineage/lifecycle evidence;
-- user-flow/state map with tested success, uncertainty, error, correction, approval, and fallback states;
-- eval dataset, grader definitions, and results;
-- threat model, privacy/data notes, and red-team report;
-- deployment configuration, monitoring view, runbook, and rollback procedure;
-- five-minute user demo;
-- ten-minute technical/business defense;
-- one-page case study suitable for a portfolio.
-
-## Four-week studio cadence
-
-1. **Week 1: scope and skeleton:** approve the proposal, freeze the baseline and initial eval set, and complete one end-to-end path with durable state.
-2. **Week 2: quality and user control:** improve the largest measured failure bucket; complete evidence, validation, review, and correction UX.
-3. **Week 3: hardening and pilot:** threat-model, red-team, load-test, deploy, rehearse rollback/incident response, and run the bounded pilot.
-4. **Week 4: decision and defense:** analyze outcome/adoption/guardrail results, close reproducibility gaps, and rehearse the technical and business defense.
-
-## Capstone rubric (100 points)
-
-| Area | Points |
-|---|---:|
-| Problem selection, workflow map, baseline, and target | 10 |
-| Data quality, provenance, permissions, and lifecycle | 10 |
-| Functional correctness, evidence, and user control | 15 |
-| Evaluation quality and honest error analysis | 20 |
-| Architecture, code/workflow quality, and reproducibility | 10 |
-| Security, privacy, approvals, and failure containment | 15 |
-| Reliability, observability, cost, and operations | 10 |
-| Pilot outcomes, adoption, business impact, and communication | 10 |
-
-Passing: 70. Portfolio distinction: 85, with at least half the available points in every area.
+A high average cannot compensate for unauthorised actions in required tests, missed agreed quality thresholds, or unusable fallback. Correct and retest those gates. Site self-attestation records a declaration; practical grading requires a reviewer.

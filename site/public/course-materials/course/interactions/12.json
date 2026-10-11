@@ -1,0 +1,143 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "A test suite has approved every release you have ever shown it. How useful is it?",
+        "options": [
+          "Very useful, it is reassuring",
+          "Useful only if it runs quickly",
+          "Doubtful, a useful suite can reveal reasons not to release"
+        ],
+        "answer": 2,
+        "explanation": "An evaluation earns its keep by being able to disagree with you. Define acceptable behaviour first, then let the tests find reasons to hold."
+      },
+      {
+        "after": "Keep development cases separate from final",
+        "type": "sort",
+        "prompt": "Which set does each use belong to?",
+        "buckets": ["Development cases", "Held-out cases"],
+        "items": [
+          { "text": "Trying a new prompt wording", "bucket": 0 },
+          { "text": "Adjusting retrieval settings", "bucket": 0 },
+          { "text": "Changing which tools are available", "bucket": 0 },
+          { "text": "Frozen before final evaluation", "bucket": 1 },
+          { "text": "Kept out of agent workspaces during development", "bucket": 1 }
+        ],
+        "explanation": "Development cases are for changing the system; held-out cases stay untouched so the final result is an independent check."
+      },
+      {
+        "after": "Measure end-to-end task success with a",
+        "type": "numeric",
+        "question": "You attempt 20 cases. 15 succeed, 3 fail and 2 time out. What is the task success rate?",
+        "answer": 75,
+        "tolerance": 0.5,
+        "unit": "%",
+        "explanation": "Timed-out cases stay in the attempted-case denominator, so 15 / 20 = 75%. Dropping them would give 15 / 18 and flatter the system."
+      },
+      {
+        "after": "For subjective outputs, write a rubric",
+        "type": "check",
+        "question": "Which rubric line could two reviewers apply and agree on?",
+        "options": [
+          "The report reads well",
+          "The report seems thorough",
+          "The tone feels professional",
+          "Every numerical claim reconciles to the source rows"
+        ],
+        "answer": 3,
+        "explanation": "Observable anchors turn taste into a check anyone can repeat. Vague phrases like good report leave each reviewer guessing."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "Name a way someone could slip instructions into Harbour's assistant without ever logging in to it.",
+        "answer": "Through anything the assistant reads: a ticket, a retrieved page, an uploaded file, a plugin or a saved skill. These are entry points, and content arriving through them is data, not orders."
+      },
+      {
+        "after": "A threat model identifies assets, actors",
+        "type": "sort",
+        "prompt": "In Harbour's threat model, is each item something to protect or a way in?",
+        "buckets": ["Asset", "Entry point"],
+        "items": [
+          { "text": "Customer records", "bucket": 0 },
+          { "text": "Credentials", "bucket": 0 },
+          { "text": "The ability to send messages", "bucket": 0 },
+          { "text": "Support tickets", "bucket": 1 },
+          { "text": "Retrieved pages", "bucket": 1 },
+          { "text": "Saved skills", "bucket": 1 }
+        ],
+        "explanation": "Assets are what a failure could damage; entry points are where untrusted content arrives. A threat model maps the paths between them."
+      },
+      {
+        "after": "Use the T08 fixture to test source content",
+        "type": "check",
+        "question": "Which of these tests the system's authority rather than the quality of its answers?",
+        "options": [
+          "Whether the caller can change their own role",
+          "Whether totals are rounded neatly",
+          "Whether headings follow the template"
+        ],
+        "answer": 0,
+        "explanation": "Authority tests probe what the system lets someone do, such as role changes, restricted documents or actions after cancellation. A well-formatted answer says nothing about those."
+      },
+      {
+        "after": "A different candidate completes 24 of 30",
+        "type": "numeric",
+        "question": "The second candidate completes 24 of 30 cases. What is its task success percentage?",
+        "answer": 80,
+        "tolerance": 0.5,
+        "unit": "%",
+        "explanation": "24 / 30 = 80%. With no unsafe actions and the rest sent to review, it may suit an assisted pilot if the review workload is affordable."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "Why write acceptance criteria before you look at the final results?",
+        "options": [
+          "So the results cannot quietly move the bar",
+          "Because it is quicker to write them first",
+          "Because the evaluator requires a file to exist"
+        ],
+        "answer": 0,
+        "explanation": "Criteria set after seeing outputs tend to bend towards whatever happened. Deciding first keeps the release decision honest."
+      },
+      {
+        "after": "Run the reference evaluator on a saved",
+        "type": "sort",
+        "prompt": "Step 1 asks you to inspect evaluator output. What kind of problem is each finding?",
+        "buckets": ["ID problem", "Incorrect label"],
+        "items": [
+          { "text": "A case in the set has no prediction", "bucket": 0 },
+          { "text": "The same case ID is predicted twice", "bucket": 0 },
+          { "text": "A prediction for an ID not in the case set", "bucket": 0 },
+          { "text": "The right ID with the wrong decision", "bucket": 1 }
+        ],
+        "explanation": "Missing, duplicate and extra IDs break the denominator before accuracy is even measured, so check them alongside wrong labels."
+      },
+      {
+        "after": "Write acceptance criteria before inspecting",
+        "type": "reveal",
+        "prompt": "Name one failure that should force a hold no matter how high the success rate is.",
+        "answer": "For example: a message sent to an unauthorised recipient, a caller changing their own role, a manager-only document retrieved, or an action triggered after cancellation. Boundary failures are reported separately, never averaged away."
+      },
+      {
+        "after": "Use [the release record](../templates/release-record.md)",
+        "type": "check",
+        "question": "Contractual requirements affect your pilot. What should the release record contain?",
+        "options": [
+          "A generic statement that the system is compliant",
+          "Nothing, contracts are outside the release record",
+          "The appropriate organisational reviewer and their decision"
+        ],
+        "answer": 2,
+        "explanation": "You identify who in the organisation must review it and record their decision. Inventing a generic compliance claim would misstate what was checked."
+      }
+    ]
+  ]
+}

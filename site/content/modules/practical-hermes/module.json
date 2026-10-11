@@ -1,0 +1,30 @@
+{
+  "slug": "practical-hermes",
+  "title": "Hermes Agent in Practice",
+  "phase": "automation",
+  "summary": "Teach a reusable procedure and verify what persists across sessions.",
+  "outcomes": [
+    "Inspect an agent skill",
+    "Verify memory writes and corrections",
+    "Compare a fresh-session run with a baseline"
+  ],
+  "number": 10,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Configure the agent and distinguish its stores",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Teach a skill and test transfer",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio, memory correction, and evidence",
+      "minutes": 30
+    }
+  ]
+}

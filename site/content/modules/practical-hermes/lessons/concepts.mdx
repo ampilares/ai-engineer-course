@@ -1,0 +1,26 @@
+<Check question={"An assistant can hold information in the current chat, a saved memory, or a written procedure. Which one vanishes when you start a new chat?"} options={["Saved memory entries","The live conversation","Skill files and their supporting files"]} answer={1} explanation={"The live conversation is temporary task context. Memory persists across sessions only when an actual write happened, and skills are saved procedures."} />
+
+This week you will turn a successful procedure into a reviewed skill and test it after the conversation context has changed. Improvement means better measured outcomes or less intervention on new cases, not merely a saved file or a confident promise.
+
+Hermes Agent is the Nous Research application used in this module. It can use different model providers. Its name should not be confused with the Hermes model family. Follow the [official quickstart](https://hermes-agent.nousresearch.com/docs/getting-started/quickstart) to install in a dedicated environment and configure an approved provider.
+
+<Check question={"A colleague says Hermes Agent must run a Hermes model. Is that right?"} options={["Yes, the names match for that reason","Only when it runs offline","No, it is an application that can use different model providers"]} answer={2} explanation={"Hermes Agent is the Nous Research application used in this module. It should not be confused with the Hermes model family, and you configure an approved provider during setup."} />
+
+```bash
+hermes setup
+hermes model
+```
+
+Use setup to choose the necessary capabilities, then verify one normal conversation. Configure isolation and tool access before supplying untrusted files. The [security guide](https://hermes-agent.nousresearch.com/docs/user-guide/security) describes approval and execution-environment controls. A minimal set of enabled tools can still include a powerful terminal; minimal does not automatically mean confined.
+
+Memory stores selected information across sessions. Skills describe procedures and may include supporting files. The live conversation contains temporary task context. The [memory documentation](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory) explains that persistence requires an actual write; an assistant saying it remembered something is not evidence of a saved entry. Confirm the stored artifact or recorded write, then test in a fresh session.
+
+<Sort prompt={"Where does each piece of information belong?"} buckets={["Memory","Skill","Live conversation"]} items={[{"text":"Reports always list unresolved questions explicitly","bucket":0},{"text":"Preferred section order for reports","bucket":0},{"text":"A step-by-step report procedure with a checking script","bucket":1},{"text":"Validate the reporting period before calculating","bucket":1},{"text":"The CSV you pasted for today's question","bucket":2},{"text":"A clarification you gave earlier in this chat","bucket":2}]} explanation={"Stable preferences suit memory, procedures suit skills, and one-off task details live only in the conversation. Mixing them up leads to stale or missing context."} />
+
+Pick a stable preference for the exercise: reports use a fixed section order and show unresolved questions explicitly. Do not use a changing refund threshold as a permanent fact. Ask the agent to retrieve the effective policy when that threshold matters.
+
+<Check question={"Which of these is a sensible thing to store as a permanent memory?"} options={["A fixed section order for reports","The current refund threshold","Last week's net total"]} answer={0} explanation={"A stable preference stays true. A refund threshold can change and should be retrieved from the effective policy, and last week's total is out of date next week."} />
+
+<Check question={"An agent says it remembered a preference. What verifies persistence?"} options={["Repeat the same question in the same context only","Inspect the stored write and test a fresh session","Assume the confirmation means a write occurred"]} answer={1} explanation={"A statement about saving is not evidence that storage changed."} />
+
+[Download the complete week](/course-materials/course/weeks/10.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

@@ -1,0 +1,23 @@
+<Reveal prompt={"Name a way someone could slip instructions into Harbour's assistant without ever logging in to it."} answer={"Through anything the assistant reads: a ticket, a retrieved page, an uploaded file, a plugin or a saved skill. These are entry points, and content arriving through them is data, not orders."} />
+
+A threat model identifies assets, actors, entry points, trust boundaries, and plausible failure effects. For Harbour, assets include customer records, policy content, credentials, and the ability to send messages. Entry points include tickets, retrieved pages, plugins, uploaded files, and saved skills.
+
+<Sort prompt={"In Harbour's threat model, is each item something to protect or a way in?"} buckets={["Asset","Entry point"]} items={[{"text":"Customer records","bucket":0},{"text":"Credentials","bucket":0},{"text":"The ability to send messages","bucket":0},{"text":"Support tickets","bucket":1},{"text":"Retrieved pages","bucket":1},{"text":"Saved skills","bucket":1}]} explanation={"Assets are what a failure could damage; entry points are where untrusted content arrives. A threat model maps the paths between them."} />
+
+Use the T08 fixture to test source content trying to redirect actions. Test whether the caller can change their own role, retrieve a manager-only document, alter a previously approved payload, or trigger an action after cancellation. The [OWASP prompt-injection material](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) is a primary security reference; your particular controls still need direct evidence.
+
+<Check question={"Which of these tests the system's authority rather than the quality of its answers?"} options={["Whether the caller can change their own role","Whether totals are rounded neatly","Whether headings follow the template"]} answer={0} explanation={"Authority tests probe what the system lets someone do, such as role changes, restricted documents or actions after cancellation. A well-formatted answer says nothing about those."} />
+
+Check logs and retained artifacts for unnecessary sensitive content. Revoking a source document is incomplete if it remains in a derived index, a memory entry, an exported file, or a trace accessible to the wrong person. Document the intended retention and deletion scope, then test it in the lab.
+
+### Worked release decision
+
+A candidate succeeds on 27 of 30 cases, but one failed case sends a message to an unauthorised recipient. Report 90% task success and the critical boundary failure. Do not average the latter away. The release decision is hold until the boundary is corrected and retested, even if the target success rate was 85%.
+
+A different candidate completes 24 of 30 and sends the other six to review without unsafe actions. It may be suitable for an assisted pilot if the review workload is affordable. Define this operating mode honestly; it is not a fully autonomous process.
+
+<NumericCheck question={"The second candidate completes 24 of 30 cases. What is its task success percentage?"} answer={80} tolerance={0.5} unit={"%"} explanation={"24 / 30 = 80%. With no unsafe actions and the rest sent to review, it may suit an assisted pilot if the review workload is affordable."} />
+
+<Check question={"A system scores 90% but sends one unauthorised message. What is the release decision under the course gate?"} options={["Pass because the average exceeds 70%","Hold until the mandatory boundary is corrected and retested","Round the error away"]} answer={1} explanation={"Mandatory action boundaries cannot be offset by average quality."} />
+
+[Download the complete week](/course-materials/course/weeks/12.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

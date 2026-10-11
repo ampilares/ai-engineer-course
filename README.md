@@ -1,83 +1,40 @@
-# Practical AI Engineer
+# Practical AI Engineering and Business Automation
 
-An open, project-based course for becoming an AI engineer: from Python and machine learning foundations to LLM applications, agents, workflow automation, evaluation, security, and production operations.
+A 16-week course for engineers and business owners who want to use AI to complete useful work, build dependable workflows, and measure the result. The October 2026 edition replaces the earlier 32-week core with a practical sequence, shared cases, and two implementation routes.
 
-**Edition:** July 2026
+Engineers build and test integrations. Business owners configure workflows, verify outputs, and establish operating responsibility. Both routes cover research, data, coding assistants, model APIs, retrieval, automation, agents, evaluation, economics, and a working capstone.
 
-**Core duration:** 32 weeks at 8–10 hours per week
+**Start with [Week 1](course/weeks/01.md)** or read the [course guide](COURSE.md). Allow 8-10 hours per week for engineers or 5-7 for business owners, plus optional preparation. Course materials are free; external accounts, hosting, and model usage may cost money.
 
-**Fast track:** 16 weeks at 15–20 hours per week
+## Materials
 
-**Cost:** Course materials are free. Most labs can use local models or free tiers; paid API credits are optional.
-
-## What an AI engineer does
-
-An AI engineer turns a useful but probabilistic model into a dependable product or business process. That means more than prompting: problem selection, data and APIs, retrieval, tools, evaluation, security, deployment, monitoring, cost control, and change management all belong in the job.
-
-By the end, a learner can:
-
-- identify workflows where AI creates measurable value, and reject poor use cases;
-- build typed Python services that call model APIs and local models;
-- explain tokens, embeddings, attention, transformers, pretraining, post-training, and inference;
-- design prompts, structured outputs, retrieval systems, tools, and agent loops;
-- automate business processes with APIs, webhooks, queues, and n8n;
-- evaluate quality, safety, latency, and cost before and after deployment;
-- apply least privilege, human approval, privacy controls, and threat modeling;
-- deploy, observe, improve, and communicate the ROI of an AI system.
-
-## Start here
-
-1. Read the [course syllabus](COURSE.md).
-2. If you are new to programming or need a math refresher, begin with the interactive Python and math on-ramps in `site/`.
-3. Take the [entry diagnostic](ASSESSMENTS.md#entry-diagnostic) and choose a route.
-4. Set up the free tooling in [SETUP.md](SETUP.md).
-5. Work through the [core module guides](modules/) in order.
-6. Record evidence in a learning log: decisions, experiments, evaluation results, failures, and demonstrations.
-7. Complete one capstone using [the project brief and rubric](CAPSTONE.md).
-8. Finish with the interactive career module on portfolio, interviews, and the first ninety days.
-
-## Repository map
-
-| File | Purpose |
+| Material | Purpose |
 |---|---|
-| [COURSE.md](COURSE.md) | Outcomes, schedule, routes, projects, and teaching model |
-| [SETUP.md](SETUP.md) | Free/local toolchain and accounts |
-| [ASSESSMENTS.md](ASSESSMENTS.md) | Diagnostic, weekly evidence, gates, and grading |
-| [CAPSTONE.md](CAPSTONE.md) | Production capstone options, deliverables, and rubric |
-| [RESOURCES.md](RESOURCES.md) | Curated, annotated free courses, articles, docs, and videos |
-| [TEACHING.md](TEACHING.md) | Guidance for cohorts, mentors, and self-directed learners |
-| [modules/](modules/) | Fifteen core learning modules, labs, and acceptance criteria |
+| [Course index](course/README.md) | Sixteen complete chapters, split into 48 site lessons |
+| [Setup](SETUP.md) | Offline labs, optional services, and account boundaries |
+| [Harbour Services case](course/case-study/README.md) | Fictional inputs, failure cases, and worked answers |
+| [Reference labs](course/labs/README.md) | Runnable reporting, retrieval, validation, evaluation, workflow, and agent exercises |
+| [Assessment guide](ASSESSMENTS.md) | Weekly evidence, progression gates, and practical grading |
+| [Capstone](CAPSTONE.md) | Implementation, pilot, demonstration, and handover |
+| [Teaching guide](TEACHING.md) | Session plans, feedback, and access alternatives |
+| [Research register](course/research.md) | Primary sources, verification date, and research limitations |
+| [Extensions](course/extensions.md) | Deeper engineering work after the core |
 
-## Curriculum numbering
+OpenClaw, Hermes Agent, and Cursor's Grok Bot each have a dedicated week. Learners compare them on the same task, inputs, and failure cases. Product capabilities are based on official documentation checked on 11 October 2026; access and versions must be checked before each cohort.
 
-The repository syllabus numbers the fifteen core modules from 1 to 15. The interactive platform in `site/` contains eighteen modules: Python and math on-ramps are platform Modules 1 and 2, the fifteen core modules are platform Modules 3 through 17, and the career module is platform Module 18. Lesson references inside the interactive platform use platform numbers; the root syllabus and `modules/` guides use core numbers.
+## Run and maintain
 
-## The learning path
+From the repository root, using Node.js 24.12 or newer compatible with `node:sqlite`:
 
-| Phase | Weeks | Build |
-|---|---:|---|
-| Software and data foundations | 1–4 | tested API/data worker plus a versioned, replayable dataset |
-| ML and deep learning | 5–9 | trained, evaluated prediction service with reproducible experiments |
-| LLM foundations and applications | 10–13 | typed, evaluated model service with cost and latency budgets |
-| Retrieval and agents | 14–17 | cited knowledge assistant plus bounded tools and durable state |
-| Multimodal and product engineering | 18–21 | evidence-preserving media workflow and tested AI product prototype |
-| Automation and evaluation | 22–25 | reliable business workflow, pilot baseline, regression suite, and traces |
-| Security and production operations | 26–27 | threat model, guarded deployment, SLOs, rollback, and incident rehearsal |
-| Expert experiment and capstone | 28–32 | controlled optimization plus production pilot and ROI decision |
+```sh
+node course/labs/reference.mjs report
+node --test course/labs/reference.test.mjs
+node course/tools/publish.mjs
+node course/tools/publish.mjs --check
+```
 
-## Course principles
+Edit canonical chapters in `course/weeks/` and questions in `course/assessments/questions.mjs`, then regenerate the site. See [site instructions](site/README.md) and [curriculum maintenance](course/maintenance.md).
 
-- **Build before framework.** Learn the primitive, HTTP call, retrieval, loop, state, before adding an abstraction.
-- **Evals before optimization.** A change is not an improvement until a representative test set says so.
-- **Workflow before agent.** Use deterministic code for known paths and model judgment only where ambiguity earns its cost.
-- **Human authority for consequential actions.** Irreversible, financial, sensitive, or high-impact steps require explicit controls.
-- **Business outcome over demo quality.** Track cycle time, error rate, throughput, adoption, and unit economics.
-- **Provider portability.** Concepts and interfaces matter more than one model or orchestration library.
+The platform provides open-book knowledge checks and capstone self-attestation. The practical 30/15/45/10 assessment requires a reviewer; it is not implemented by the quiz engine. Older lessons remain optional references outside the active core.
 
-## Keeping it current
-
-AI APIs and frameworks change quickly. The concepts, outcomes, and evaluation criteria are stable; version-specific snippets are not. Resources were checked during July 2026. Before teaching, verify provider documentation and replace any retired interface while preserving the learning objective.
-
-## License note
-
-This repository links to external resources; each remains under its owner’s terms and license. Do not copy third-party course content into commercial materials without checking its license.
+External resources retain their owners' terms and licences. These materials explain and link to those sources rather than reproducing their tutorials.

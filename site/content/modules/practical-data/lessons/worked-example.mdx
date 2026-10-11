@@ -1,0 +1,23 @@
+<Reveal prompt={"A meeting transcript says 5 October, then a speaker corrects it to 6 October. Which date goes in the action list, and what should you keep with it?"} answer={"6 October, the corrected date, with the timestamp of the correction so a reviewer can find it. Preserving speakers and corrections lets others see why the date changed."} />
+
+Extraction is observing fields; calculation is deriving a value. In [INV-014](/course-materials/course/case-study/document.txt), line items sum to AUD 220, while the printed total contains an unreadable character. Store the observed total as unknown, the calculated subtotal as 220.00, and a review reason. Filling the unreadable character with zero would merge inference with observation.
+
+<Sort prompt={"Classify each INV-014 field."} buckets={["Observed","Calculated","Unknown"]} items={[{"text":"Supplier: Harbour Parts","bucket":0},{"text":"Invoice date: 2026-10-03","bucket":0},{"text":"Line 2: AUD 40.00","bucket":0},{"text":"Sum of the two line items","bucket":1},{"text":"Payment due date","bucket":2}]} explanation={"Observed values are read from the document, calculated values are derived from them, and anything not visible stays unknown until a person or authoritative source resolves it."} />
+
+Keep document ID, page or region, extracted text, normalised value, and validation result. A clean JSON object can still contain a wrong date or a fabricated amount. Check fields against the source and enforce business rules after extraction. Unknown values should survive until a person or an authoritative source resolves them.
+
+<Check question={"An extraction returns tidy, valid JSON. What does that prove?"} options={["Every value matches the source document","Only that the structure is valid; values still need checking","The invoice has been paid","Business rules have been applied"]} answer={1} explanation={"A clean object can still hold a wrong date or a fabricated amount. Check fields against the source and apply business rules afterwards."} />
+
+For meeting work, preserve timestamps, speakers, and corrections. The Harbour transcript first mentions 5 October and then corrects the date to 6 October. The final action list should reflect the correction and cite the policy it refers to. The missing-amount investigation has no assigned owner. Write "owner unresolved" instead of inventing one.
+
+For images and charts, inspect labels, units, scale, and the underlying data if available. A rising line does not establish a percentage increase without values. For audio, confirm consent and the allowed purpose before supplying a recording to a service. A text transcript in this lab lets you practise evidence preservation without creating or uploading anyone's recording.
+
+<Check question={"A chart's line climbs steeply. Can you report a specific percentage increase?"} options={["Yes, the steep slope shows it","Yes, if the chart title mentions growth","Not without the underlying values, units and scale"]} answer={2} explanation={"Slope depends on the axis scale. A percentage needs actual values, so inspect labels, units and the data behind the chart."} />
+
+### Worked report
+
+The accepted sales sum is AUD 6,500, the refund magnitude is AUD 200, and the net is AUD 6,300. State the reporting window and exclusions next to the number. It is a subtotal of accepted operational events, not an assertion that all business income has been reconciled. S010 may change the report after review, but its unknown value cannot be estimated from nearby rows.
+
+<Check question={"Two rows share an ID but have different amounts. What does the course contract require?"} options={["Keep whichever amount is larger","Review the conflict without silently choosing a value","Treat both as separate sales"]} answer={1} explanation={"A conflicting business event needs reconciliation; exact-copy deduplication is a different case."} />
+
+[Download the complete week](/course-materials/course/weeks/03.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

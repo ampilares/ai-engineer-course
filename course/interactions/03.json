@@ -1,0 +1,147 @@
+{
+  "lessons": [
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "A sales file has two identical rows: same transaction ID, date and amount. How many sales happened?",
+        "options": [
+          "Two, because there are two rows",
+          "One, because the ID identifies a single event",
+          "None, the rows cancel out"
+        ],
+        "answer": 1,
+        "explanation": "A transaction ID identifies a business event, so an exact duplicate copy is not extra income. Counting rows instead of events inflates totals."
+      },
+      {
+        "after": "Use four stages: preserve, validate",
+        "type": "numeric",
+        "question": "Harbour's S008 appears twice at 500.00 AUD. If both copies were counted, by how much would sales be overstated?",
+        "answer": 500,
+        "tolerance": 0,
+        "unit": "AUD",
+        "explanation": "The second row is a copy of the same event, so counting it adds a phantom 500.00 AUD."
+      },
+      {
+        "after": "For Harbour, 12 rows become 11 unique IDs",
+        "type": "sort",
+        "prompt": "Apply Harbour's data contract to these rows.",
+        "buckets": ["Accepted", "Outside the period", "Needs review"],
+        "items": [
+          {"text": "S001: 1,200.00 AUD sale on 1 October", "bucket": 0},
+          {"text": "S004: refund of -200.00 AUD on 3 October", "bucket": 0},
+          {"text": "S009: 700.00 AUD sale on 8 October", "bucket": 1},
+          {"text": "S010: sale on 7 October with a blank amount", "bucket": 2},
+          {"text": "S011: 300.00 USD sale on 7 October", "bucket": 2}
+        ],
+        "explanation": "The window is 1 to 7 October, only complete AUD records count, and refunds are negative. Reconciliation means every row has an explanation, not just the accepted ones."
+      },
+      {
+        "after": "Use integer cents or an appropriate decimal",
+        "type": "check",
+        "question": "Why convert amounts such as 1,200.00 into whole cents before adding them?",
+        "options": [
+          "It makes the file smaller",
+          "Spreadsheets cannot show decimals",
+          "Binary floating-point can introduce small representation errors",
+          "Cents are required by the tax office"
+        ],
+        "answer": 2,
+        "explanation": "Integers add exactly, while binary floating-point cannot represent some decimal values precisely. The fixture reference tool converts to cents for this reason."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "reveal",
+        "prompt": "A meeting transcript says 5 October, then a speaker corrects it to 6 October. Which date goes in the action list, and what should you keep with it?",
+        "answer": "6 October, the corrected date, with the timestamp of the correction so a reviewer can find it. Preserving speakers and corrections lets others see why the date changed."
+      },
+      {
+        "after": "Extraction is observing fields; calculation",
+        "type": "sort",
+        "prompt": "Classify each INV-014 field.",
+        "buckets": ["Observed", "Calculated", "Unknown"],
+        "items": [
+          {"text": "Supplier: Harbour Parts", "bucket": 0},
+          {"text": "Invoice date: 2026-10-03", "bucket": 0},
+          {"text": "Line 2: AUD 40.00", "bucket": 0},
+          {"text": "Sum of the two line items", "bucket": 1},
+          {"text": "Payment due date", "bucket": 2}
+        ],
+        "explanation": "Observed values are read from the document, calculated values are derived from them, and anything not visible stays unknown until a person or authoritative source resolves it."
+      },
+      {
+        "after": "Keep document ID, page or region, extracted",
+        "type": "check",
+        "question": "An extraction returns tidy, valid JSON. What does that prove?",
+        "options": [
+          "Every value matches the source document",
+          "Only that the structure is valid; values still need checking",
+          "The invoice has been paid",
+          "Business rules have been applied"
+        ],
+        "answer": 1,
+        "explanation": "A clean object can still hold a wrong date or a fabricated amount. Check fields against the source and apply business rules afterwards."
+      },
+      {
+        "after": "For images and charts, inspect labels, units",
+        "type": "check",
+        "question": "A chart's line climbs steeply. Can you report a specific percentage increase?",
+        "options": [
+          "Yes, the steep slope shows it",
+          "Yes, if the chart title mentions growth",
+          "Not without the underlying values, units and scale"
+        ],
+        "answer": 2,
+        "explanation": "Slope depends on the axis scale. A percentage needs actual values, so inspect labels, units and the data behind the chart."
+      }
+    ],
+    [
+      {
+        "after": "^",
+        "type": "check",
+        "question": "You want to test your rules on messy data, such as a malformed date. Where should the bad rows go?",
+        "options": [
+          "Into a copy of the dataset, leaving the original untouched",
+          "Directly into the original file",
+          "Nowhere; test only on clean data"
+        ],
+        "answer": 0,
+        "explanation": "Preserving the original keeps a trustworthy reference. Deliberately messy copies show how each kind of problem reaches an outcome."
+      },
+      {
+        "after": "Run the reference report and inspect each",
+        "type": "check",
+        "question": "Why write your own calculation from the source contract rather than copying the reference result?",
+        "options": [
+          "Copying is slower",
+          "An independent calculation can expose mistakes a copy would repeat",
+          "The reference tool gives random answers"
+        ],
+        "answer": 1,
+        "explanation": "Agreement between two independent methods is evidence; a copied number only agrees with itself."
+      },
+      {
+        "after": "Open the CSV in a spreadsheet and preserve",
+        "type": "order",
+        "prompt": "Put the spreadsheet workflow in order.",
+        "steps": [
+          "Keep the raw data on its own sheet",
+          "Import IDs as text and dates in ISO format",
+          "Mark duplicate, outside-period, missing-amount and wrong-currency rows",
+          "Calculate sales and refunds with separate formulas",
+          "Derive the net from those formulas",
+          "Check each figure in the assistant's report against the prepared table"
+        ],
+        "explanation": "Problems are flagged before any totals are calculated, and formulas on prepared data make every number traceable."
+      },
+      {
+        "after": "Submit raw inputs, transformation rules",
+        "type": "reveal",
+        "prompt": "Your reviewer receives only your files. What must they be able to do without asking you anything?",
+        "answer": "Reproduce the net total from the raw inputs and your rules, and locate each action in the source by its timestamp. They should also know whether you used a multimodal model or the text transcript."
+      }
+    ]
+  ]
+}

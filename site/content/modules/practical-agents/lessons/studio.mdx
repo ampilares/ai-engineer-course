@@ -1,0 +1,25 @@
+<Reveal prompt={"Before building an agent, ask: does this task really need one? When would a fixed workflow be the better choice?"} answer={"When the steps are known and the same every time, a fixed workflow like Week 7's is simpler to control and test. An agent earns its place only when choosing the next action from observations genuinely helps."} />
+
+### Engineering route
+
+1. Run `node course/labs/reference.mjs agent` and inspect the tool trace, including a denied export and a step-limit outcome. The planner is a deterministic fixture, not an LLM.
+2. Replace the planner with your approved agent runtime while preserving the tool allowlist and validation.
+3. In a separate Python environment, install the official MCP SDK, record its version, and launch `python course/labs/mcp_server.py` through your MCP client's local-server configuration. Use the absolute script path on your machine and the environment's Python executable.
+4. Inspect the discovered tool list and call policy search. There should be no write, shell, customer-send, or role-switch tool.
+5. Test a missing source, repeated tool failure, cancellation, an out-of-scope request, and the T08 instruction.
+
+### Business-owner route
+
+1. Complete the [agent operating brief](/course-materials/course/templates/agent-brief.md): job, inputs, allowed actions, review owner, limits, and stop procedure.
+2. Use a prepared runtime with the same two tools. Ask for one weekly brief and inspect its action history.
+3. Ask for an action outside the brief and verify that the runtime prevents it.
+4. Identify a preference that can be remembered and a business fact that must be rechecked.
+5. Decide whether the task benefits from agent choices or works better as the Week 7 fixed workflow.
+
+Submit a tool contract, permissions map, trace, stop demonstration, and a rejected request. Additional agents are an optional experiment: compare their coordination and cost with a single-agent baseline before adding them to the project.
+
+<Sort prompt={"For the Harbour weekly-brief agent, should the runtime allow each request or stop it?"} buckets={["Allow","Stop or deny"]} items={[{"text":"Search policy for the weekly brief","bucket":0},{"text":"Calculate the report totals","bucket":0},{"text":"Export customer files as T08 asks","bucket":1},{"text":"Send a message to a customer","bucket":1},{"text":"Keep searching for a document that does not exist","bucket":1},{"text":"Switch itself to the manager role","bucket":1}]} explanation={"Only the two approved read tools are in scope. Customer messaging, exports and role changes are unavailable, and repeated failure should end in an unresolved question."} />
+
+<Check question={"Which is a suitable persistent preference?"} options={["An unverified customer balance that changes daily","The preferred section order for reports","A permanent permission grant inferred from a ticket"]} answer={1} explanation={"Stable presentation preferences differ from changing business facts and authority."} />
+
+[Download the complete week](/course-materials/course/weeks/08.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

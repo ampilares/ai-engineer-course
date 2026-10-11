@@ -1,0 +1,29 @@
+<Check question={"Your assistant's process is healthy and answers instantly. Does that tell you its weekly report is right?"} options={["Yes, a healthy process means a correct report","Only if the replies arrive quickly","No, process health and task quality are separate"]} answer={2} explanation={"Gateway health only says the system is running. A perfectly healthy process can still pick the wrong sources or miscalculate, so you check the report itself."} />
+
+Use the documented setup for one supported channel, such as a dedicated Telegram or Slack test integration. Configure authorised senders before accepting work. Restrict where the bot can respond. Avoid connecting a personal inbox merely to make the first demonstration more impressive.
+
+<Order prompt={"Put these steps for bringing a messaging channel online in a sensible order."} steps={["Verify a first chat in the control interface","Connect one dedicated test channel","Configure authorised senders and where the bot may respond","Send the first piece of work"]} explanation={"You prove the basics in the control interface first, then add one test channel, and lock down who can talk to the bot before it accepts any work."} />
+
+Run the weekly brief from the common task specification. Record the received request, source IDs, observed tool calls, output, review duration, and unresolved items. Keep gateway health separate from task quality: a healthy process can still produce a wrong report.
+
+Use the [security audit documentation](https://docs.openclaw.ai/cli/security) to inspect the deployment:
+
+```bash
+openclaw security audit
+```
+
+Read the findings and assess them against the lab's intended exposure. Do not apply automatic broad changes to an existing shared installation. The audit is a configuration check, not a certification that generated answers are safe or correct.
+
+### Worked fault isolation
+
+The dashboard loads, but messages do not arrive. Check channel authentication and sender routing before changing the model. Messages arrive, but a tool is denied. Check whether the denial is the intended permission boundary. Replies appear, but the total is wrong. Investigate source selection and calculation. These are different layers; reinstalling the entire product obscures the cause.
+
+<Sort prompt={"Each symptom points to a different layer. Sort them so you know where to look first."} buckets={["Channel and routing","Permission boundary","Sources and calculation"]} items={[{"text":"Your test chat shows no sign the bot saw your message","bucket":0},{"text":"Channel authentication broke after a credential change","bucket":0},{"text":"The bot replies that a tool was denied","bucket":1},{"text":"The report includes a row from outside the period","bucket":2},{"text":"The total in the reply is wrong","bucket":2}]} explanation={"Delivery, permissions and calculation are different layers. Diagnosing the right layer beats reinstalling everything, which only hides the cause."} />
+
+Restart after a completed report, then ask for a new report with changed input. Inspect which state persisted and which sources were reopened. Do not treat an old answer recalled from a session as a new calculation. Use [the sandboxing guide](https://docs.openclaw.ai/gateway/sandboxing) to understand which execution is isolated and which host-level capabilities remain available.
+
+<Reveal prompt={"After a restart you ask for a fresh report on changed input. What two things would you inspect to trust the answer?"} answer={"Which state persisted across the restart, and which sources were actually reopened. A familiar answer recalled from an earlier session is not a new calculation."} />
+
+<Check question={"The dashboard loads but the channel receives no messages. Where should diagnosis begin?"} options={["Changing the report's wording","Channel authentication, sender policy and routing","Replacing the transaction calculator"]} answer={1} explanation={"A functioning dashboard does not establish channel connectivity."} />
+
+[Download the complete week](/course-materials/course/weeks/09.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

@@ -1,0 +1,34 @@
+<Check question={"Your app gets an HTTP success back from a model API. Can it safely use the answer straight away?"} options={["Yes, success means the model answered correctly","Not yet, because completion and content still need checking","Only if the response arrived quickly"]} answer={1} explanation={"HTTP success only says the transport worked. The response may still be incomplete, a refusal, or well-formed but wrong, so each layer needs its own check."} />
+
+This week turns language output into an application interface. Start with recorded responses to test the surrounding software, then use a live model for quality evaluation if an approved account is available. A mock can test error handling; it cannot establish model accuracy.
+
+A model API takes a request and returns a response whose transport, completion status, and content must all be checked. An HTTP success does not necessarily mean the model produced a usable result. A response may be incomplete, refuse the request, or contain a well-formed but incorrect answer.
+
+For ticket triage, define four fields: `id`, `category`, `needs_review`, and `reason`. Categories are billing, scheduling, technical, and unknown. The ID must match the submitted ticket. A review flag is a Boolean, not the strings "yes" or "false." A reason cites the request rather than claiming unsupported facts.
+
+<Sort prompt={"Does each piece of triage output follow the field rules?"} buckets={["Follows the rules","Breaks the rules"]} items={[{"text":"needs_review is the string 'yes'","bucket":1},{"text":"category is scheduling","bucket":0},{"text":"category is urgent","bucket":1},{"text":"needs_review is the Boolean true","bucket":0},{"text":"reason quotes what the customer asked for","bucket":0},{"text":"reason claims a past refund the ticket never mentions","bucket":1}]} explanation={"Categories come from a fixed list, the review flag must be a real Boolean, and the reason must cite the request rather than invent facts."} />
+
+Schema validation checks shape, types, required fields, and allowed values. Business validation checks relationships: an unknown category must go to review; a refund cannot be treated as approved; the output ID must not switch to another customer. Semantic evaluation asks whether the category and review decision are actually correct. These are three different checks.
+
+<Sort prompt={"Which kind of check would catch each problem?"} buckets={["Schema","Business","Semantic"]} items={[{"text":"The reason field is missing entirely","bucket":0},{"text":"Category is shipping, which is not an allowed value","bucket":0},{"text":"An unknown category was not sent to review","bucket":1},{"text":"A refund is recorded as already approved","bucket":1},{"text":"The reason misreads what the customer wanted","bucket":2},{"text":"A reviewer says this ticket needed review but the flag says no","bucket":2}]} explanation={"Schema checks shape and allowed values, business checks enforce relationships and rules, and semantic evaluation asks whether the decision is actually right."} />
+
+OpenAI's [structured-output documentation](https://developers.openai.com/api/docs/guides/structured-outputs) explains schema-constrained responses and exceptions such as refusal or incomplete output. The course's [optional live extraction example](/course-materials/course/labs/live-extract.mjs) uses the Responses API, an explicit schema, and a model name supplied by the learner. It does not hard-code a supposedly permanent best model.
+
+### A valid response can still be wrong
+
+```json
+{
+  "id": "T09",
+  "category": "billing",
+  "needs_review": false,
+  "reason": "The customer mentions an invoice."
+}
+```
+
+All four fields have the right types. But T09 also asks to change a visit. The reference policy sends mixed intent to review. Passing the JSON parser is not sufficient for accepting this decision.
+
+<Reveal prompt={"T09 passed every type check. What rule could have stopped this decision before it reached staff?"} answer={"A business rule for mixed intent: when a ticket asks about more than one thing, such as an invoice and a visit change, set needs_review to true. The reference policy sends mixed intent to review, whatever the parser says."} />
+
+<Check question={"A category is valid JSON but wrong for the ticket. Which check catches that?"} options={["JSON parsing alone","Checking that HTTP returned 200","Semantic evaluation against the task criteria"]} answer={2} explanation={"Transport and shape checks cannot establish the meaning is correct."} />
+
+[Download the complete week](/course-materials/course/weeks/05.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

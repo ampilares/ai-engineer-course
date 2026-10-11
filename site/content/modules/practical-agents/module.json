@@ -1,0 +1,30 @@
+{
+  "slug": "practical-agents",
+  "title": "Agents, Tools, MCP, and Memory",
+  "phase": "automation",
+  "summary": "Give agents useful tools with enforced boundaries and observable execution.",
+  "outcomes": [
+    "Explain an agent loop and MCP roles",
+    "Apply action and resource budgets",
+    "Inspect memory and tool traces"
+  ],
+  "number": 8,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Trace the agent loop",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Distinguish context, state, memory, and skills",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio and bounded execution",
+      "minutes": 30
+    }
+  ]
+}

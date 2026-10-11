@@ -1,0 +1,21 @@
+<Check question={"A reviewer sees a box that just says 'Continue?' before a tool changes an external system. Is that enough to approve safely?"} options={["Yes, the reviewer can trust the flow","Yes, as long as it appears quickly","No, they need to see the actual proposed arguments"]} answer={2} explanation={"A reviewer can only judge what they can see. Showing the exact tool arguments turns a rubber stamp into a real decision."} />
+
+In n8n, start with a manual execution while developing. Use [Edit Fields](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/) to supply one fictional ticket and preserve its event ID. Add your model step and validate its output. Use an [If node](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.if/) to route review-required items.
+
+<Check question={"In the lab flow, which n8n node routes review-required items down a separate path?"} options={["Edit Fields","If node","The model step"]} answer={1} explanation={"Edit Fields supplies the fictional ticket and its event ID, while the If node branches items that need review away from the normal path."} />
+
+For an agent tool that can change an external system, n8n documents a [human-review connection](https://docs.n8n.io/advanced-ai/human-in-the-loop-tools/) that pauses execution for approval or denial. Configure the review destination to an internal test surface. Show the actual proposed tool arguments; a generic "continue?" prompt does not give a reviewer enough information.
+
+Build the first flow as intake, validation, classification, draft preparation, review, and recording. There is no customer-send node in the initial lab. Add an error branch that records case ID, reason, attempt count, and responsible owner. A visual flow still needs a durable record and a deduplication design before it handles real events.
+
+<Order prompt={"Arrange the stages of the first lab flow."} steps={["Intake","Validation","Classification","Draft preparation","Review","Recording"]} explanation={"Checking input before classifying, and reviewing before recording, keeps bad data and unreviewed drafts out of the record. There is deliberately no customer-send step yet."} />
+
+### Worked interruption
+
+The provider accepts action A17. The worker crashes before marking A17 completed. On restart, the local record says approved, but the external effect may already exist. Retrying with a new action ID creates a duplicate. Retrying A17 with an identical payload against a provider that enforces idempotency returns the existing effect. Retrying A17 with changed content must be rejected, not silently treated as the approved action.
+
+<Sort prompt={"After the A17 crash, is each retry choice safe or a problem?"} buckets={["Safe","Problem"]} items={[{"text":"Retry with a brand-new action ID","bucket":1},{"text":"Retry A17 with the identical payload to an idempotent provider","bucket":0},{"text":"Silently accept a retry of A17 with changed content","bucket":1},{"text":"Reject a retry of A17 whose content has changed","bucket":0}]} explanation={"Reusing the same key and payload lets the provider return the existing effect. A new ID creates a duplicate, and changed content was never approved."} />
+
+<Check question={"What should an approval identify?"} options={["Any action the agent later considers useful","Only a generic request to continue","The exact proposed payload, target, version and validity period"]} answer={2} explanation={"A reviewer must know what will happen; changed actions need a new decision."} />
+
+[Download the complete week](/course-materials/course/weeks/07.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

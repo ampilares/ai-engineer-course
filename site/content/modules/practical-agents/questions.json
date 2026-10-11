@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pa-w08-q01",
+    "type": "single",
+    "prompt": "Who validates an agent's requested tool call?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Only the text in the tool description"
+      },
+      {
+        "id": "b",
+        "text": "The untrusted source document"
+      },
+      {
+        "id": "c",
+        "text": "The surrounding runtime before execution"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Tool choice is a proposal; the runtime enforces authority and validates arguments."
+  },
+  {
+    "id": "pa-w08-q02",
+    "type": "single",
+    "prompt": "What does MCP provide?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A protocol for connecting applications to exposed capabilities"
+      },
+      {
+        "id": "b",
+        "text": "A guarantee that every server is safe"
+      },
+      {
+        "id": "c",
+        "text": "An automatic business approval for tool calls"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Protocol compatibility does not establish trust or authorisation."
+  },
+  {
+    "id": "pa-w08-q03",
+    "type": "single",
+    "prompt": "Which is a suitable persistent preference?",
+    "options": [
+      {
+        "id": "a",
+        "text": "An unverified customer balance that changes daily"
+      },
+      {
+        "id": "b",
+        "text": "The preferred section order for reports"
+      },
+      {
+        "id": "c",
+        "text": "A permanent permission grant inferred from a ticket"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Stable presentation preferences differ from changing business facts and authority."
+  },
+  {
+    "id": "pa-w08-q04",
+    "type": "single",
+    "prompt": "A source ticket requests file export. What is the strongest lab evidence of prevention?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The prompt includes a warning"
+      },
+      {
+        "id": "b",
+        "text": "The model says it probably would not export"
+      },
+      {
+        "id": "c",
+        "text": "The runtime denies the unavailable tool or destination"
+      }
+    ],
+    "answer": "c",
+    "explanation": "Enforcement evidence is stronger than an intention stated in language."
+  },
+  {
+    "id": "pa-w08-q05",
+    "type": "single",
+    "prompt": "Why separate read_ticket from send_message tools?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Their permissions and side effects can be controlled independently"
+      },
+      {
+        "id": "b",
+        "text": "A longer tool list is always better"
+      },
+      {
+        "id": "c",
+        "text": "The agent then needs no validation"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Narrow tools expose meaningful authority boundaries."
+  },
+  {
+    "id": "pa-w08-q06",
+    "type": "single",
+    "prompt": "When should multiple agents be added?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Whenever a task has more than one sentence"
+      },
+      {
+        "id": "b",
+        "text": "When comparison shows useful separation or coordination benefits"
+      },
+      {
+        "id": "c",
+        "text": "Before trying a single-agent baseline"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Additional agents add coordination and cost; benefits should be measured."
+  },
+  {
+    "id": "pa-w08-q07",
+    "type": "numeric",
+    "prompt": "A planner requests five actions but the runtime's step budget is four. What is the maximum number of attempted actions?",
+    "answer": 4,
+    "unit": "actions",
+    "tolerance": 0.01,
+    "explanation": "The runtime caps attempts at the configured budget."
+  },
+  {
+    "id": "pa-w08-q08",
+    "type": "numeric",
+    "prompt": "An analyst-only MCP server exposes one policy-search tool and no write tools. How many write capabilities should be discovered?",
+    "answer": 0,
+    "unit": "tools",
+    "tolerance": 0.01,
+    "explanation": "The example intentionally exposes no write capability."
+  }
+]

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pa-w15-q01",
+    "type": "single",
+    "prompt": "Why preserve the original output before human correction?",
+    "options": [
+      {
+        "id": "a",
+        "text": "To distinguish first-pass system performance from staff-assisted completion"
+      },
+      {
+        "id": "b",
+        "text": "To avoid recording the final result"
+      },
+      {
+        "id": "c",
+        "text": "To prove the original was correct"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Corrections are part of the process and must not hide the original failure."
+  },
+  {
+    "id": "pa-w15-q02",
+    "type": "single",
+    "prompt": "A report quotes a draft policy passed by retrieval. What is the first targeted fix?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Make the answer friendlier"
+      },
+      {
+        "id": "b",
+        "text": "Correct source-status filtering and add a regression case"
+      },
+      {
+        "id": "c",
+        "text": "Remove all source references"
+      }
+    ],
+    "answer": "b",
+    "explanation": "The trace identifies an evidence-selection defect."
+  },
+  {
+    "id": "pa-w15-q03",
+    "type": "single",
+    "prompt": "What makes pilot and manual timing comparable?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Measuring generation time against full manual effort"
+      },
+      {
+        "id": "b",
+        "text": "Selecting only easy pilot cases"
+      },
+      {
+        "id": "c",
+        "text": "The same completion definition including review and correction"
+      }
+    ],
+    "answer": "c",
+    "explanation": "The populations and task boundaries must be comparable."
+  },
+  {
+    "id": "pa-w15-q04",
+    "type": "single",
+    "prompt": "What should a simulation be reported as?",
+    "options": [
+      {
+        "id": "a",
+        "text": "A classroom process test, not measured workplace impact"
+      },
+      {
+        "id": "b",
+        "text": "Proof of staff adoption"
+      },
+      {
+        "id": "c",
+        "text": "Guaranteed commercial savings"
+      }
+    ],
+    "answer": "a",
+    "explanation": "Fictional inputs cannot establish actual organisational outcomes."
+  },
+  {
+    "id": "pa-w15-q05",
+    "type": "single",
+    "prompt": "Which failure should usually be prioritised?",
+    "options": [
+      {
+        "id": "a",
+        "text": "The easiest cosmetic issue regardless of risk"
+      },
+      {
+        "id": "b",
+        "text": "The most consequential observed failure within the agreed scope"
+      },
+      {
+        "id": "c",
+        "text": "The failure with the shortest log"
+      }
+    ],
+    "answer": "b",
+    "explanation": "Severity and exposure should guide improvement priorities."
+  },
+  {
+    "id": "pa-w15-q06",
+    "type": "single",
+    "prompt": "After an ambiguous send timeout, what should a fix avoid?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Preserving the case ID"
+      },
+      {
+        "id": "b",
+        "text": "Inspecting an external receipt"
+      },
+      {
+        "id": "c",
+        "text": "Blindly adding retries without understanding the recipient's idempotency"
+      }
+    ],
+    "answer": "c",
+    "explanation": "More retries can create duplicate effects if the original may have succeeded."
+  },
+  {
+    "id": "pa-w15-q07",
+    "type": "numeric",
+    "prompt": "Nine of twelve pilot cases succeed without correction. What is first-pass success?",
+    "answer": 75,
+    "unit": "%",
+    "tolerance": 0.01,
+    "explanation": "9 / 12 × 100 = 75%."
+  },
+  {
+    "id": "pa-w15-q08",
+    "type": "numeric",
+    "prompt": "Eleven of twelve pilot cases eventually succeed. To one decimal place, what is final success?",
+    "answer": 91.7,
+    "unit": "%",
+    "tolerance": 0.05,
+    "explanation": "11 / 12 × 100 is approximately 91.7%."
+  }
+]

@@ -1,0 +1,33 @@
+<Reveal prompt={"Before you build anything: if this assistant stopped delivering Maya's report next Tuesday, who would notice, and who would fix it?"} answer={"If you cannot name them, the setup is not ready. The business-owner route ends by deciding who maintains the assistant and who responds when reports stop arriving."} />
+
+### Engineering route
+
+1. Install or provision a dedicated OpenClaw lab from the current official instructions; record version, runtime, hosting location, and provider.
+2. Copy only approved agent inputs to its workspace. Apply restrictive tool and file permissions.
+3. Verify one control-interface chat, then configure one test channel and approved sender.
+4. Request the common weekly brief. Verify AUD 6,300 net accepted transactions and the unresolved data rows independently.
+5. Use a second controlled test identity to check sender rejection. Ask the authorised identity for a file outside the workspace and an unauthorised export; inspect the enforcement result.
+6. Restart the gateway, rerun a changed-input case, and record whether it recalculates.
+7. Stop any lab schedule or service and revoke the test channel credential when finished.
+
+<Sort prompt={"Step 4 asks you to verify the total independently. Which sales.csv rows count towards the net accepted total?"} buckets={["Counts","Left out or quarantined"]} items={[{"text":"S004, a refund of -200 AUD on 3 October","bucket":0},{"text":"S007, 1000 AUD on 6 October","bucket":0},{"text":"S009, dated 8 October","bucket":1},{"text":"S010, amount missing","bucket":1},{"text":"S011, recorded in USD","bucket":1},{"text":"The second, identical copy of S008","bucket":1}]} explanation={"Only complete AUD rows inside 1-7 October count, refunds included as negatives, and an exact duplicate counts once. That leaves AUD 6,300 with S010 and S011 as unresolved rows."} />
+
+### Business-owner route
+
+1. Obtain the prepared lab's hosting, provider, access, and support record from the instructor.
+2. Complete an operating brief for Maya's daily or weekly report. Name the evidence and review owner.
+3. Submit the report task and review every amount, source, and proposed action.
+4. Observe the unauthorised-sender, out-of-scope request, and restart demonstrations. Record actual results, not claimed defaults.
+5. Decide who would maintain this setup and respond if it stopped delivering reports.
+
+<Check question={"During the restart demonstration, what should the business owner write down?"} options={["The defaults the documentation describes","What actually happened during the demonstration","What the assistant promised it would do","Nothing, the instructor records it"]} answer={1} explanation={"The route asks you to record actual results, not claimed defaults. Your installation may differ from the current documentation, and a promise is not evidence."} />
+
+### Acceptance and limitations
+
+Submit the configuration inventory, a redacted action record, boundary-test results, restart evidence, and teardown record. A missing permission feature is an observed limitation; do not record a pass based on a prompt promise. If installation or account access is unavailable, use an instructor's recorded run and label your assessment as observed rather than hands-on. No live OpenClaw run is claimed by the creation of this course material.
+
+<Check question={"Account access fell through, so you watched the instructor's recorded run. How do you label your assessment?"} options={["As observed rather than hands-on","As a hands-on pass","As not applicable"]} answer={0} explanation={"Honest labelling keeps the evidence trustworthy. Watching a recorded run is still useful, but it is observation, not something you performed."} />
+
+<Check question={"What is an appropriate initial workspace?"} options={["The learner's whole home directory","A shared folder containing credentials and answer keys","A dedicated folder with approved fictional inputs only"]} answer={2} explanation={"Minimal approved inputs make the lab's access boundary reviewable."} />
+
+[Download the complete week](/course-materials/course/weeks/09.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

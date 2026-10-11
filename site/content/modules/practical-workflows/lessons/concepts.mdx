@@ -1,0 +1,27 @@
+<Check question={"A workflow dashboard shows only completed cases, and it looks great. What could it be hiding?"} options={["Nothing, because completed work is all that matters","A second dashboard with the same data","Stuck or failed work that never finished"]} answer={2} explanation={"Every input needs a visible outcome. Showing only completions hides the cases that are waiting, stuck or failed, which are exactly the ones needing attention."} />
+
+This week you will turn a useful model step into a process that can wait, fail, and resume. A workflow is complete when every input has a visible outcome and an accountable owner, including the inputs that did not succeed.
+
+Use explicit states such as received, validated, needs-review, approved, executing, completed, rejected, and failed. Persist the state before acknowledging that work has been accepted. A dashboard that shows only completed cases hides stuck work.
+
+<Order prompt={"Put these states in order for a case that goes smoothly through review."} steps={["received","validated","needs-review","approved","executing","completed"]} explanation={"Naming each state makes it obvious where a case is waiting. Persisting the state before acknowledging the work means nothing is lost if the process stops."} />
+
+Attach a stable business-event ID to every run. Distinguish the original event from an execution attempt; a retry should not look like a new customer request. Save the proposed action as a versioned payload, including target, content, relevant source version, and expiry. Approval applies to that exact payload. A later edit requires a new decision.
+
+<Check question={"A reviewer approves a draft reply. Someone then edits a sentence in it. What happens to the approval?"} options={["The edited version needs a new decision","The approval still stands for the new text","Only the edit needs to be logged"]} answer={0} explanation={"Approval applies to an exact versioned payload. Any later change means the reviewer has not seen what will actually be sent."} />
+
+Two people clicking Approve is a concurrency problem. A worker crashing after the external action but before recording completion is a distributed-systems problem. Checking a local "done" flag before sending is insufficient because the process can fail between the send and the flag update. A receiving API's idempotency key can make repeated identical requests return the same business effect. If the recipient cannot deduplicate, reconcile the uncertain outcome before retrying it.
+
+The supplied simulator uses separate local workflow and simulated-provider databases. It intentionally crashes between the provider's committed effect and the workflow's completion record. A retry reuses the same action key and payload hash. This is a controlled demonstration, not a claim of exactly-once execution across arbitrary services. [SQLite's transaction reference](https://sqlite.org/lang_transaction.html) explains the local transaction boundary; it does not make a remote action part of that transaction.
+
+<Sort prompt={"Which statements describe the course simulator, and which go beyond what it claims?"} buckets={["True of the simulator","Not claimed"]} items={[{"text":"It uses separate workflow and provider databases","bucket":0},{"text":"It crashes on purpose after the provider's effect","bucket":0},{"text":"A retry reuses the same action key and payload hash","bucket":0},{"text":"It guarantees exactly-once delivery to any service","bucket":1},{"text":"It puts the remote action inside the local transaction","bucket":1}]} explanation={"The simulator is a controlled demonstration. A local transaction covers only the local database, never an action on someone else's system."} />
+
+### Explore the concept
+
+This illustrative simulator uses its own teaching examples. It is not a live platform run or a measurement of the Harbour case.
+
+<PipelineSimulator />
+
+<Check question={"A worker crashes after an external action but before marking completion. What is the central risk?"} options={["The original input automatically disappears","Retrying may duplicate the effect","The action is guaranteed to roll back"]} answer={1} explanation={"Local state and external effects do not share one automatic transaction."} />
+
+[Download the complete week](/course-materials/course/weeks/07.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

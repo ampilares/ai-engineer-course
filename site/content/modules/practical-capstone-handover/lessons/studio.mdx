@@ -1,0 +1,33 @@
+<Reveal prompt={"The course is over and you want to keep improving. What makes a good next experiment? Think, then reveal."} answer={"Investigate one measured limitation. Pick a single experiment, compare it with the strongest simple baseline, and keep the same discipline of evidence, boundaries and operational ownership."} />
+
+### Engineering route
+
+1. Reproduce the final candidate from its documented setup and version record.
+2. Run the agreed acceptance and boundary checks. Preserve the output and any unresolved limitations.
+3. Demonstrate the four behaviours: success, failure, blocked action, and recovery.
+4. Hand over the repository, configuration instructions, runbook, and maintenance ownership.
+5. Explain the next improvement you would test and the evidence that would justify it.
+
+<Sort prompt={"Which route does each final task belong to?"} buckets={["Engineering route","Business-owner route"]} items={[{"text":"Reproduce the candidate from its version record","bucket":0},{"text":"Show how staff reject an action and stop the workflow","bucket":1},{"text":"Hand over the repository and maintenance ownership","bucket":0},{"text":"Present the volume-sensitive business case","bucket":1},{"text":"Explain the next improvement and its evidence","bucket":0}]} explanation={"Engineers prove the system can be rebuilt and maintained; business owners prove staff and budget holders can run and govern it."} />
+
+### Business-owner route
+
+1. Verify the workflow, staff procedure, review responsibilities, and manual fallback are usable by another person.
+2. Present the measured or clearly simulated results and volume-sensitive business case.
+3. Demonstrate how staff identify uncertainty, reject an action, and stop the workflow.
+4. Name the operational owner, budget owner, and reviewer for future changes.
+5. Choose adopt, revise, or stop and communicate the scope of that decision.
+
+<Check question={"Which three roles does the business-owner route ask you to name for future changes?"} options={["Operational owner, budget owner and reviewer","Builder, tester and designer","Model provider, platform vendor and user"]} answer={0} explanation={"Someone must run it, someone must pay for it, and someone must check changes. Naming them keeps the system governed after the builder steps away."} />
+
+### Completion criteria
+
+Submit every item in [the capstone checklist](/course-materials/CAPSTONE.md). A passing practical result requires at least 70% overall and all mandatory progression gates. A critical unauthorised-action failure cannot be offset by attractive outputs or high marks elsewhere. Self-directed learners should ask an independent peer to review the evidence; otherwise label the practical assessment as self-reviewed.
+
+<Check question={"You are a self-directed learner and no independent peer reviews your evidence. How should you label your practical assessment?"} options={["Independently graded","Production certified","Self-reviewed","Pending forever"]} answer={2} explanation={"Without an independent peer, the honest label is self-reviewed. Claiming more would overstate what the evidence shows."} />
+
+Keep learning by investigating a measured limitation. Use [the optional extensions](/course-materials/course/extensions.md) for forecasting, model internals, advanced retrieval, adaptation, local inference, multiple agents, or voice. Select one experiment, compare it with the strongest simple baseline, and preserve the same discipline of evidence, boundaries, and operational ownership.
+
+<Check question={"What does the website's self-attestation establish?"} options={["The learner's declaration alongside conceptual quiz completion","Independent grading of every practical artifact","A production safety certification"]} answer={0} explanation={"The site does not implement the full practical review rubric."} />
+
+[Download the complete week](/course-materials/course/weeks/16.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

@@ -1,0 +1,23 @@
+<Check question={"You spot a bad output during the pilot. Before changing anything, what is most worth keeping?"} options={["A case that reproduces the failure","Nothing, just fix it quickly","A screenshot of your best output","The longest log file"]} answer={0} explanation={"A reproduction case lets you confirm the fix actually works and becomes a regression test. Without it, you cannot tell whether the failure is gone or just hiding."} />
+
+Classify the failure by stage: input quality, retrieval, model interpretation, schema, business validation, tool execution, review, or operations. An incorrect current policy may be a retrieval filter problem, not a weak model. A duplicate external action may be an idempotency problem, not a bad prompt.
+
+<Sort prompt={"Which stage does each Harbour failure most likely belong to?"} buckets={["Input quality","Retrieval","Tool execution"]} items={[{"text":"A sales row has a missing amount","bucket":0},{"text":"A draft policy reaches the generator","bucket":1},{"text":"The same external action happens twice","bucket":2},{"text":"A transaction uses an unrecognised currency","bucket":0},{"text":"Nobody can tell if a timed-out action ran","bucket":2}]} explanation={"Naming the stage points you to the right fix. A duplicate action is an idempotency issue and a wrong source is a filter issue, so rewriting the prompt would help neither."} />
+
+Choose the most consequential failure using severity and exposure, not the easiest cosmetic issue. Preserve a reproduction case. State a hypothesis, make a targeted change, and rerun the affected regression set. If you change several components, say that the cause of improvement is not isolated.
+
+<Order prompt={"Arrange the improvement loop in the order this lesson describes."} steps={["Classify the failure by stage","Choose the most consequential failure","Preserve a reproduction case","State a hypothesis","Make a targeted change","Rerun the affected regression set"]} explanation={"Diagnosis comes before change, and a single targeted change makes it clear what caused any improvement. The rerun confirms the fix without breaking other cases."} />
+
+### Worked improvement
+
+The report includes the draft automatic-refund proposal. The trace shows retrieval passed it to the generator. Fix the document-status filter, add a regression case containing a highly relevant draft, and verify that the approved effective policy is selected. Changing the report's tone does not address the source-selection defect.
+
+<Reveal prompt={"Why should the new regression case contain a highly relevant draft, rather than any old draft?"} answer={"The draft slipped through because it looked relevant. A highly relevant draft is the hardest test of the status filter, so passing it shows status, not just relevance, now decides what reaches the generator."} />
+
+Another failure occurs after a tool times out. The operator cannot tell whether the action was performed. The fix may require an external receipt lookup or a manual reconciliation state. Adding more retries without understanding the action's idempotency can make the incident worse.
+
+Keep held-out discipline. If final assessment reveals a failure and you inspect it to repair the system, that example is now part of development. After the fix, rerun it as regression evidence and use new independent cases for any renewed final-quality claim.
+
+<Check question={"A report quotes a draft policy passed by retrieval. What is the first targeted fix?"} options={["Make the answer friendlier","Correct source-status filtering and add a regression case","Remove all source references"]} answer={1} explanation={"The trace identifies an evidence-selection defect."} />
+
+[Download the complete week](/course-materials/course/weeks/15.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

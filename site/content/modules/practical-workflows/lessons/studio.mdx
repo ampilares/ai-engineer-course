@@ -1,0 +1,31 @@
+<Reveal prompt={"Your flow fails halfway through a busy Monday. What would you want staff to be able to see?"} answer={"Which items are waiting or failed, why, who owns each one, and how old the oldest unresolved item is. A failed item should stay visible with a reason, not vanish into an empty success response."} />
+
+### Engineering route
+
+1. Run `node course/labs/reference.mjs workflow` and inspect the reported interruption and resumed result.
+2. Inspect the two database roles in the reference implementation. Explain the crash window in your own words.
+3. Test duplicate delivery, denied approval, expired approval, changed payload, and restart after the simulated provider action.
+4. Add a visible waiting state to your own workflow and a report of its oldest unresolved item.
+5. Document the policy for ambiguous outcomes when a real recipient lacks idempotency support. Do not promise automatic recovery that your integration cannot provide.
+
+### Business-owner route
+
+1. Use the review prototype to practise approve, reject, edit, and resubmit on fictional cases.
+2. Build the n8n flow described above in an approved test account, keeping output as a draft.
+3. Define who checks the review queue, when a waiting item is overdue, and what happens if that person is absent.
+4. Execute a complete request, a missing-field request, a rejection, and a repeated event.
+5. Review the simulator's crash scenario with an engineer and write the staff procedure for an uncertain external action.
+
+<Sort prompt={"Predict each test result: should the simulated provider end up with one effect or none?"} buckets={["One effect","No effect"]} items={[{"text":"Approved action that runs without any crash","bucket":0},{"text":"Approval is denied","bucket":1},{"text":"Approval has expired","bucket":1},{"text":"Payload edited after approval and not re-approved","bucket":1},{"text":"The same approved event is delivered twice","bucket":0}]} explanation={"Only an approved, unchanged, unexpired payload should take effect, and a repeated delivery of the same event must not add a second effect."} />
+
+### Expected results
+
+The same approved action should produce one simulated provider effect after a crash and retry. A denied or expired action produces none. An edit invalidates the previous approval. A failed item remains visible with a reason and owner; it does not disappear into an empty success response.
+
+Submit the flow, state diagram, action/review record, failure matrix, and replay evidence. Pass the Week 7 gate when you can demonstrate validation, a human decision point, and recovery without a duplicate effect in the tested scenario. Use [the runbook template](/course-materials/course/templates/runbook.md) to describe limits as well as successful recovery.
+
+<Check question={"A real recipient has no idempotency support. What should your runbook avoid promising?"} options={["That uncertain outcomes are checked by a person","Automatic recovery the integration cannot actually provide","That failed items stay visible with an owner"]} answer={1} explanation={"A runbook should describe limits as well as successes. Promising recovery the integration cannot deliver sets staff up to create duplicates."} />
+
+<Check question={"Why is a local done flag alone insufficient for a remote action?"} options={["A crash can occur between the effect and the flag update","A Boolean cannot be stored in a database","Remote actions never time out"]} answer={0} explanation={"The ambiguity window exists even when each local operation is correct."} />
+
+[Download the complete week](/course-materials/course/weeks/07.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

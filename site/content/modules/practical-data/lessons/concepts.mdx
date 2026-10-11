@@ -1,0 +1,29 @@
+<Check question={"A sales file has two identical rows: same transaction ID, date and amount. How many sales happened?"} options={["Two, because there are two rows","One, because the ID identifies a single event","None, the rows cancel out"]} answer={1} explanation={"A transaction ID identifies a business event, so an exact duplicate copy is not extra income. Counting rows instead of events inflates totals."} />
+
+This week produces an analysis that another person can reproduce. Keep the raw source, transformation rules, calculated results, and interpretation distinguishable. The same discipline applies whether the assistant reads a CSV, screenshot, PDF, or recording.
+
+Read [the Harbour data contract](/course-materials/course/case-study/README.md) before touching the CSV. A transaction ID identifies a business event. One duplicate row does not represent additional income. A missing amount is unknown; replacing it with zero conceals a data problem. USD and AUD cannot be summed as though they were the same unit.
+
+Use four stages: preserve, validate, transform, and reconcile. Preserve the original file. Validate columns, date formats, identifiers, currency, and amount representation. Transform only records that meet the stated rules. Reconcile counts so that every input row has an explanation.
+
+<NumericCheck question={"Harbour's S008 appears twice at 500.00 AUD. If both copies were counted, by how much would sales be overstated?"} answer={500} tolerance={0} unit={"AUD"} explanation={"The second row is a copy of the same event, so counting it adds a phantom 500.00 AUD."} />
+
+For Harbour, 12 rows become 11 unique IDs after removing one exact duplicate copy. One ID falls outside the period. Two IDs require review. Eight events remain for the accepted AUD calculation. An analysis that reports eight events but cannot account for the other four rows is incomplete.
+
+<Sort prompt={"Apply Harbour's data contract to these rows."} buckets={["Accepted","Outside the period","Needs review"]} items={[{"text":"S001: 1,200.00 AUD sale on 1 October","bucket":0},{"text":"S004: refund of -200.00 AUD on 3 October","bucket":0},{"text":"S009: 700.00 AUD sale on 8 October","bucket":1},{"text":"S010: sale on 7 October with a blank amount","bucket":2},{"text":"S011: 300.00 USD sale on 7 October","bucket":2}]} explanation={"The window is 1 to 7 October, only complete AUD records count, and refunds are negative. Reconciliation means every row has an explanation, not just the accepted ones."} />
+
+Use integer cents or an appropriate decimal type for money. Binary floating-point calculations can introduce representation errors. The fixture reference tool converts two-decimal amounts to cents before addition. In a spreadsheet, make currency and inclusion criteria explicit, preserve raw rows, and use formulas on the prepared data rather than typing the final total.
+
+<Check question={"Why convert amounts such as 1,200.00 into whole cents before adding them?"} options={["It makes the file smaller","Spreadsheets cannot show decimals","Binary floating-point can introduce small representation errors","Cents are required by the tax office"]} answer={2} explanation={"Integers add exactly, while binary floating-point cannot represent some decimal values precisely. The fixture reference tool converts to cents for this reason."} />
+
+The [Python CSV reference](https://docs.python.org/3/library/csv.html) documents practical details such as quoted fields and newline handling. The supplied JavaScript teaching reader deliberately accepts only this fixture's simple unquoted format and rejects unexpected formats. A production import should use a suitable parser and a tested source contract.
+
+### Explore the concept
+
+This illustrative simulator uses its own teaching examples. It is not a live platform run or a measurement of the Harbour case.
+
+<DocExtractionDemo />
+
+<Check question={"How should S010's missing amount be handled?"} options={["Keep it unknown and route the record to review","Replace it with zero","Infer it from the preceding sale"]} answer={0} explanation={"Neither zero nor a neighbouring value is evidence for a missing amount."} />
+
+[Download the complete week](/course-materials/course/weeks/03.md) · [Case pack](/course-materials/course/case-study/README.md) · [Lab instructions](/course-materials/course/labs/README.md)

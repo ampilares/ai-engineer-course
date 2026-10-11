@@ -1,0 +1,30 @@
+{
+  "slug": "practical-workflows",
+  "title": "Business Workflow Automation",
+  "phase": "automation",
+  "summary": "Use durable states, approvals, and idempotent effects to make workflows recoverable.",
+  "outcomes": [
+    "Map a process into states",
+    "Bind approval to an exact action",
+    "Recover without duplicate effects"
+  ],
+  "number": 7,
+  "examCount": 8,
+  "lessons": [
+    {
+      "slug": "concepts",
+      "title": "Represent work as durable states",
+      "minutes": 20
+    },
+    {
+      "slug": "worked-example",
+      "title": "Build a reviewable low-code flow",
+      "minutes": 20
+    },
+    {
+      "slug": "studio",
+      "title": "Studio and the recoverability gate",
+      "minutes": 30
+    }
+  ]
+}
